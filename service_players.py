@@ -15,14 +15,11 @@ def get_player_list():
 
 def initialize_friend_list(player_list, player):
     friend_list = []
-
     for i, f in enumerate(player.friend_list):
         friend = get_player_by_name(player_list, f)
-
         if friend != None:
             friend_list.append(friend)
     player.friend_list = friend_list
-
 
 def get_player_by_name(player_list, name):
     player = [p for p in player_list if p.name == name]

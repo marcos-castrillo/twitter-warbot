@@ -35,31 +35,37 @@ def start_battle():
         if datetime.datetime.now().hour in sleeping_hours:
             print_or_tweet(sleep(sleeping_hours[-1] + 1))
         while datetime.datetime.now().hour in sleeping_hours:
+            hour_count = hour_count + int(sleeping_interval/3600)
             time.sleep(sleeping_interval)
 
         time.sleep(tweeting_interval)
         simulate_day()
 
 def simulate_day():
-    global hour_count
+    global hour_count, simulation_probab, item_probab
     hour_count = hour_count + 1
-    if hour_count in hour_thresholds:
-        simulation_probab[0] = simulation_probab[0] + prob_item_var
-        simulation_probab[1] = simulation_probab[1] + prob_battle_var
-        simulation_probab[2] = simulation_probab[2] + prob_suicide_var
-        simulation_probab[3] = simulation_probab[3] + prob_revive_var
-        item_probab[0] = item_probab[0] + probab_rarity_1_var
-        item_probab[1] = item_probab[1] + probab_rarity_2_var
-        item_probab[2] = item_probab[2] + probab_rarity_3_var
-        print_or_tweet(hour_threshold(hour_count))
+    for i, th in enumerate(hour_thresholds):
+        if hour_count == th:
+            if i == 0:
+                simulation_probab = simulation_probab_0
+                item_probab = item_probab_0
+            if i == 1:
+                simulation_probab = simulation_probab_1
+                item_probab = item_probab_1
+            if i == 2:
+                simulation_probab = simulation_probab_2
+                item_probab = item_probab_2
+            print_or_tweet(hour_threshold(hour_count))
     action_number = random.randint(1, 100)
     if action_number < simulation_probab[0]:
         pick_item()
     elif action_number < sum(simulation_probab[0:2]):
         battle()
-    elif action_number == sum(simulation_probab[0:3]):
-        suicide()
+    elif action_number < sum(simulation_probab[0:3]):
+        accident()
     elif action_number == sum(simulation_probab[0:4]):
+        suicide()
+    elif action_number == sum(simulation_probab[0:5]):
         revive()
 
     if get_alive_players_count(player_list) <= 1:
@@ -96,6 +102,29 @@ def battle():
     else:
         tie(player_1, player_2)
 
+def accident():
+    alive_players = filter_player_list_by_state(player_list, 1)
+    player = random.choice(alive_players)
+    if len(player.item_list) == 0:
+        illness(player)
+    else:
+        action_number = random.randint(0, 100)
+        if action_number <= 50:
+            injure(player)
+        else:
+            illness(player)
+
+def illness(player):
+    illness = get_random_illness()
+    player.injury_list.append(illness)
+    print_or_tweet(somebody_got_ill(player, illness))
+
+
+def injure(player):
+    injury = get_random_injury()
+    player.injury_list.append(injury)
+    print_or_tweet(somebody_got_injured(player, injury))
+
 def revive():
     dead_players = filter_player_list_by_state(player_list, 0)
     if len(dead_players) > 0:
@@ -118,6 +147,7 @@ def end():
         print_or_tweet(winner(alive_players[0]))
     elif len(alive_players) == 0:
         print_or_tweet(nobody_won())
+    print_or_tweet(final_statistics(player_list))
     finished = True
 
 start_battle()

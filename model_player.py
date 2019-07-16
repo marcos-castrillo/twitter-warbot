@@ -8,11 +8,13 @@ class Player(object):
     state = 0
     item_list = []
     friend_list = []
+    injury_list = []
 
     # Constructor
     def __init__(self, name, username = None, friend_list = None):
         self.friend_list = friend_list
         self.item_list = []
+        self.injury_list = []
         self.state = 1
         if username != None:
             self.name = name + '(@' + username + ')'
@@ -41,12 +43,16 @@ class Player(object):
         attack = 0
         for item in self.item_list:
             attack = attack + item.attack
+        for injury in self.injury_list:
+            attack = attack + injury.attack
         return attack
 
     def get_defense(self):
         defense = 0
         for item in self.item_list:
             defense = defense + item.defense
+        for injury in self.injury_list:
+            defense = defense + injury.defense
         return defense
 
     def get_best_item(self):

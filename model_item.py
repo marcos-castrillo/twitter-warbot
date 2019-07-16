@@ -10,4 +10,4 @@ class Item(object):
         self.attack = attack
 
     def get_value(item):
-        return abs(item.defense) + abs(item.attack)
+        return item.defense + item.attack

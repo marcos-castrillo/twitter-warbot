@@ -19,7 +19,7 @@ def print_or_tweet(message):
     if live:
         tweet(message.decode("utf8"))
     else:
-        print(' '.join([str(datetime.datetime.now().hour), str(datetime.datetime.now().minute), message]))
+        print(message)
 
 def startListeningMDs():
     while not finished:

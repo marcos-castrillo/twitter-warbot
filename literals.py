@@ -20,10 +20,54 @@ def hour_threshold(hour_count):
     return (u'¡Ya han pasado ' + str(hour_count) + ' horas! A partir de ahora incrementan las posibilidades de batalla y las de encontrarse mejores objetos.').encode('utf-8')
 
 def winner(player):
-    return u' '.join((u'¡' + player.name, 'ha ganado!')).encode('utf-8')
+    item_list = ''
+    injury_list = ''
+    if len(player.item_list) > 0:
+        list = []
+        for i, item in enumerate(player.item_list):
+            list.append(item.name)
+        item_list = u' Además, ha acabado teniendo ' + u', '.join(list) + '.'
+    if len(player.injury_list) > 0:
+        list = []
+        for i, item in enumerate(player.injury_list):
+            list.append(item.name)
+        injury_list = ' Todo ello a pesar de tener ' + u', '.join(list) + '.'
+    return u' '.join((u'¡' + player.name, u'ha ganado! Lo ha conseguido llevándose por delante a', str(player.kills), 'participantes.' + item_list + injury_list, 'El ataque de', player.name, u'llegó a ser de', str(player.get_attack()), u'y su defensa de', str(player.get_defense()) + '.')).encode('utf-8')
 
 def nobody_won():
     return (u'Por algún motivo, todos los jugadores están muertos. Nadie ha ganado...').encode('utf-8')
+
+def final_statistics(player_list):
+    more_kills = None
+    more_injuries = None
+    more_defense = None
+    more_attack = None
+    list = []
+
+    for i, player in enumerate(player_list):
+        list.append(player)
+        if more_kills == None or player.kills > more_kills.kills:
+            more_kills = player
+        if more_injuries == None or len(player.injury_list) > len(more_injuries.injury_list):
+            more_injuries = player
+        if more_defense == None or player.get_defense() > more_defense.get_defense():
+            more_defense = player
+        if more_attack == None or player.get_attack() > more_attack.get_attack():
+            more_attack = player
+
+    stat_kills = more_kills.name + u' es el jugador que ha conseguido más bajas con un total de ' + str(more_kills.kills) + '.'
+    stat_injuries = more_injuries.name + u' es el pupas del torneo, con ' + str(len(more_injuries.injury_list)) + ' enfermedades o desventajas.'
+    stat_defense = u'El jugador más defensivo ha sido ' + more_defense.name + ' con un total de ' + str(more_defense.get_defense()) + '.'
+    stat_attack = u'En cambio, el más ofensivo ha sido ' + more_attack.name + ' con ' +  str(more_attack.get_attack()) + ' de ataque.'
+    return u' '.join([stat_kills, stat_injuries, stat_defense, stat_attack]).encode('utf-8')
+
+def somebody_got_ill(player, illness):
+    ill_verb = random.choice(['ha cogido', u'ha contraído', u'ha padecido'])
+    return u' '.join((u'¡' + player.name, ill_verb, illness.name + '!', 'Ahora tiene', str(player.get_attack()) + get_amount(illness.attack), 'en ataque y', str(player.get_defense()) +  get_amount(illness.defense), 'en defensa.')).encode('utf-8')
+
+def somebody_got_injured(player, injury):
+    ill_verb = random.choice(['ha padecido', u'ha recibido'])
+    return u' '.join((u'¡' + player.name, ill_verb, injury.name + '!', 'Ahora tiene', str(player.get_attack()) + get_amount(injury.attack), 'en ataque y', str(player.get_defense()) +  get_amount(injury.defense), 'en defensa.')).encode('utf-8')
 
 def somebody_found_item(player, item):
     if item.attack != 0:
