@@ -4,6 +4,7 @@ from literals import *
 
 class Player(object):
     name = ""
+    username = ""
     kills = 0
     state = 0
     item_list = []
@@ -16,10 +17,8 @@ class Player(object):
         self.item_list = []
         self.injury_list = []
         self.state = 1
-        if username != None:
-            self.name = name + '(@' + username + ')'
-        else:
-            self.name = name
+        self.name = name
+        self.username = username
 
     def pick(self, item):
         if len(self.item_list) <= 1:
@@ -87,3 +86,9 @@ class Player(object):
                 return self.item_list[0]
             else:
                 return self.item_list[1]
+
+    def get_name(self):
+        if self.username != "":
+            return self.name + '(@' + self.username + ')'
+        else:
+            self.name

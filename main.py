@@ -23,6 +23,7 @@ finished = False
 hour_count = 0
 
 def start_battle():
+    global hour_count
     if sum(simulation_probab) != 100:
         sys.exit('Config error: battle probabilities do not sum up 100')
     if sum(item_probab) != 100:
@@ -143,11 +144,14 @@ def suicide():
 def end():
     global finished
     alive_players = filter_player_list_by_state(player_list, 1)
+    print_or_tweet(final())
+    print_or_tweet(final_statistics_1(player_list))
+    print_or_tweet(final_statistics_2(player_list))
+    print_or_tweet(final_statistics_3(player_list))
     if len(alive_players) == 1:
         print_or_tweet(winner(alive_players[0]))
     elif len(alive_players) == 0:
         print_or_tweet(nobody_won())
-    print_or_tweet(final_statistics(player_list))
     finished = True
 
 start_battle()
