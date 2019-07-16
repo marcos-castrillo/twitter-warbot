@@ -1,2 +1,3 @@
 # Python files
 *.pyc
+data_secrets.py
