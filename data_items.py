@@ -32,7 +32,8 @@ raw_item_list_1 = [
     [u'un pallet', 2, 0],
     [u'unas llaves', 1, 1],
     [u'un cartel de Jose de Rico #ProjectBercy', 2, 0],
-    [u'una piedra con forma de Q', 2, 0]
+    [u'una piedra con forma de Q', 2, 0],
+    [u'la foto de la orla de Juan Pérez Trujillo', 2, 0]
 ]
 
 raw_item_list_2 = [
@@ -50,7 +51,8 @@ raw_item_list_2 = [
     [u'un perro agresivo pero muy obediente', 2, 2],
     [u'un escudo de hierro', 4, 0],
     [u'un hacha', 0, 4],
-    [u'unas granadas', 0, 4]
+    [u'unas granadas', 0, 4],
+    [u'unos restos del avión estrellado de Juan Pérez Trujillo', 3, 0]
 ]
 
 raw_item_list_3 = [

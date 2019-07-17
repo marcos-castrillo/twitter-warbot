@@ -1,7 +1,7 @@
 tweeting_interval = 3600 # seconds
-sleeping_interval = 3600 # seconds
-live = False # console or tweet
-sleeping_hours = [1, 2, 3, 4, 5, 6, 7, 8]
+sleeping_interval = 900 # seconds
+live = True # console or tweet
+sleeping_hours = [2, 3, 4, 5, 6, 7, 8]
 
 prob_item = 70
 prob_battle = 25

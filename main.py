@@ -30,7 +30,10 @@ def start_battle():
         sys.exit('Config error: item probabilities do not sum up 100')
     if probab_tie + probab_friend_tie > 50:
         sys.exit('Config error: tie probabilities cannot be higher than 50')
+
+    time.sleep(60)
     print_or_tweet(start())
+    simulate_day()
 
     while not finished:
         if datetime.datetime.now().hour in sleeping_hours:

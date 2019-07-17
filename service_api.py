@@ -3,15 +3,15 @@ import datetime
 from data_secrets import *
 from data_constants import *
 
-api = twitter.Api(consumer_key=consumer_key,
-                  consumer_secret=consumer_secret,
-                  access_token_key=access_token,
-                  access_token_secret=access_token_secret)
-
 last_tweet_id = None
 
 def tweet(message):
-    global last_tweet_id
+    global last_tweet_id, consumer_key, consumer_secret, access_token, access_token_secret
+
+    api = twitter.Api(consumer_key=consumer_key,
+                      consumer_secret=consumer_secret,
+                      access_token_key=access_token,
+                      access_token_secret=access_token_secret)
     tweet = api.PostUpdate(status = message, in_reply_to_status_id=last_tweet_id)
     last_tweet_id = tweet.id_str
 
