@@ -23,7 +23,6 @@ def update_player_list(player_list, item_list):
     give_item(player_list, item_list, 'Laura', 'un perro agresivo pero muy obediente')
     give_item(player_list, item_list, 'Rik', 'un mero')
     give_item(player_list, item_list, 'Melissa', 'una escopeta de balines')
-    give_item(player_list, item_list, 'Melissa', 'una escopeta de balines')
     get_player(player_list, 'Leticia').state = 1
     give_item(player_list, item_list, 'Clara', 'una espada con forma de Q')
     give_item(player_list, item_list, 'Kini', 'una escopeta de caza')
