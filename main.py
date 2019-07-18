@@ -8,6 +8,7 @@ import datetime
 
 from literals import *
 from data_constants import *
+from data_preloaded import *
 
 from model_player import Player
 from model_item import Item
@@ -23,7 +24,7 @@ finished = False
 hour_count = 0
 
 def start_battle():
-    global hour_count
+    global hour_count, player_list, item_list
     if sum(simulation_probab) != 100:
         sys.exit('Config error: battle probabilities do not sum up 100')
     if sum(item_probab) != 100:
@@ -31,15 +32,19 @@ def start_battle():
     if probab_tie + probab_friend_tie > 50:
         sys.exit('Config error: tie probabilities cannot be higher than 50')
 
-    time.sleep(60)
-    print_or_tweet(start())
+    if preload_data:
+        hour_count = update_hour_count(hour_count)
+        update_player_list(player_list, item_list)
+
+    else:
+        print_or_tweet(start())
+
     simulate_day()
 
     while not finished:
         if datetime.datetime.now().hour in sleeping_hours:
             print_or_tweet(sleep(sleeping_hours[-1] + 1))
         while datetime.datetime.now().hour in sleeping_hours:
-            hour_count = hour_count + int(sleeping_interval/3600)
             time.sleep(sleeping_interval)
 
         time.sleep(tweeting_interval)

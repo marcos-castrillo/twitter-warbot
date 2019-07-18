@@ -5,6 +5,12 @@ from data_constants import *
 
 last_tweet_id = None
 
+def print_or_tweet(message):
+    if live:
+        tweet(message.decode("utf8"))
+    else:
+        print(message)
+
 def tweet(message):
     global last_tweet_id, consumer_key, consumer_secret, access_token, access_token_secret
 
@@ -13,18 +19,24 @@ def tweet(message):
                       access_token_key=access_token,
                       access_token_secret=access_token_secret)
     tweet = api.PostUpdate(status = message, in_reply_to_status_id=last_tweet_id)
-    last_tweet_id = tweet.id_str
 
-def print_or_tweet(message):
-    if live:
-        tweet(message.decode("utf8"))
-    else:
-        print(message)
+def get_last_tweet_id():
+    global last_tweet_id, consumer_key, consumer_secret, access_token, access_token_secret
+    api = twitter.Api(consumer_key=consumer_key,
+                      consumer_secret=consumer_secret,
+                      access_token_key=access_token,
+                      access_token_secret=access_token_secret)
 
-def startListeningMDs():
-    while not finished:
-        answerDMs()
-        time.sleep(listeningDelay)
+    user = api.VerifyCredentials()
+    timeline = api.GetUserTimeline(user_id=user.id_str)
+    return timeline[0].id_str
+
+if preload_data:
+    last_tweet_id = get_last_tweet_id()
+# def startListeningMDs():
+#     while not finished:
+#         answerDMs()
+#         time.sleep(listeningDelay)
 
 # def check_dms():
 #     global max_id
