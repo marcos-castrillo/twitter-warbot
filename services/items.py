@@ -1,6 +1,6 @@
 import random
-from data_items import raw_item_list, raw_item_list_1, raw_item_list_2, raw_item_list_3, raw_illness_list, raw_injury_list
-from model_item import Item
+from data.items import raw_item_list, raw_item_list_1, raw_item_list_2, raw_item_list_3, raw_illness_list, raw_injury_list
+from models.item import Item
 
 def get_item_list(rarity = None):
     list = []

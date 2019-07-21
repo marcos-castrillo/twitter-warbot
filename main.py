@@ -6,17 +6,16 @@ import time
 import sys
 import datetime
 
-from literals import *
-from data_constants import *
-from data_preloaded import *
+from data.literals import *
+from data.constants import *
 
-from model_player import Player
-from model_item import Item
+from models.player import Player
+from models.item import Item
 
-from service_api import print_or_tweet
-from service_items import *
-from service_battles import *
-from service_players import *
+from services.simulation import write_tweet
+from services.items import *
+from services.battles import *
+from services.players import *
 
 item_list = get_item_list()
 player_list = get_player_list()
@@ -32,18 +31,13 @@ def start_battle():
     if probab_tie + probab_friend_tie > 50:
         sys.exit('Config error: tie probabilities cannot be higher than 50')
 
-    if preload_data:
-        hour_count = update_hour_count(hour_count)
-        update_player_list(player_list, item_list)
 
-    else:
-        print_or_tweet(start())
-
+    write_tweet(start())
     simulate_day()
 
     while not finished:
         if datetime.datetime.now().hour in sleeping_hours:
-            print_or_tweet(sleep(sleeping_hours[-1] + 1))
+            write_tweet(sleep(sleeping_hours[-1] + 1))
         while datetime.datetime.now().hour in sleeping_hours:
             time.sleep(sleeping_interval)
 
@@ -64,7 +58,7 @@ def simulate_day():
             if i == 2:
                 simulation_probab = simulation_probab_2
                 item_probab = item_probab_2
-            print_or_tweet(hour_threshold(hour_count))
+            write_tweet(hour_threshold(hour_count))
     action_number = random.randint(1, 100)
     if action_number < simulation_probab[0]:
         pick_item()
@@ -126,20 +120,20 @@ def accident():
 def illness(player):
     illness = get_random_illness()
     player.injury_list.append(illness)
-    print_or_tweet(somebody_got_ill(player, illness))
+    write_tweet(somebody_got_ill(player, illness))
 
 
 def injure(player):
     injury = get_random_injury()
     player.injury_list.append(injury)
-    print_or_tweet(somebody_got_injured(player, injury))
+    write_tweet(somebody_got_injured(player, injury))
 
 def revive():
     dead_players = filter_player_list_by_state(player_list, 0)
     if len(dead_players) > 0:
         player = random.choice(dead_players)
         player.state = 1
-        print_or_tweet(somebody_revived(player))
+        write_tweet(somebody_revived(player))
     else:
         suicide()
 
@@ -147,19 +141,19 @@ def suicide():
     alive_players = filter_player_list_by_state(player_list, 1)
     player = random.choice(alive_players)
     player.state = 0
-    print_or_tweet(somebody_died(player))
+    write_tweet(somebody_died(player))
 
 def end():
     global finished
     alive_players = filter_player_list_by_state(player_list, 1)
-    print_or_tweet(final())
-    print_or_tweet(final_statistics_1(player_list))
-    print_or_tweet(final_statistics_2(player_list))
-    print_or_tweet(final_statistics_3(player_list))
+    write_tweet(final())
+    write_tweet(final_statistics_1(player_list))
+    write_tweet(final_statistics_2(player_list))
+    write_tweet(final_statistics_3(player_list))
     if len(alive_players) == 1:
-        print_or_tweet(winner(alive_players[0]))
+        write_tweet(winner(alive_players[0]))
     elif len(alive_players) == 0:
-        print_or_tweet(nobody_won())
+        write_tweet(nobody_won())
     finished = True
 
 start_battle()

@@ -1,6 +1,6 @@
-from model_item import Item
-from service_api import print_or_tweet
-from literals import *
+from item import Item
+from services.simulation import write_tweet
+from data.literals import *
 
 class Player(object):
     name = ""
@@ -23,7 +23,7 @@ class Player(object):
     def pick(self, item):
         if len(self.item_list) <= 1:
             self.item_list.append(item)
-            print_or_tweet(somebody_found_item(self, item))
+            write_tweet(somebody_found_item(self, item))
         else:
             if self.item_list[0].get_value() >= self.item_list[1].get_value():
                 worst_item = self.item_list[1]
@@ -34,9 +34,9 @@ class Player(object):
 
             if item.get_value() > worst_item.get_value():
                 self.item_list = [item, best_item]
-                print_or_tweet(somebody_replaced_item(self, item, worst_item))
+                write_tweet(somebody_replaced_item(self, item, worst_item))
             else:
-                print_or_tweet(somebody_doesnt_want_item(self, item))
+                write_tweet(somebody_doesnt_want_item(self, item))
 
     def get_attack(self):
         attack = 0

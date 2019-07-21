@@ -1,6 +1,6 @@
 import random
-from data_players import raw_player_list
-from model_player import Player
+from data.players import raw_player_list
+from models.player import Player
 
 def get_player_list():
     list = []

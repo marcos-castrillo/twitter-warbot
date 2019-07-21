@@ -1,8 +1,7 @@
-tweeting_interval = 3600 # seconds
+tweeting_interval = 0.1 # seconds
 sleeping_interval = 600 # seconds
-live = True # console or tweet
-preload_data = True
 sleeping_hours = [3, 4, 5, 6, 7]
+output_dir = './simulations'
 
 prob_item = 70
 prob_battle = 25
