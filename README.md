@@ -25,3 +25,5 @@ This is my first twitter bot. It's a fictional tournament where players can 'fig
 - Attach an image with the summary of the action/ of the tournament results.
 - Introduce teams.
 - Leave traps in places.
+- Display remaining alive players.
+- Gender-friendly literals
