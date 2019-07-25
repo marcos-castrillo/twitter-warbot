@@ -27,3 +27,4 @@ This is my first twitter bot. It's a fictional tournament where players can 'fig
 - Leave traps in places.
 - Display remaining alive players.
 - Gender-friendly literals
+- Wake up in the middle of the night
