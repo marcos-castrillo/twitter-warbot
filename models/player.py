@@ -1,5 +1,6 @@
 from item import Item
 from services.simulation import write_tweet
+from models.tweet_type import Tweet_type
 from data.literals import *
 
 class Player(object):
@@ -20,10 +21,10 @@ class Player(object):
         self.name = name
         self.username = username
 
-    def pick(self, item):
+    def pick(self, player_list, item):
         if len(self.item_list) <= 1:
             self.item_list.append(item)
-            write_tweet(somebody_found_item(self, item))
+            write_tweet(Tweet_type.somebody_found_item, player_list, [self, item])
         else:
             if self.item_list[0].get_value() >= self.item_list[1].get_value():
                 worst_item = self.item_list[1]
@@ -34,9 +35,9 @@ class Player(object):
 
             if item.get_value() > worst_item.get_value():
                 self.item_list = [item, best_item]
-                write_tweet(somebody_replaced_item(self, item, worst_item))
+                write_tweet(Tweet_type.somebody_replaced_item, player_list, [self, item, worst_item])
             else:
-                write_tweet(somebody_doesnt_want_item(self, item))
+                write_tweet(Tweet_type.somebody_doesnt_want_item, player_list, [self, item])
 
     def get_attack(self):
         attack = 0

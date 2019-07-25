@@ -1,6 +1,57 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import random
+from models.tweet_types import Tweet_type
+
+def get_message(type, args = None):
+    if type == Tweet_type.start:
+        return start()
+    if type == Tweet_type.sleep:
+        return sleep(args[0])
+    if type == Tweet_type.hour_threshold:
+        return hour_threshold(args[0])
+    if type == Tweet_type.final:
+        return final()
+    if type == Tweet_type.winner:
+        return hour_threshold(args[0])
+    if type == Tweet_type.nobody_won:
+        return nobody_won()
+    if type == Tweet_type.final_statistics_1:
+        return final_statistics_1(args[0])
+    if type == Tweet_type.final_statistics_2:
+        return final_statistics_2(args[0])
+    if type == Tweet_type.final_statistics_3:
+        return final_statistics_3(args[0])
+    if type == Tweet_type.somebody_got_ill:
+        return somebody_got_ill(args[0], args[1])
+    if type == Tweet_type.somebody_got_injured:
+        return somebody_got_injured(args[0], args[1])
+    if type == Tweet_type.somebody_found_item:
+        return somebody_found_item(args[0], args[1])
+    if type == Tweet_type.somebody_replaced_item:
+        return somebody_replaced_item(args[0], args[1], args[2])
+    if type == Tweet_type.somebody_doesnt_want_item:
+        return somebody_doesnt_want_item(args[0], args[1])
+    if type == Tweet_type.somebody_tied_and_became_friend:
+        return somebody_tied_and_became_friend(args[0], args[1])
+    if type == Tweet_type.somebody_tied_and_was_friend:
+        return somebody_tied_and_was_friend(args[0], args[1])
+    if type == Tweet_type.somebody_escaped:
+        if len(args) == 3:
+            return somebody_escaped(args[0], args[1], args[2])
+        if len(args) == 2:
+            return somebody_escaped(args[0], args[1])
+    if type == Tweet_type.somebody_killed:
+        if len(args) == 5:
+            return somebody_killed(args[0], args[1], args[2], args[3], args[4])
+        if len(args) == 4:
+            return somebody_killed(args[0], args[1], args[2], args[3])
+        if len(args) == 3:
+            return somebody_killed(args[0], args[1], args[2])
+    if type == Tweet_type.somebody_revived:
+        return somebody_revived(args[0])
+    if type == Tweet_type.somebody_died:
+        return somebody_died(args[0])
 
 def get_amount(number):
     if number == 0:
