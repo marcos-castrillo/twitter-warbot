@@ -1,5 +1,6 @@
 import twitter
 import datetime
+
 from data.secrets import *
 from data.constants import *
 
@@ -20,5 +21,6 @@ def tweet(message):
                       consumer_secret=consumer_secret,
                       access_token_key=access_token,
                       access_token_secret=access_token_secret)
+
     tweet = api.PostUpdate(status = message.decode("utf8"), in_reply_to_status_id=last_tweet_id)
     last_tweet_id = tweet.id_str

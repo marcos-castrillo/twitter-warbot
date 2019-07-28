@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import random
-from models.tweet_types import Tweet_type
+from models.tweet_type import Tweet_type
 
 def get_message(type, args = None):
     if type == Tweet_type.start:
@@ -13,7 +13,7 @@ def get_message(type, args = None):
     if type == Tweet_type.final:
         return final()
     if type == Tweet_type.winner:
-        return hour_threshold(args[0])
+        return winner(args[0])
     if type == Tweet_type.nobody_won:
         return nobody_won()
     if type == Tweet_type.final_statistics_1:
@@ -52,6 +52,12 @@ def get_message(type, args = None):
         return somebody_revived(args[0])
     if type == Tweet_type.somebody_died:
         return somebody_died(args[0])
+    if type == Tweet_type.somebody_moved:
+        return somebody_moved(args[0], args[1], args[2])
+    if type == Tweet_type.destroyed:
+        return destroyed(args[0], args[1])
+    if type == Tweet_type.somebody_couldnt_move:
+        return somebody_couldnt_move(args[0])
 
 def get_amount(number):
     if number == 0:
@@ -202,3 +208,18 @@ def somebody_revived(player):
 
 def somebody_died(player):
     return u' '.join((player.get_name(), random.choice([u'ha metido la pierna en una trampa para osos y se ha muerto desangrado. ¡Qué mala pata!', u'se ha caído por un barranco y se ha muerto. ¡Qué torpe!', u'ha sido víctima de un rayo y se ha muerto en el acto.', u'ha muerto repentinamente por un fallo cardíaco. ¡Hay que hacer más deporte!', u'se estaba dando un baño en un lago sin darse cuenta de que había pirañas. Nunca fue la persona más avispada.', u'ha empezado a toser, a toser y a toser y se ha acabado asfixiando. Puede que fumarse 5 paquetes al día no fuera la decisión más sabia.', u'ha amochado de repente.', u'se petateó y ahora le está dando de comer a los gusanos.']))).encode('utf-8')
+
+def somebody_moved(player, old_location, new_location):
+    return u' '.join((player.get_name(), 'ha caminado desde', old_location.name, 'a', new_location.name)).encode('utf-8')
+
+def destroyed(place, dead_list):
+    dead = ''
+    for i, p in enumerate(dead_list):
+        if dead == '':
+            dead = p.get_name()
+        else:
+            dead = dead + u' y ' + p.get_name()
+    return u' '.join((place.name, u'ha colapsado y', dead, u'han muerto en un trágico accidente.')).encode('utf-8')
+
+def somebody_couldnt_move(player):
+    return u' '.join((player.name, u'se ha terminado toda la comida de', player.location.name, u'y no ha podido acceder a otros lugares, por lo que ha muerto de hambre.')).encode('utf-8')

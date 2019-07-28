@@ -2,11 +2,14 @@ import random
 from data.players import raw_player_list
 from models.player import Player
 
-def get_player_list():
+def get_player_list(place_list):
     list = []
     for i, p in enumerate(raw_player_list):
-        player = Player(p[0], p[1], p[2])
+        location = random.choice(place_list)
+        player = Player(p[0], location, p[1], p[2], p[3])
         list.append(player)
+
+        place_list[place_list.index(location)].players.append(player)
 
     for i, p in enumerate(list):
         initialize_friend_list(list, p)
@@ -28,17 +31,21 @@ def get_player_by_name(player_list, name):
     else:
         return None
 
-def get_random_player(player_list):
-    player = random.choice(player_list)
-    return player
+def get_two_players_in_random_place(player_list, place_list):
+    list = []
+    for i, p in enumerate(place_list):
+        if len(p.players) > 1:
+            list.append(p)
 
-def get_two_random_players(player_list):
-    player1 = get_random_player(player_list)
-    player2 = get_random_player(player_list)
-    while player2 == player1:
-        player2 = get_random_player(player_list)
-
-    return player1, player2
+    if len(list) > 0:
+        place = random.choice(list)
+        player_1 = random.choice(place.players)
+        player_2 = random.choice(place.players)
+        while player_2 == player_1:
+            player_2 = random.choice(place.players)
+        return player_1, player_2
+    else:
+        return None
 
 def filter_player_list_by_state(player_list, value):
     list = []

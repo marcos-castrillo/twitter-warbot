@@ -19,6 +19,9 @@ class Tweet_type(object):
     somebody_killed = 18
     somebody_revived = 19
     somebody_died = 20
+    somebody_moved = 21
+    destroyed = 22
+    somebody_couldnt_move = 23
 
     def __init__(self):
         pass

@@ -19,12 +19,11 @@ This is my first twitter bot. It's a fictional tournament where players can 'fig
 
 ## Ideas
 
-- Loading data via DM.
-- Introduce places.
 - Introduce life points.
-- Attach an image with the summary of the action/ of the tournament results.
 - Introduce teams.
 - Leave traps in places.
-- Display remaining alive players.
 - Gender-friendly literals
 - Wake up in the middle of the night
+- Steal items from other players
+- Cure illnesses
+- When moving do something else (pick items?)

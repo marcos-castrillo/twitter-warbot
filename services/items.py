@@ -1,6 +1,10 @@
 import random
 from data.items import raw_item_list, raw_item_list_1, raw_item_list_2, raw_item_list_3, raw_illness_list, raw_injury_list
 from models.item import Item
+from models.item_rarity_probab import Item_Rarity_Probab
+
+def initialize_item_rarity_probab(probab_rarity_1, probab_rarity_2, probab_rarity_3):
+    return Item_Rarity_Probab(probab_rarity_1, probab_rarity_2, probab_rarity_3)
 
 def get_item_list(rarity = None):
     list = []
@@ -31,11 +35,11 @@ def get_injury_list():
 
 def get_random_item(item_probab):
     action_number = random.randint(1, 100)
-    if action_number < item_probab[0]:
+    if action_number < item_probab.rarity_1_action_number:
         rarity = 1
-    elif action_number < sum(item_probab[0:2]):
+    elif action_number < item_probab.rarity_2_action_number:
         rarity = 2
-    elif action_number <= sum(item_probab[0:3]):
+    elif action_number <= item_probab.rarity_3_action_number:
         rarity = 1
     return random.choice(get_item_list(rarity))
 
