@@ -6,10 +6,9 @@ def get_player_list(place_list):
     list = []
     for i, p in enumerate(raw_player_list):
         location = random.choice(place_list)
-        player = Player(p[0], location, p[1], p[2], p[3])
+        player = Player(p[0], location, p[2], p[1], p[3], p[3])
         list.append(player)
-
-        place_list[place_list.index(location)].players.append(player)
+        location.players.append(player)
 
     for i, p in enumerate(list):
         initialize_friend_list(list, p)
@@ -45,7 +44,7 @@ def get_two_players_in_random_place(player_list, place_list):
             player_2 = random.choice(place.players)
         return player_1, player_2
     else:
-        return None
+        return None, None
 
 def filter_player_list_by_state(player_list, value):
     list = []

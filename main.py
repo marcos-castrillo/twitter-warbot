@@ -23,7 +23,7 @@ item_list = get_item_list()
 place_list = get_place_list()
 player_list = get_player_list(place_list)
 initialize_avatars(player_list)
-simulation_probab = initialize_simulation_probabs(probab_item, probab_move, probab_battle, probab_destroy, probab_accident, probab_suicide, probab_revive)
+simulation_probab = initialize_simulation_probabs(probab_item, probab_move, probab_battle, probab_destroy, probab_trap, probab_accident, probab_suicide, probab_revive)
 item_rarity_probab = initialize_item_rarity_probab(probab_rarity_1, probab_rarity_2, probab_rarity_3)
 finished = False
 hour_count = 0
@@ -33,17 +33,9 @@ def start_battle():
     if probab_tie + probab_friend_tie > 50:
         sys.exit('Config error: tie probabilities cannot be higher than 50')
 
-
     write_tweet(Tweet_type.start, player_list, place_list)
-    simulate_day()
 
     while not finished:
-        if datetime.datetime.now().hour in sleeping_hours:
-            write_tweet(Tweet_type.sleep, player_list, place_list, None, [sleeping_hours[-1] + 1])
-        while datetime.datetime.now().hour in sleeping_hours:
-            time.sleep(sleeping_interval)
-
-        time.sleep(tweeting_interval)
         simulate_day()
 
 def simulate_day():
@@ -54,21 +46,25 @@ def simulate_day():
             simulation_probab.increase(i)
             item_rarity_probab.increase(i)
             write_tweet(Tweet_type.hour_threshold, player_list, place_list, None, [hour_count])
+
     action_number = random.randint(1, 100)
+
     if action_number < simulation_probab.item_action_number:
-        destroy()
+        pick_item()
     elif action_number < simulation_probab.move_action_number:
         move()
     elif action_number < simulation_probab.battle_action_number:
-        destroy()
+        battle()
     elif action_number < simulation_probab.destroy_action_number:
         destroy()
+    elif action_number < simulation_probab.trap_action_number:
+        trap()
     elif action_number < simulation_probab.accident_action_number:
-        move()
+        accident()
     elif action_number == simulation_probab.suicide_action_number:
-        move()
+        suicide()
     elif action_number == simulation_probab.revive_action_number:
-        move()
+        revive()
 
     if get_alive_players_count(player_list) <= 1:
         end()
@@ -77,7 +73,7 @@ def pick_item():
     alive_players = filter_player_list_by_state(player_list, 1)
     player = random.choice(alive_players)
     item = get_random_item(item_rarity_probab)
-    player.pick(player_list, item)
+    player.pick(player_list, place_list, item)
 
 def move():
     global place_list
@@ -90,24 +86,48 @@ def move():
         if not l.destroyed:
             loc_candidates.append(l)
 
-    if len(loc_candidates) > 0:
+    if len(loc_candidates) == 0:
+        player.state = 0
+        player.location.players.pop(player.location.players.index(player))
+
+        write_tweet(Tweet_type.somebody_couldnt_move, player_list, place_list, player.location, [player])
+        return
+
+    new_location = random.choice(loc_candidates)
+
+    if new_location.trap_by != None:
+        action_number = random.randint(1, 100)
+
+        if action_number < 50:
+            player.state = 0
+            player.location.players.pop(player.location.players.index(player))
+
+            trapped_by = new_location.trap_by
+            new_location.trap_by.kills = new_location.trap_by.kills + 1
+            new_location.trap_by = None
+            write_tweet(Tweet_type.trapped, player_list, place_list, player.location, [player, trapped_by, new_location])
+        else:
+            trapped_by = new_location.trap_by
+            new_location.trap_by = None
+            write_tweet(Tweet_type.dodged_trap, player_list, place_list, player.location, [player, trapped_by, new_location])
+
+    else:
         old_location = player.location
         index = old_location.players.index(player)
         old_location.players.pop(index)
 
-        new_location = random.choice(loc_candidates)
-        index = place_list.index(new_location)
-        place_list[index].players.append(player)
+        new_location.players.append(player)
         player.location = new_location
 
         write_tweet(Tweet_type.somebody_moved, player_list, place_list, player.location, [player, old_location, player.location])
-    else:
-        player.state = 0
-        write_tweet(Tweet_type.somebody_couldnt_move, player_list, place_list, player.location, [player])
 
 def battle():
     alive_players = filter_player_list_by_state(player_list, 1)
     player_1, player_2 = get_two_players_in_random_place(alive_players, place_list)
+
+    if (player_1, player_2) == (None, None):
+        move()
+        return
 
     factor_1 = 1 - player_1.get_defense() + player_2.get_attack()
     factor_2 = 100 + player_2.get_defense() - player_1.get_attack()
@@ -121,40 +141,64 @@ def battle():
 
     kill_number = random.randint(factor_1, factor_2)
 
-    if kill_number < winner_1:
-        kill(player_list, player_1, player_2)
+    if kill_number == int((factor_2 - factor_1) / 2):
+        run_away(player_list, place_list, player_1, player_2)
+    elif kill_number <= int((factor_2 - factor_1) / 2) + 2 and kill_number >= int((factor_2 - factor_1) / 2) - 2 and (len(player_1.item_list) > 0 or len(player_2.item_list) > 0):
+        steal(player_list, place_list, player_1, player_2)
+    elif kill_number < winner_1:
+        kill(player_list, place_list, player_1, player_2)
     elif kill_number > winner_2:
-        kill(player_list, player_2, player_1)
-    elif kill_number == 50:
-        run_away(player_list, player_1, player_2)
+        kill(player_list, place_list, player_2, player_1)
     else:
-        tie(player_list, player_1, player_2)
+        tie(player_list, place_list, player_1, player_2)
 
 def destroy():
+    connected_list = []
     list = []
     for i, p in enumerate(place_list):
         append = False
         if not p.destroyed:
+            list.append(p)
             for j, q in enumerate(p.connections):
                 if q.destroyed:
                     append = True
             if append:
-                list.append(p)
+                connected_list.append(p)
 
-    if len(list) == 0:
-        place = random.choice(place_list)
-    else:
+    if len(connected_list) == 0:
         place = random.choice(list)
+    else:
+        place = random.choice(connected_list)
 
     place.destroyed = True
-
     dead_list = []
+
     for i, p in enumerate(place.players):
         if p.state == 1:
             p.state = 0
             dead_list.append(p)
 
+    for i, p in enumerate(place.players):
+        for j, q in enumerate(dead_list):
+            if p == q:
+                p.location.players.pop(p.location.players.index(p))
+
     write_tweet(Tweet_type.destroyed, player_list, place_list, place, [place, dead_list])
+
+def trap():
+    list = []
+    for i, p in enumerate(place_list):
+        if p.trap_by == None and len(p.players) > 0:
+            list.append(p)
+
+    if len(list) > 0:
+        place = random.choice(list)
+        player = random.choice(place.players)
+
+        place.trap_by = player
+        write_tweet(Tweet_type.trap, player_list, place_list, place, [player, place])
+    else:
+        move()
 
 def accident():
     alive_players = filter_player_list_by_state(player_list, 1)
@@ -183,6 +227,12 @@ def revive():
     if len(dead_players) > 0:
         player = random.choice(dead_players)
         player.state = 1
+
+        place = player.location
+        while place.destroyed:
+            place = random.choice(place_list)
+        player.location = place
+        place.players.append(player)
         write_tweet(Tweet_type.somebody_revived, player_list, place_list, player.location, [player])
     else:
         suicide()
@@ -191,6 +241,8 @@ def suicide():
     alive_players = filter_player_list_by_state(player_list, 1)
     player = random.choice(alive_players)
     player.state = 0
+    player.location.players.pop(player.location.players.index(player))
+
     write_tweet(Tweet_type.somebody_died, player_list, place_list, player.location, [player])
 
 def end():

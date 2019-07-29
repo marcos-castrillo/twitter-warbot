@@ -11,22 +11,24 @@ class Player(object):
     kills = 0
     location = 0
     state = 0
+    gender = None
     item_list = []
     friend_list = []
     injury_list = []
 
     # Constructor
-    def __init__(self, name, location, username = None, friend_list = None, fav_place = None):
+    def __init__(self, name, location, gender, username = None, friend_list = None, fav_place = None):
         self.friend_list = friend_list
         self.item_list = []
         self.injury_list = []
         self.fav_place = fav_place
         self.location = location
         self.state = 1
+        self.gender = gender
         self.name = name
         self.username = username
 
-    def pick(self, player_list, item):
+    def pick(self, player_list, place_list, item):
         if len(self.item_list) <= 1:
             self.item_list.append(item)
             write_tweet(Tweet_type.somebody_found_item, player_list, place_list, self.location, [self, item])

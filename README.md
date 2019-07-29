@@ -21,9 +21,6 @@ This is my first twitter bot. It's a fictional tournament where players can 'fig
 
 - Introduce life points.
 - Introduce teams.
-- Leave traps in places.
-- Gender-friendly literals
-- Wake up in the middle of the night
-- Steal items from other players
 - Cure illnesses
 - When moving do something else (pick items?)
+- Find characters

@@ -22,6 +22,12 @@ class Tweet_type(object):
     somebody_moved = 21
     destroyed = 22
     somebody_couldnt_move = 23
+    trap = 24
+    trapped = 25
+    dodged_trap = 26
+    somebody_stole = 27
+    somebody_stole_and_replaced = 28
+    somebody_stole_and_threw = 29
 
     def __init__(self):
         pass

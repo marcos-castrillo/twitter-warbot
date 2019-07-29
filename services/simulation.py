@@ -44,8 +44,8 @@ def initialize_avatars(player_list):
             urllib.urlretrieve('http://avatars.io/twitter/' + player.username + '/small', filename)
         player.avatar_dir = filename
 
-def initialize_simulation_probabs(prob_item, prob_move, prob_battle, prob_destroy, prob_accident, prob_suicide, prob_revive):
-    return Simulation_Probab(prob_item, prob_move, prob_destroy, prob_battle, prob_accident, prob_suicide, prob_revive)
+def initialize_simulation_probabs(prob_item, prob_move, prob_battle, prob_destroy, prob_trap, prob_accident, prob_suicide, prob_revive):
+    return Simulation_Probab(prob_item, prob_move, prob_destroy, prob_battle, prob_trap, prob_accident, prob_suicide, prob_revive)
 
 def write_tweet(type, player_list, place_list, location = None, args = None):
     global line_number
@@ -54,6 +54,9 @@ def write_tweet(type, player_list, place_list, location = None, args = None):
     write_line(get_message(type, args))
     line_number = file_len()
     draw_image(type, player_list, place_list, location, args)
+    if type == Tweet_type.winner:
+        with open(os.path.join(output_dir, '_seacabo.txt'), "w") as file:
+            file.write('todo ok')
 
 def write_line(message):
     with open(os.path.join(path), "a+") as file:
@@ -137,10 +140,10 @@ def draw_player(image, draw, coord_x, coord_y, player, is_alive):
 
     if player.get_attack() > 0:
         image.paste(attack, (coord_x, coord_y - 35), attack.convert('RGBA'))
-        draw.text((coord_x + 15, coord_y - 35), str(player.get_attack()), fill='rgb(0,0,0)', font=ImageFont.truetype('assets/Comic-Sans.ttf', size=10))
+        draw.text((coord_x + 14, coord_y - 35), str(player.get_attack()), fill='rgb(0,0,0)', font=ImageFont.truetype('assets/Comic-Sans.ttf', size=10))
 
     if player.get_defense() > 0:
-        image.paste(defense, (coord_x + 24, coord_y - 35), defense.convert('RGBA'))
+        image.paste(defense, (coord_x + 25, coord_y - 35), defense.convert('RGBA'))
         draw.text((coord_x + 41, coord_y - 35), str(player.get_attack()), fill='rgb(0,0,0)', font=ImageFont.truetype('assets/Comic-Sans.ttf', size=10))
 
     if not is_alive:
