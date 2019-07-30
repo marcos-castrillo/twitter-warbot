@@ -5,9 +5,9 @@ class Tweet_type(object):
     final = 4
     winner = 5
     nobody_won = 6
-    final_statistics_1 = 7
-    final_statistics_2 = 8
-    final_statistics_3 = 9
+    somebody_stole = 7
+    somebody_stole_and_replaced = 8
+    somebody_stole_and_threw = 9
     somebody_got_ill = 10
     somebody_got_injured = 11
     somebody_found_item = 12
@@ -25,9 +25,7 @@ class Tweet_type(object):
     trap = 24
     trapped = 25
     dodged_trap = 26
-    somebody_stole = 27
-    somebody_stole_and_replaced = 28
-    somebody_stole_and_threw = 29
+    somebody_powerup = 30
 
     def __init__(self):
         pass

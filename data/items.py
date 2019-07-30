@@ -8,7 +8,7 @@ raw_item_list_1 = [
     [u'un mero', 0, 0],
     [u'una pistola sin balas', 0, 0],
     [u'unas chinchetas', 0, 1],
-    [u'una cáscara de platano', 0, 1],
+    [u'una cáscara de plátano', 0, 1],
     [u'un libro tocho', 1, 0],
     [u'un tiesto', 0, 1],
     [u'una lata de sardinas', 0, 1],
@@ -69,6 +69,8 @@ raw_item_list_3 = [
     [u'un javelin', -2, 10]
 ]
 
+raw_item_list = raw_item_list_1 + raw_item_list_2 + raw_item_list_3
+
 raw_illness_list = [
     [u'un resfriado', -1, -1],
     [u'una tos mucal', -1, -1],
@@ -99,4 +101,6 @@ raw_injury_list = [
     [u'una necrosis en el brazo izquierdo', -5, -5]
 ]
 
-raw_item_list = raw_item_list_1 + raw_item_list_2 + raw_item_list_3
+raw_powerup_list = [
+    [u'un cubata bien cargado', 3, 3]
+]

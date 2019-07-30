@@ -44,8 +44,8 @@ def initialize_avatars(player_list):
             urllib.urlretrieve('http://avatars.io/twitter/' + player.username + '/small', filename)
         player.avatar_dir = filename
 
-def initialize_simulation_probabs(prob_item, prob_move, prob_battle, prob_destroy, prob_trap, prob_accident, prob_suicide, prob_revive):
-    return Simulation_Probab(prob_item, prob_move, prob_destroy, prob_battle, prob_trap, prob_accident, prob_suicide, prob_revive)
+def initialize_simulation_probabs(prob_item, prob_move, prob_battle, prob_destroy, prob_trap, prob_suicide, prob_revive):
+    return Simulation_Probab(prob_item, prob_move, prob_battle, prob_destroy, prob_trap, prob_suicide, prob_revive)
 
 def write_tweet(type, player_list, place_list, location = None, args = None):
     global line_number
@@ -74,6 +74,8 @@ def draw_image(type, player_list, place_list, location = None, args = None):
 
     image = Image.open('assets/background.png')
     destroyed = Image.open('assets/destroyed.png')
+    trap = Image.open('assets/trap.png')
+    loot = Image.open('assets/loot.png')
     draw = ImageDraw.Draw(image)
 
     alive_players_list = []
@@ -109,6 +111,11 @@ def draw_image(type, player_list, place_list, location = None, args = None):
     for i, p in enumerate(place_list):
         if p.destroyed == True:
             image.paste(destroyed, (p.coord_x - 15, p.coord_y - 15, p.coord_x + 15, p.coord_y + 15), destroyed.convert('RGBA'))
+        else:
+            if p.loot:
+                image.paste(loot, (p.coord_x - 15, p.coord_y - 15, p.coord_x + 15, p.coord_y + 15), loot.convert('RGBA'))
+            if p.trap_by != None:
+                image.paste(trap, (p.coord_x - 15, p.coord_y - 15, p.coord_x + 15, p.coord_y + 15), trap.convert('RGBA'))
 
     draw_ranking(image, draw, alive_players_list, dead_players_list)
 

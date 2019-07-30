@@ -19,8 +19,4 @@ This is my first twitter bot. It's a fictional tournament where players can 'fig
 
 ## Ideas
 
-- Introduce life points.
-- Introduce teams.
-- Cure illnesses
 - When moving do something else (pick items?)
-- Find characters

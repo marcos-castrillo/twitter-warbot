@@ -15,12 +15,14 @@ class Player(object):
     item_list = []
     friend_list = []
     injury_list = []
+    powerup_list = []
 
     # Constructor
     def __init__(self, name, location, gender, username = None, friend_list = None, fav_place = None):
         self.friend_list = friend_list
         self.item_list = []
         self.injury_list = []
+        self.powerup_list = []
         self.fav_place = fav_place
         self.location = location
         self.state = 1
@@ -52,6 +54,8 @@ class Player(object):
             attack = attack + item.attack
         for injury in self.injury_list:
             attack = attack + injury.attack
+        for powerup in self.powerup_list:
+            attack = attack + powerup.attack
         return attack
 
     def get_defense(self):
@@ -60,6 +64,8 @@ class Player(object):
             defense = defense + item.defense
         for injury in self.injury_list:
             defense = defense + injury.defense
+        for powerup in self.powerup_list:
+            defense = defense + powerup.attack
         return defense
 
     def get_best_item(self):
