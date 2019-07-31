@@ -1,8 +1,7 @@
 class Tweet_type(object):
     start = 1
-    sleep = 2
     hour_threshold = 3
-    final = 4
+    somebody_powerup = 4
     winner = 5
     nobody_won = 6
     somebody_stole = 7
@@ -25,7 +24,10 @@ class Tweet_type(object):
     trap = 24
     trapped = 25
     dodged_trap = 26
-    somebody_powerup = 30
+    monster_appeared = 28
+    monster_dissappeared = 29
+    monster_moved = 30
+    monster_killed = 31
 
     def __init__(self):
         pass

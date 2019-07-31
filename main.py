@@ -31,7 +31,9 @@ hour_count = 0
 def start_battle():
     global hour_count, player_list, item_list
     if probab_tie + probab_friend_tie > 50:
-        sys.exit('Config error: tie probabilities cannot be higher than 50')
+        sys.exit('Config error: tie probabilities cannot be higher than 50.')
+    if len(player_list) > max_players:
+        sys.exit('Config error: player limit exceeded.')
 
     write_tweet(Tweet_type.start, player_list, place_list)
 
@@ -68,12 +70,57 @@ def simulate_day():
         end()
 
 def pick_item():
-    alive_players = filter_player_list_by_state(player_list, 1)
-    player = random.choice(alive_players)
+    action_number = random.randint(1, 100)
 
-    better_loot = player.location.loot or player.location == player.fav_place
-    item = get_random_item(item_rarity_probab, better_loot)
-    player.pick(player_list, place_list, item)
+    if action_number > 70:
+        monster()
+    else:
+        alive_players = filter_player_list_by_state(player_list, 1)
+        player = random.choice(alive_players)
+
+        better_loot = player.location.loot or player.location == player.fav_place
+        item = get_random_item(item_rarity_probab, better_loot)
+        player.pick(player_list, place_list, item)
+
+def monster():
+    place = None
+    for i, p in enumerate(place_list):
+        if p.monster:
+            place = p
+
+    if place != None:
+        action_number = random.randint(1, 100)
+
+        if action_number > 20 and len(place.players) > 0:
+            player = random.choice(place.players)
+            player.state = 0
+            place.players.pop(place.players.index(player))
+            write_tweet(Tweet_type.monster_killed, player_list, place_list, place, [player, place])
+        else:
+            place.monster = False
+
+            loc_candidates = []
+            for i, l in enumerate(place.connections):
+                if not l.destroyed:
+                    loc_candidates.append(l)
+
+            if len(loc_candidates) > 0:
+                new_place = random.choice(loc_candidates)
+                new_place.monster = True
+                write_tweet(Tweet_type.monster_moved, player_list, place_list, new_place, [place, new_place])
+            else:
+                write_tweet(Tweet_type.monster_dissappeared, player_list, place_list, place, [place])
+    else:
+        loc_candidates = []
+
+        for i, p in enumerate(place_list):
+            if not p.destroyed:
+                loc_candidates.append(p)
+
+        new_place = random.choice(loc_candidates)
+        new_place.monster = True
+
+        write_tweet(Tweet_type.monster_appeared, player_list, place_list, new_place, [new_place])
 
 def move():
     global place_list
@@ -106,6 +153,7 @@ def move():
             player.location.players.pop(player.location.players.index(player))
             new_location.players.append(player)
             player.location = new_location
+
             write_tweet(Tweet_type.trapped, player_list, place_list, player.location, [player, trapped_by, new_location])
         else:
             trapped_by = new_location.trap_by
@@ -198,6 +246,9 @@ def destroy():
             if p == q:
                 p.location.players.pop(p.location.players.index(p))
 
+    if place.monster:
+        place.monster = None
+
     write_tweet(Tweet_type.destroyed, player_list, place_list, place, [place, dead_list])
 
 def trap():
@@ -266,7 +317,6 @@ def suicide():
 def end():
     global finished
     alive_players = filter_player_list_by_state(player_list, 1)
-    write_tweet(Tweet_type.final, player_list, place_list)
     if len(alive_players) == 1:
         write_tweet(Tweet_type.winner, player_list, place_list, alive_players[0].location, [alive_players[0]])
     elif len(alive_players) == 0:

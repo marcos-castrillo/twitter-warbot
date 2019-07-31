@@ -76,6 +76,10 @@ def draw_image(type, player_list, place_list, location = None, args = None):
     destroyed = Image.open('assets/destroyed.png')
     trap = Image.open('assets/trap.png')
     loot = Image.open('assets/loot.png')
+    item = Image.open('assets/item.png')
+    monster = Image.open('assets/monster.png')
+    illness = Image.open('assets/illness.png')
+    powerup = Image.open('assets/powerup.png')
     draw = ImageDraw.Draw(image)
 
     alive_players_list = []
@@ -86,10 +90,7 @@ def draw_image(type, player_list, place_list, location = None, args = None):
         else:
             dead_players_list.append(p)
 
-    if location != None:
-        draw.ellipse((location.coord_x - 75, location.coord_y - 75, location.coord_x + 75, location.coord_y + 75), outline='rgb(255,0,0)')
-
-    if type == Tweet_type.winner or type == Tweet_type.somebody_got_ill or type == Tweet_type.somebody_got_injured or type == Tweet_type.somebody_found_item or type == Tweet_type.somebody_replaced_item or type == Tweet_type.somebody_doesnt_want_item or type == Tweet_type.somebody_revived or type == Tweet_type.somebody_died or type == Tweet_type.somebody_moved:
+    if type == Tweet_type.winner or type == Tweet_type.somebody_got_ill or type == Tweet_type.somebody_got_injured or type == Tweet_type.somebody_found_item or type == Tweet_type.somebody_replaced_item or type == Tweet_type.somebody_doesnt_want_item or type == Tweet_type.somebody_revived or type == Tweet_type.somebody_died or type == Tweet_type.somebody_moved or type == Tweet_type.monster_killed or type == Tweet_type.trap or type == Tweet_type.trapped or type == Tweet_type.dodged_trap:
         avatar = Image.open(args[0].avatar_dir)
         image.paste(avatar, (location.coord_x - 24, location.coord_y - 24, location.coord_x + 24, location.coord_y + 24), avatar.convert('RGBA'))
     elif type == Tweet_type.somebody_tied_and_became_friend or type == Tweet_type.somebody_tied_and_was_friend or type == Tweet_type.somebody_escaped or type == Tweet_type.somebody_killed:
@@ -103,19 +104,32 @@ def draw_image(type, player_list, place_list, location = None, args = None):
         if args[1].state == 0:
             draw.text((location.coord_x + 8, location.coord_y - 36), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype('assets/Comic-Sans.ttf', size=50))
 
-    elif type == Tweet_type.destroyed:
+    if location != None:
+        draw.ellipse((location.coord_x - 75, location.coord_y - 75, location.coord_x + 75, location.coord_y + 75), outline='rgb(255,0,0)')
+    if type == Tweet_type.destroyed:
         for i, p in enumerate(args[1]):
             avatar = Image.open(p.avatar_dir)
             image.paste(avatar, (location.coord_x - 40 + (i * 30), location.coord_y - 24, location.coord_x + 8 + (i * 30), location.coord_y + 24), avatar.convert('RGBA'))
+
+    if type == Tweet_type.somebody_found_item or type == Tweet_type.somebody_replaced_item or type == Tweet_type.somebody_doesnt_want_item:
+        image.paste(item, (location.coord_x - 15, location.coord_y - 15, location.coord_x + 15, location.coord_y + 15), item.convert('RGBA'))
+
+    if type == Tweet_type.somebody_got_ill:
+        image.paste(illness, (location.coord_x - 15, location.coord_y - 15, location.coord_x + 15, location.coord_y + 15), illness.convert('RGBA'))
+
+    if type == Tweet_type.somebody_powerup:
+        image.paste(powerup, (location.coord_x - 15, location.coord_y - 15, location.coord_x + 15, location.coord_y + 15), powerup.convert('RGBA'))
 
     for i, p in enumerate(place_list):
         if p.destroyed == True:
             image.paste(destroyed, (p.coord_x - 15, p.coord_y - 15, p.coord_x + 15, p.coord_y + 15), destroyed.convert('RGBA'))
         else:
             if p.loot:
-                image.paste(loot, (p.coord_x - 15, p.coord_y - 15, p.coord_x + 15, p.coord_y + 15), loot.convert('RGBA'))
+                image.paste(loot, (p.coord_x - 30, p.coord_y - 20, p.coord_x, p.coord_y + 10), loot.convert('RGBA'))
             if p.trap_by != None:
-                image.paste(trap, (p.coord_x - 15, p.coord_y - 15, p.coord_x + 15, p.coord_y + 15), trap.convert('RGBA'))
+                image.paste(trap, (p.coord_x - 10, p.coord_y - 10, p.coord_x + 20, p.coord_y + 20), trap.convert('RGBA'))
+            if p.monster:
+                image.paste(monster, (p.coord_x - 15, p.coord_y - 30, p.coord_x + 15, p.coord_y), monster.convert('RGBA'))
 
     draw_ranking(image, draw, alive_players_list, dead_players_list)
 

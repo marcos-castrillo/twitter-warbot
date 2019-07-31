@@ -6,12 +6,8 @@ from models.tweet_type import Tweet_type
 def get_message(type, args = None):
     if type == Tweet_type.start:
         return start()
-    if type == Tweet_type.sleep:
-        return sleep(args[0])
     if type == Tweet_type.hour_threshold:
         return hour_threshold(args[0])
-    if type == Tweet_type.final:
-        return final()
     if type == Tweet_type.winner:
         return winner(args[0])
     if type == Tweet_type.nobody_won:
@@ -66,6 +62,14 @@ def get_message(type, args = None):
         return somebody_stole_and_threw(args[0], args[1], args[2])
     if type == Tweet_type.somebody_powerup:
         return somebody_powerup(args[0], args[1])
+    if type == Tweet_type.monster_appeared:
+        return monster_appeared(args[0])
+    if type == Tweet_type.monster_moved:
+        return monster_moved(args[0], args[1])
+    if type == Tweet_type.monster_dissappeared:
+        return monster_dissappeared(args[0])
+    if monster_killed(args[0], args[1]):
+        return monster_killed(args[0], args[1])
 
 def get_amount(number):
     if number == 0:
@@ -90,14 +94,8 @@ def get_x_or_y_plural(player_list, x, y):
 def start():
     return (u'¡Los participantes están listos! Bienvenidos a los juegos de Q, dónde sólo uno de ellos se alzará con el título. Esto está a punto de arrancar.').encode('utf-8')
 
-def sleep(wake_up_time):
-    return (u'Se está haciendo de noche y los participantes que aún están vivos se han ido a dormir. ' + random.choice([u'El amanecer será sobre las ', u'Empezará a clarear a las ']) + str(wake_up_time) + '.').encode('utf-8')
-
 def hour_threshold(hour_count):
     return (u'¡Ya han pasado ' + str(hour_count) + ' horas! A partir de ahora incrementan las posibilidades de batalla y las de encontrarse mejores objetos.').encode('utf-8')
-
-def final():
-    return (u'¡Se acabó! Los participantes han peleado con valor, pero sólo podía quedar uno. A continuación, las estadísticas destacadas de este torneo.').encode('utf-8')
 
 def winner(player):
     item_list = ''
@@ -115,17 +113,18 @@ def winner(player):
     return u' '.join((u'¡' + player.get_name(), u'ha ganado! Lo ha conseguido llevándose por delante a', str(player.kills), 'participantes.' + item_list + injury_list, 'El ataque de', player.get_name(), u'llegó a ser de', str(player.get_attack()), u'y su defensa de', str(player.get_defense()) + '.')).encode('utf-8')
 
 def nobody_won():
-    return (u'Por algún motivo, todos los jugadores están muertos. Nadie ha ganado...').encode('utf-8')
+    return (u'Por algún motivo desconocido, todos los jugadores están muertos. Nadie ha ganado... ¡otra vez será!').encode('utf-8')
 
 def somebody_got_ill(player, illness):
     ill_verb = random.choice(['ha cogido', u'ha contraído', u'ha padecido'])
     return u' '.join((u'¡' + player.get_name(), ill_verb, illness.name + '!', 'Ahora tiene', str(player.get_attack()) + get_amount(illness.attack), 'en ataque y', str(player.get_defense()) +  get_amount(illness.defense), 'en defensa.')).encode('utf-8')
 
 def somebody_got_injured(player, injury):
-    ill_verb = random.choice(['ha padecido', u'ha recibido'])
+    ill_verb = random.choice(['ha padecido', u'ha recibido', u'ha cogido'])
     return u' '.join((u'¡' + player.get_name(), ill_verb, injury.name + '!', 'Ahora tiene', str(player.get_attack()) + get_amount(injury.attack), 'en ataque y', str(player.get_defense()) +  get_amount(injury.defense), 'en defensa.')).encode('utf-8')
 
 def somebody_found_item(player, item):
+    action = random.choice([u'se ha encontrado', u'ha cogido', u'ha entrado en una casa y ha robado', u'ha recogido', u'ha abierto un contenedor. Rebuscando entre la basura, ha encontrado', u'se ha llevado en la tómbola', u'ha intercambiado tres cigarros por', u'lleva unas pintas que alguien lo confundió con un vagabundo y le regaló', u'ha ganado en un bingo', u'ha ganado en una apuesta', u'se ha comprado en el estanco', u'se ha comprado en el kiosko', u'ha comprado en el supermercado'])
     if item.attack != 0:
         now_he_has = ' Ahora tiene ' + str(player.get_attack()) + get_amount(item.attack) + ' en ataque'
     if item.attack != 0 and item.defense != 0:
@@ -143,19 +142,23 @@ def somebody_found_item(player, item):
     elif player.location.loot:
         loot = u' Como ' + player.location.name + u' tiene mejores objetos de lo normal, ha conseguido algo muy bueno.'
 
-    return u' '.join((u'¡' + player.get_name(), random.choice([u'se ha encontrado', u'ha cogido', u'ha encontrado un cadáver. Rebuscando entre sus restos, ha cogido', u'ha entrado en una cabaña y ha robado', u'ha abierto un cofre. Dentro había', u'ha recogido', u'ha encontrado', u'ha entrado en una cueva y ha encontrado']), item.name + '!' + now_he_has + loot)).encode('utf-8')
+    return u' '.join((u'¡' + player.get_name(), action, item.name + '!' + now_he_has + loot)).encode('utf-8')
 
 def somebody_replaced_item(player, item_new, item_old):
-    return u' '.join((u'¡' + player.get_name(), random.choice([u'se ha encontrado', u'ha cogido', u'ha encontrado un cadáver. Rebuscando entre sus restos, ha cogido', u'ha entrado en una cabaña y ha robado', u'ha abierto un cofre. Dentro había', u'ha recogido', u'ha encontrado', u'ha entrado en una cueva y ha encontrado']), item_new.name + '!', 'Se lo queda y se deshace de', item_old.name + '.', 'Ahora tiene', str(player.get_attack()) + get_amount(item_new.attack - item_old.attack), 'en ataque y', str(player.get_defense()) +  get_amount(item_new.defense - item_old.defense), 'en defensa.')).encode('utf-8')
+    action = random.choice([u'se ha encontrado', u'ha cogido', u'ha entrado en una casa y ha robado', u'ha recogido', u'ha abierto un contenedor. Rebuscando entre la basura, ha encontrado', u'se ha llevado en la tómbola', u'ha intercambiado tres cigarros por', u'lleva unas pintas que alguien lo confundió con un vagabundo y le regaló', u'ha ganado en un bingo', u'ha ganado en una apuesta', u'se ha comprado en el estanco', u'se ha comprado en el kiosko', u'ha comprado en el supermercado'])
+
+    return u' '.join((u'¡' + player.get_name(), action, item_new.name + '!', 'Se lo queda y se deshace de', item_old.name + '.', 'Ahora tiene', str(player.get_attack()) + get_amount(item_new.attack - item_old.attack), 'en ataque y', str(player.get_defense()) +  get_amount(item_new.defense - item_old.defense), 'en defensa.')).encode('utf-8')
 
 def somebody_doesnt_want_item(player, item):
-    return u' '.join((u'¡' + player.get_name(), random.choice([u'se ha encontrado', u'ha cogido', u'ha encontrado un cadáver. Rebuscando entre sus restos, ha cogido', u'ha entrado en una cabaña y ha robado', u'ha abierto un cofre. Dentro había', u'ha recogido', u'ha encontrado', u'ha entrado en una cueva y ha encontrado']), item.name + '!', 'Pero no lo quiere porque ya tiene cosas mejores... (' + player.item_list[0].name,  'y', player.item_list[1].name + ').')).encode('utf-8')
+    action = random.choice([u'se ha encontrado', u'ha cogido', u'ha entrado en una casa y ha robado', u'ha recogido', u'ha abierto un contenedor. Rebuscando entre la basura, ha encontrado', u'se ha llevado en la tómbola', u'ha intercambiado tres cigarros por', u'lleva unas pintas que alguien lo confundió con un vagabundo y le regaló', u'ha ganado en un bingo', u'ha ganado en una apuesta', u'se ha comprado en el estanco', u'se ha comprado en el kiosko', u'ha comprado en el supermercado'])
+
+    return u' '.join((u'¡' + player.get_name(), action, item.name + '!', 'Pero no lo quiere porque ya tiene cosas mejores... (' + player.item_list[0].name,  'y', player.item_list[1].name + ').')).encode('utf-8')
 
 def somebody_tied_and_became_friend(player_1, player_2):
     return random.choice([player_1.get_name() + ' y ' + player_2.get_name() + u' se han peleado, pero se han cansado antes de que nadie cayera en combate, así que se han hecho ' + get_x_or_y_plural([player_1, player_2], 'amigos.', 'amigas.'), player_1.get_name() + ' y ' + player_2.get_name() + u' han hecho una tregua y ahora son ' + get_x_or_y_plural([player_1, player_2], 'amigos.', 'amigas.'), player_1.get_name() + ' ha formado una alianza con ' + player_2.get_name() + u' y ahora son ' + get_x_or_y_plural([player_1, player_2], 'amigos.', 'amigas.'), 'Aunque no se caigan muy bien, ' + player_1.get_name() + ' y ' + player_2.get_name() + u' han hecho un pacto y ahora son ' + get_x_or_y_plural([player_1, player_2], 'amigos.', 'amigas.')]).encode('utf-8')
 
 def somebody_tied_and_was_friend(player_1, player_2):
-    return (random.choice([player_1.get_name() + ' y ' + player_2.get_name() + u'son tan ' + get_x_or_y_plural([player_1, player_2], 'buenos amigos', 'buenas amigas') + ' que no han querido pelearse.', player_1.get_name() + u' iba a reventar a ' + player_2.get_name() + u', pero se dio cuenta de que en el fondo le cae bien.', player_1.get_name() + u' contó un chiste tan malo que ' + player_2.get_name() + u' estuvo a punto de ' + get_x_or_y(player_1, 'matarlo', 'matarla') + u', pero cambió de opinión en el último momento porque son ' + get_x_or_y_plural([player_1, player_2], 'amigos', 'amigas')])).encode('utf-8')
+    return (random.choice([player_1.get_name() + ' y ' + player_2.get_name() + u' son tan ' + get_x_or_y_plural([player_1, player_2], 'buenos amigos', 'buenas amigas') + ' que no han querido pelearse.', player_1.get_name() + u' iba a reventar a ' + player_2.get_name() + u', pero se dio cuenta de que en el fondo le cae bien.', player_1.get_name() + u' contó un chiste tan malo que ' + player_2.get_name() + u' estuvo a punto de ' + get_x_or_y(player_1, 'matarlo', 'matarla') + u', pero cambió de opinión en el último momento porque son ' + get_x_or_y_plural([player_1, player_2], 'amigos.', 'amigas.')])).encode('utf-8')
 
 def somebody_escaped(player_1, player_2, unfriend = False):
     sufix = ''
@@ -166,13 +169,13 @@ def somebody_escaped(player_1, player_2, unfriend = False):
 def somebody_killed(player_1, player_2, are_friends = False, new_item = None, old_item = None):
     kill_verb = random.choice(['se ha cargado a', 'ha matado a', 'se ha llevado por delante a', 'le ha cruzado la cara a'])
     friend_message = ''
-    kill_method = random.choice([u' con sus puños', u' con sus puños', u' a tortazo limpio', u' de un cabezazo', u' de un codazo en el esternón', u' le ha pisoteado, escupido y ha meado un ojo', u' y le ha hecho un dab', u' y le ha hecho un baile del fortnite'])
+    kill_method = random.choice([u' con sus puños', u' a tortazo limpio', u' de un cabezazo', u' de un codazo en el esternón', u' le ha pisoteado, escupido y ha meado un ojo', u' y le ha hecho un dab', u' y le ha hecho un baile del fortnite', u' sin despeinarse', u' de un buco', u' con una llave de kárate', u' haciendo capoeira'])
     kills_count = '.'
     stole = ''
     fav = ''
 
     if are_friends:
-        friend_message = random.choice([u'Aunque eran ' + get_x_or_y_plural([player_1, player_2], u'amigos', u'amigas'), u'Parece que no se caían tan bien, ', u'Premio ' + get_x_or_y(player_1, u'al mejor amigo', u'a la mejor amiga') + u' del año. ', ''])
+        friend_message = random.choice([u'Aunque eran ' + get_x_or_y_plural([player_1, player_2], u'amigos, ', u'amigas, '), u'Parece que no se caían tan bien, ', u'Premio ' + get_x_or_y(player_1, u'al mejor amigo', u'a la mejor amiga') + u' del año. ', ''])
     if player_1.get_best_attack_item() != None:
         kill_method = u' con ' + player_1.get_best_attack_item().name
     if player_1.kills > 1:
@@ -193,15 +196,18 @@ def somebody_died(player):
     return u' '.join((player.get_name(), random.choice([u'ha metido la pierna en una trampa para osos y se ha muerto ' + get_x_or_y(player, u'desangrado', u'desangrada') + u'.¡Qué mala pata!', u'se ha caído por un barranco y se ha muerto. ¡Qué torpe!', u'ha sido víctima de un rayo y se ha muerto en el acto.', u'ha muerto repentinamente por un fallo cardíaco. ¡Hay que hacer más deporte!', u'se estaba dando un baño en un lago sin darse cuenta de que había pirañas. Nunca fue la persona más avispada.', u'ha empezado a toser, a toser y a toser y se ha acabado asfixiando. Puede que fumarse 5 paquetes al día no fuera la decisión más sabia.', u'ha amochado de repente.', u'se petateó y ahora le está dando de comer a los gusanos.']))).encode('utf-8')
 
 def somebody_moved(player, old_location, new_location):
-    return u' '.join((player.get_name(), 'ha caminado desde', old_location.name, 'a', new_location.name + '.')).encode('utf-8')
+    action = random.choice([u'ha caminado desde', u'ha ido en bici de', u'ha ido en motorrabo de', u'ha hecho dedo desde', u'está tan en forma que ha hecho un sprint de', u'se aburría y ha ido a la pata coja desde', u'ha llamado a Rebollo para que le lleve a', u'ha llamado a Santi para que le lleve a', u'ha llamado a Aquilino para que le lleve a', u'ha llamado a Germán para que le lleve a'])
+    return u' '.join((player.get_name(), action, old_location.name, 'a', new_location.name + '.')).encode('utf-8')
 
 def destroyed(place, dead_list):
-    prefix = random.choice([u'Un meterito ha caído en ' + place.name, u'Una riada ha inundado ' + place.name, u'Una bomba nuclear ha reducido ' + place.name + u' a pedazos', u'Alguien ha prendido el polen de ' + place.name + u' provocando un gran incendio', u'La caseta de ' + place.name + u' se ha derrumbado', u'Un huracán ha arrasado todo ' + place.name])
+    if place.name == 'Bercianos':
+        prefix = u'Es un día triste para la humanidad, la caseta de Bercianos se ha derrumbado'
+    prefix = random.choice([u'Un meterito ha caído en ' + place.name + u' y lo ha destruido', u'Una riada ha inundado todo ' + place.name, u'Una bomba nuclear ha reducido ' + place.name + u' a pedazos', u'Alguien ha prendido el polen de ' + place.name + u' incendiando todo el pueblo', u'Un huracán ha arrasado todo ' + place.name, u'Una nube de gas tóxico ha llegado a ' + place.name + u' haciéndolo inhabitable', u'En medio de una gran tormenta, un rayo ha caído en ' + place.name  + ', provocando un incendio que ha quemado todo el pueblo'])
 
     if len(dead_list) == 0:
         sufix = '.'
     elif len(dead_list) == 1:
-        sufix = random.choice([' y ' + dead_list[0].get_name() + u' ha fallecido en un trágico accidente.'])
+        sufix = random.choice([' y ' + dead_list[0].get_name() + u' ha fallecido en un trágico accidente.', ' y ' + dead_list[0].get_name() + u' ha amochado.', ' y ' + dead_list[0].get_name() + u' ha muerto.', ' y se ha llevado por delante a ' + dead_list[0].get_name() + u'.'])
     else:
         dead = []
         dead_str = ''
@@ -214,7 +220,7 @@ def destroyed(place, dead_list):
                 dead_str = dead_str + ' y ' + d
             else:
                 dead_str = dead_str + ', ' + d
-        sufix = random.choice([' y ' + dead_str + u' han fallecido en un trágico accidente.'])
+        sufix = random.choice([' y ' + dead_str + u' han fallecido en un trágico accidente.', ' y ' + dead_str + u' han amochado.'])
 
     return (prefix + sufix).encode('utf-8')
 
@@ -225,7 +231,7 @@ def trap(player, place):
     return u' '.join((player.get_name(), u'ha puesto una trampa en', player.location.name + '.')).encode('utf-8')
 
 def trapped(player, trapped_by, location):
-    return u' '.join((player.get_name(), u'ha ido a', location.name, u'pero se ha comido la trampa que había puesto', trapped_by.get_name())).encode('utf-8')
+    return u' '.join((player.get_name(), u'ha ido a', location.name, u'pero se ha comido la trampa que había puesto', trapped_by.get_name() + '.')).encode('utf-8')
 
 def dodged_trap(player, trapped_by, location):
     return u' '.join((player.get_name(), u'ha ido a', location.name, u', ha visto la trampa que había puesto', trapped_by.get_name(), 'y la ha destruido.')).encode('utf-8')
@@ -240,5 +246,26 @@ def somebody_stole_and_threw(robber, robbed, item):
     return u' '.join((robber.get_name(), u'le ha robado', item.name, u'a', robbed.get_name() + u'. Como tiene cosas mejores, lo ha tirado a la basura.')).encode('utf-8')
 
 def somebody_powerup(player, powerup):
-    powerup_verb = random.choice(['ha cogido', u'ha contraído', u'ha padecido'])
+    powerup_verb = random.choice(['ha cogido', u'ha encontrado'])
     return u' '.join((u'¡' + player.get_name(), powerup_verb, powerup.name + '!', 'Ahora tiene', str(player.get_attack()) + get_amount(powerup.attack), 'en ataque y', str(player.get_defense()) +  get_amount(powerup.defense), 'en defensa.')).encode('utf-8')
+
+def monster_appeared(place):
+    if place.name == u'Santa María':
+        return (u'Ratonera sucia.').encode('utf-8')
+    if place.name == u'Bercianos':
+        return (u'Como son las fiestas de Bercianos (#ProjectBercy) y todo el mundo está allí, la guardia se ha puesto a la salida de Santa María.').encode('utf-8')
+    return random.choice([u'¡Ha aparecido un control de la guardia en ' + place.name + u'! Habrá que ir con cuidado.', u'¡Ojo! Alguien ha avistado un coche de la guardia civil en ' + place.name + '.', u'Están haciendo la prueba del palito en ' + place.name + '.', u'Ya está la guardia otra vez a la entrada de ' + place.name + '.']).encode('utf-8')
+
+def monster_moved(place, new_place):
+    if new_place.name == u'Santa María':
+        return (u'Ratonera sucia, la guardia se ha ido de ' + place.name + '.').encode('utf-8')
+    if new_place.name == u'Bercianos':
+        return (u'Como son las fiestas de Bercianos (#ProjectBercy) y todo el mundo está allí, la guardia se ha tenido que ir de ' + place.name + '.').encode('utf-8')
+
+    return random.choice([u'¡El control de la guardia se ha movido de ' + place.name + ' a ' + new_place.name + u'! Habrá que ir con cuidado.', u'Ha habido movida en ' + new_place.name + u', por lo que la guardia ha tenido que irse de ' + place.name + '.', u'El control se ha movido de ' + place.name + u' a ' + new_place.name + '.', u'Alguien se ha chivado de que hay un cultivo de maría en ' + new_place.name + u', por lo que la guardia se ha ido de ' + place.name + '.']).encode('utf-8')
+
+def monster_disappeared(place):
+    return random.choice([u'¡El control de la guardia ha desaparecido de ' + place.name + u'!', u'La guardia ya no está en ' + place.name + '.', u'El control se ha movido de ' + place.name + u' a ' + new_place.name + '.', u'Se acabó el turno de los guardias, por lo que se han ido de ' + new_place.name + u'.']).encode('utf-8')
+
+def monster_killed(player, place):
+    return random.choice([player.get_name() + u' ha pasado a 200 km/h al lado del control de la guardia en ' + place.name + u' y se lo han llevado a comisaría. ¡Mal jugado!', u'La guardia le ha pillado una bolsa a ' + player.get_name() + ' en ' + place.name + u' y se lo han llevado, hay que esconderla mejor!', u'La policía ha desahuciado a palos a ' + player.get_name() + u' de ' + place.name + '.', 'A ' + player.get_name() + u' se le ocurrió que era gracioso gritar GORA *** al lado de la policía. Se lo han llevado detenido de ' + place.name + u' por apología al terrorismo.', player.get_name() + u' creía que era ' + get_x_or_y(player, u'el más gracioso', u'la más graciosa') + u' haciendo humor negro en Twitter, hasta que se encontró a la policía en ' + place.name + '.']).encode('utf-8')

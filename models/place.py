@@ -7,6 +7,7 @@ class Place(object):
     players = []
     trap_by = None
     loot = None
+    monster = None
 
     # Constructor
     def __init__(self, name, coordinates, connections, loot):
@@ -16,5 +17,6 @@ class Place(object):
         self.connections = connections
         self.destroyed = False
         self.loot = loot
+        self.monster = None
         self.players = []
         self.trap_by = None

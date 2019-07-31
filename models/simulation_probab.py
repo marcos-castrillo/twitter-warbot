@@ -33,13 +33,23 @@ class Simulation_Probab(object):
         self.calculate_action_numbers()
 
     def increase(self, i):
-        self.item_probab = self.item_probab - 10
-        self.move_probab = self.move_probab + 3
-        self.battle_probab = self.battle_probab + 3
-        self.destroy_probab = self.destroy_probab + 2
-        self.trap_probab = self.trap_probab + 2
-        self.suicide_probab = self.suicide_probab + 1
-        self.revive_probab = self.revive_probab
+        if i <= 3:
+            self.item_probab = self.item_probab - 8
+            self.move_probab = self.move_probab - 3
+            self.battle_probab = self.battle_probab + 5
+            self.destroy_probab = self.destroy_probab + 4
+            self.trap_probab = self.trap_probab + 1
+            self.suicide_probab = self.suicide_probab + 1
+            self.revive_probab = self.revive_probab
+
+        else:
+            self.item_probab = self.item_probab - 7
+            self.move_probab = self.move_probab - 2
+            self.battle_probab = self.battle_probab + 3
+            self.destroy_probab = self.destroy_probab + 4
+            self.trap_probab = self.trap_probab + 1
+            self.suicide_probab = self.suicide_probab + 1
+            self.revive_probab = self.revive_probab
 
         for i, pr in enumerate([self.item_probab, self.move_probab, self.battle_probab, self.destroy_probab, self.trap_probab, self.suicide_probab, self.revive_probab]):
             if pr <= 0:
