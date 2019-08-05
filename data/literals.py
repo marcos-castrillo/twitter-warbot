@@ -169,7 +169,7 @@ def somebody_escaped(player_1, player_2, unfriend = False):
 def somebody_killed(player_1, player_2, are_friends = False, new_item = None, old_item = None):
     kill_verb = random.choice(['se ha cargado a', 'ha matado a', 'se ha llevado por delante a', 'le ha cruzado la cara a'])
     friend_message = ''
-    kill_method = random.choice([u' con sus puños', u' a tortazo limpio', u' de un cabezazo', u' de un codazo en el esternón', u' le ha pisoteado, escupido y ha meado un ojo', u' y le ha hecho un dab', u' y le ha hecho un baile del fortnite', u' sin despeinarse', u' de un buco', u' con una llave de kárate', u' haciendo capoeira'])
+    kill_method = random.choice([u' con sus puños', u' a tortazo limpio', u' de un cabezazo', u' de un codazo en el esternón', u', le ha pisoteado, escupido y ha meado un ojo', u' y le ha hecho un dab', u' y le ha hecho un baile del fortnite', u' sin despeinarse', u' de un buco', u' con una llave de kárate', u' haciendo capoeira'])
     kills_count = '.'
     stole = ''
     fav = ''

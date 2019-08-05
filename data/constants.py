@@ -1,5 +1,6 @@
 hour_thresholds = [25, 50, 100, 150, 200, 250]
 max_players = 75
+use_usernames = False
 
 probab_item = 45
 probab_move = 15

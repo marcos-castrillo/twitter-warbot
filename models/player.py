@@ -2,6 +2,7 @@ from item import Item
 from services.simulation import write_tweet
 from models.tweet_type import Tweet_type
 from data.literals import *
+from data.constants import *
 
 class Player(object):
     avatar_dir = None
@@ -102,7 +103,7 @@ class Player(object):
                 return self.item_list[1]
 
     def get_name(self):
-        if self.username != "":
+        if self.username != "" and use_usernames:
             return self.name + '(@' + self.username + ')'
         else:
-            self.name
+            return self.name

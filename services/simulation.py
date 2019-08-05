@@ -20,7 +20,7 @@ i = 1
 temp_output_dir = output_dir
 while os.path.exists(temp_output_dir):
     i = i + 1
-    temp_output_dir = os.path.join(output_dir + ' (' + str(i) + ')')
+    temp_output_dir = os.path.join(output_dir + '__' + str(i))
 
 output_dir = temp_output_dir
 
@@ -31,7 +31,7 @@ path = os.path.join(output_dir, filename + '.txt')
 i = 1
 while os.path.exists(path):
     i = i + 1
-    path = os.path.join(output_dir, filename + ' (' + str(i) + ')' + ".txt")
+    path = os.path.join(output_dir, filename + '__' + str(i) + ".txt")
 
 def initialize_avatars(player_list):
     path = 'assets/avatars'
