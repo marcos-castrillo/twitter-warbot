@@ -19,8 +19,8 @@ class Player(object):
     powerup_list = []
 
     # Constructor
-    def __init__(self, name, location, gender, username = None, friend_list = None, fav_place = None):
-        self.friend_list = friend_list
+    def __init__(self, name, location, gender, username = None, fav_place = None):
+        self.friend_list = []
         self.item_list = []
         self.injury_list = []
         self.powerup_list = []

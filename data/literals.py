@@ -124,7 +124,7 @@ def somebody_got_injured(player, injury):
     return u' '.join((u'¡' + player.get_name(), ill_verb, injury.name + '!', 'Ahora tiene', str(player.get_attack()) + get_amount(injury.attack), 'en ataque y', str(player.get_defense()) +  get_amount(injury.defense), 'en defensa.')).encode('utf-8')
 
 def somebody_found_item(player, item):
-    action = random.choice([u'se ha encontrado', u'ha cogido', u'ha entrado en una casa y ha robado', u'ha recogido', u'ha abierto un contenedor. Rebuscando entre la basura, ha encontrado', u'se ha llevado en la tómbola', u'ha intercambiado tres cigarros por', u'lleva unas pintas que alguien lo confundió con un vagabundo y le regaló', u'ha ganado en un bingo', u'ha ganado en una apuesta', u'se ha comprado en el estanco', u'se ha comprado en el kiosko', u'ha comprado en el supermercado'])
+    action = random.choice([u'se ha encontrado', u'ha cogido', u'ha entrado en una casa y ha robado', u'ha recogido', u'ha abierto un contenedor. Rebuscando entre la basura, ha encontrado', u'se ha llevado en la tómbola', u'ha intercambiado tres cigarros por', u'lleva unas pintas que alguien lo confundió con ' + get_x_or_y(player, u'un vagabundo', u'una vagabunda') + u' y le regaló', u'ha ganado en un bingo', u'ha ganado en una apuesta', u'se ha comprado en el estanco', u'se ha comprado en el kiosko', u'ha comprado en el supermercado'])
     if item.attack != 0:
         now_he_has = ' Ahora tiene ' + str(player.get_attack()) + get_amount(item.attack) + ' en ataque'
     if item.attack != 0 and item.defense != 0:
@@ -145,12 +145,12 @@ def somebody_found_item(player, item):
     return u' '.join((u'¡' + player.get_name(), action, item.name + '!' + now_he_has + loot)).encode('utf-8')
 
 def somebody_replaced_item(player, item_new, item_old):
-    action = random.choice([u'se ha encontrado', u'ha cogido', u'ha entrado en una casa y ha robado', u'ha recogido', u'ha abierto un contenedor. Rebuscando entre la basura, ha encontrado', u'se ha llevado en la tómbola', u'ha intercambiado tres cigarros por', u'lleva unas pintas que alguien lo confundió con un vagabundo y le regaló', u'ha ganado en un bingo', u'ha ganado en una apuesta', u'se ha comprado en el estanco', u'se ha comprado en el kiosko', u'ha comprado en el supermercado'])
+    action = random.choice([u'se ha encontrado', u'ha cogido', u'ha entrado en una casa y ha robado', u'ha recogido', u'ha abierto un contenedor. Rebuscando entre la basura, ha encontrado', u'se ha llevado en la tómbola', u'ha intercambiado tres cigarros por', u'lleva unas pintas que alguien lo confundió con ' + get_x_or_y(player, u'un vagabundo', u'una vagabunda') + u' y le regaló', u'ha ganado en un bingo', u'ha ganado en una apuesta', u'se ha comprado en el estanco', u'se ha comprado en el kiosko', u'ha comprado en el supermercado'])
 
-    return u' '.join((u'¡' + player.get_name(), action, item_new.name + '!', 'Se lo queda y se deshace de', item_old.name + '.', 'Ahora tiene', str(player.get_attack()) + get_amount(item_new.attack - item_old.attack), 'en ataque y', str(player.get_defense()) +  get_amount(item_new.defense - item_old.defense), 'en defensa.')).encode('utf-8')
+    return u' '.join((u'¡' + player.get_name(), action, item_new.name + '!', 'Se lo queda y se deshace de', item_old.name + '.', 'Ahora tiene', str(player.get_attack()) + get_amount(item_new.attack - item_old.attack), 'en ataque y', str(player.get_defense()) + get_amount(item_new.defense - item_old.defense), 'en defensa.')).encode('utf-8')
 
 def somebody_doesnt_want_item(player, item):
-    action = random.choice([u'se ha encontrado', u'ha cogido', u'ha entrado en una casa y ha robado', u'ha recogido', u'ha abierto un contenedor. Rebuscando entre la basura, ha encontrado', u'se ha llevado en la tómbola', u'ha intercambiado tres cigarros por', u'lleva unas pintas que alguien lo confundió con un vagabundo y le regaló', u'ha ganado en un bingo', u'ha ganado en una apuesta', u'se ha comprado en el estanco', u'se ha comprado en el kiosko', u'ha comprado en el supermercado'])
+    action = random.choice([u'se ha encontrado', u'ha cogido', u'ha entrado en una casa y ha robado', u'ha recogido', u'ha abierto un contenedor. Rebuscando entre la basura, ha encontrado', u'se ha llevado en la tómbola', u'ha intercambiado tres cigarros por', u'lleva unas pintas que alguien lo confundió con ' + get_x_or_y(player, u'un vagabundo', u'una vagabunda') + u' y le regaló', u'ha ganado en un bingo', u'ha ganado en una apuesta', u'se ha comprado en el estanco', u'se ha comprado en el kiosko', u'ha comprado en el supermercado'])
 
     return u' '.join((u'¡' + player.get_name(), action, item.name + '!', 'Pero no lo quiere porque ya tiene cosas mejores... (' + player.item_list[0].name,  'y', player.item_list[1].name + ').')).encode('utf-8')
 
