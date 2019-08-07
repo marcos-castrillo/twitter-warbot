@@ -94,7 +94,12 @@ def draw_image(type, player_list, place_list, location = None, args = None):
         else:
             dead_players_list.append(p)
 
-    if type == Tweet_type.winner or type == Tweet_type.somebody_got_ill or type == Tweet_type.somebody_got_injured or type == Tweet_type.somebody_found_item or type == Tweet_type.somebody_replaced_item or type == Tweet_type.somebody_doesnt_want_item or type == Tweet_type.somebody_revived or type == Tweet_type.somebody_died or type == Tweet_type.somebody_moved or type == Tweet_type.monster_killed or type == Tweet_type.trap or type == Tweet_type.trapped or type == Tweet_type.dodged_trap:
+    if type == Tweet_type.start:
+        for i, place in enumerate(place_list):
+            for j, player in enumerate(place.players):
+                avatar = Image.open(player.avatar_dir)
+                image.paste(avatar, (place.coord_x - 24 + (j * 24), place.coord_y - 24, place.coord_x + 24 + (j * 24), place.coord_y + 24), avatar.convert('RGBA'))
+    elif type == Tweet_type.winner or type == Tweet_type.somebody_got_ill or type == Tweet_type.somebody_got_injured or type == Tweet_type.somebody_found_item or type == Tweet_type.somebody_replaced_item or type == Tweet_type.somebody_doesnt_want_item or type == Tweet_type.somebody_revived or type == Tweet_type.somebody_died or type == Tweet_type.somebody_moved or type == Tweet_type.monster_killed or type == Tweet_type.trap or type == Tweet_type.trapped or type == Tweet_type.dodged_trap:
         avatar = Image.open(args[0].avatar_dir)
         image.paste(avatar, (location.coord_x - 24, location.coord_y - 24, location.coord_x + 24, location.coord_y + 24), avatar.convert('RGBA'))
     elif type == Tweet_type.somebody_tied_and_became_friend or type == Tweet_type.somebody_tied_and_was_friend or type == Tweet_type.somebody_escaped or type == Tweet_type.somebody_killed:
