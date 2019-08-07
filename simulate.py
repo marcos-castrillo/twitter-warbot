@@ -144,7 +144,7 @@ def move():
     action_number = random.randint(1, 100)
 
     if new_location.trap_by != None and new_location.trap_by != player:
-        if action_number < 50:
+        if action_number < 75:
             player.state = 0
 
             trapped_by = new_location.trap_by
@@ -255,11 +255,22 @@ def trap():
     list = []
     for i, p in enumerate(place_list):
         if p.trap_by == None and len(p.players) > 0:
-            list.append(p)
+            any_alive = False
+            for j, q in enumerate(p.players):
+                if q.state == 1:
+                    any_alive = True
+            if any_alive:
+                list.append(p)
 
     if len(list) > 0:
-        place = random.choice(list)
-        player = random.choice(place.players)
+        candidates_list = []
+        while len(candidates_list) == 0:
+            place = random.choice(list)
+            for i, p in enumerate(place.players):
+                if p.state == 1:
+                    candidates_list.append(p)
+
+        player = random.choice(candidates_list)
 
         place.trap_by = player
         write_tweet(Tweet_type.trap, player_list, place_list, place, [player, place])

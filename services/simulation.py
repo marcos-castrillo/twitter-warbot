@@ -60,7 +60,7 @@ def write_tweet(type, player_list, place_list, location = None, args = None):
 
 def write_line(message):
     with open(os.path.join(path), "a+") as file:
-        print(message)
+        print(str(line_number + 1) + ': ' + message)
         file.write(message + '\n')
 
 def file_len():
@@ -81,6 +81,7 @@ def draw_image(type, player_list, place_list, location = None, args = None):
     illness = Image.open(os.path.join(current_dir, '../assets/illness.png'))
     powerup = Image.open(os.path.join(current_dir, '../assets/powerup.png'))
     skull = Image.open(os.path.join(current_dir, '../assets/powerup.png'))
+    heart = Image.open(os.path.join(current_dir, '../assets/heart.png'))
 
     font_path = os.path.join(current_dir, '../assets/Comic-Sans.ttf')
 
@@ -99,7 +100,11 @@ def draw_image(type, player_list, place_list, location = None, args = None):
             for j, player in enumerate(place.players):
                 avatar = Image.open(player.avatar_dir)
                 image.paste(avatar, (place.coord_x - 24 + (j * 24), place.coord_y - 24, place.coord_x + 24 + (j * 24), place.coord_y + 24), avatar.convert('RGBA'))
-    elif type == Tweet_type.winner or type == Tweet_type.somebody_got_ill or type == Tweet_type.somebody_got_injured or type == Tweet_type.somebody_found_item or type == Tweet_type.somebody_replaced_item or type == Tweet_type.somebody_doesnt_want_item or type == Tweet_type.somebody_revived or type == Tweet_type.somebody_died or type == Tweet_type.somebody_moved or type == Tweet_type.monster_killed or type == Tweet_type.trap or type == Tweet_type.trapped or type == Tweet_type.dodged_trap:
+    elif type == Tweet_type.somebody_died or type == Tweet_type.monster_killed or type == Tweet_type.trapped:
+        avatar = Image.open(args[0].avatar_dir)
+        image.paste(avatar, (args[0].location.coord_x - 24, args[0].location.coord_y - 24, args[0].location.coord_x + 24, args[0].location.coord_y + 24), avatar.convert('RGBA'))
+        draw.text((args[0].location.coord_x - 12, args[0].location.coord_y - 39), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path, size=50))
+    elif type == Tweet_type.winner or type == Tweet_type.somebody_got_ill or type == Tweet_type.somebody_got_injured or type == Tweet_type.somebody_found_item or type == Tweet_type.somebody_replaced_item or type == Tweet_type.somebody_doesnt_want_item or type == Tweet_type.somebody_revived or type == Tweet_type.somebody_moved or type == Tweet_type.trap or type == Tweet_type.dodged_trap:
         avatar = Image.open(args[0].avatar_dir)
         image.paste(avatar, (location.coord_x - 24, location.coord_y - 24, location.coord_x + 24, location.coord_y + 24), avatar.convert('RGBA'))
     elif type == Tweet_type.somebody_tied_and_became_friend or type == Tweet_type.somebody_tied_and_was_friend or type == Tweet_type.somebody_escaped or type == Tweet_type.somebody_killed:
@@ -128,6 +133,9 @@ def draw_image(type, player_list, place_list, location = None, args = None):
 
     if type == Tweet_type.somebody_powerup:
         image.paste(powerup, (location.coord_x - 15, location.coord_y - 15, location.coord_x + 15, location.coord_y + 15), powerup.convert('RGBA'))
+
+    if type == Tweet_type.somebody_tied_and_became_friend or type == Tweet_type.somebody_tied_and_was_friend:
+        image.paste(heart, (location.coord_x - 15, location.coord_y - 15, location.coord_x + 15, location.coord_y + 15), heart.convert('RGBA'))
 
     for i, p in enumerate(place_list):
         if p.destroyed == True:
