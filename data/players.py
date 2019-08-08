@@ -23,6 +23,7 @@ raw_player_list = [
     [u'Eric', u'Eric_Almeda', 0, u'Bercianos'],
     [u'García', u'J_Garcia_25', 0, u'Santa María'],
     [u'Hugo', u'2Hugo21', 0, u'Bercianos'],
+    [u'Iván', u'ivxnyrc', 0, u'Bercianos'],
     [u'Ivo', u'ivopd_01', 0, u'Bercianos'],
     [u'Jony', u'jony_JRM', 0, u'Bercianos'],
     [u'Josele', u'jose_martrod', 0, u'Villar del Yermo'],
