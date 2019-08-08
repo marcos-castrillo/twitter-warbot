@@ -186,7 +186,7 @@ def draw_player(image, draw, coord_x, coord_y, player, is_alive):
 
     if player.get_defense() > 0:
         image.paste(defense, (coord_x + 25, coord_y - 35), defense.convert('RGBA'))
-        draw.text((coord_x + 41, coord_y - 35), str(player.get_attack()), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=10))
+        draw.text((coord_x + 41, coord_y - 35), str(player.get_defense()), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=10))
 
     if not is_alive:
         draw.text((coord_x + 3, coord_y - 11), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path, size=50))
