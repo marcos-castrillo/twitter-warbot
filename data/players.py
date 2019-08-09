@@ -3,6 +3,7 @@
 
 # Name, username, friend_list
 raw_player_list = [
+    [u'Abelcalopez4', u'santamariastar1', 0, u'Santa María'],
     [u'Alex', u'Alexzotes00', 0, u'Zotes'],
     [u'Alex Portero', u'IamKrell', 0, u'Azares'],
     [u'Alicia', u'alimatalobos', 1, u'Bercianos'],
