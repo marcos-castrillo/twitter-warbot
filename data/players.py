@@ -54,6 +54,7 @@ raw_player_list = [
     [u'Samu', u'samu_cente8', 0, u'Cebrones'],
     [u'Sergio', u'SergioRenton', 0, u'Vallejo'],
     [u'Sergio', u'WelintonSergist', 0, u'Villar de Mazarife'],
+    [u'Sergio Bailez', u'sergiobailez', 0, u'Urdiales'],
     [u'Sokram', u'Sokram', 0, u'Antoñanes'],
     [u'Víctor', u'Victoriano_15', 0, u'Soguillo'],
     [u'Víctor', u'Victor_SM98', 0, u'Bustillo'],
