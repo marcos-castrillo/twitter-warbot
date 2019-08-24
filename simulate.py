@@ -179,7 +179,7 @@ def move():
 
 def battle():
     alive_players = filter_player_list_by_state(player_list, 1)
-    player_1, player_2 = get_two_players_in_random_place(alive_players, place_list)
+    player_1, player_2 = get_two_players_in_random_place(place_list)
 
     if (player_1, player_2) == (None, None):
         move()

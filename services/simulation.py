@@ -180,11 +180,11 @@ def draw_player(image, draw, coord_x, coord_y, player, is_alive):
         image.paste(skull, (coord_x + 7, coord_y - 17), skull.convert('RGBA'))
         draw.text((coord_x + 27, coord_y - 17), str(player.kills), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=10))
 
-    if player.get_attack() > 0:
+    if player.get_attack() != 0:
         image.paste(attack, (coord_x, coord_y - 35), attack.convert('RGBA'))
         draw.text((coord_x + 14, coord_y - 35), str(player.get_attack()), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=10))
 
-    if player.get_defense() > 0:
+    if player.get_defense() != 0:
         image.paste(defense, (coord_x + 25, coord_y - 35), defense.convert('RGBA'))
         draw.text((coord_x + 41, coord_y - 35), str(player.get_defense()), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=10))
 

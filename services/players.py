@@ -33,21 +33,32 @@ def get_player_by_name(player_list, name):
     else:
         return None
 
-def get_two_players_in_random_place(player_list, place_list):
+def get_two_players_in_random_place(place_list):
     list = []
     for i, p in enumerate(place_list):
         if len(p.players) > 1:
             list.append(p)
 
-    if len(list) > 0:
+
+    while len(list) > 0:
         place = random.choice(list)
-        player_1 = random.choice(place.players)
-        player_2 = random.choice(place.players)
-        while player_2 == player_1:
-            player_2 = random.choice(place.players)
-        return player_1, player_2
-    else:
-        return None, None
+
+        alive = []
+        for i, p in enumerate(place.players):
+            if p.state == 1:
+                alive.append(p)
+
+        if len(alive) > 1:
+            player_1 = random.choice(alive)
+            alive.pop(alive.index(player_1))
+            player_2 = random.choice(alive)
+        else:
+            place_list.pop(place_list.index(place))
+
+        if player_1 != None and player_2 != None:
+            return player_1, player_2
+            
+    return None, None
 
 def filter_player_list_by_state(player_list, value):
     list = []
