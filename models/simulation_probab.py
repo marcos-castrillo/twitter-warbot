@@ -34,10 +34,10 @@ class Simulation_Probab(object):
 
     def increase(self, i):
         if i <= 3:
-            self.item_probab = self.item_probab - 8
+            self.item_probab = self.item_probab - 5
             self.move_probab = self.move_probab - 3
-            self.battle_probab = self.battle_probab + 5
-            self.destroy_probab = self.destroy_probab + 4
+            self.battle_probab = self.battle_probab + 10
+            self.destroy_probab = self.destroy_probab + 2
             self.trap_probab = self.trap_probab + 1
             self.suicide_probab = self.suicide_probab + 1
             self.revive_probab = self.revive_probab

@@ -216,22 +216,20 @@ def battle():
         tie(player_list, place_list, player_1, player_2)
 
 def destroy():
-    connected_list = []
     list = []
-    for i, p in enumerate(place_list):
-        append = False
-        if not p.destroyed:
-            list.append(p)
-            for j, q in enumerate(p.connections):
-                if q.destroyed:
-                    append = True
-            if append:
-                connected_list.append(p)
+    limit = 1
+    while len(list) == 0:
+        for i, p in enumerate(place_list):
+            if not p.destroyed:
+                count = 0
+                for j, q in enumerate(p.connections):
+                    if not q.destroyed:
+                        count = count + 1
+                if count <= limit:
+                    list.append(p)
+        limit = limit + 1
 
-    if len(connected_list) == 0:
-        place = random.choice(list)
-    else:
-        place = random.choice(connected_list)
+    place = random.choice(list)
 
     place.destroyed = True
     dead_list = []

@@ -154,7 +154,7 @@ def draw_image(type, player_list, place_list, location = None, args = None):
 
 def draw_ranking(image, draw, alive_players_list, dead_players_list):
     coord_x = 20
-    coord_y = 760
+    coord_y = 1150
 
     for i, p in enumerate(alive_players_list):
         draw_player(image, draw, coord_x, coord_y, alive_players_list[i], True)
@@ -175,6 +175,8 @@ def draw_player(image, draw, coord_x, coord_y, player, is_alive):
     font_path = os.path.join(current_dir, '../assets/Comic-Sans.ttf')
 
     image.paste(avatar, (coord_x, coord_y), avatar.convert('RGBA'))
+    draw.rectangle((coord_x, coord_y, coord_x + 48, coord_y + 48), outline='rgb(0,0,0)')
+
 
     if player.kills > 0:
         image.paste(skull, (coord_x + 7, coord_y - 17), skull.convert('RGBA'))
@@ -193,9 +195,9 @@ def draw_player(image, draw, coord_x, coord_y, player, is_alive):
 
 def calculate_coords(coord_x, coord_y):
     img_width = 50
-    imgs_per_row = 15
-    space_between_rows = 88
-    space_between_cols = 1
+    imgs_per_row = 25
+    space_between_rows = 100
+    space_between_cols = 10
     first_column_x = 20
 
     coord_x = coord_x + (img_width + space_between_cols)

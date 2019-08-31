@@ -42,6 +42,8 @@ def get_two_players_in_random_place(place_list):
 
     while len(list) > 0:
         place = random.choice(list)
+        player_1 = None
+        player_2 = None
 
         alive = []
         for i, p in enumerate(place.players):
@@ -53,11 +55,11 @@ def get_two_players_in_random_place(place_list):
             alive.pop(alive.index(player_1))
             player_2 = random.choice(alive)
         else:
-            place_list.pop(place_list.index(place))
+            list.pop(list.index(place))
 
         if player_1 != None and player_2 != None:
             return player_1, player_2
-            
+
     return None, None
 
 def filter_player_list_by_state(player_list, value):

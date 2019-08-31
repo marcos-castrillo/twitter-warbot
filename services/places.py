@@ -8,12 +8,14 @@ from models.place import Place
 def get_place_list():
     list = []
     for i, p in enumerate(raw_place_list):
+        if len(p) == 3:
+            p.append(None)
         action_number = random.randint(1, 100)
         if action_number > 90:
             loot = True
         else:
             loot = False
-        place = Place(p[0], p[1], p[2], loot)
+        place = Place(p[0], p[1], p[2], loot, p[3])
         list.append(place)
 
     for i, p in enumerate(list):
