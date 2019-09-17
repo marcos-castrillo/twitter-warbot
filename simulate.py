@@ -215,6 +215,7 @@ def battle():
     else:
         tie(player_list, place_list, player_1, player_2)
 
+
 def destroy():
     list = []
     limit = 1
