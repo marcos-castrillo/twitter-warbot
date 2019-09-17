@@ -45,7 +45,7 @@ def get_message(type, args = None):
     if type == Tweet_type.somebody_moved:
         return somebody_moved(args[0], args[1], args[2])
     if type == Tweet_type.destroyed:
-        return destroyed(args[0], args[1])
+        return destroyed(args[0], args[1], args[2], args[3])
     if type == Tweet_type.somebody_couldnt_move:
         return somebody_couldnt_move(args[0])
     if type == Tweet_type.trap:
@@ -78,6 +78,12 @@ def get_amount(number):
         return '(+' + str(number) + ')'
     else:
         return '(' + str(number) + ')'
+
+def get_sing_or_pl(player_list, x, y):
+    if len(player_list) == 1:
+        return x
+    elif len(player_list) > 1:
+        return y
 
 def get_x_or_y(player, x, y):
     if player.gender == 0:
@@ -199,9 +205,7 @@ def somebody_moved(player, old_location, new_location):
     action = random.choice([u'ha caminado desde', u'ha ido en bici de', u'ha ido en motorrabo de', u'ha hecho dedo desde', u'está tan en forma que ha hecho un sprint de', u'se aburría y ha ido a la pata coja desde', u'ha llamado al taxi de Rebollo para que le lleve de', u'ha llamado al taxi de Santi para que le lleve de', u'ha llamado al taxi de Aquilino para que le lleve de', u'ha llamado al taxi de Germán para que le lleve de', u'ha ido en tractor de', u'ha ido en patinete de', u'ha ido en skate haciendo backflips de', u'ha cogido el coche y ha hecho un derrape de', u'ha cogido un Blablacar de'])
     return u' '.join((player.get_name(), action, old_location.name, 'a', new_location.name + '.')).encode('utf-8')
 
-def destroyed(place, dead_list):
-    if place.name == 'Bercianos':
-        prefix = u'Es un día triste para la humanidad (y para Kini), la caseta de Bercianos se ha derrumbado'
+def destroyed(place, dead_list, escaped_list, new_location):
     prefix = random.choice([u'Un meteorito ha caído en ' + place.name + u' y lo ha destruido', place.name + u' ha colapsado', u'Alguien se dejó una vela encendida, lo que incendió su casa y rápidamente todo ' + place.name + u' fue reducido a cenizas', u'Un terrorista islámico ha dinamitado ' + place.name, u'Una riada ha inundado todo ' + place.name, u'Una bomba nuclear ha reducido ' + place.name + u' a pedazos', u'Alguien ha prendido el polen de ' + place.name + u' incendiando todo el pueblo', u'Un huracán ha arrasado todo ' + place.name, u'Una nube de gas tóxico ha llegado a ' + place.name + u' haciéndolo inhabitable', u'En medio de una gran tormenta, un rayo ha caído en ' + place.name  + u', provocando un incendio que ha quemado todo el pueblo', u'El mundo está mejor sin ' + place.name  + u', así que el creador de este bot ha decidido cargárselo sin más', u'Unos alienígenas han estado observando ' + place.name + u' durante meses para llegar a la conclusión de que no merece existir, así que lo han destruido con un láser tocho', u'Un avión portugués ha bombardeado ' + place.name, u'Un bombardero británico se ha cargado todo ' + place.name, place.name + u' se ha ido a la puta mierda', u'Una terrible sequía ha asolado ' + place.name])
 
     if len(dead_list) == 0:
@@ -222,7 +226,22 @@ def destroyed(place, dead_list):
                 dead_str = dead_str + ', ' + d
         sufix = random.choice([u' y ' + dead_str + u' han fallecido en un trágico accidente.', ' y ' + dead_str + u' han amochado.', ' y ' + dead_str + u' la han palmado.', ' y ' + dead_str + u' han muerto.', ' y ' + dead_str + u' no han sobrevivido.', u' y hay un luto de 3 días por ' + dead_str + u'.', u' y no ha habido supervivientes. RIP ' + dead_str + u'.'])
 
-    return (prefix + sufix).encode('utf-8')
+    susufix = ''
+    escaped = []
+
+    if new_location and len(escaped_list) > 0:
+        for i, d in enumerate(escaped_list):
+            escaped.append(d.get_name())
+        for i, d in enumerate(escaped):
+            if i == 0:
+                susufix_str = d
+            elif i == len(dead) - 1:
+                susufix_str = susufix_str + ' y ' + d
+            else:
+                susufix_str = susufix_str + ', ' + d
+        susufix = random.choice([u' Por suerte, ' + susufix_str + get_sing_or_pl(escaped_list, u' ha conseguido escapar a ', u' ha conseguido escapar a ')]) + new_location.name
+
+    return (prefix + sufix + susufix).encode('utf-8')
 
 def somebody_couldnt_move(player):
     return u' '.join((player.get_name(), u'se ha terminado toda la comida de', player.location.name, u'y no ha podido acceder a otros lugares, por lo que ha muerto de hambre.')).encode('utf-8')

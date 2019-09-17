@@ -234,21 +234,38 @@ def destroy():
 
     place.destroyed = True
     dead_list = []
+    escaped_list = []
+    route_list = []
+    new_location = False
+
+    for j, c in enumerate(place.connections):
+        if not c.destroyed:
+            route_list.append(c)
+
+    if len(route_list) > 0:
+        new_location = random.choice(route_list)
 
     for i, p in enumerate(place.players):
         if p.state == 1:
-            p.state = 0
-            dead_list.append(p)
+            if new_location and random.randint(0, 100) >= 90:
+                escaped_list.append(p)
+            else:
+                p.state = 0
+                dead_list.append(p)
 
     for i, p in enumerate(place.players):
         for j, q in enumerate(dead_list):
             if p == q:
                 p.location.players.pop(p.location.players.index(p))
+        for j, q in enumerate(escaped_list):
+            if p == q:
+                p.location.players.pop(p.location.players.index(p))
+                new_location.players.append(p)
 
     if place.monster:
         place.monster = None
 
-    write_tweet(Tweet_type.destroyed, player_list, place_list, place, [place, dead_list])
+    write_tweet(Tweet_type.destroyed, player_list, place_list, place, [place, dead_list, escaped_list, new_location])
 
 def trap():
     list = []

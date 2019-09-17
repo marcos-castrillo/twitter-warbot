@@ -124,6 +124,10 @@ def draw_image(type, player_list, place_list, location = None, args = None):
         for i, p in enumerate(args[1]):
             avatar = Image.open(p.avatar_dir)
             image.paste(avatar, (location.coord_x - 40 + (i * 30), location.coord_y - 24, location.coord_x + 8 + (i * 30), location.coord_y + 24), avatar.convert('RGBA'))
+        if args[3] and len(args[2]) > 0:
+            for i, p in enumerate(args[2]):
+                avatar = Image.open(p.avatar_dir)
+                image.paste(avatar, (args[3].coord_x - 40 + (i * 30), args[3].coord_y - 24, args[3].coord_x + 8 + (i * 30), args[3].coord_y + 24), avatar.convert('RGBA'))
 
     if type == Tweet_type.somebody_found_item or type == Tweet_type.somebody_replaced_item or type == Tweet_type.somebody_doesnt_want_item:
         image.paste(item, (location.coord_x - 15, location.coord_y - 15, location.coord_x + 15, location.coord_y + 15), item.convert('RGBA'))
