@@ -12,5 +12,4 @@ This is my first twitter bot. It's a fictional tournament where players can 'fig
 
 ## Todo
 
-1. Escape from destroyed cities
-2. Destroyed world theme
+1. Destroyed world theme

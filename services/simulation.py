@@ -6,7 +6,6 @@ import urllib
 from PIL import Image, ImageDraw, ImageFont
 
 from data.literals import get_message
-from models.simulation_probab import Simulation_Probab
 from models.tweet_type import Tweet_type
 
 date = datetime.datetime.now()
@@ -44,9 +43,6 @@ def initialize_avatars(player_list):
             urllib.urlretrieve('http://avatars.io/twitter/' + player.username + '/small', filename)
         player.avatar_dir = filename
 
-def initialize_simulation_probabs(prob_item, prob_move, prob_battle, prob_destroy, prob_trap, prob_suicide, prob_revive):
-    return Simulation_Probab(prob_item, prob_move, prob_battle, prob_destroy, prob_trap, prob_suicide, prob_revive)
-
 def write_tweet(type, player_list, place_list, location = None, args = None):
     global line_number
     if args == None:
@@ -82,6 +78,7 @@ def draw_image(type, player_list, place_list, location = None, args = None):
     powerup = Image.open(os.path.join(current_dir, '../assets/powerup.png'))
     skull = Image.open(os.path.join(current_dir, '../assets/powerup.png'))
     heart = Image.open(os.path.join(current_dir, '../assets/heart.png'))
+    crown = Image.open(os.path.join(current_dir, '../assets/crown.png'))
 
     font_path = os.path.join(current_dir, '../assets/Comic-Sans.ttf')
 
@@ -141,6 +138,9 @@ def draw_image(type, player_list, place_list, location = None, args = None):
     if type == Tweet_type.somebody_tied_and_became_friend or type == Tweet_type.somebody_tied_and_was_friend:
         image.paste(heart, (location.coord_x - 15, location.coord_y - 15, location.coord_x + 15, location.coord_y + 15), heart.convert('RGBA'))
 
+    if type == Tweet_type.winner:
+        image.paste(crown, (location.coord_x - 36, location.coord_y - 76, location.coord_x + 36, location.coord_y - 20), crown.convert('RGBA'))
+
     for i, p in enumerate(place_list):
         if p.destroyed == True:
             image.paste(destroyed, (p.coord_x - 15, p.coord_y - 15, p.coord_x + 15, p.coord_y + 15), destroyed.convert('RGBA'))
@@ -157,8 +157,8 @@ def draw_image(type, player_list, place_list, location = None, args = None):
     image.save(output_dir + '/' + str(line_number) + '.png')
 
 def draw_ranking(image, draw, alive_players_list, dead_players_list):
-    coord_x = 20
-    coord_y = 1150
+    coord_x = 5
+    coord_y = 1145
 
     for i, p in enumerate(alive_players_list):
         draw_player(image, draw, coord_x, coord_y, alive_players_list[i], True)
@@ -187,12 +187,12 @@ def draw_player(image, draw, coord_x, coord_y, player, is_alive):
         draw.text((coord_x + 27, coord_y - 17), str(player.kills), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=10))
 
     if player.get_attack() != 0:
-        image.paste(attack, (coord_x, coord_y - 35), attack.convert('RGBA'))
+        image.paste(attack, (coord_x - 2, coord_y - 35), attack.convert('RGBA'))
         draw.text((coord_x + 14, coord_y - 35), str(player.get_attack()), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=10))
 
     if player.get_defense() != 0:
-        image.paste(defense, (coord_x + 25, coord_y - 35), defense.convert('RGBA'))
-        draw.text((coord_x + 41, coord_y - 35), str(player.get_defense()), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=10))
+        image.paste(defense, (coord_x + 26, coord_y - 35), defense.convert('RGBA'))
+        draw.text((coord_x + 42, coord_y - 35), str(player.get_defense()), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=10))
 
     if not is_alive:
         draw.text((coord_x + 3, coord_y - 11), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path, size=50))
@@ -202,7 +202,7 @@ def calculate_coords(coord_x, coord_y):
     imgs_per_row = 25
     space_between_rows = 100
     space_between_cols = 10
-    first_column_x = 20
+    first_column_x = 5
 
     coord_x = coord_x + (img_width + space_between_cols)
     if coord_x == first_column_x + imgs_per_row * (img_width + space_between_cols):

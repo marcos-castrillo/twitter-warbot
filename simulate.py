@@ -12,6 +12,8 @@ from data.constants import *
 from models.player import Player
 from models.item import Item
 from models.tweet_type import Tweet_type
+from models.item_rarity_probab import Item_Rarity_Probab
+from models.simulation_probab import Simulation_Probab
 
 from services.simulation import *
 from services.items import *
@@ -23,8 +25,8 @@ item_list = get_item_list()
 place_list = get_place_list()
 player_list = get_player_list(place_list)
 initialize_avatars(player_list)
-simulation_probab = initialize_simulation_probabs(probab_item, probab_move, probab_battle, probab_destroy, probab_trap, probab_suicide, probab_revive)
-item_rarity_probab = initialize_item_rarity_probab(probab_rarity_1, probab_rarity_2, probab_rarity_3)
+simulation_probab = Simulation_Probab(probab_item[0], probab_move[0], probab_battle[0], probab_destroy[0], probab_monster[0], probab_trap[0], probab_suicide[0], probab_revive[0])
+item_rarity_probab = Item_Rarity_Probab(probab_rarity_1[0], probab_rarity_2[0], probab_rarity_3[0])
 finished = False
 hour_count = 0
 
@@ -45,9 +47,9 @@ def simulate_day():
     hour_count = hour_count + 1
     for i, th in enumerate(hour_thresholds):
         if hour_count == th:
-            simulation_probab.increase(i)
-            item_rarity_probab.increase(i)
-            write_tweet(Tweet_type.hour_threshold, player_list, place_list, None, [hour_count])
+            simulation_probab = Simulation_Probab(probab_item[i], probab_move[i], probab_battle[i], probab_destroy[i], probab_monster[i], probab_trap[i], probab_suicide[i], probab_revive[i])
+            item_rarity_probab = Item_Rarity_Probab(probab_rarity_1[i], probab_rarity_2[i], probab_rarity_3[i])
+            #write_tweet(Tweet_type.hour_threshold, player_list, place_list, None, [hour_count])
 
     action_number = random.randint(1, 100)
 
@@ -59,6 +61,8 @@ def simulate_day():
         battle()
     elif action_number < simulation_probab.destroy_action_number:
         destroy()
+    elif action_number < simulation_probab.monster_action_number:
+        monster()
     elif action_number < simulation_probab.trap_action_number:
         trap()
     elif action_number == simulation_probab.suicide_action_number:
@@ -70,17 +74,12 @@ def simulate_day():
         end()
 
 def pick_item():
-    action_number = random.randint(1, 100)
+    alive_players = filter_player_list_by_state(player_list, 1)
+    player = random.choice(alive_players)
 
-    if action_number > 70:
-        monster()
-    else:
-        alive_players = filter_player_list_by_state(player_list, 1)
-        player = random.choice(alive_players)
-
-        better_loot = player.location.loot or player.location == player.fav_place
-        item = get_random_item(item_rarity_probab, better_loot)
-        player.pick(player_list, place_list, item)
+    better_loot = player.location.loot or player.location == player.fav_place
+    item = get_random_item(item_rarity_probab, better_loot)
+    player.pick(player_list, place_list, item)
 
 def monster():
     place = None
@@ -182,9 +181,8 @@ def battle():
     player_1, player_2 = get_two_players_in_random_place(place_list)
 
     if (player_1, player_2) == (None, None):
-        move()
+        destroy()
         return
-
 
     factor_1 = 1 - player_1.get_defense() + player_2.get_attack()
     factor_2 = 100 + player_2.get_defense() - player_1.get_attack()
@@ -247,20 +245,14 @@ def destroy():
 
     for i, p in enumerate(place.players):
         if p.state == 1:
+            place.players.pop(place.players.index(p))
+
             if new_location and random.randint(0, 100) >= 90:
                 escaped_list.append(p)
+                new_location.players.append(p)
             else:
                 p.state = 0
                 dead_list.append(p)
-
-    for i, p in enumerate(place.players):
-        for j, q in enumerate(dead_list):
-            if p == q:
-                p.location.players.pop(p.location.players.index(p))
-        for j, q in enumerate(escaped_list):
-            if p == q:
-                p.location.players.pop(p.location.players.index(p))
-                new_location.players.append(p)
 
     if place.monster:
         place.monster = None
