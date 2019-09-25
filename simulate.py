@@ -25,7 +25,7 @@ item_list = get_item_list()
 place_list = get_place_list()
 player_list = get_player_list(place_list)
 initialize_avatars(player_list)
-simulation_probab = Simulation_Probab(probab_item[0], probab_move[0], probab_battle[0], probab_destroy[0], probab_monster[0], probab_trap[0], probab_suicide[0], probab_revive[0])
+simulation_probab = Simulation_Probab(probab_item[0], probab_move[0], probab_battle[0], probab_destroy[0], probab_monster[0], probab_aop[0], probab_trap[0], probab_suicide[0], probab_revive[0])
 item_rarity_probab = Item_Rarity_Probab(probab_rarity_1[0], probab_rarity_2[0], probab_rarity_3[0])
 finished = False
 hour_count = 0
@@ -47,7 +47,7 @@ def simulate_day():
     hour_count = hour_count + 1
     for i, th in enumerate(hour_thresholds):
         if hour_count == th:
-            simulation_probab = Simulation_Probab(probab_item[i], probab_move[i], probab_battle[i], probab_destroy[i], probab_monster[i], probab_trap[i], probab_suicide[i], probab_revive[i])
+            simulation_probab = Simulation_Probab(probab_item[i], probab_move[i], probab_battle[i], probab_destroy[i], probab_monster[i], probab_aop[i], probab_trap[i], probab_suicide[i], probab_revive[i])
             item_rarity_probab = Item_Rarity_Probab(probab_rarity_1[i], probab_rarity_2[i], probab_rarity_3[i])
             #write_tweet(Tweet_type.hour_threshold, player_list, place_list, None, [hour_count])
 
@@ -63,6 +63,8 @@ def simulate_day():
         destroy()
     elif action_number < simulation_probab.monster_action_number:
         monster()
+    elif action_number < simulation_probab.aop_action_number:
+        accident_or_powerup()
     elif action_number < simulation_probab.trap_action_number:
         trap()
     elif action_number == simulation_probab.suicide_action_number:
@@ -171,17 +173,14 @@ def move():
         new_location.players.append(player)
         player.location = new_location
 
-        if action_number < 25:
-            accident_or_powerup(player)
-        else:
-            write_tweet(Tweet_type.somebody_moved, player_list, place_list, player.location, [player, old_location, player.location])
+        write_tweet(Tweet_type.somebody_moved, player_list, place_list, player.location, [player, old_location, player.location])
 
 def battle():
     alive_players = filter_player_list_by_state(player_list, 1)
-    player_1, player_2 = get_two_players_in_random_place(place_list)
+    player_1, player_2, place = get_two_players_in_random_place(place_list)
 
     if (player_1, player_2) == (None, None):
-        destroy()
+        accident_or_powerup()
         return
 
     factor_1 = 1 - player_1.get_defense() + player_2.get_attack()
@@ -193,26 +192,25 @@ def battle():
     if player_2.location == player_2.fav_place:
         factor_2 = factor_2 + 10
 
-    if is_friend(player_1, player_2):
-        winner_1 = 50 - probab_tie - probab_friend_tie
-        winner_2 = 50 + probab_tie + probab_friend_tie
-    else:
-        winner_1 = 50 - probab_tie
-        winner_2 = 50 + probab_tie
+    winner_1 = 50 - probab_tie
+    winner_2 = 50 + probab_tie
 
     kill_number = random.randint(factor_1, factor_2)
 
-    if kill_number == int((factor_2 - factor_1) / 2):
-        run_away(player_list, place_list, player_1, player_2)
-    elif kill_number <= int((factor_2 - factor_1) / 2) + 2 and kill_number >= int((factor_2 - factor_1) / 2) - 2 and (len(player_1.item_list) > 0 or len(player_2.item_list) > 0):
-        steal(player_list, place_list, player_1, player_2)
-    elif kill_number < winner_1:
-        kill(player_list, place_list, player_1, player_2)
-    elif kill_number > winner_2:
-        kill(player_list, place_list, player_2, player_1)
+    if is_friend(player_1, player_2):
+        if kill_number > 20 or kill_number < 80:
+            tie(player_list, place_list, player_1, player_2)
     else:
-        tie(player_list, place_list, player_1, player_2)
-
+        if kill_number == int((factor_2 - factor_1) / 2):
+            run_away(player_list, place_list, player_1, player_2)
+        elif kill_number <= int((factor_2 - factor_1) / 2) + 2 and kill_number >= int((factor_2 - factor_1) / 2) - 2 and (len(player_1.item_list) > 0 or len(player_2.item_list) > 0):
+            steal(player_list, place_list, player_1, player_2)
+        elif kill_number < winner_1:
+            kill(player_list, place_list, player_1, player_2, place)
+        elif kill_number > winner_2:
+            kill(player_list, place_list, player_2, player_1, place)
+        else:
+            tie(player_list, place_list, player_1, player_2)
 
 def destroy():
     list = []
@@ -283,14 +281,16 @@ def trap():
         place.trap_by = player
         write_tweet(Tweet_type.trap, player_list, place_list, place, [player, place])
     else:
-        move()
+        accident_or_powerup()
 
-def accident_or_powerup(player):
+def accident_or_powerup():
+    alive_players = filter_player_list_by_state(player_list, 1)
+    player = random.choice(alive_players)
     action_number = random.randint(0, 100)
 
-    if action_number > 75:
+    if action_number > 50:
         powerup(player)
-    elif action_number > 50:
+    elif action_number > 25:
         injure(player)
     else:
         illness(player)

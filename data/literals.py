@@ -104,10 +104,16 @@ def winner(player):
     item_list = ''
     injury_list = ''
     if len(player.item_list) > 0:
-        list = []
+        list = ''
         for i, item in enumerate(player.item_list):
-            list.append(item.name)
-        item_list = u' Además, ha acabado teniendo ' + u', '.join(list) + '.'
+            if i == 0:
+                list = item.name
+            elif i == len(player.item_list):
+                list = list + ' y ' + item.name
+            else:
+                list = list + ', ' + item.name
+
+        item_list = u' Además, ha acabado teniendo ' + list + '.'
     if len(player.injury_list) > 0:
         list = []
         for i, item in enumerate(player.injury_list):
@@ -138,7 +144,7 @@ def somebody_found_item(player, item):
     u'ha intercambiado ' + random.choice([u'dos gramos', u'un gramo', u'dos cigarros', u'medio porro', u'un porro', u'una chusta', u'cuatro cigarros', u'tres cigarros', 'una calada']) + ' por',
     u'ha ganado en una apuesta',
     u'se ha comprado en un estanco',
-    u'se ha comprado en un kiosko clandestinamente',
+    u'se ha comprado clandestinamente en un kiosko',
     u'ha comprado en el supermercado',
     u'ha recibido un paquete de Amazon con',
     u'ha ido al mercadillo y ha comprado',
@@ -183,7 +189,7 @@ def somebody_replaced_item(player, item_new, item_old):
     u'ha intercambiado ' + random.choice([u'dos gramos', u'un gramo', u'dos cigarros', u'medio porro', u'un porro', u'una chusta', u'cuatro cigarros', u'tres cigarros', 'una calada']) + ' por',
     u'ha ganado en una apuesta',
     u'se ha comprado en un estanco',
-    u'se ha comprado en un kiosko clandestinamente',
+    u'se ha comprado clandestinamente en un kiosko',
     u'ha comprado en el supermercado',
     u'ha recibido un paquete de Amazon con',
     u'ha ido al mercadillo y ha comprado',
@@ -212,7 +218,7 @@ def somebody_doesnt_want_item(player, item):
     u'ha intercambiado ' + random.choice([u'dos gramos', u'un gramo', u'dos cigarros', u'medio porro', u'un porro', u'una chusta', u'cuatro cigarros', u'tres cigarros', 'una calada']) + ' por',
     u'ha ganado en una apuesta',
     u'se ha comprado en un estanco',
-    u'se ha comprado en un kiosko clandestinamente',
+    u'se ha comprado clandestinamente en un kiosko',
     u'ha comprado en el supermercado',
     u'ha recibido un paquete de Amazon con',
     u'ha ido al mercadillo y ha comprado',
@@ -245,7 +251,7 @@ def somebody_tied_and_was_friend(player_1, player_2):
     'buenos amigos', 'buenas amigas') + ' que no han querido pelearse.',
     player_1.get_name() + u' iba a reventar a ' + player_2.get_name() + u', pero se dio cuenta de que en el fondo le cae bien.',
     player_1.get_name() + u' contó un chiste tan malo que ' + player_2.get_name() + u' estuvo a punto de ' + get_x_or_y(player_1, 'matarlo', 'matarla') + u', pero cambió de opinión en el último momento porque son ' + get_x_or_y_plural([player_1, player_2], 'amigos.', 'amigas.'),
-    player_1.get_name() + ' se ha negado a pelearse con ' + player_2.get_name() + u' a pesar de que sea tan ' + get_x_or_y(player_2, 'tonto', 'tonta') + ', ya que son ' + get_x_or_y_plural([player_1, player_2],'buenos amigos', 'buenas amigas') + '.'
+    player_1.get_name() + ' se ha negado a pelearse con ' + player_2.get_name() + u' a pesar de que le tenga ganas, ya que son ' + get_x_or_y_plural([player_1, player_2], 'amigos', 'amigas') + '.'
     ])).encode('utf-8')
 
 def somebody_escaped(player_1, player_2, unfriend = False):
@@ -281,6 +287,7 @@ def somebody_killed(player_1, player_2, are_friends = False, new_item = None, ol
 
     kill_method = random.choice([
     u' con sus puños',
+    u' a lo jíbiri',
     u' a tortazo limpio',
     u' de un cabezazo',
     u' de un codazo en el esternón',
@@ -312,6 +319,9 @@ def somebody_killed(player_1, player_2, are_friends = False, new_item = None, ol
         friend_message = random.choice([
         u'Aunque eran ' + get_x_or_y_plural([player_1, player_2], u'amigos, ', u'amigas, '),
         u'Parece que no se caían tan bien, ',
+        u'Parece que alguien es un judas, ',
+        u'Vaya puñalada por la espalda, ',
+        u'Menuda traición, ',
         u'Por lo visto no eran tan ' + get_x_or_y_plural([player_1, player_2], u'amigos, ', u'amigas, '),
         u'Premio ' + get_x_or_y(player_1, u'al mejor amigo', u'a la mejor amiga') + u' del año. ',
         ''
@@ -328,7 +338,7 @@ def somebody_killed(player_1, player_2, are_friends = False, new_item = None, ol
         u'Qué crack.',
         u'No hay quién ' + get_x_or_y(player_1, u'lo.', u'la.') + ' pare.',
         u'A por la MOAB.',
-        u'Ni Willyrex.',
+        u'Tra tra.',
         u'Campear tanto da sus frutos.',
         get_x_or_y(player_1, u'Esta mamadísimo.', u'Está mamadísima.')])
     if new_item != None and old_item != None:
@@ -354,10 +364,10 @@ def somebody_revived(player):
 
 def somebody_died(player):
     return u' '.join((player.get_name(), random.choice([
-    u'debería de haber mirado antes de cruzar la carretera. Quizás así hubiera visto al camión que se lo ha llevado por delante.',
+    u'debería de haber mirado antes de cruzar la carretera. Quizás así hubiera visto el camión que se lo ha llevado por delante.',
     u'ha sido víctima de un rayo y se ha muerto en el acto.',
     u'ha muerto repentinamente por un fallo cardíaco. ¡Hay que hacer más deporte!',
-    u'ha empezado a toser, a toser y a toser y se ha acabado asfixiando. Puede que fumarse 5 paquetes al día no fuera la decisión más sabia para ' + get_x_or_y(player, u'un chavalito.', u'una chavalita.'),
+    u'ha empezado a toser, a toser y a toser y se ha acabado asfixiando. Puede que fumarse 5 paquetes al día no fuera la decisión más sabia. Estos chavalitos...',
     u'ha amochado de repente.',
     u'ha sido atropellado por una moto y se fue a la puta.'
     ]))).encode('utf-8')
@@ -366,7 +376,7 @@ def somebody_moved(player, old_location, new_location):
     road = False
 
     for i, c in enumerate(old_location.road_connections):
-        if c == new_location.name.encode('utf-8'):
+        if c.encode('utf-8') == new_location.name.encode('utf-8'):
             road = True
 
     if road:
@@ -381,6 +391,8 @@ def somebody_moved(player, old_location, new_location):
         u'ha ido en su moto de',
         u'ha ido en su scooter de',
         u'ha ido en AVE de',
+        u'ha ido en mochillo de',
+        u'ha ido en patinete eléctrico de',
         u'ha ido en un tren regional de',
         u'ha encontrado billetes de avión baratos para ir de',
         u'ha ido en avión en primera clase para ir de',
@@ -501,7 +513,7 @@ def somebody_powerup(player, powerup):
 def monster_appeared(place):
     return random.choice([
     u'¡Ojo! Alguien ha avistado una patrulla de la guardia en ' + place.name + '.',
-    u'Se ha producido una serie de altercados en ' + place.name + u', por lo que la policía se ha visto obligada a intervenir.',
+    u'Se han producido una serie de altercados en ' + place.name + u', por lo que la policía se ha visto obligada a desplazarse allí.',
     ]).encode('utf-8')
 
 def monster_moved(place, new_place):

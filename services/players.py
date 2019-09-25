@@ -39,7 +39,6 @@ def get_two_players_in_random_place(place_list):
         if len(p.players) > 1:
             list.append(p)
 
-
     while len(list) > 0:
         place = random.choice(list)
         player_1 = None
@@ -58,9 +57,13 @@ def get_two_players_in_random_place(place_list):
             list.pop(list.index(place))
 
         if player_1 != None and player_2 != None:
-            return player_1, player_2
+            if is_friend(player_1, player_2):
+                action_number = random.randint(0, 100)
+                if action_number > 50:
+                    return None, None, None
+            return player_1, player_2, place
 
-    return None, None
+    return None, None, None
 
 def filter_player_list_by_state(player_list, value):
     list = []

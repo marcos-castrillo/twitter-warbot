@@ -12,7 +12,6 @@ This is my first twitter bot. It's a fictional tournament where players can 'fig
 
 ## Todo
 
-1. <models.player.Player object at 0x03444350> is not in list
 2. Check all the literals
 3. Participants
 4. Test test test

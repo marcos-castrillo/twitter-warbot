@@ -2,11 +2,12 @@ hour_thresholds = [25, 50, 100, 150, 200, 250]
 max_players = 100
 use_usernames = True
 
-probab_item = [65, 54, 43, 31, 20, 11]
+probab_item = [55, 48, 40, 30, 20, 11]
 probab_move = [4, 4, 4, 4, 4, 4]
 probab_battle = [30, 39, 47, 52, 55, 60]
 probab_destroy = [0, 0, 1, 4, 7, 10]
 probab_monster = [0, 1, 2, 4, 7, 7]
+probab_aop = [10, 16, 19, 5, 7, 7]
 probab_trap = [0, 1, 2, 3, 4, 5]
 probab_suicide = [1, 1, 1, 1, 2, 2]
 probab_revive =  [0, 0, 0, 1, 1, 1]
