@@ -180,7 +180,7 @@ def battle():
     player_1, player_2, place = get_two_players_in_random_place(place_list)
 
     if (player_1, player_2) == (None, None):
-        accident_or_powerup()
+        move()
         return
 
     factor_1 = 1 - player_1.get_defense() + player_2.get_attack()

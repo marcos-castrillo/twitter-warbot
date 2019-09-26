@@ -103,6 +103,14 @@ def start():
 def winner(player):
     item_list = ''
     injury_list = ''
+    kills = ''
+    if player.kills == 0:
+        kills = u'Lo ha conseguido sin llevarse por delante a nadie.'
+    if player.kills == 1:
+        kills = u'Lo ha conseguido llevándose por delante a sólo 1 participante.'
+    else:
+        kills = u'Lo ha conseguido llevándose por delante a ' + str(player.kills) + ' participantes.'
+
     if len(player.item_list) > 0:
         list = ''
         for i, item in enumerate(player.item_list):
@@ -119,7 +127,7 @@ def winner(player):
         for i, item in enumerate(player.injury_list):
             list.append(item.name)
         injury_list = ' Todo ello a pesar de tener ' + u', '.join(list) + '.'
-    return u' '.join((u'¡' + player.get_name(), u'ha ganado! Lo ha conseguido llevándose por delante a', str(player.kills), 'participantes.' + item_list + injury_list, 'El ataque de', player.get_name(), u'llegó a ser de', str(player.get_attack()), u'y su defensa de', str(player.get_defense()) + '.')).encode('utf-8')
+    return u' '.join((u'¡' + player.get_name(), u'ha ganado! ' + kills + item_list + injury_list, 'El ataque de', player.get_name(), u'llegó a ser de', str(player.get_attack()), u'y su defensa de', str(player.get_defense()) + '.')).encode('utf-8')
 
 def nobody_won():
     return (u'Por algún motivo, todos los jugadores están muertos. Nadie ha ganado... ¡otra vez será!').encode('utf-8')
