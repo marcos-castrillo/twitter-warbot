@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import random
+import sys
+
 from data.places import raw_place_list
 from models.place import Place
 
@@ -21,6 +23,10 @@ def get_place_list():
     for i, p in enumerate(list):
         initialize_connections_list(list, p)
 
+    for i, p in enumerate(list):
+        if len(p.connections) == 0:
+            sys.exit('Config error: place without connections: ' + p.name)
+
     return list
 
 def initialize_connections_list(places_list, place):
@@ -37,4 +43,4 @@ def get_place_by_name(place_list, name):
     if place:
         return place[0]
     else:
-        return None
+        sys.exit('Config error: there are no places with that name: ' + name)

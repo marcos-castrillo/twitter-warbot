@@ -12,7 +12,6 @@ raw_item_list_1 = [
     [u'un libro tocho', 1, 0],
     [u'una botella de horchata', 0, 1],
     [u'una botella de agua de Madrid', 0, 1],
-    [u'una bocata de calamares', 0, 1],
     [u'un puñado de arena', 1, 0],
     [u'un tiesto', 0, 1],
     [u'una lata de sardinas', 0, 1],
@@ -117,6 +116,7 @@ raw_injury_list = [
 
 raw_powerup_list = [
     [u'un botiquín', 3, 0],
+    [u'una bocata de calamares', 2, 1],
     [u'un vodka Knebep con limón', 3, 3],
     [u'un ron Almirante con cola', 3, 3],
     [u'una caja de botellas de sidra', 3, 3],

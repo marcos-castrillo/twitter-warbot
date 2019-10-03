@@ -116,17 +116,22 @@ def winner(player):
         for i, item in enumerate(player.item_list):
             if i == 0:
                 list = item.name
-            elif i == len(player.item_list):
+            elif i == len(player.item_list) - 1:
                 list = list + ' y ' + item.name
             else:
                 list = list + ', ' + item.name
 
         item_list = u' Además, ha acabado teniendo ' + list + '.'
     if len(player.injury_list) > 0:
-        list = []
+        list = ''
         for i, item in enumerate(player.injury_list):
-            list.append(item.name)
-        injury_list = ' Todo ello a pesar de tener ' + u', '.join(list) + '.'
+            if i == 0:
+                list = item.name
+            elif i == len(player.item_list) - 1:
+                list = list + ' y ' + item.name
+            else:
+                list = list + ', ' + item.name
+        injury_list = ' Todo ello a pesar de padecer ' + list + '.'
     return u' '.join((u'¡' + player.get_name(), u'ha ganado! ' + kills + item_list + injury_list, 'El ataque de', player.get_name(), u'llegó a ser de', str(player.get_attack()), u'y su defensa de', str(player.get_defense()) + '.')).encode('utf-8')
 
 def nobody_won():
@@ -160,7 +165,7 @@ def somebody_found_item(player, item):
     u'se ha encontrado una caja llena de papel de periódico. Al abrirla había',
     u'ha recibido por su cumpleaños',
     u'llevaba mucho tiempo ahorrando para comprarse',
-    u'iba tranquilamnente por la calle cuando un desconocido le regaló',
+    u'iba tranquilamente por la calle cuando un desconocido le regaló',
     u'llevaba meses coleccionando tapas de yogurt para conseguir',
     u'ha ido coleccionando fascículos para montar',
     u'es tan manitas que se ha construido',
@@ -205,7 +210,7 @@ def somebody_replaced_item(player, item_new, item_old):
     u'se ha encontrado una caja llena de papel de periódico. Al abrirla había',
     u'ha recibido por su cumpleaños',
     u'llevaba mucho tiempo ahorrando para comprarse',
-    u'iba tranquilamnente por la calle cuando un desconocido le regaló',
+    u'iba tranquilamente por la calle cuando un desconocido le regaló',
     u'llevaba meses coleccionando tapas de yogurt para conseguir',
     u'ha ido coleccionando fascículos para montar',
     u'es tan manitas que se ha construido',
@@ -234,7 +239,7 @@ def somebody_doesnt_want_item(player, item):
     u'se ha encontrado una caja llena de papel de periódico. Al abrirla había',
     u'ha recibido por su cumpleaños',
     u'llevaba mucho tiempo ahorrando para comprarse',
-    u'iba tranquilamnente por la calle cuando un desconocido le regaló',
+    u'iba tranquilamente por la calle cuando un desconocido le regaló',
     u'llevaba meses coleccionando tapas de yogurt para conseguir',
     u'ha ido coleccionando fascículos para montar',
     u'es tan manitas que se ha construido',
@@ -312,7 +317,7 @@ def somebody_killed(player_1, player_2, are_friends = False, new_item = None, ol
     u' con lágrimas en los ojos',
     u' con mirada de psicópata',
     u' y ha gritado SUUUUUUUUUUUUUUUUU',
-    u' y ha gritado ' + get_x_or_y(player_1, u'ESTOY MAMADISIMO HIJO DE PUTA', u'ESTOY MAMADISIMA HIJO DE PUTA'),
+    u' y ha gritado ' + get_x_or_y(player_1, u'ESTOY MAMADÍSIMO HIJO DE PUTA', u'ESTOY MAMADÍSIMA HIJO DE PUTA'),
     u' y ha gritado PRANK ÉPICA',
     u', lo ha grabado y lo ha subido a su instagram',
     u' y lo ha tuiteado',
@@ -396,12 +401,12 @@ def somebody_moved(player, old_location, new_location):
         u'ha hecho dedo desde',
         u'ha hecho autostop desde',
         u'ha robado un coche descapotable a lo GTA y se ha ido de',
-        u'ha ido en su moto de',
+        u'ha ido en moto de',
         u'ha ido en su scooter de',
         u'ha ido en AVE de',
         u'ha ido en mochillo de',
         u'ha ido en patinete eléctrico de',
-        u'ha ido en un tren regional de',
+        u'ha ido en tren regional de',
         u'ha encontrado billetes de avión baratos para ir de',
         u'ha ido en avión en primera clase para ir de',
         u'ha cogido un Blablacar de'
@@ -468,7 +473,7 @@ def destroyed(place, dead_list, escaped_list, new_location):
         ' y ' + dead_str + u' no han sobrevivido.',
         ' y ' + dead_str + u' han espichado.',
         u' y hay un luto de 3 días por ' + dead_str + u'.',
-        u' RIP ' + dead_str + u'.'
+        u' . DEP ' + dead_str + u'.'
         ])
 
     susufix = ''

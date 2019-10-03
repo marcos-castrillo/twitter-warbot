@@ -81,15 +81,15 @@ class Player(object):
                 return self.item_list[1]
 
     def get_best_attack_item(self):
-        if len(self.item_list) == 0:
-            return None
-        elif len(self.item_list) == 1:
-            return self.item_list[0]
-        else:
-            if self.item_list[0].attack >= self.item_list[1].attack:
+        if len(self.item_list) == 1:
+            if self.item_list[0].attack > 0:
                 return self.item_list[0]
-            else:
+        elif len(self.item_list) == 2:
+            if self.item_list[0].attack >= self.item_list[1].attack and self.item_list[0].attack > 0:
+                return self.item_list[0]
+            elif self.item_list[1].attack > 0:
                 return self.item_list[1]
+        return None
 
     def get_worst_item(self):
         if len(self.item_list) == 0:

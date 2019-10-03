@@ -46,7 +46,7 @@ def get_random_item(item_probab, loot = None):
     elif action_number < item_probab.rarity_2_action_number:
         rarity = 2
     else:
-        rarity = 1
+        rarity = 3
     return random.choice(get_item_list(rarity))
 
 def get_random_illness():

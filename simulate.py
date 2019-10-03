@@ -51,8 +51,14 @@ def simulate_day():
             item_rarity_probab = Item_Rarity_Probab(probab_rarity_1[i], probab_rarity_2[i], probab_rarity_3[i])
             #write_tweet(Tweet_type.hour_threshold, player_list, place_list, None, [hour_count])
 
-    action_number = random.randint(1, 100)
+    do_something()
 
+    if get_alive_players_count(player_list) <= 1:
+        end()
+
+def do_something():
+    action_number = random.randint(1, 100)
+    
     if action_number < simulation_probab.item_action_number:
         pick_item()
     elif action_number < simulation_probab.move_action_number:
@@ -71,9 +77,6 @@ def simulate_day():
         suicide()
     elif action_number == simulation_probab.revive_action_number:
         revive()
-
-    if get_alive_players_count(player_list) <= 1:
-        end()
 
 def pick_item():
     alive_players = filter_player_list_by_state(player_list, 1)
@@ -167,8 +170,8 @@ def move():
             write_tweet(Tweet_type.dodged_trap, player_list, place_list, player.location, [player, trapped_by, new_location])
 
     else:
-        old_location = player.location
         player.location.players.pop(player.location.players.index(player))
+        old_location = player.location
 
         new_location.players.append(player)
         player.location = new_location
@@ -180,7 +183,7 @@ def battle():
     player_1, player_2, place = get_two_players_in_random_place(place_list)
 
     if (player_1, player_2) == (None, None):
-        move()
+        do_something()
         return
 
     factor_1 = 1 - player_1.get_defense() + player_2.get_attack()
@@ -281,7 +284,7 @@ def trap():
         place.trap_by = player
         write_tweet(Tweet_type.trap, player_list, place_list, place, [player, place])
     else:
-        accident_or_powerup()
+        do_something()
 
 def accident_or_powerup():
     alive_players = filter_player_list_by_state(player_list, 1)
