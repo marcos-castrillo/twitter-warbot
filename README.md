@@ -19,3 +19,4 @@ This is my first twitter bot. It's a fictional tournament where players can 'fig
 ## Bugs
 <models.player.Player object at 0x0321E150> is not in list
 Configuration changes to 150 in the tweet 146
+Tres provincias del pais vasco
