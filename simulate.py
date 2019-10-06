@@ -58,7 +58,7 @@ def simulate_day():
 
 def do_something():
     action_number = random.randint(1, 100)
-    
+
     if action_number < simulation_probab.item_action_number:
         pick_item()
     elif action_number < simulation_probab.move_action_number:
@@ -94,9 +94,12 @@ def monster():
 
     if place != None:
         action_number = random.randint(1, 100)
-
-        if action_number > 20 and len(place.players) > 0:
-            player = random.choice(place.players)
+        people_list = []
+        for i, p in enumerate(place.players):
+            if p.state == 1:
+                people_list.append(p)
+        if action_number > 20 and len(people_list) > 0:
+            player = random.choice(people_list)
             player.state = 0
             place.players.pop(place.players.index(player))
             write_tweet(Tweet_type.monster_killed, player_list, place_list, place, [player, place])
@@ -113,7 +116,7 @@ def monster():
                 new_place.monster = True
                 write_tweet(Tweet_type.monster_moved, player_list, place_list, new_place, [place, new_place])
             else:
-                write_tweet(Tweet_type.monster_dissappeared, player_list, place_list, place, [place])
+                write_tweet(Tweet_type.monster_disappeared, player_list, place_list, place, [place])
     else:
         loc_candidates = []
 
@@ -138,10 +141,11 @@ def move():
             loc_candidates.append(l)
 
     if len(loc_candidates) == 0:
-        player.state = 0
-        player.location.players.pop(player.location.players.index(player))
-
-        write_tweet(Tweet_type.somebody_couldnt_move, player_list, place_list, player.location, [player])
+        #player.state = 0
+        #place.players.pop(place.players.index(player_2))
+        #player.location.players.pop(player.location.players.index(player))
+        #write_tweet(Tweet_type.somebody_couldnt_move, player_list, place_list, player.location, [player])
+        do_something()
         return
 
     new_location = random.choice(loc_candidates)
@@ -202,7 +206,8 @@ def battle():
 
     if is_friend(player_1, player_2):
         if kill_number > 20 or kill_number < 80:
-            tie(player_list, place_list, player_1, player_2)
+            #tie(player_list, place_list, player_1, player_2)
+            do_something()
     else:
         if kill_number == int((factor_2 - factor_1) / 2):
             run_away(player_list, place_list, player_1, player_2)
@@ -251,6 +256,7 @@ def destroy():
             if new_location and random.randint(0, 100) >= 90:
                 escaped_list.append(p)
                 new_location.players.append(p)
+                p.location = new_location
             else:
                 p.state = 0
                 dead_list.append(p)

@@ -3,8 +3,8 @@
 
 # Name, defense, attack
 raw_item_list_1 = [
-    [u'un gato chino de esos que mueven el brazo', 0, 0],
-    [u'una pistola sin balas', 0, 0],
+    [u'un gato chino de esos que mueven el brazo', 1, 0],
+    [u'una pistola sin balas', 1, 0],
     [u'unas chinchetas', 0, 1],
     [u'una lata de atún del Día', 0, 1],
     [u'una bandera de Moderdonia', 0, 1],
@@ -22,8 +22,10 @@ raw_item_list_1 = [
     [u'una espada de plástico de los chinos', 0, 1],
     [u'un perrito faldero', 1, 1],
     [u'un puntero láser', 1, 1],
+    [u'un cuerno de mamut', 0, 2],
     [u'una ikurriña', 1, 1],
     [u'una estelada', 1, 1],
+    [u'una gorro de cocinero', 1, 0],
     [u'una sudadera guapa', 2, 0],
     [u'un tirachinas', 0, 2],
     [u'un micrófono', 0, 2],
@@ -40,7 +42,7 @@ raw_item_list_1 = [
 
 raw_item_list_2 = [
     [u'un cinturón con la bandera de España', 0, 3],
-    [u'un trozo de carne mechada', 0, 3],
+    [u'un filete de carne mechada', 0, 3],
     [u'una cuchilla de afeitar', 0, 3],
     [u'una escopeta de balines', 0, 3],
     [u'unos shurikens', 0, 3],
@@ -54,11 +56,13 @@ raw_item_list_2 = [
     [u'una sandía de 10 kg', -1, 3],
     [u'una lanza', 0, 3],
     [u'un martillo', 1, 2],
+    [u'un pico del Minecraft', 0, 3],
     [u'un Nokia 6300', 0, 3],
-    [u'una jeringuilla con sida', -2, -1],
     [u'un perro agresivo pero muy obediente', 2, 2],
     [u'un escudo de hierro', 4, 0],
-    [u'un hacha', 0, 4]
+    [u'un hacha', 0, 4],
+    [u'el casco de Alonso', 4, 0],
+    [u'los guantes de Casillas', 3, 0],
 ]
 
 raw_item_list_3 = [
@@ -68,9 +72,10 @@ raw_item_list_3 = [
     [u'un francotirador', -1, 9],
     [u'un escudo antidisturbios', 10, -3],
     [u'un chaleco antibalas', 10, 0],
-    [u'el pelo de Cepeda', 10, 0],
+    [u'el peluquín de Cepeda', 10, 0],
     [u'la silla de Echenique', 10, 0],
-    [u'el puño de Thanos', 0, 9]
+    [u'el puño de Thanos', 0, 9],
+    [u'el perro Excálibur', 2, 8]
 ]
 
 raw_item_list = raw_item_list_1 + raw_item_list_2 + raw_item_list_3
@@ -115,6 +120,7 @@ raw_injury_list = [
 ]
 
 raw_powerup_list = [
+    [u'una bolsa de magdalenas', 2, 0],
     [u'un botiquín', 3, 0],
     [u'una bocata de calamares', 2, 1],
     [u'un vodka Knebep con limón', 3, 3],
@@ -137,6 +143,6 @@ raw_powerup_list = [
     [u'una jamón de Jabugo', 1, 1],
     [u'una morcilla de León', 1, 1],
     [u'unas Pringles', 1, 1],
-    [u'una botella de agua. ¡Hay que hidratarse!', 1, 1],
+    [u'una botella de agua (¡hay que hidratarse!)', 1, 1],
     [u'unos Doritos', 1, 1]
 ]

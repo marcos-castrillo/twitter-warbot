@@ -7,13 +7,13 @@ def get_item_list(rarity = None):
     if rarity != None:
         if rarity == 1:
             raw_list = raw_item_list_1
-            if rarity == 1:
-                raw_list = raw_item_list_1
-                if rarity == 1:
-                    raw_list = raw_item_list_1
+        if rarity == 2:
+            raw_list = raw_item_list_2
+        if rarity == 3:
+            raw_list = raw_item_list_3
     else:
         raw_list = raw_item_list
-    for i, p in enumerate(raw_item_list):
+    for i, p in enumerate(raw_list):
         list.append(Item(p[0], p[1], p[2]))
     return list
 
@@ -47,6 +47,7 @@ def get_random_item(item_probab, loot = None):
         rarity = 2
     else:
         rarity = 3
+
     return random.choice(get_item_list(rarity))
 
 def get_random_illness():

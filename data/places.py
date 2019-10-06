@@ -47,12 +47,12 @@ raw_place_list = [
     [u'Segovia', [u'Ávila', u'Madrid', u'Valladolid'], [764, 385]],
     [u'Sevilla', [u'Badajoz', u'Cádiz', u'Córdoba', u'Huelva', u'Madrid'], [590, 792]],
     [u'Soria', [u'Guadalajara', u'Zaragoza'], [902, 304]],
-    [u'Tarragona', [u'Barcelona', u'Castellón de la Plana', u'Lleida'], [1200, 3600]],
+    [u'Tarragona', [u'Barcelona', u'Castellón de la Plana', u'Lleida'], [1204, 360]],
     [u'Teruel', [u'Castellón de la Plana', u'Zaragoza'], [1020, 456]],
     [u'Toledo', [u'Madrid'], [768, 517]],
     [u'Valencia', [u'Albacete', u'Alicante', u'Castellón de la Plana'], [1070, 562], [u'Palma de Mallorca']],
     [u'Valladolid', [u'León', u'Palencia', u'Salamanca', u'Segovia', u'Zamora'], [714, 318]],
     [u'Vitoria', [u'Bilbao', u'Logroño', u'Burgos'], [885, 184]],
     [u'Zamora', [u'León', u'Ourense', u'Valladolid'], [628, 324]],
-    [u'Zaragoza', [u'Huesca', u'Lleida', u'Logroño', u'Pamplona', u'Soria', u'Teruel'], [1086, 312]]
+    [u'Zaragoza', [u'Huesca', u'Lleida', u'Logroño', u'Pamplona', u'Soria', u'Teruel'], [1034, 312]]
 ]

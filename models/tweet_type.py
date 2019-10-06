@@ -25,7 +25,7 @@ class Tweet_type(object):
     trapped = 25
     dodged_trap = 26
     monster_appeared = 28
-    monster_dissappeared = 29
+    monster_disappeared = 29
     monster_moved = 30
     monster_killed = 31
 

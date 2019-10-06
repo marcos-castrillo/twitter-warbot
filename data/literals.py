@@ -66,8 +66,8 @@ def get_message(type, args = None):
         return monster_appeared(args[0])
     if type == Tweet_type.monster_moved:
         return monster_moved(args[0], args[1])
-    if type == Tweet_type.monster_dissappeared:
-        return monster_dissappeared(args[0])
+    if type == Tweet_type.monster_disappeared:
+        return monster_disappeared(args[0])
     if monster_killed(args[0], args[1]):
         return monster_killed(args[0], args[1])
 
@@ -97,6 +97,49 @@ def get_x_or_y_plural(player_list, x, y):
             return x
     return y
 
+def get_find_action():
+    return random.choice([
+        u'ha encontrado',
+        u'ha encontrado',
+        u'se ha encontrado',
+        u'se ha encontrado',
+        u'ha cogido',
+        u'ha cogido',
+        u'ha entrado en una casa y ha robado',
+        u'ha entrado en una casa y ha robado',
+        u'ha recogido',
+        u'ha recogido',
+        u'tras mucho suplicarle al creador de este bot que le diera algo, se ha llevado',
+        u'rebuscando entre la basura ha encontrado',
+        u'se ha llevado en la tómbola',
+        u'se ha llevado',
+        u'se ha llevado',
+        u'ha intercambiado ' + random.choice([u'dos gramos', u'un gramo', u'dos cigarros', u'medio porro', u'un porro', u'una chusta', u'cuatro cigarros', u'tres cigarros', 'una calada']) + ' por',
+        u'ha ganado en una apuesta',
+        u'se ha comprado en un estanco',
+        u'se ha comprado en un todo a cien',
+        u'se ha comprado clandestinamente en un kiosko',
+        u'ha comprado en el Mercadona',
+        u'ha comprado en el Carrefour',
+        u'ha comprado en el Alcampo',
+        u'ha comprado en el Corte Inglés',
+        u'ha comprado en el Lidl',
+        u'ha recibido un paquete de Amazon con',
+        u'ha recibido un paquete de Ebay con',
+        u'ha ido al mercadillo y ha comprado',
+        u'se ha llevado en una caja de cereales',
+        u'se ha encontrado una caja misteriosa en la que había',
+        u'ha recibido por su cumpleaños',
+        u'se ha llevado como primer premio en un concurso de talentos',
+        u'se ha llevado en un sorteo de ' + random.choice([u'HTCMania', u'PcComponentes', u'la ONCE']),
+        u'llevaba mucho tiempo ahorrando para comprarse',
+        u'iba andando por la calle cuando un desconocido le regaló',
+        u'llevaba meses coleccionando tapas de yogurt para conseguir',
+        u'ha ido coleccionando fascículos para montar',
+        u'es tan manitas que se ha construido',
+        u'vio a alguien desprevenido por la calle y le robó'
+    ])
+
 def start():
     return (u'¡Los participantes están listos! Ya conocemos la ubicación de cada uno de ellos. Esto está a punto de arrancar.').encode('utf-8')
 
@@ -106,7 +149,7 @@ def winner(player):
     kills = ''
     if player.kills == 0:
         kills = u'Lo ha conseguido sin llevarse por delante a nadie.'
-    if player.kills == 1:
+    elif player.kills == 1:
         kills = u'Lo ha conseguido llevándose por delante a sólo 1 participante.'
     else:
         kills = u'Lo ha conseguido llevándose por delante a ' + str(player.kills) + ' participantes.'
@@ -127,12 +170,12 @@ def winner(player):
         for i, item in enumerate(player.injury_list):
             if i == 0:
                 list = item.name
-            elif i == len(player.item_list) - 1:
+            elif i == len(player.item_list):
                 list = list + ' y ' + item.name
             else:
                 list = list + ', ' + item.name
         injury_list = ' Todo ello a pesar de padecer ' + list + '.'
-    return u' '.join((u'¡' + player.get_name(), u'ha ganado! ' + kills + item_list + injury_list, 'El ataque de', player.get_name(), u'llegó a ser de', str(player.get_attack()), u'y su defensa de', str(player.get_defense()) + '.')).encode('utf-8')
+    return u' '.join((u'¡' + player.get_name(), u'ha ganado en ' + player.location.name + '! ' + kills + item_list + injury_list, 'El ataque de', player.get_name(), u'llegó a ser de', str(player.get_attack()), u'y su defensa de', str(player.get_defense()) + '.')).encode('utf-8')
 
 def nobody_won():
     return (u'Por algún motivo, todos los jugadores están muertos. Nadie ha ganado... ¡otra vez será!').encode('utf-8')
@@ -142,35 +185,12 @@ def somebody_got_ill(player, illness):
     return u' '.join((u'¡' + player.get_name(), ill_verb, illness.name + '!', 'Ahora tiene', str(player.get_attack()) + get_amount(illness.attack), 'en ataque y', str(player.get_defense()) +  get_amount(illness.defense), 'en defensa.')).encode('utf-8')
 
 def somebody_got_injured(player, injury):
-    ill_verb = random.choice(['ha padecido', u'ha recibido', u'ha cogido'])
+    ill_verb = random.choice([u'ha recibido', u'ha cogido'])
     return u' '.join((u'¡' + player.get_name(), ill_verb, injury.name + '!', 'Ahora tiene', str(player.get_attack()) + get_amount(injury.attack), 'en ataque y', str(player.get_defense()) +  get_amount(injury.defense), 'en defensa.')).encode('utf-8')
 
 def somebody_found_item(player, item):
-    action = random.choice([
-    u'se ha encontrado',
-    u'ha cogido',
-    u'ha entrado en una casa y ha robado',
-    u'ha recogido',
-    u'le ha suplicado al creador de este bot que le diera algo. Tras mucho intentarlo, se ha llevado',
-    u'ha abierto un contenedor. Rebuscando entre la basura, ha encontrado',
-    u'se ha llevado en la tómbola',
-    u'ha intercambiado ' + random.choice([u'dos gramos', u'un gramo', u'dos cigarros', u'medio porro', u'un porro', u'una chusta', u'cuatro cigarros', u'tres cigarros', 'una calada']) + ' por',
-    u'ha ganado en una apuesta',
-    u'se ha comprado en un estanco',
-    u'se ha comprado clandestinamente en un kiosko',
-    u'ha comprado en el supermercado',
-    u'ha recibido un paquete de Amazon con',
-    u'ha ido al mercadillo y ha comprado',
-    u'se ha llevado en una caja de cereales',
-    u'se ha encontrado una caja llena de papel de periódico. Al abrirla había',
-    u'ha recibido por su cumpleaños',
-    u'llevaba mucho tiempo ahorrando para comprarse',
-    u'iba tranquilamente por la calle cuando un desconocido le regaló',
-    u'llevaba meses coleccionando tapas de yogurt para conseguir',
-    u'ha ido coleccionando fascículos para montar',
-    u'es tan manitas que se ha construido',
-    u'vio a alguien desprevenido por la calle y le robó'
-    ])
+    action = get_find_action()
+
     if item.attack != 0:
         now_he_has = ' Ahora tiene ' + str(player.get_attack()) + get_amount(item.attack) + ' en ataque'
     if item.attack != 0 and item.defense != 0:
@@ -184,67 +204,26 @@ def somebody_found_item(player, item):
 
     loot = ''
     if player.fav_place == player.location:
-        loot = u' Como ' + player.location.name + u' es su ciudad, ha conseguido algo mejor de lo normal.'
+        loot = random.choice([
+            u' Como ' + player.location.name + u' está en su región, ha conseguido algo mejor de lo normal.',
+            u' Ha encontrado algo muy bueno porque está jugando en casa.',
+            u' Como le gusta mucho ' + player.location.name + u' se ha llevado algo muy bueno.'
+        ])
     elif player.location.loot:
-        loot = u' Ha conseguido algo mejor de lo normal porque está en ' + player.location.name + u'.'
+        loot = random.choice([
+            u' Ha conseguido algo mejor de lo normal porque está en ' + player.location.name + u'.',
+            u' Como ' + player.location.name + u' tiene mejor loot de lo normal, se ha llevado algo muy bueno.',
+            u' Ha tenido suerte porque está en ' + player.location.name + u'.'
+        ])
 
     return u' '.join((u'¡' + player.get_name(), action, item.name + '!' + now_he_has + loot)).encode('utf-8')
 
 def somebody_replaced_item(player, item_new, item_old):
-    action = random.choice([
-    u'se ha encontrado',
-    u'ha cogido',
-    u'ha entrado en una casa y ha robado',
-    u'ha recogido',
-    u'le ha suplicado al creador de este bot que le diera algo. Tras mucho intentarlo, se ha llevado',
-    u'ha abierto un contenedor. Rebuscando entre la basura, ha encontrado',
-    u'se ha llevado en la tómbola',
-    u'ha intercambiado ' + random.choice([u'dos gramos', u'un gramo', u'dos cigarros', u'medio porro', u'un porro', u'una chusta', u'cuatro cigarros', u'tres cigarros', 'una calada']) + ' por',
-    u'ha ganado en una apuesta',
-    u'se ha comprado en un estanco',
-    u'se ha comprado clandestinamente en un kiosko',
-    u'ha comprado en el supermercado',
-    u'ha recibido un paquete de Amazon con',
-    u'ha ido al mercadillo y ha comprado',
-    u'se ha llevado en una caja de cereales',
-    u'se ha encontrado una caja llena de papel de periódico. Al abrirla había',
-    u'ha recibido por su cumpleaños',
-    u'llevaba mucho tiempo ahorrando para comprarse',
-    u'iba tranquilamente por la calle cuando un desconocido le regaló',
-    u'llevaba meses coleccionando tapas de yogurt para conseguir',
-    u'ha ido coleccionando fascículos para montar',
-    u'es tan manitas que se ha construido',
-    u'vio a alguien desprevenido por la calle y le robó'
-    ])
-
+    action = get_find_action()
     return u' '.join((u'¡' + player.get_name(), action, item_new.name + '!', 'Se lo queda y se deshace de', item_old.name + '.', 'Ahora tiene', str(player.get_attack()) + get_amount(item_new.attack - item_old.attack), 'en ataque y', str(player.get_defense()) + get_amount(item_new.defense - item_old.defense), 'en defensa.')).encode('utf-8')
 
 def somebody_doesnt_want_item(player, item):
-    action = random.choice([
-    u'se ha encontrado',
-    u'ha cogido',
-    u'ha entrado en una casa y ha robado',
-    u'ha recogido',
-    u'le ha suplicado al creador de este bot que le diera algo. Tras mucho intentarlo, se ha llevado',
-    u'ha abierto un contenedor. Rebuscando entre la basura, ha encontrado',
-    u'se ha llevado en la tómbola',
-    u'ha intercambiado ' + random.choice([u'dos gramos', u'un gramo', u'dos cigarros', u'medio porro', u'un porro', u'una chusta', u'cuatro cigarros', u'tres cigarros', 'una calada']) + ' por',
-    u'ha ganado en una apuesta',
-    u'se ha comprado en un estanco',
-    u'se ha comprado clandestinamente en un kiosko',
-    u'ha comprado en el supermercado',
-    u'ha recibido un paquete de Amazon con',
-    u'ha ido al mercadillo y ha comprado',
-    u'se ha llevado en una caja de cereales',
-    u'se ha encontrado una caja llena de papel de periódico. Al abrirla había',
-    u'ha recibido por su cumpleaños',
-    u'llevaba mucho tiempo ahorrando para comprarse',
-    u'iba tranquilamente por la calle cuando un desconocido le regaló',
-    u'llevaba meses coleccionando tapas de yogurt para conseguir',
-    u'ha ido coleccionando fascículos para montar',
-    u'es tan manitas que se ha construido',
-    u'vio a alguien desprevenido por la calle y le robó'
-    ])
+    action = get_find_action()
 
     return u' '.join((u'¡' + player.get_name(), action, item.name + '!', 'Pero no lo quiere porque ya tiene cosas mejores... (' + player.item_list[0].name,  'y', player.item_list[1].name + ').')).encode('utf-8')
 
@@ -274,55 +253,67 @@ def somebody_escaped(player_1, player_2, unfriend = False):
     return random.choice([
     player_1.get_name() + u' y ' + player_2.get_name() + u' se han encontrado, pero ' + player_1.get_name() + u' ha salido por patas cual cobarde.',
     player_1.get_name() + u' y ' + player_2.get_name() + u' han empezado a pelear, pero ' + player_2.get_name() + u' sabía que tenía las de perder. Cogió un puñado de arena, se lo echó a ' + player_1.get_name() + u' en los ojos y salió corriendo.',
-    player_1.get_name() + u' iba a asesinar a ' + player_2.get_name() + u' por la espalda, pero se dio cuenta en el último momento, por lo que' + player_1.get_name() + u' salió por patas.',
+    player_1.get_name() + u' iba a asesinar a ' + player_2.get_name() + u' por la espalda, pero éste se dio cuenta en el último momento. ' + player_1.get_name() + u' ha salido por patas.',
     player_1.get_name() + u' se ha encarado con ' + player_2.get_name() + u', pero ' + player_2.get_name() + u' se ha achantado y salido corriendo.'
     ]).encode('utf-8') + sufix
 
 def somebody_killed(player_1, player_2, are_friends = False, new_item = None, old_item = None):
     kill_verb = random.choice([
-    u'se ha cargado a',
-    u'ha matado a',
-    u'se ha llevado por delante a',
-    u'ha destrozado a',
-    u'ha desintegrado a',
-    u'ha dejado KO a',
-    u'ha ejecutado a',
-    u'ha despachado a',
-    u'ha asesinado a sangre fría a',
-    u'se ha quitado de en medio a',
-    u'se ha cepillado a',
-    u'ha degollado a',
-    u'ha asfixiado a',
-    u'ha lapidado a',
-    u'ha desnucado a'])
+        u'se ha cargado a',
+        u'ha matado a',
+        u'se ha llevado por delante a',
+        u'ha destrozado a',
+        u'ha desintegrado a',
+        u'ha dejado KO a',
+        u'ha ejecutado a',
+        u'ha despachado a',
+        u'ha asesinado a sangre fría a',
+        u'se ha quitado de en medio a',
+        u'se ha cepillado a',
+        u'ha degollado a',
+        u'ha asfixiado a',
+        u'ha lapidado a',
+        u'ha desnucado a'
+    ])
 
     friend_message = ''
 
     kill_method = random.choice([
-    u' con sus puños',
-    u' a lo jíbiri',
-    u' a tortazo limpio',
-    u' de un cabezazo',
-    u' de un codazo en el esternón',
-    u', le ha pisoteado, escupido y ha meado un ojo',
-    u' y le ha hecho un dab',
-    u' y le ha hecho un baile del fortnite',
-    u' sin despeinarse',
-    u' con una llave de kárate',
-    u' haciendo capoeira',
-    u' de una hostia limpia',
-    u' sin esforzarse',
-    u' y ha seguido a lo suyo',
-    u' y se ha acabado el bocata tranquilamente',
-    u' con lágrimas en los ojos',
-    u' con mirada de psicópata',
-    u' y ha gritado SUUUUUUUUUUUUUUUUU',
-    u' y ha gritado ' + get_x_or_y(player_1, u'ESTOY MAMADÍSIMO HIJO DE PUTA', u'ESTOY MAMADÍSIMA HIJO DE PUTA'),
-    u' y ha gritado PRANK ÉPICA',
-    u', lo ha grabado y lo ha subido a su instagram',
-    u' y lo ha tuiteado',
-    u' y le ha sacado una foto de recuerdo',
-    u' y ha tirado su cadáver al contenedor de basura'
+        u' con sus puños',
+        u' a lo jíbiri',
+        u' a tortazo limpio',
+        u' por la gloria de ESPAÑA',
+        u' de un cabezazo',
+        u' de un codazo en el esternón',
+        u' y le ha hecho un dab',
+        u' y le ha hecho un baile del fortnite',
+        u' sin despeinarse',
+        u' con una llave de kárate',
+        u' y le ha cantado una canción triste.',
+        u' y ha hecho un perreo duro hasta el suelo.',
+        u' haciendo capoeira',
+        u' y se ha puesto a bailar',
+        u' a hostia limpia',
+        u' y le ha cantado una bulería',
+        u' y le ha quitado el trabajo',
+        u' sin esforzarse',
+        u' sin inmutarse',
+        u' y ha seguido a lo suyo',
+        u' y se ha acabado el bocata tranquilamente',
+        u' con lágrimas en los ojos',
+        u' con mirada de psicópata',
+        u' y ha gritado SUUUUUUUUUUUUUUUUU',
+        u' y ha gritado ' + get_x_or_y(player_1, u'ESTOY MAMADÍSIMO HIJO DE PUTA', u'ESTOY MAMADÍSIMA HIJO DE PUTA'),
+        u' en una epic prank',
+        u', lo ha grabado y lo ha subido a su instagram',
+        u' y lo ha tuiteado',
+        u' y le ha sacado una foto de recuerdo',
+        u' y ha tirado su cadáver al contenedor de basura',
+        u' y se ha ido de cañas',
+        u' y se ha fumado un cigarrito',
+        u'',
+        u'',
+        u''
     ])
     kills_count = '.'
     stole = ''
@@ -344,12 +335,15 @@ def somebody_killed(player_1, player_2, are_friends = False, new_item = None, ol
     if player_1.kills > 1:
         kills_count = u' y ya lleva ' + str(player_1.kills) + u' muertes. ' + random.choice([
         '',
+        '',
+        '',
         u'Qué ' + get_x_or_y(player_1, u'tío.', u'tía.'),
         u'Vaya fiera.',
-        u'Es una máquina.',
+        u'Es ' + get_x_or_y(player_1, u'un', u'una') + u' máquina.',
         u'Menudo monstruo.',
         u'Qué crack.',
-        u'No hay quién ' + get_x_or_y(player_1, u'lo.', u'la.') + ' pare.',
+        u'Es un tifón.',
+        u'No hay quién ' + get_x_or_y(player_1, u'lo', u'la') + ' pare.',
         u'A por la MOAB.',
         u'Tra tra.',
         u'Campear tanto da sus frutos.',
@@ -368,7 +362,7 @@ def somebody_killed(player_1, player_2, are_friends = False, new_item = None, ol
 
 def somebody_revived(player):
     return u' '.join((player.get_name(), random.choice([
-    u'sólo se estaba haciendo ' + get_x_or_y(player, u'el muerto. ¡Qué zooorrrooooo!.', u'la muerta. ¡Qué zooorrraaaaa! (sin trazas de patriarcado).'),
+    u'sólo se estaba haciendo ' + get_x_or_y(player, u'el muerto. ¡Qué zooorrrooooo!', u'la muerta. ¡Qué zooorrraaaaa! (sin trazas de patriarcado).'),
     u'ha vuelto a la vida bajo extrañas circunstancias.',
     u'ha vuelto en forma de chapa y ahora es un zombie.',
     u'ha resucitado en mitad de su funeral y ha vuelto a la batalla.',
@@ -379,6 +373,7 @@ def somebody_died(player):
     return u' '.join((player.get_name(), random.choice([
     u'debería de haber mirado antes de cruzar la carretera. Quizás así hubiera visto el camión que se lo ha llevado por delante.',
     u'ha sido víctima de un rayo y se ha muerto en el acto.',
+    u'tuvo un piñazo con un Seat Panda.',
     u'ha muerto repentinamente por un fallo cardíaco. ¡Hay que hacer más deporte!',
     u'ha empezado a toser, a toser y a toser y se ha acabado asfixiando. Puede que fumarse 5 paquetes al día no fuera la decisión más sabia. Estos chavalitos...',
     u'ha amochado de repente.',
@@ -394,51 +389,58 @@ def somebody_moved(player, old_location, new_location):
 
     if road:
         action = random.choice([
-        u'ha llamado a un taxi para que le lleve de',
-        u'ha llamado a un Uber para que le lleve de',
-        u'ha llamado a un Cabify para que le lleve de',
-        u'está tan en forma que ha ido en bici de',
-        u'ha hecho dedo desde',
-        u'ha hecho autostop desde',
-        u'ha robado un coche descapotable a lo GTA y se ha ido de',
-        u'ha ido en moto de',
-        u'ha ido en su scooter de',
-        u'ha ido en AVE de',
-        u'ha ido en mochillo de',
-        u'ha ido en patinete eléctrico de',
-        u'ha ido en tren regional de',
-        u'ha encontrado billetes de avión baratos para ir de',
-        u'ha ido en avión en primera clase para ir de',
-        u'ha cogido un Blablacar de'
+            u'ha llamado a un taxi para que le lleve de',
+            u'ha llamado a un Uber para que le lleve de',
+            u'ha llamado a un Cabify para que le lleve de',
+            u'está tan en forma que ha ido en bici de',
+            u'ha hecho dedo desde',
+            u'ha hecho autostop desde',
+            u'ha robado un coche descapotable a lo GTA y se ha ido de',
+            u'ha ido en moto de',
+            u'ha ido en su jet privado de',
+            u'ha ido en su scooter de',
+            u'ha ido en AVE de',
+            u'ha ido en mochillo de',
+            u'ha ido en limusina con su chófer de',
+            u'ha ido en patinete eléctrico de',
+            u'ha ido en tren regional de',
+            u'ha ido en Alsa de',
+            u'ha ido en globo de',
+            u'ha encontrado billetes de avión baratos para ir de',
+            u'ha ido en avión en primera clase para ir de',
+            u'ha cogido un Blablacar de'
         ])
     else:
         action = random.choice([
-        u'ha ido en su barquito velero de',
-        u'ha ido en un crucero de cinco plantas de',
-        u'ha ido en lancha motora de',
-        u'se ha colado de polizón en un barco de',
-        u'ha ido en patera de'
+            u'ha ido en su barquito velero de',
+            u'ha ido en un crucero de cinco plantas de',
+            u'ha ido en lancha motora de',
+            u'se ha colado de polizón en un barco de',
+            u'ha ido en patera de'
         ])
 
     return u' '.join((player.get_name(), action, old_location.name, 'a', new_location.name + '.')).encode('utf-8')
 
 def destroyed(place, dead_list, escaped_list, new_location):
     prefix = random.choice([
-    u'Un meteorito ha caído en ' + place.name + u' y lo ha destruido',
-    place.name + u' ha colapsado',
-    u'Alguien se dejó una vela encendida, lo que incendió su casa y rápidamente todo ' + place.name + u' fue reducido a cenizas',
-    u'Un terrorista ha dinamitado ' + place.name,
-    u'Una riada ha inundado todo ' + place.name,
-    u'Una bomba nuclear ha reducido ' + place.name + u' a pedazos',
-    u'Un huracán ha arrasado todo ' + place.name,
-    u'Una nube de gas tóxico ha llegado a ' + place.name + u' haciéndolo inhabitable',
-    u'Una epidemia de listeriosis se ha extendido por ' + place.name + u'.',
-    u'En medio de una gran tormenta, un rayo ha caído en ' + place.name  + u', provocando un incendio que lo ha quemado todo',
-    u'El mundo está mejor sin ' + place.name  + u', así que el creador de este bot ha decidido cargárselo sin más',
-    u'Unos alienígenas han estado observando ' + place.name + u' durante meses para llegar a la conclusión de que no merece existir, así que lo han destruido con un láser tocho',
-    u'Un avión ' + random.choice([u'portugués', u'inglés', u'francés', u'estadounidense', u'italiano', u'alemán', u'ruso', u'chino']) + u' ha bombardeado ' + place.name,
-    place.name + u' se ha ido a la puta mierda',
-    u'Una terrible sequía ha asolado ' + place.name
+        u'Un meteorito ha caído en ' + place.name + u' y lo ha destruido',
+        place.name + u' ha colapsado',
+        u'Alguien se dejó una vela encendida y rápidamente todo ' + place.name + u' fue reducido a cenizas',
+        u'Un terrorista ha dinamitado ' + place.name,
+        u'Una riada ha inundado todo ' + place.name,
+        u'Una bomba nuclear ha reducido ' + place.name + u' a pedazos',
+        u'Un huracán ha arrasado todo ' + place.name,
+        u'Una nube de gas tóxico ha llegado a ' + place.name + u' haciéndolo inhabitable',
+        u'Una epidemia de listeriosis se ha extendido por ' + place.name,
+        u'Una epidemia de gripe española ha arrasado ' + place.name,
+        u'Una epidemia de ébola ha acabado con ' + place.name,
+        u'Un rayo ha caído en ' + place.name  + u', provocando un incendio que lo ha quemado todo',
+        u'El mundo está mejor sin ' + place.name,
+        u'Unos alienígenas han observado ' + place.name + u' durante meses para llegar a la conclusión de que no merece existir, así que lo han destruido con un láser tocho',
+        u'Un avión ' + random.choice([u'portugués', u'inglés', u'francés', u'estadounidense', u'italiano', u'alemán', u'ruso', u'chino']) + u' ha bombardeado ' + place.name,
+        place.name + u' se ha ido a la puta mierda',
+        u'El creador de este bot ha decidido cargarse ' + place.name + u' sin más',
+        u'Una terrible sequía ha asolado ' + place.name
     ])
 
     if len(dead_list) == 0:
@@ -450,6 +452,7 @@ def destroyed(place, dead_list, escaped_list, new_location):
         ' y ' + dead_list[0].get_name() + u' ha muerto.',
         ' y ' + dead_list[0].get_name() + u' la ha palmado.',
         ' y ' + dead_list[0].get_name() + u' ha espichado.',
+        '. DEP ' + dead_list[0].get_name() + u'.',
         ' y ' + dead_list[0].get_name() + u' se ha ido al otro barrio.',
         ' y ' + dead_list[0].get_name() + u' ya no está entre nosotros.',
         ' y se ha llevado por delante a ' + dead_list[0].get_name() + u'.'])
@@ -466,14 +469,14 @@ def destroyed(place, dead_list, escaped_list, new_location):
             else:
                 dead_str = dead_str + ', ' + d
         sufix = random.choice([
-        u' y ' + dead_str + u' han fallecido en un trágico accidente.',
-        ' y ' + dead_str + u' han amochado.',
-        ' y ' + dead_str + u' la han palmado.',
-        ' y ' + dead_str + u' han muerto.',
-        ' y ' + dead_str + u' no han sobrevivido.',
-        ' y ' + dead_str + u' han espichado.',
-        u' y hay un luto de 3 días por ' + dead_str + u'.',
-        u' . DEP ' + dead_str + u'.'
+            u' y ' + dead_str + u' han fallecido en un trágico accidente.',
+            ' y ' + dead_str + u' han amochado.',
+            ' y ' + dead_str + u' la han palmado.',
+            ' y ' + dead_str + u' han muerto.',
+            ' y ' + dead_str + u' no han sobrevivido.',
+            ' y ' + dead_str + u' han espichado.',
+            u' y hay un luto de 3 días por ' + dead_str + u'.',
+            u' . DEP ' + dead_str + u'.'
         ])
 
     susufix = ''
@@ -526,7 +529,7 @@ def somebody_powerup(player, powerup):
 def monster_appeared(place):
     return random.choice([
     u'¡Ojo! Alguien ha avistado una patrulla de la guardia en ' + place.name + '.',
-    u'Se han producido una serie de altercados en ' + place.name + u', por lo que la policía se ha visto obligada a desplazarse allí.',
+    u'Se ha producido una serie de altercados en ' + place.name + u', por lo que la policía se ha visto obligada a desplazarse allí.',
     ]).encode('utf-8')
 
 def monster_moved(place, new_place):
@@ -535,22 +538,22 @@ def monster_moved(place, new_place):
     u'Ha habido movida en ' + new_place.name + u', por lo que la policía ha tenido que irse de ' + place.name + '.',
     u'Alguien se ha chivado de que hay una manifestación en ' + new_place.name + u', así que la policía se ha ido de ' + place.name + '.',
     u'La policía se ha movido de ' + place.name + u' a ' + new_place.name + '.',
-    u'¡La policía se ha ido a un desahucio a ' + new_place.name + '!.',
+    u'¡La policía se ha ido a un desahucio a ' + new_place.name + '!',
     ]).encode('utf-8')
 
 def monster_disappeared(place):
     return random.choice([
-    u'¡La policía se ha esfumado de ' + place.name + u'!',
-    u'La policía ya no está en ' + place.name + '.',
-    u'Se acabó el turno de la policía, por lo que se han ido de ' + new_place.name + u'.'
+        u'¡La policía se ha esfumado de ' + place.name + u'!',
+        u'La policía ya no está en ' + place.name + '.',
+        u'Se acabó el turno de la policía, por lo que se han ido de ' + place.name + u'.'
     ]).encode('utf-8')
 
 def monster_killed(player, place):
     return random.choice([
-    player.get_name() + u' ha sido ' + get_x_or_y(player, 'arrestado', 'arrestada') + u' por la policía de ' + place.name + u'. Aquí acaba su aventura.',
-    u'¡La guardia le ha pillado una bolsita a ' + player.get_name() + ' en ' + place.name + u' y se ' + get_x_or_y(player, 'lo', 'la') + u' han llevado, hay que esconderla mejor!',
-    u'La policía ha desahuciado a palos a ' + player.get_name() + u' de ' + place.name + u'. ¡Game over!',
-    player.get_name() + u' creía que no iba a pasar nada por meter su voto en una urna, hasta que los antidisturbios de ' + place.name + ' cargaron contra ' + get_x_or_y(player, u'él', 'ella') + u'. ¡Mala suerte!',
-    'A ' + player.get_name() + u' se le ocurrió que era gracioso gritar GORA *** al lado de la policía. Se ' + get_x_or_y(player, 'lo han llevado detenido', 'la han llevado detenida') + ' de ' + place.name + u' por apología al terrorismo.',
-    player.get_name() + u' creía que era ' + get_x_or_y(player, u'el más gracioso', u'la más graciosa') + u' haciendo humor negro en Twitter, hasta que se encontró a la policía en ' + place.name + u'.'
+        player.get_name() + u' ha sido ' + get_x_or_y(player, 'arrestado', 'arrestada') + u' por la policía de ' + place.name + u'. Aquí acaba su aventura.',
+        u'¡La guardia le ha pillado una bolsita a ' + player.get_name() + ' en ' + place.name + u' y se ' + get_x_or_y(player, 'lo', 'la') + u' han llevado, hay que esconderla mejor!',
+        u'La policía ha desahuciado a palos a ' + player.get_name() + u' de ' + place.name + u'. ¡Game over!',
+        player.get_name() + u' creía que no iba a pasar nada por meter su voto en una urna, hasta que los antidisturbios de ' + place.name + ' cargaron contra ' + get_x_or_y(player, u'él', 'ella') + u'. ¡Mala suerte!',
+        'A ' + player.get_name() + u' se le ocurrió que era gracioso gritar GORA *** al lado de la policía. Se ' + get_x_or_y(player, 'lo han llevado detenido', 'la han llevado detenida') + ' de ' + place.name + u' por apología al terrorismo.',
+        player.get_name() + u' creía que era ' + get_x_or_y(player, u'el más gracioso', u'la más graciosa') + u' haciendo humor negro en Twitter, hasta que se encontró a la policía en ' + place.name + u'.'
     ]).encode('utf-8')
