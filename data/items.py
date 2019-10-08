@@ -67,7 +67,7 @@ raw_item_list_2 = [
 
 raw_item_list_3 = [
     [u'un bazooka', -3, 10],
-    [u'la bandera de ESPAÑA', 5, 5],
+    [u'una bandera de ESPAÑA', 5, 5],
     [u'una escopeta de caza', 0, 7],
     [u'un francotirador', -1, 9],
     [u'un escudo antidisturbios', 10, -3],

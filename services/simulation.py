@@ -39,11 +39,12 @@ def initialize_avatars(player_list):
 
     for i, player in enumerate(player_list):
         if len(player.username) > 0:
-            filename = path + '/' + player.username + '.jpg'
+            filename = path + '/' + player.username
         else:
-            filename = path + '/' + player.name + '.jpg'
-        if not os.path.exists(filename):
-            urllib.urlretrieve('http://avatars.io/twitter/' + player.username + '/small', filename)
+            filename = path + '/' + player.name
+        if not (os.path.exists(filename + '.jpg') and os.path.exists(filename + '_medium.jpg')):
+            urllib.urlretrieve('http://avatars.io/twitter/' + player.username + '/small', filename + '.jpg')
+            urllib.urlretrieve('http://avatars.io/twitter/' + player.username + '/medium', filename + '_medium.jpg')
         player.avatar_dir = filename
 
 def write_tweet(type, player_list, place_list, location = None, args = None):
@@ -108,20 +109,28 @@ def draw_image(type, player_list, place_list, location = None, args = None):
     if type == Tweet_type.start:
         for i, place in enumerate(place_list):
             for j, player in enumerate(place.players):
-                avatar = Image.open(player.avatar_dir)
+                avatar = Image.open(player.avatar_dir + '.jpg')
                 image.paste(avatar, (place.coord_x - 24 + (j * 24), place.coord_y - 24, place.coord_x + 24 + (j * 24), place.coord_y + 24), avatar.convert('RGBA'))
     elif type == Tweet_type.somebody_died or type == Tweet_type.monster_killed or type == Tweet_type.trapped:
-        avatar = Image.open(args[0].avatar_dir)
+        avatar = Image.open(args[0].avatar_dir + '.jpg')
+        avatar_medium = Image.open(args[0].avatar_dir + '_medium.jpg')
         image.paste(avatar, (args[0].location.coord_x - 24, args[0].location.coord_y - 24, args[0].location.coord_x + 24, args[0].location.coord_y + 24), avatar.convert('RGBA'))
+        image.paste(avatar_medium, (0, 258), avatar_medium.convert('RGBA'))
         draw.text((args[0].location.coord_x - 12, args[0].location.coord_y - 39), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path, size=50))
     elif type == Tweet_type.winner or type == Tweet_type.somebody_got_ill or type == Tweet_type.somebody_got_injured or type == Tweet_type.somebody_found_item or type == Tweet_type.somebody_replaced_item or type == Tweet_type.somebody_doesnt_want_item or type == Tweet_type.somebody_revived or type == Tweet_type.somebody_moved or type == Tweet_type.trap or type == Tweet_type.dodged_trap or type == Tweet_type.somebody_powerup:
-        avatar = Image.open(args[0].avatar_dir)
+        avatar = Image.open(args[0].avatar_dir + '.jpg')
+        avatar_medium = Image.open(args[0].avatar_dir + '_medium.jpg')
         image.paste(avatar, (location.coord_x - 24, location.coord_y - 24, location.coord_x + 24, location.coord_y + 24), avatar.convert('RGBA'))
+        image.paste(avatar_medium, (0, 258), avatar_medium.convert('RGBA'))
     elif type == Tweet_type.somebody_tied_and_became_friend or type == Tweet_type.somebody_tied_and_was_friend or type == Tweet_type.somebody_escaped or type == Tweet_type.somebody_killed or type == Tweet_type.somebody_stole or type == Tweet_type.somebody_stole_and_threw or type == Tweet_type.somebody_stole_and_replaced:
-        avatar_1 = Image.open(args[0].avatar_dir)
-        avatar_2 = Image.open(args[1].avatar_dir)
+        avatar_1 = Image.open(args[0].avatar_dir + '.jpg')
+        avatar_2 = Image.open(args[1].avatar_dir + '.jpg')
+        avatar_1_medium = Image.open(args[0].avatar_dir + '_medium.jpg')
+        avatar_2_medium = Image.open(args[1].avatar_dir + '_medium.jpg')
         image.paste(avatar_1, (location.coord_x - 50, location.coord_y - 24, location.coord_x - 2, location.coord_y + 24), avatar_1.convert('RGBA'))
+        image.paste(avatar_1_medium, (0, 258), avatar_1_medium.convert('RGBA'))
         image.paste(avatar_2, (location.coord_x + 2, location.coord_y - 24, location.coord_x + 50, location.coord_y + 24), avatar_2.convert('RGBA'))
+        image.paste(avatar_2_medium, (128, 258), avatar_2_medium.convert('RGBA'))
 
         if args[0].state == 0:
             draw.text((location.coord_x + 8, location.coord_y - 36), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path, size=50))
@@ -132,11 +141,11 @@ def draw_image(type, player_list, place_list, location = None, args = None):
         draw.ellipse((location.coord_x - 75, location.coord_y - 75, location.coord_x + 75, location.coord_y + 75), outline='rgb(255,0,0)', width=3)
     if type == Tweet_type.destroyed:
         for i, p in enumerate(args[1]):
-            avatar = Image.open(p.avatar_dir)
+            avatar = Image.open(p.avatar_dir + '.jpg')
             image.paste(avatar, (location.coord_x - 40 + (i * 30), location.coord_y - 24, location.coord_x + 8 + (i * 30), location.coord_y + 24), avatar.convert('RGBA'))
         if args[3] and len(args[2]) > 0:
             for i, p in enumerate(args[2]):
-                avatar = Image.open(p.avatar_dir)
+                avatar = Image.open(p.avatar_dir + '.jpg')
                 image.paste(avatar, (args[3].coord_x - 40 + (i * 30), args[3].coord_y - 24, args[3].coord_x + 8 + (i * 30), args[3].coord_y + 24), avatar.convert('RGBA'))
 
     if type == Tweet_type.winner:
@@ -188,7 +197,7 @@ def draw_image(type, player_list, place_list, location = None, args = None):
 
 def draw_ranking(image, draw, alive_players_list, dead_players_list):
     coord_x = 5
-    coord_y = 1145
+    coord_y = 1150
 
     for i, p in enumerate(alive_players_list):
         draw_player(image, draw, coord_x, coord_y, alive_players_list[i], True)
@@ -201,7 +210,7 @@ def draw_ranking(image, draw, alive_players_list, dead_players_list):
 def draw_player(image, draw, coord_x, coord_y, player, is_alive):
     global current_dir
 
-    avatar = Image.open(os.path.join(current_dir, '../', player.avatar_dir))
+    avatar = Image.open(os.path.join(current_dir, '../', player.avatar_dir + '.jpg'))
     skull = Image.open(os.path.join(current_dir, '../assets/skull.png'))
     attack = Image.open(os.path.join(current_dir, '../assets/attack.png'))
     defense = Image.open(os.path.join(current_dir, '../assets/defense.png'))

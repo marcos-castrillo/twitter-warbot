@@ -97,7 +97,7 @@ raw_player_list = [
     [u'Kidd Keo', u'KiddKeo95Flames', 0, u'Alicante'],
     [u'LMDShow', u'LMDShow', 0, u'Málaga'],
     [u'Leticia Sabater', u'SABATERLETICIA', 1, u'Barcelona'],
-    [u'Lolito Fernández', u'LOLiTOFDEZ', 0, u'Málaga'],
+    [u'Lolito Fdez.', u'LOLiTOFDEZ', 0, u'Málaga'],
     [u'Los Chikos del Maíz', u'chikosdelmaiz', 0, u'Valencia'],
     [u'Loquillo', u'LOQUILLOoficial', 0, u'Barcelona'],
     [u'Loulogio', u'Loulogio_Pi', 0, u'Barcelona'],

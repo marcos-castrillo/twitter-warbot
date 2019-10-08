@@ -205,7 +205,7 @@ def somebody_found_item(player, item):
     loot = ''
     if player.fav_place == player.location:
         loot = random.choice([
-            u' Como ' + player.location.name + u' está en su región, ha conseguido algo mejor de lo normal.',
+            u' Como le encanta ' + player.location.name + u', ha conseguido algo mejor de lo normal.',
             u' Ha encontrado algo muy bueno porque está jugando en casa.',
             u' Como le gusta mucho ' + player.location.name + u' se ha llevado algo muy bueno.'
         ])
@@ -356,8 +356,8 @@ def somebody_killed(player_1, player_2, are_friends = False, new_item = None, ol
     if player_1.location == player_1.fav_place:
         fav = random.choice([
         ' ' + player_1.get_name() + u' estaba peleando en su lugar preferido(' + player_1.location.name + u'), lo que le dio ventaja.',
-        u' Se nota que ' + player_1.get_name() + u' estaba en su lugar de nacimiento, ' + player_1.location.name + '.',
-        ' ' + player_1.get_name() + u' ha podido ganar gracias a que juega en casa (' + player_1.location.name + ').'])
+        u' Se nota que ' + player_1.get_name() + u' estaba en ' + player_1.location.name + '.',
+        ' ' + player_1.get_name() + u' ha podido ganar gracias a que juega en ' + player_1.location.name + '.'])
     return u' '.join((friend_message + player_1.get_name(), kill_verb, player_2.get_name() + kill_method + kills_count + stole + fav)).encode('utf-8')
 
 def somebody_revived(player):
@@ -417,6 +417,14 @@ def somebody_moved(player, old_location, new_location):
             u'ha ido en lancha motora de',
             u'se ha colado de polizón en un barco de',
             u'ha ido en patera de'
+        ])
+
+    sufix = ''
+    if new_location == player.fav_place:
+        sufix = random.choice([
+            u'A ' + player.get_name() + u' le encanta este lugar.',
+            player.get_name() + u' juega con ventaja en ' + new_location.name + '.',
+            player.get_name() + u' está feliz de volver a ' + new_location.name + '.',
         ])
 
     return u' '.join((player.get_name(), action, old_location.name, 'a', new_location.name + '.')).encode('utf-8')
