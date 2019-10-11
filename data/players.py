@@ -152,5 +152,5 @@ raw_player_list = [
     [u'Wismichu', u'Wismichu', 0, u'A Coruña'],
     [u'Yola Berrocal', u'YolaBerrocal', 1, u'Ciudad Real'],
     [u'Yolanda Ramos', u'_YolandaRamos_', 1, u'Barcelona'],
-    [u'Zatu', u'SFDKoficial', 0, u'Sevilla']
+    [u'Zatu', u'yozatu', 0, u'Sevilla']
 ]
