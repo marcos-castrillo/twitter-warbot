@@ -12,8 +12,9 @@ raw_item_list_1 = [
     [u'un libro tocho', 1, 0],
     [u'una botella de horchata', 0, 1],
     [u'una botella de agua de Madrid', 0, 1],
-    [u'un puñado de arena', 1, 0],
+    [u'una percha de Zara', 1, 0],
     [u'un tiesto', 0, 1],
+    [u'un periódico enrollado', 0, 1],
     [u'una lata de sardinas', 0, 1],
     [u'una lata de melocotones en almíbar', 0, 1],
     [u'uuuuuun paaaaaaloooooooo', 0, 1],
@@ -33,10 +34,18 @@ raw_item_list_1 = [
     [u'un destornillador', 0, 2],
     [u'un tomahawk', 0, 2],
     [u'una chancla', 0, 2],
+    [u'una zapatilla de andar por casa', 1, 1],
     [u'una pistola de agua', 0, 1],
     [u'una espada de madera', 0, 2],
     [u'un escudo de madera', 2, 0],
     [u'un manojo de llaves', 1, 1],
+    [u'un calcetín sudado', 1, 1],
+    [u'un panfleto del PP', 1, 1],
+    [u'un panfleto del PSOE', 1, 1],
+    [u'un panfleto de Vox', 1, 1],
+    [u'un panfleto de Ciudadanos', 1, 1],
+    [u'un panfleto de Podemos', 1, 1],
+    [u'un panfleto de UPyD', 1, 1],
     [u'unos tirantes con la bandera de España', 1, 1]
 ]
 
@@ -47,6 +56,7 @@ raw_item_list_2 = [
     [u'una escopeta de balines', 0, 3],
     [u'unos shurikens', 0, 3],
     [u'un palo muy largo', 1, 2],
+    [u'una silla del IKEA', 1, 2],
     [u'un bate de béisbol', 0, 3],
     [u'una ballesta', 0, 3],
     [u'unos guantes de boxeo', 1, 2],
@@ -58,10 +68,10 @@ raw_item_list_2 = [
     [u'un martillo', 1, 2],
     [u'un pico del Minecraft', 0, 3],
     [u'un Nokia 6300', 0, 3],
-    [u'un perro agresivo pero muy obediente', 2, 2],
+    [u'un perro agresivo', 2, 2],
     [u'un escudo de hierro', 4, 0],
     [u'un hacha', 0, 4],
-    [u'el casco de Alonso', 4, 0],
+    [u'el casco de Fernando Alonso', 4, 0],
     [u'los guantes de Casillas', 3, 0],
 ]
 
@@ -75,7 +85,8 @@ raw_item_list_3 = [
     [u'el peluquín de Cepeda', 10, 0],
     [u'la silla de Echenique', 10, 0],
     [u'el puño de Thanos', 0, 9],
-    [u'el perro Excálibur', 2, 8]
+    [u'el perro Excálibur', 2, 8],
+    [u'la cabra de la Legión', 2, 8]
 ]
 
 raw_item_list = raw_item_list_1 + raw_item_list_2 + raw_item_list_3
@@ -140,8 +151,9 @@ raw_powerup_list = [
     [u'unos Risketos', 1, 1],
     [u'unas Lays', 1, 1],
     [u'una caja de Fresón de Palos', 1, 1],
-    [u'una jamón de Jabugo', 1, 1],
+    [u'un jamón de Jabugo', 1, 1],
     [u'una morcilla de León', 1, 1],
+    [u'una morcilla de Burgos', 1, 1],
     [u'unas Pringles', 1, 1],
     [u'una botella de agua (¡hay que hidratarse!)', 1, 1],
     [u'unos Doritos', 1, 1]

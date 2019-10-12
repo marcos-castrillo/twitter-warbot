@@ -131,7 +131,7 @@ def get_find_action():
         u'se ha encontrado una caja misteriosa en la que había',
         u'ha recibido por su cumpleaños',
         u'se ha llevado como primer premio en un concurso de talentos',
-        u'se ha llevado en un sorteo de ' + random.choice([u'HTCMania', u'PcComponentes', u'la ONCE']),
+        u'se ha llevado en un sorteo de ' + random.choice([u'HTCMania', u'PcComponentes', u'la ONCE', u'Forocoches']),
         u'llevaba mucho tiempo ahorrando para comprarse',
         u'iba andando por la calle cuando un desconocido le regaló',
         u'llevaba meses coleccionando tapas de yogurt para conseguir',
@@ -141,7 +141,7 @@ def get_find_action():
     ])
 
 def start():
-    return (u'¡Los participantes están listos! Ya conocemos la ubicación de cada uno de ellos. Esto está a punto de arrancar.').encode('utf-8')
+    return (u'¡Los participantes están listos! Ya conocemos la ubicación de cada uno de ellos. Que empiece el apocalipsis.').encode('utf-8')
 
 def winner(player):
     item_list = ''
@@ -175,7 +175,7 @@ def winner(player):
             else:
                 list = list + ', ' + item.name
         injury_list = ' Todo ello a pesar de padecer ' + list + '.'
-    return u' '.join((u'¡' + player.get_name(), u'ha ganado en ' + player.location.name + '! ' + kills + item_list + injury_list, 'El ataque de', player.get_name(), u'llegó a ser de', str(player.get_attack()), u'y su defensa de', str(player.get_defense()) + '.')).encode('utf-8')
+    return u' '.join((u'¡' + player.get_name(), u'ha ganado en ' + player.location.name + '! ' + kills + item_list, 'El ataque de', player.get_name(), u'llegó a ser de', str(player.get_attack()), u'y su defensa de', str(player.get_defense()) + '.')).encode('utf-8')
 
 def nobody_won():
     return (u'Por algún motivo, todos los jugadores están muertos. Nadie ha ganado... ¡otra vez será!').encode('utf-8')
@@ -267,13 +267,17 @@ def somebody_killed(player_1, player_2, are_friends = False, new_item = None, ol
         u'ha dejado KO a',
         u'ha ejecutado a',
         u'ha despachado a',
+        u'ha terminado con el sufrimiento que era la vida de',
         u'ha asesinado a sangre fría a',
         u'se ha quitado de en medio a',
+        u'se ha quitado de encima a',
         u'se ha cepillado a',
         u'ha degollado a',
         u'ha asfixiado a',
         u'ha lapidado a',
-        u'ha desnucado a'
+        u'ha desnucado a',
+        u'ha mandado al otro barrio a',
+        u'ha reventado a'
     ])
 
     friend_message = ''
@@ -289,13 +293,16 @@ def somebody_killed(player_1, player_2, are_friends = False, new_item = None, ol
         u' y le ha hecho un baile del fortnite',
         u' sin despeinarse',
         u' con una llave de kárate',
-        u' y le ha cantado una canción triste.',
-        u' y ha hecho un perreo duro hasta el suelo.',
+        u' y le ha cantado una canción triste',
+        u' y ha hecho un perreo duro hasta el suelo',
         u' haciendo capoeira',
         u' y se ha puesto a bailar',
         u' a hostia limpia',
         u' y le ha cantado una bulería',
+        u' y le ha cantado una balada',
+        u' y le ha recitado un poema',
         u' y le ha quitado el trabajo',
+        u'. A partir de ahora va a hacer su trabajo',
         u' sin esforzarse',
         u' sin inmutarse',
         u' y ha seguido a lo suyo',
@@ -305,12 +312,17 @@ def somebody_killed(player_1, player_2, are_friends = False, new_item = None, ol
         u' y ha gritado SUUUUUUUUUUUUUUUUU',
         u' y ha gritado ' + get_x_or_y(player_1, u'ESTOY MAMADÍSIMO HIJO DE PUTA', u'ESTOY MAMADÍSIMA HIJO DE PUTA'),
         u' en una epic prank',
+        u' en un abrir y cerrar de ojos',
+        u' sin pestañear',
+        u' por turras',
         u', lo ha grabado y lo ha subido a su instagram',
         u' y lo ha tuiteado',
         u' y le ha sacado una foto de recuerdo',
         u' y ha tirado su cadáver al contenedor de basura',
         u' y se ha ido de cañas',
+        u' sudando mogollón',
         u' y se ha fumado un cigarrito',
+        u' mientras sus colegas le gritaban ACÁBALO',
         u'',
         u'',
         u''
@@ -337,10 +349,12 @@ def somebody_killed(player_1, player_2, are_friends = False, new_item = None, ol
         '',
         '',
         '',
+        '',
         u'Qué ' + get_x_or_y(player_1, u'tío.', u'tía.'),
         u'Vaya fiera.',
         u'Es ' + get_x_or_y(player_1, u'un', u'una') + u' máquina.',
         u'Menudo monstruo.',
+        u'Está ' + get_x_or_y(player_1, u'rocoso.', u'rocosa.'),
         u'Qué crack.',
         u'Es un tifón.',
         u'No hay quién ' + get_x_or_y(player_1, u'lo', u'la') + ' pare.',
@@ -371,13 +385,16 @@ def somebody_revived(player):
 
 def somebody_died(player):
     return u' '.join((player.get_name(), random.choice([
-    u'debería de haber mirado antes de cruzar la carretera. Quizás así hubiera visto el camión que se lo ha llevado por delante.',
-    u'ha sido víctima de un rayo y se ha muerto en el acto.',
-    u'tuvo un piñazo con un Seat Panda.',
-    u'ha muerto repentinamente por un fallo cardíaco. ¡Hay que hacer más deporte!',
-    u'ha empezado a toser, a toser y a toser y se ha acabado asfixiando. Puede que fumarse 5 paquetes al día no fuera la decisión más sabia. Estos chavalitos...',
-    u'ha amochado de repente.',
-    u'ha sido atropellado por una moto y se fue a la puta.'
+        u'ha sido víctima de un rayo y se ha muerto en el acto.',
+        u'ha bebido un chupito de lejía.',
+        u'ha bebido un chupito de cianuro.',
+        u'se ha pegado un tiro.',
+        u'se la ha pegado por conducir con unas copas de más.',
+        u'tuvo un piñazo con un Seat Panda.',
+        u'ha muerto repentinamente por un fallo cardíaco. ¡Hay que hacer más deporte!',
+        u'ha empezado a toser, a toser y a toser y se ha acabado asfixiando. Puede que fumarse 5 paquetes al día no fuera la decisión más sabia. Estos chavalitos...',
+        u'ha amochado de repente.',
+        u'ha sido atropellado por una moto y se fue a la puta.'
     ]))).encode('utf-8')
 
 def somebody_moved(player, old_location, new_location):
@@ -407,7 +424,7 @@ def somebody_moved(player, old_location, new_location):
             u'ha ido en Alsa de',
             u'ha ido en globo de',
             u'ha encontrado billetes de avión baratos para ir de',
-            u'ha ido en avión en primera clase para ir de',
+            u'ha ido en avión en primera clase de',
             u'ha cogido un Blablacar de'
         ])
     else:
@@ -496,7 +513,7 @@ def destroyed(place, dead_list, escaped_list, new_location):
         for i, d in enumerate(escaped):
             if i == 0:
                 susufix_str = d
-            elif i == len(dead) - 1:
+            elif i == len(escaped) - 1:
                 susufix_str = susufix_str + ' y ' + d
             else:
                 susufix_str = susufix_str + ', ' + d

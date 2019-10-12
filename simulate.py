@@ -53,7 +53,12 @@ def simulate_day():
 
     do_something()
 
-    if get_alive_players_count(player_list) <= 1:
+    stop = True
+    for i, p in enumerate(place_list):
+        if not p.destroyed:
+            stop = False
+
+    if stop or get_alive_players_count(player_list) <= 1:
         end()
 
 def do_something():
@@ -251,8 +256,6 @@ def destroy():
 
     for i, p in enumerate(place.players):
         if p.state == 1:
-            place.players.pop(place.players.index(p))
-
             if new_location and random.randint(0, 100) >= 90:
                 escaped_list.append(p)
                 new_location.players.append(p)
@@ -260,6 +263,11 @@ def destroy():
             else:
                 p.state = 0
                 dead_list.append(p)
+
+    for i, p in enumerate(escaped_list):
+        place.players.pop(place.players.index(p))
+    for i, p in enumerate(dead_list):
+        place.players.pop(place.players.index(p))
 
     if place.monster:
         place.monster = None
