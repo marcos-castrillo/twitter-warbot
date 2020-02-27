@@ -10,6 +10,7 @@ class Place(object):
     trap_by = None
     loot = None
     monster = None
+    tributes = []
 
     # Constructor
     def __init__(self, name, road_connections, coordinates, loot, sea_connections = None):
@@ -25,4 +26,5 @@ class Place(object):
         self.loot = loot
         self.monster = None
         self.players = []
+        self.tributes = []
         self.trap_by = None

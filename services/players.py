@@ -1,4 +1,5 @@
 import random
+import sys
 from data.players import raw_player_list
 from models.player import Player
 
@@ -12,6 +13,11 @@ def get_player_list(place_list):
         player = Player(p[0], location, p[2], p[1], p[3])
         list.append(player)
         location.players.append(player)
+
+        if player.district != None and player.district != '':
+            player.district.tributes.append(player)
+        else:
+            sys.exit('Config error: wrong district name.')
 
     for i, p in enumerate(list):
         initialize_friend_list(list, p)

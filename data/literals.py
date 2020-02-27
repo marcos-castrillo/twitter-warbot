@@ -6,8 +6,6 @@ from models.tweet_type import Tweet_type
 def get_message(type, args = None):
     if type == Tweet_type.start:
         return start()
-    # if type == Tweet_type.hour_threshold:
-    #     return hour_threshold(args[0])
     if type == Tweet_type.winner:
         return winner(args[0])
     if type == Tweet_type.nobody_won:
@@ -39,7 +37,7 @@ def get_message(type, args = None):
         if len(args) == 3:
             return somebody_killed(args[0], args[1], args[2])
     if type == Tweet_type.somebody_revived:
-        return somebody_revived(args[0])
+        return somebody_revived(args[0], args[1])
     if type == Tweet_type.somebody_died:
         return somebody_died(args[0])
     if type == Tweet_type.somebody_moved:
@@ -203,13 +201,7 @@ def somebody_found_item(player, item):
         now_he_has = now_he_has + '.'
 
     loot = ''
-    if player.fav_place == player.location:
-        loot = random.choice([
-            u' Como le encanta ' + player.location.name + u', ha conseguido algo mejor de lo normal.',
-            u' Ha encontrado algo muy bueno porque está jugando en casa.',
-            u' Como le gusta mucho ' + player.location.name + u' se ha llevado algo muy bueno.'
-        ])
-    elif player.location.loot:
+    if player.location.loot:
         loot = random.choice([
             u' Ha conseguido algo mejor de lo normal porque está en ' + player.location.name + u'.',
             u' Como ' + player.location.name + u' tiene mejor loot de lo normal, se ha llevado algo muy bueno.',
@@ -367,21 +359,20 @@ def somebody_killed(player_1, player_2, are_friends = False, new_item = None, ol
     elif new_item != None:
         stole = u' Además, le ha robado ' + new_item.name + '.'
 
-    if player_1.location == player_1.fav_place:
-        fav = random.choice([
-        ' ' + player_1.get_name() + u' estaba peleando en su lugar preferido(' + player_1.location.name + u'), lo que le dio ventaja.',
-        u' Se nota que ' + player_1.get_name() + u' estaba en ' + player_1.location.name + '.',
-        ' ' + player_1.get_name() + u' ha podido ganar gracias a que juega en ' + player_1.location.name + '.'])
-    return u' '.join((friend_message + player_1.get_name(), kill_verb, player_2.get_name() + kill_method + kills_count + stole + fav)).encode('utf-8')
+    return u' '.join((friend_message + player_1.get_name(), kill_verb, player_2.get_name() + kill_method + kills_count + stole)).encode('utf-8')
 
-def somebody_revived(player):
+def somebody_revived(player, is_rebuilt):
+    rebuilt = ''
+    if is_rebuilt:
+        rebuilt = u'¡Además, ' + player.district.name + u' ha sido reconstruida y su equipo vuelve a la batalla!.'
+
     return u' '.join((player.get_name(), random.choice([
     u'sólo se estaba haciendo ' + get_x_or_y(player, u'el muerto. ¡Qué zooorrrooooo!', u'la muerta. ¡Qué zooorrraaaaa! (sin trazas de patriarcado).'),
     u'ha vuelto a la vida bajo extrañas circunstancias.',
     u'ha vuelto en forma de chapa y ahora es un zombie.',
     u'ha resucitado en mitad de su funeral y ha vuelto a la batalla.',
     u'tiene enchufe y el creador del bot le ha resucitado.'
-    ]))).encode('utf-8')
+    ]), rebuilt)).encode('utf-8')
 
 def somebody_died(player):
     return u' '.join((player.get_name(), random.choice([
@@ -436,36 +427,11 @@ def somebody_moved(player, old_location, new_location):
             u'ha ido en patera de'
         ])
 
-    sufix = ''
-    if new_location == player.fav_place:
-        sufix = random.choice([
-            u'A ' + player.get_name() + u' le encanta este lugar.',
-            player.get_name() + u' juega con ventaja en ' + new_location.name + '.',
-            player.get_name() + u' está feliz de volver a ' + new_location.name + '.',
-        ])
-
     return u' '.join((player.get_name(), action, old_location.name, 'a', new_location.name + '.')).encode('utf-8')
 
 def destroyed(place, dead_list, escaped_list, new_location):
     prefix = random.choice([
-        u'Un meteorito ha caído en ' + place.name + u' y lo ha destruido',
-        place.name + u' ha colapsado',
-        u'Alguien se dejó una vela encendida y rápidamente todo ' + place.name + u' fue reducido a cenizas',
-        u'Un terrorista ha dinamitado ' + place.name,
-        u'Una riada ha inundado todo ' + place.name,
-        u'Una bomba nuclear ha reducido ' + place.name + u' a pedazos',
-        u'Un huracán ha arrasado todo ' + place.name,
-        u'Una nube de gas tóxico ha llegado a ' + place.name + u' haciéndolo inhabitable',
-        u'Una epidemia de listeriosis se ha extendido por ' + place.name,
-        u'Una epidemia de gripe española ha arrasado ' + place.name,
-        u'Una epidemia de ébola ha acabado con ' + place.name,
-        u'Un rayo ha caído en ' + place.name  + u', provocando un incendio que lo ha quemado todo',
-        u'El mundo está mejor sin ' + place.name,
-        u'Unos alienígenas han observado ' + place.name + u' durante meses para llegar a la conclusión de que no merece existir, así que lo han destruido con un láser tocho',
-        u'Un avión ' + random.choice([u'portugués', u'inglés', u'francés', u'estadounidense', u'italiano', u'alemán', u'ruso', u'chino']) + u' ha bombardeado ' + place.name,
-        place.name + u' se ha ido a la puta mierda',
-        u'El creador de este bot ha decidido cargarse ' + place.name + u' sin más',
-        u'Una terrible sequía ha asolado ' + place.name
+        u'El equipo de ' + place.name + u' ha perdido, por lo que la ciudad ha sido reducida a cenizas'
     ])
 
     if len(dead_list) == 0:
@@ -518,11 +484,7 @@ def destroyed(place, dead_list, escaped_list, new_location):
             else:
                 susufix_str = susufix_str + ', ' + d
 
-        susufix = random.choice([
-        u' Por suerte, ' + susufix_str + get_sing_or_pl(escaped_list, u' ha conseguido escapar a ', u' han conseguido escapar a ') + new_location.name + u'.',
-        u' ' + susufix_str + get_sing_or_pl(escaped_list, u' ha sido rápido y ha huido a ', u' han sido rápidos y han huido a ') + new_location.name + u'.',
-        u' ' + susufix_str + get_sing_or_pl(escaped_list, u' se ha librado a duras penas y se ha movido a ', u' se han librado a duras penas y se han movido a ') + new_location.name + u'.'
-        ])
+        susufix = u' ' + susufix_str + get_sing_or_pl(escaped_list, u' se ha movido a ', u' se han movido a ') + new_location.name + u'.'
 
     return (prefix + sufix + susufix).encode('utf-8')
 

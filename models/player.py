@@ -1,4 +1,4 @@
-from item import Item
+from models.item import Item
 from services.simulation import write_tweet
 from models.tweet_type import Tweet_type
 from data.literals import *
@@ -8,7 +8,7 @@ class Player(object):
     avatar_dir = None
     name = ""
     username = ""
-    fav_place = None
+    district = None
     kills = 0
     location = 0
     state = 0
@@ -19,12 +19,12 @@ class Player(object):
     powerup_list = []
 
     # Constructor
-    def __init__(self, name, location, gender, username = None, fav_place = None):
+    def __init__(self, name, location, gender, username = None, district = None):
         self.friend_list = []
         self.item_list = []
         self.injury_list = []
         self.powerup_list = []
-        self.fav_place = fav_place
+        self.district = district
         self.location = location
         self.state = 1
         self.gender = gender

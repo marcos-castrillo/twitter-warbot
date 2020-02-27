@@ -3,7 +3,6 @@
 
 import random
 import time
-import sys
 import datetime
 
 from data.literals import *
@@ -25,7 +24,7 @@ item_list = get_item_list()
 place_list = get_place_list()
 player_list = get_player_list(place_list)
 initialize_avatars(player_list)
-simulation_probab = Simulation_Probab(probab_item[0], probab_move[0], probab_battle[0], probab_destroy[0], probab_monster[0], probab_aop[0], probab_trap[0], probab_suicide[0], probab_revive[0])
+simulation_probab = Simulation_Probab(probab_item[0], probab_move[0], probab_battle[0], probab_monster[0], probab_aop[0], probab_trap[0], probab_suicide[0], probab_revive[0])
 item_rarity_probab = Item_Rarity_Probab(probab_rarity_1[0], probab_rarity_2[0], probab_rarity_3[0])
 finished = False
 hour_count = 0
@@ -47,9 +46,8 @@ def simulate_day():
     hour_count = hour_count + 1
     for i, th in enumerate(hour_thresholds):
         if hour_count == th:
-            simulation_probab = Simulation_Probab(probab_item[i], probab_move[i], probab_battle[i], probab_destroy[i], probab_monster[i], probab_aop[i], probab_trap[i], probab_suicide[i], probab_revive[i])
+            simulation_probab = Simulation_Probab(probab_item[i], probab_move[i], probab_battle[i], probab_monster[i], probab_aop[i], probab_trap[i], probab_suicide[i], probab_revive[i])
             item_rarity_probab = Item_Rarity_Probab(probab_rarity_1[i], probab_rarity_2[i], probab_rarity_3[i])
-            #write_tweet(Tweet_type.hour_threshold, player_list, place_list, None, [hour_count])
 
     do_something()
 
@@ -70,8 +68,6 @@ def do_something():
         move()
     elif action_number < simulation_probab.battle_action_number:
         battle()
-    elif action_number < simulation_probab.destroy_action_number:
-        destroy()
     elif action_number < simulation_probab.monster_action_number:
         monster()
     elif action_number < simulation_probab.aop_action_number:
@@ -87,7 +83,7 @@ def pick_item():
     alive_players = filter_player_list_by_state(player_list, 1)
     player = random.choice(alive_players)
 
-    better_loot = player.location.loot or player.location == player.fav_place
+    better_loot = player.location.loot
     item = get_random_item(item_rarity_probab, better_loot)
     player.pick(player_list, place_list, item)
 
@@ -108,6 +104,7 @@ def monster():
             player.state = 0
             place.players.pop(place.players.index(player))
             write_tweet(Tweet_type.monster_killed, player_list, place_list, place, [player, place])
+            should_place_be_destroyed(player.district)
         else:
             place.monster = False
 
@@ -146,10 +143,6 @@ def move():
             loc_candidates.append(l)
 
     if len(loc_candidates) == 0:
-        #player.state = 0
-        #place.players.pop(place.players.index(player_2))
-        #player.location.players.pop(player.location.players.index(player))
-        #write_tweet(Tweet_type.somebody_couldnt_move, player_list, place_list, player.location, [player])
         do_something()
         return
 
@@ -168,6 +161,7 @@ def move():
             player.location = new_location
 
             write_tweet(Tweet_type.trapped, player_list, place_list, player.location, [player, trapped_by, new_location])
+            should_place_be_destroyed(player.district)
         else:
             trapped_by = new_location.trap_by
             new_location.trap_by = None
@@ -198,12 +192,6 @@ def battle():
     factor_1 = 1 - player_1.get_defense() + player_2.get_attack()
     factor_2 = 100 + player_2.get_defense() - player_1.get_attack()
 
-    if player_1.location == player_1.fav_place:
-        factor_1 = factor_1 + 10
-
-    if player_2.location == player_2.fav_place:
-        factor_2 = factor_2 + 10
-
     winner_1 = 50 - probab_tie
     winner_2 = 50 + probab_tie
 
@@ -220,27 +208,24 @@ def battle():
             steal(player_list, place_list, player_1, player_2)
         elif kill_number < winner_1:
             kill(player_list, place_list, player_1, player_2, place)
+            should_place_be_destroyed(player_2.district)
         elif kill_number > winner_2:
             kill(player_list, place_list, player_2, player_1, place)
+            should_place_be_destroyed(player_1.district)
         else:
             tie(player_list, place_list, player_1, player_2)
 
-def destroy():
-    list = []
-    limit = 1
-    while len(list) == 0:
-        for i, p in enumerate(place_list):
-            if not p.destroyed:
-                count = 0
-                for j, q in enumerate(p.connections):
-                    if not q.destroyed:
-                        count = count + 1
-                if count <= limit:
-                    list.append(p)
-        limit = limit + 1
+def should_place_be_destroyed(place):
+    any_alive = False
 
-    place = random.choice(list)
+    for i, t in enumerate(place.tributes):
+        if t.state == 1:
+            any_alive = True
 
+    if not any_alive:
+        destroy(place)
+
+def destroy(place):
     place.destroyed = True
     dead_list = []
     escaped_list = []
@@ -256,17 +241,11 @@ def destroy():
 
     for i, p in enumerate(place.players):
         if p.state == 1:
-            if new_location and random.randint(0, 100) >= 90:
-                escaped_list.append(p)
-                new_location.players.append(p)
-                p.location = new_location
-            else:
-                p.state = 0
-                dead_list.append(p)
+            escaped_list.append(p)
+            new_location.players.append(p)
+            p.location = new_location
 
     for i, p in enumerate(escaped_list):
-        place.players.pop(place.players.index(p))
-    for i, p in enumerate(dead_list):
         place.players.pop(place.players.index(p))
 
     if place.monster:
@@ -333,12 +312,17 @@ def revive():
         player = random.choice(dead_players)
         player.state = 1
 
-        place = player.location
-        while place.destroyed:
-            place = random.choice(place_list)
+        place = player.district
+
+        is_rebuilt = False
         player.location = place
         place.players.append(player)
-        write_tweet(Tweet_type.somebody_revived, player_list, place_list, player.location, [player])
+
+        if place.destroyed:
+            place.destroyed = False
+            is_rebuilt = True
+
+        write_tweet(Tweet_type.somebody_revived, player_list, place_list, player.location, [player, is_rebuilt])
     else:
         suicide()
 
@@ -349,6 +333,7 @@ def suicide():
     player.location.players.pop(player.location.players.index(player))
 
     write_tweet(Tweet_type.somebody_died, player_list, place_list, player.location, [player])
+    should_place_be_destroyed(player.district)
 
 def end():
     global finished
