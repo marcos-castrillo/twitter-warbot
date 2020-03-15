@@ -28,7 +28,9 @@ class Tweet_type(object):
     monster_disappeared = 29
     monster_moved = 30
     monster_killed = 31
-
+    somebody_died_of_infection = 32
+    somebody_was_infected = 33
+    
     def __init__(self):
         pass
     def __getattr__(self, attr):

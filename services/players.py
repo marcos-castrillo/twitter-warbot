@@ -14,10 +14,10 @@ def get_player_list(place_list):
         list.append(player)
         location.players.append(player)
 
-        if player.district != None and player.district != '':
-            player.district.tributes.append(player)
-        else:
-            sys.exit('Config error: wrong district name.')
+        # if player.district != None and player.district != '':
+        #     player.district.tributes.append(player)
+        # else:
+        #     sys.exit('Config error: wrong district name.')
 
     for i, p in enumerate(list):
         initialize_friend_list(list, p)

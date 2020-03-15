@@ -64,6 +64,10 @@ def get_message(type, args = None):
         return monster_appeared(args[0])
     if type == Tweet_type.monster_moved:
         return monster_moved(args[0], args[1])
+    if type == Tweet_type.somebody_died_of_infection:
+        return somebody_died_of_infection(args[0])
+    if type == Tweet_type.somebody_was_infected:
+        return somebody_was_infected(args[0])
     if type == Tweet_type.monster_disappeared:
         return monster_disappeared(args[0])
     if monster_killed(args[0], args[1]):
@@ -242,12 +246,12 @@ def somebody_escaped(player_1, player_2, unfriend = False):
     sufix = ''
     if unfriend:
         sufix = ' Han dejado de ser ' + get_x_or_y_plural([player_1, player_2], 'amigos.', 'amigas.')
-    return random.choice([
-    player_1.get_name() + u' y ' + player_2.get_name() + u' se han encontrado, pero ' + player_1.get_name() + u' ha salido por patas cual cobarde.',
-    player_1.get_name() + u' y ' + player_2.get_name() + u' han empezado a pelear, pero ' + player_2.get_name() + u' sabía que tenía las de perder. Cogió un puñado de arena, se lo echó a ' + player_1.get_name() + u' en los ojos y salió corriendo.',
-    player_1.get_name() + u' iba a asesinar a ' + player_2.get_name() + u' por la espalda, pero éste se dio cuenta en el último momento. ' + player_1.get_name() + u' ha salido por patas.',
-    player_1.get_name() + u' se ha encarado con ' + player_2.get_name() + u', pero ' + player_2.get_name() + u' se ha achantado y salido corriendo.'
-    ]).encode('utf-8') + sufix
+    return (random.choice([
+        player_1.get_name() + u' y ' + player_2.get_name() + u' se han encontrado, pero ' + player_1.get_name() + u' ha salido por patas cual cobarde.',
+        player_1.get_name() + u' y ' + player_2.get_name() + u' han empezado a pelear, pero ' + player_2.get_name() + u' sabía que tenía las de perder. Cogió un puñado de arena, se lo echó a ' + player_1.get_name() + u' en los ojos y salió corriendo.',
+        player_1.get_name() + u' iba a asesinar a ' + player_2.get_name() + u' por la espalda, pero éste se dio cuenta en el último momento. ' + player_1.get_name() + u' ha salido por patas.',
+        player_1.get_name() + u' se ha encarado con ' + player_2.get_name() + u', pero ' + player_2.get_name() + u' se ha achantado y salido corriendo.'
+    ]) + sufix).encode('utf-8')
 
 def somebody_killed(player_1, player_2, are_friends = False, new_item = None, old_item = None):
     kill_verb = random.choice([
@@ -363,8 +367,8 @@ def somebody_killed(player_1, player_2, are_friends = False, new_item = None, ol
 
 def somebody_revived(player, is_rebuilt):
     rebuilt = ''
-    if is_rebuilt:
-        rebuilt = u'¡Además, ' + player.district.name + u' ha sido reconstruida y su equipo vuelve a la batalla!.'
+    # if is_rebuilt:
+    #     rebuilt = u'¡Además, ' + player.district.name + u' ha sido reconstruida y su equipo vuelve a la batalla!.'
 
     return u' '.join((player.get_name(), random.choice([
     u'sólo se estaba haciendo ' + get_x_or_y(player, u'el muerto. ¡Qué zooorrrooooo!', u'la muerta. ¡Qué zooorrraaaaa! (sin trazas de patriarcado).'),
@@ -543,4 +547,20 @@ def monster_killed(player, place):
         player.get_name() + u' creía que no iba a pasar nada por meter su voto en una urna, hasta que los antidisturbios de ' + place.name + ' cargaron contra ' + get_x_or_y(player, u'él', 'ella') + u'. ¡Mala suerte!',
         'A ' + player.get_name() + u' se le ocurrió que era gracioso gritar GORA *** al lado de la policía. Se ' + get_x_or_y(player, 'lo han llevado detenido', 'la han llevado detenida') + ' de ' + place.name + u' por apología al terrorismo.',
         player.get_name() + u' creía que era ' + get_x_or_y(player, u'el más gracioso', u'la más graciosa') + u' haciendo humor negro en Twitter, hasta que se encontró a la policía en ' + place.name + u'.'
+    ]).encode('utf-8')
+
+def somebody_died_of_infection(player):
+    return random.choice([
+        u'El coronavirus ha acabado con ' + player.get_name() + u'. Aquí acaba su aventura.',
+        u'Los hospitales están colapsados y no quedan camas para ' + player.get_name() + u'. Ha muerto por una neumonía provocada por coronavirus.',
+        player.get_name() + u' ha fallecido por coronavirus.',
+    ]).encode('utf-8')
+
+def somebody_was_infected(player):
+    return random.choice([
+        player.get_name() + u' ha pillado el coronavirus.',
+        u'Alguien ha infectado a ' + player.get_name() + u' con el coronavirus.',
+        player.get_name() + u' no se ha lavado las manos lo suficiente y ha contraído el coronavirus.',
+        player.get_name() + u' debería de haber seguido las recomendaciones para no pillar el coronavirus.',
+        player.get_name() + u' ha contraído el coronavirus por ir al Mercadona a comprar papel higiénico.',
     ]).encode('utf-8')

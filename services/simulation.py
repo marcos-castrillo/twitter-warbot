@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 import datetime
-import urllib
+import urllib.request
 from PIL import Image, ImageDraw, ImageFont
 
 from data.literals import get_message
@@ -42,9 +42,8 @@ def initialize_avatars(player_list):
             filename = path + '/' + player.username
         else:
             filename = path + '/' + player.name
-        if not (os.path.exists(filename + '.jpg') and os.path.exists(filename + '_medium.jpg')):
-            urllib.urlretrieve('http://avatars.io/twitter/' + player.username + '/small', filename + '.jpg')
-            urllib.urlretrieve('http://avatars.io/twitter/' + player.username + '/medium', filename + '_medium.jpg')
+        if not (os.path.exists(filename + '.png')):
+            urllib.request.urlretrieve('http://avatars.io/twitter/' + player.username + '/medium', filename + '.png')
         player.avatar_dir = filename
 
 def write_tweet(type, player_list, place_list, location = None, args = None):
@@ -78,6 +77,20 @@ def get_image(image_name, size = None):
     else:
         return image
 
+def paste_image(image, x, y, dimension, image_name, image_dir = None):
+    global current_dir
+
+    if image_dir == None:
+        image_dir = '../assets/' + image_name
+    else:
+        image_dir = '../' + image_dir
+
+    image_to_paste = Image.open(os.path.join(current_dir, image_dir + '.png'))
+    image_to_paste.thumbnail([dimension, dimension])
+    side = int(dimension / 2)
+
+    image.paste(image_to_paste, (x - side, y - side, x + side, y + side), image_to_paste.convert('RGBA'))
+
 def draw_image(type, player_list, place_list, location = None, args = None):
     global line_number, current_dir
     image_1 = get_image('background')
@@ -92,6 +105,7 @@ def draw_image(type, player_list, place_list, location = None, args = None):
             dead_players_list.append(p)
 
     if type == Tweet_type.start:
+        image_2 = get_image('background_initial')
         summary_image = get_summary_image(type, image_2, alive_players_list, dead_players_list, place_list, location)
         summary_image.save(output_dir + '/' + str(line_number) + '.png')
     else:
@@ -110,47 +124,36 @@ def get_zoomed_image(type, image, alive_players_list, dead_players_list, place_l
     font_path = os.path.join(current_dir, '../assets/Comic-Sans.ttf')
     image.putalpha(128)  # Half alpha; alpha argument must be an int
 
-    if type == Tweet_type.somebody_died or type == Tweet_type.monster_killed or type == Tweet_type.trapped:
-        avatar = Image.open(args[0].avatar_dir + '.jpg')
-        image.paste(avatar, (args[0].location.coord_x - 24, args[0].location.coord_y - 24, args[0].location.coord_x + 24, args[0].location.coord_y + 24), avatar.convert('RGBA'))
+    for i, p in enumerate(place_list):
+        if p.destroyed == True:
+            paste_image(image, p.coord_x, p.coord_y, 60, 'destroyed')
+        else:
+            if p.loot:
+                paste_image(image, p.coord_x - 16, p.coord_y, 32, 'loot')
+            if p.trap_by != None:
+                paste_image(image, location.coord_x, location.coord_y + 16, 32, 'trap')
+            if p.monster:
+                paste_image(image, location.coord_x, location.coord_y - 16, 32, 'monster')
+
+    if type == Tweet_type.somebody_died or type == Tweet_type.monster_killed or type == Tweet_type.trapped or type == Tweet_type.somebody_died_of_infection:
+        paste_image(image, args[0].location.coord_x, args[0].location.coord_y, 48, '', args[0].avatar_dir)
         draw.text((args[0].location.coord_x - 12, args[0].location.coord_y - 39), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path, size=50))
-        draw_big_player(image, draw, args[0])
-    elif type == Tweet_type.winner or type == Tweet_type.somebody_got_ill or type == Tweet_type.somebody_got_injured or type == Tweet_type.somebody_found_item or type == Tweet_type.somebody_replaced_item or type == Tweet_type.somebody_doesnt_want_item or type == Tweet_type.somebody_revived or type == Tweet_type.somebody_moved or type == Tweet_type.trap or type == Tweet_type.dodged_trap or type == Tweet_type.somebody_powerup:
-        avatar = Image.open(args[0].avatar_dir + '.jpg')
-        image.paste(avatar, (location.coord_x - 24, location.coord_y - 24, location.coord_x + 24, location.coord_y + 24), avatar.convert('RGBA'))
-        draw_big_player(image, draw, args[0])
+    elif type == Tweet_type.winner or type == Tweet_type.somebody_got_ill or type == Tweet_type.somebody_got_injured or type == Tweet_type.somebody_found_item or type == Tweet_type.somebody_replaced_item or type == Tweet_type.somebody_doesnt_want_item or type == Tweet_type.somebody_revived or type == Tweet_type.somebody_moved or type == Tweet_type.trap or type == Tweet_type.dodged_trap or type == Tweet_type.somebody_powerup or type == Tweet_type.somebody_was_infected:
+        paste_image(image, location.coord_x, location.coord_y, 48, '', args[0].avatar_dir)
+    elif type == Tweet_type.destroyed:
+        for i, p in enumerate(args[1]):
+            paste_image(image, location.coord_x + (i * 30) - 16, location.coord_y, 48, '', p.avatar_dir)
+        if args[3] and len(args[2]) > 0:
+            for i, p in enumerate(args[2]):
+                paste_image(image, args[3].coord_x + (i * 30) - 16, args[3].coord_y, 48, '', p.avatar_dir)
     elif type == Tweet_type.somebody_tied_and_became_friend or type == Tweet_type.somebody_tied_and_was_friend or type == Tweet_type.somebody_escaped or type == Tweet_type.somebody_killed or type == Tweet_type.somebody_stole or type == Tweet_type.somebody_stole_and_threw or type == Tweet_type.somebody_stole_and_replaced:
-        avatar_1 = Image.open(args[0].avatar_dir + '.jpg')
-        avatar_2 = Image.open(args[1].avatar_dir + '.jpg')
-        image.paste(avatar_1, (location.coord_x - 50, location.coord_y - 24, location.coord_x - 2, location.coord_y + 24), avatar_1.convert('RGBA'))
-        draw_big_player(image, draw, args[0])
-        image.paste(avatar_2, (location.coord_x + 2, location.coord_y - 24, location.coord_x + 50, location.coord_y + 24), avatar_2.convert('RGBA'))
-        draw_big_player(image, draw, args[1], True)
+        paste_image(image, location.coord_x - 26, location.coord_y, 48, '', args[0].avatar_dir)
+        paste_image(image, location.coord_x + 26, location.coord_y, 48, '', args[1].avatar_dir)
 
         if args[0].state == 0:
             draw.text((location.coord_x + 8, location.coord_y - 36), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path, size=50))
         if args[1].state == 0:
             draw.text((location.coord_x + 8, location.coord_y - 36), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path, size=50))
-
-    if type == Tweet_type.destroyed:
-        for i, p in enumerate(args[1]):
-            avatar = Image.open(p.avatar_dir + '.jpg')
-            image.paste(avatar, (location.coord_x - 40 + (i * 30), location.coord_y - 24, location.coord_x + 8 + (i * 30), location.coord_y + 24), avatar.convert('RGBA'))
-        if args[3] and len(args[2]) > 0:
-            for i, p in enumerate(args[2]):
-                avatar = Image.open(p.avatar_dir + '.jpg')
-                image.paste(avatar, (args[3].coord_x - 40 + (i * 30), args[3].coord_y - 24, args[3].coord_x + 8 + (i * 30), args[3].coord_y + 24), avatar.convert('RGBA'))
-
-    for i, p in enumerate(place_list):
-        if p.destroyed == True:
-            image.paste(get_image('destroyed'), (p.coord_x - 30, p.coord_y - 30, p.coord_x + 30, p.coord_y + 30), get_image('destroyed').convert('RGBA'))
-        else:
-            if p.loot:
-                image.paste(get_image('loot'), (p.coord_x - 30, p.coord_y - 20, p.coord_x, p.coord_y + 10), get_image('loot').convert('RGBA'))
-            if p.trap_by != None:
-                image.paste(get_image('trap'), (p.coord_x - 10, p.coord_y - 10, p.coord_x + 20, p.coord_y + 20), get_image('trap').convert('RGBA'))
-            if p.monster:
-                image.paste(get_image('monster'), (p.coord_x - 15, p.coord_y - 30, p.coord_x + 15, p.coord_y), get_image('monster').convert('RGBA'))
 
     w, h = image.size
     zoom = 3
@@ -158,8 +161,7 @@ def get_zoomed_image(type, image, alive_players_list, dead_players_list, place_l
         x = location.coord_x
         y = location.coord_y
         zoom2 = zoom * 2
-        image = image.crop((x - w / zoom2, y - h / zoom2,
-                        x + w / zoom2, y + h / zoom2))
+        image = image.crop((x - w / zoom2, y - h / zoom2, x + w / zoom2, y + h / zoom2))
         image.resize((w, h), Image.LANCZOS)
     return image
 
@@ -167,54 +169,65 @@ def get_summary_image(type, image, alive_players_list, dead_players_list, place_
     draw = ImageDraw.Draw(image)
 
     for i, place in enumerate(place_list):
-        for j, player in enumerate(place.players):
-            avatar = Image.open(player.avatar_dir + '.jpg')
-            image.paste(avatar, (place.coord_x - 24 + (j * 24), place.coord_y - 24, place.coord_x + 24 + (j * 24), place.coord_y + 24), avatar.convert('RGBA'))
+        players_in_place = []
+        for r, pp in enumerate(place.players):
+            players_in_place.append(pp)
+        for x, dp in enumerate(dead_players_list):
+            if dp.location.name == place.name:
+                players_in_place.append(dp)
+        for j, player in enumerate(players_in_place):
+            paste_image(image, place.coord_x + (j * 24), place.coord_y, 48, '', player.avatar_dir)
 
     if location != None:
         draw.ellipse((location.coord_x - 75, location.coord_y - 75, location.coord_x + 75, location.coord_y + 75), outline='rgb(255,0,0)', width=5)
+        ellipse = Image.new('RGBA', image.size, (255,255,255,0))
+        d = ImageDraw.Draw(ellipse)
+        d.ellipse((location.coord_x - 2000, location.coord_y - 2000, location.coord_x + 2000, location.coord_y + 2000), outline=(255,255,255,100), width=1925)
+        image = Image.alpha_composite(image, ellipse)
 
     for i, p in enumerate(place_list):
         if p.destroyed == True:
-            image.paste(get_image('destroyed'), (p.coord_x - 30, p.coord_y - 30, p.coord_x + 30, p.coord_y + 30), get_image('destroyed').convert('RGBA'))
+            paste_image(image, p.coord_x, p.coord_y, 60, 'destroyed')
+
         else:
             if p.loot:
-                image.paste(get_image('loot'), (p.coord_x - 30, p.coord_y - 20, p.coord_x, p.coord_y + 10), get_image('loot').convert('RGBA'))
+                paste_image(image, p.coord_x - 16, p.coord_y, 32, 'loot')
             if p.trap_by != None:
-                image.paste(get_image('trap'), (p.coord_x - 10, p.coord_y - 10, p.coord_x + 20, p.coord_y + 20), get_image('trap').convert('RGBA'))
+                paste_image(image, p.coord_x, p.coord_y + 16, 32, 'trap')
             if p.monster:
-                monster = Image.open(os.path.join(current_dir, '../assets/monster.png'))
-                image.paste(monster, (p.coord_x - 15, p.coord_y - 30, p.coord_x + 15, p.coord_y), monster.convert('RGBA'))
+                paste_image(image, p.coord_x, p.coord_y - 16, 32, 'monster')
 
         if type == Tweet_type.winner:
-            image.paste(get_image('crown'), (location.coord_x - 36, location.coord_y - 76, location.coord_x + 36, location.coord_y - 20), get_image('crown').convert('RGBA'))
-            image.paste(get_image('winner'), (0, 0), get_image('winner').convert('RGBA'))
+            paste_image(image, p.coord_x, p.coord_y - 38, 72, 'crown')
+            paste_image(image, 128, 128, 256, 'winner')
         elif type == Tweet_type.somebody_found_item or type == Tweet_type.somebody_replaced_item or type == Tweet_type.somebody_doesnt_want_item:
-            image.paste(get_image('item'), (location.coord_x - 256, location.coord_y - 256), get_image('item').convert('RGBA'))
+            paste_image(image, 128, 128, 256, 'item')
         elif type == Tweet_type.somebody_got_ill:
-            image.paste(get_image('illness'), (0, 0), get_image('illness').convert('RGBA'))
+            paste_image(image, 128, 128, 256, 'illness')
         elif type == Tweet_type.somebody_got_injured:
-            image.paste(get_image('injure'), (0, 0), get_image('injure').convert('RGBA'))
+            paste_image(image, 128, 128, 256, 'injure')
         elif type == Tweet_type.somebody_powerup:
-            image.paste(get_image('powerup'), (0, 0), get_image('powerup').convert('RGBA'))
+            paste_image(image, 128, 128, 256, 'powerup')
         elif type == Tweet_type.somebody_tied_and_became_friend or type == Tweet_type.somebody_tied_and_was_friend:
-            image.paste(get_image('heart'), (0, 0), get_image('heart').convert('RGBA'))
+            paste_image(image, 128, 128, 256, 'heart')
         elif type == Tweet_type.monster_moved or type == Tweet_type.monster_killed or type == Tweet_type.monster_appeared or type == Tweet_type.monster_disappeared:
-            image.paste(get_image('monster_big'), (0, 0), get_image('monster_big').convert('RGBA'))
+            paste_image(image, 128, 128, 256, 'monster')
         elif type == Tweet_type.dodged_trap or type == Tweet_type.trapped or type == Tweet_type.trap:
-            image.paste(get_image('trap_big'), (0, 0), get_image('trap_big').convert('RGBA'))
+            paste_image(image, 128, 128, 256, 'trap')
         elif type == Tweet_type.somebody_moved:
-            image.paste(get_image('move'), (0, 0), get_image('move').convert('RGBA'))
+            paste_image(image, 128, 128, 256, 'move')
         elif type == Tweet_type.monster_killed or type == Tweet_type.somebody_killed or type == Tweet_type.somebody_died:
-            image.paste(get_image('skull_big'), (0, 0), get_image('skull_big').convert('RGBA'))
+            paste_image(image, 128, 128, 256, 'skull')
         elif type == Tweet_type.somebody_revived:
-            image.paste(get_image('revive'), (0, 0), get_image('revive').convert('RGBA'))
+            paste_image(image, 128, 128, 256, 'revive')
         elif type == Tweet_type.somebody_stole or type == Tweet_type.somebody_stole_and_threw or type == Tweet_type.somebody_stole_and_replaced:
-            image.paste(get_image('steal'), (0, 0), get_image('steal').convert('RGBA'))
+            paste_image(image, 128, 128, 256, 'steal')
         elif type == Tweet_type.somebody_escaped:
-            image.paste(get_image('runaway'), (0, 0), get_image('runaway').convert('RGBA'))
+            paste_image(image, 128, 128, 256, 'runaway')
         elif type == Tweet_type.destroyed:
-            image.paste(get_image('destroyed_big'), (0, 0), get_image('destroyed_big').convert('RGBA'))
+            paste_image(image, 128, 128, 256, 'destroyed')
+        elif type == Tweet_type.somebody_was_infected or type == Tweet_type.somebody_died_of_infection:
+            paste_image(image, 128, 128, 256, 'infection')
 
     draw_ranking(image, alive_players_list, dead_players_list)
     return image
@@ -231,71 +244,27 @@ def draw_ranking(image, alive_players_list, dead_players_list):
         draw_player(image, coord_x, coord_y, dead_players_list[i])
         coord_x, coord_y = calculate_coords(coord_x, coord_y)
 
-def draw_big_player(image, draw, player, is_second_player = False):
-    global current_dir
-
-    avatar = Image.open(os.path.join(current_dir, '../', player.avatar_dir + '.jpg'))
-    font_path = os.path.join(current_dir, '../assets/Arial.ttf')
-    font_path_2 = os.path.join(current_dir, '../assets/Comic-Sans.ttf')
-
-    coord_x = 0
-    coord_y = 350
-    if is_second_player:
-        coord_x = 128
-
-    image.paste(avatar, (coord_x, coord_y), avatar.convert('RGBA'))
-    draw.rectangle((coord_x, coord_y, coord_x + 128, coord_y + 128), outline='rgb(0,0,0)')
-
-    image.paste(get_image('skull'), (coord_x + 38, coord_y - 38), get_image('skull').convert('RGBA'))
-    draw.text((coord_x + 70, coord_y - 33), str(player.kills), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=20))
-
-    image.paste(get_image('attack'), (coord_x + 10, coord_y - 75), get_image('attack').convert('RGBA'))
-    draw.text((coord_x + 40, coord_y - 73), str(player.get_attack()), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=20))
-
-    image.paste(get_image('defense'), (coord_x + 69, coord_y - 75), get_image('defense').convert('RGBA'))
-    draw.text((coord_x + 101, coord_y - 73), str(player.get_defense()), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=20))
-
-    size_player = 17
-    size_location = 17
-    player_name = [0, 0]
-    location_name = [0, 0]
-
-    while len(player_name) > 1:
-        player_name = wrap_text(player.name, 128, ImageFont.truetype(font_path, size=size_player))
-        size_player = size_player - 1
-
-    while len(location_name) > 1:
-        location_name = wrap_text(player.location.name, 128, ImageFont.truetype(font_path, size=size_location))
-        size_location = size_location - 1
-
-    draw.text((coord_x + 2, coord_y + 130), player_name[0], fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=size_player))
-    draw.text((coord_x + 2, coord_y + 150), location_name[0], fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=size_location))
-
-    if player.state == 0:
-        draw.text((coord_x + 3, coord_y - 50), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path_2, size=150))
 
 def draw_player(image, coord_x, coord_y, player):
     global current_dir
     draw = ImageDraw.Draw(image)
 
-    avatar = Image.open(os.path.join(current_dir, '../', player.avatar_dir + '.jpg'))
-
     font_path = os.path.join(current_dir, '../assets/Arial.ttf')
     font_path_2 = os.path.join(current_dir, '../assets/Comic-Sans.ttf')
 
-    image.paste(avatar, (coord_x, coord_y), avatar.convert('RGBA'))
+    paste_image(image, coord_x + 24, coord_y + 24, 48, '', player.avatar_dir)
     draw.rectangle((coord_x, coord_y, coord_x + 48, coord_y + 48), outline='rgb(0,0,0)')
 
     if player.kills > 0:
-        image.paste(get_image('skull'), (coord_x + 7, coord_y - 17), get_image('skull').convert('RGBA'))
+        paste_image(image, coord_x + 7, coord_y - 17, 16, 'skull')
         draw.text((coord_x + 27, coord_y - 17), str(player.kills), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=10))
 
     if player.get_attack() != 0:
-        image.paste(get_image('attack'), (coord_x - 2, coord_y - 35), get_image('attack').convert('RGBA'))
+        paste_image(image, coord_x - 2, coord_y - 35, 16, 'attack')
         draw.text((coord_x + 14, coord_y - 35), str(player.get_attack()), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=10))
 
     if player.get_defense() != 0:
-        image.paste(get_image('defense'), (coord_x + 26, coord_y - 35), get_image('defense').convert('RGBA'))
+        paste_image(image, coord_x + 26, coord_y - 35, 16, 'defense')
         draw.text((coord_x + 42, coord_y - 35), str(player.get_defense()), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=10))
 
     if player.state == 0:
@@ -338,3 +307,45 @@ def wrap_text(text, width, font):
         text_lines.append(' '.join(text_line))
 
     return text_lines
+
+# def draw_big_player(image, draw, player, is_second_player = False):
+#     global current_dir
+#
+#     font_path = os.path.join(current_dir, '../assets/Arial.ttf')
+#     font_path_2 = os.path.join(current_dir, '../assets/Comic-Sans.ttf')
+#
+#     coord_x = 0
+#     coord_y = 350
+#     if is_second_player:
+#         coord_x = 128
+#
+#     paste_image(image, coord_x, coord_y, 128, '', player.avatar_dir)
+#     draw.rectangle((coord_x, coord_y, coord_x + 128, coord_y + 128), outline='rgb(0,0,0)')
+#     paste_image(image, coord_x, coord_y, 76, 'skull')
+#
+#     draw.text((coord_x + 70, coord_y - 33), str(player.kills), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=20))
+#
+#     paste_image(image, coord_x + 10, coord_y - 75, 16, 'attack')
+#     draw.text((coord_x + 40, coord_y - 73), str(player.get_attack()), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=20))
+#
+#     paste_image(image, coord_x + 69, coord_y - 75, 16, 'defense')
+#     draw.text((coord_x + 101, coord_y - 73), str(player.get_defense()), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=20))
+#
+#     size_player = 17
+#     size_location = 17
+#     player_name = [0, 0]
+#     location_name = [0, 0]
+#
+#     while len(player_name) > 1:
+#         player_name = wrap_text(player.name, 128, ImageFont.truetype(font_path, size=size_player))
+#         size_player = size_player - 1
+#
+#     while len(location_name) > 1:
+#         location_name = wrap_text(player.location.name, 128, ImageFont.truetype(font_path, size=size_location))
+#         size_location = size_location - 1
+#
+#     draw.text((coord_x + 2, coord_y + 130), player_name[0], fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=size_player))
+#     draw.text((coord_x + 2, coord_y + 150), location_name[0], fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=size_location))
+#
+#     if player.state == 0:
+#         draw.text((coord_x + 3, coord_y - 50), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path_2, size=150))

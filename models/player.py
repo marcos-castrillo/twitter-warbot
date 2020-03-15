@@ -17,6 +17,7 @@ class Player(object):
     friend_list = []
     injury_list = []
     powerup_list = []
+    infected = False
 
     # Constructor
     def __init__(self, name, location, gender, username = None, district = None):
@@ -30,6 +31,7 @@ class Player(object):
         self.gender = gender
         self.name = name
         self.username = username
+        self.infected = False
 
     def pick(self, player_list, place_list, item):
         if len(self.item_list) <= 1:
@@ -104,6 +106,6 @@ class Player(object):
 
     def get_name(self):
         if self.username != "" and use_usernames:
-            return self.name + '(@' + self.username + ')'
+            return self.name + u'(@' + self.username + u')'
         else:
             return self.name
