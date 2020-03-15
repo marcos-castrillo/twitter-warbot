@@ -1,4 +1,4 @@
-from item import Item
+from models.item import Item
 from services.simulation import write_tweet
 from models.tweet_type import Tweet_type
 from data.literals import *
@@ -8,7 +8,7 @@ class Player(object):
     avatar_dir = None
     name = ""
     username = ""
-    fav_place = None
+    district = None
     kills = 0
     location = 0
     state = 0
@@ -17,19 +17,21 @@ class Player(object):
     friend_list = []
     injury_list = []
     powerup_list = []
+    infected = False
 
     # Constructor
-    def __init__(self, name, location, gender, username = None, fav_place = None):
+    def __init__(self, name, location, gender, username = None, district = None):
         self.friend_list = []
         self.item_list = []
         self.injury_list = []
         self.powerup_list = []
-        self.fav_place = fav_place
+        self.district = district
         self.location = location
         self.state = 1
         self.gender = gender
         self.name = name
         self.username = username
+        self.infected = False
 
     def pick(self, player_list, place_list, item):
         if len(self.item_list) <= 1:
@@ -81,15 +83,15 @@ class Player(object):
                 return self.item_list[1]
 
     def get_best_attack_item(self):
-        if len(self.item_list) == 0:
-            return None
-        elif len(self.item_list) == 1:
-            return self.item_list[0]
-        else:
-            if self.item_list[0].attack >= self.item_list[1].attack:
+        if len(self.item_list) == 1:
+            if self.item_list[0].attack > 0:
                 return self.item_list[0]
-            else:
+        elif len(self.item_list) == 2:
+            if self.item_list[0].attack >= self.item_list[1].attack and self.item_list[0].attack > 0:
+                return self.item_list[0]
+            elif self.item_list[1].attack > 0:
                 return self.item_list[1]
+        return None
 
     def get_worst_item(self):
         if len(self.item_list) == 0:
@@ -104,6 +106,6 @@ class Player(object):
 
     def get_name(self):
         if self.username != "" and use_usernames:
-            return self.name + '(@' + self.username + ')'
+            return self.name + u'(@' + self.username + u')'
         else:
             return self.name

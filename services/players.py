@@ -1,4 +1,5 @@
 import random
+import sys
 from data.players import raw_player_list
 from models.player import Player
 
@@ -12,6 +13,11 @@ def get_player_list(place_list):
         player = Player(p[0], location, p[2], p[1], p[3])
         list.append(player)
         location.players.append(player)
+
+        # if player.district != None and player.district != '':
+        #     player.district.tributes.append(player)
+        # else:
+        #     sys.exit('Config error: wrong district name.')
 
     for i, p in enumerate(list):
         initialize_friend_list(list, p)
@@ -39,9 +45,10 @@ def get_two_players_in_random_place(place_list):
         if len(p.players) > 1:
             list.append(p)
 
-
     while len(list) > 0:
         place = random.choice(list)
+        player_1 = None
+        player_2 = None
 
         alive = []
         for i, p in enumerate(place.players):
@@ -53,12 +60,16 @@ def get_two_players_in_random_place(place_list):
             alive.pop(alive.index(player_1))
             player_2 = random.choice(alive)
         else:
-            place_list.pop(place_list.index(place))
+            list.pop(list.index(place))
 
         if player_1 != None and player_2 != None:
-            return player_1, player_2
-            
-    return None, None
+            if is_friend(player_1, player_2):
+                action_number = random.randint(0, 100)
+                if action_number > 50:
+                    return None, None, None
+            return player_1, player_2, place
+
+    return None, None, None
 
 def filter_player_list_by_state(player_list, value):
     list = []

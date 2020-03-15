@@ -35,10 +35,20 @@ with open(line_path) as f:
 
 image_path = os.path.join(current_dir, 'simulations', dir_files[-1], str(line) + '.png')
 
-last_tweet_id = tweet_line_from_file(simulation_path, line, image_path, last_tweet_id)
+# last_tweet_id = tweet_line_from_file(simulation_path, line, image_path, last_tweet_id)
+tweet_line_from_file(simulation_path, line, image_path)
 
 with open(line_path, "w") as f:
     f.write(str(last_tweet_id))
 
 new_path = os.path.join(current_dir, 'simulations', dir_files[-1], str(line) + '.txt')
 os.rename(line_path, new_path)
+
+second_image_path = os.path.join(current_dir, 'simulations', dir_files[-1], str(line) + 'bis.png')
+if os.path.exists(second_image_path):
+    line = line + 1
+    tweet_line_from_file(simulation_path, line, second_image_path)
+    with open(line_path, "w") as f:
+        f.write(str(last_tweet_id))
+    new_path = os.path.join(current_dir, 'simulations', dir_files[-1], str(line) + '.txt')
+    os.rename(line_path, new_path)
