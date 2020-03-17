@@ -1,5 +1,7 @@
+import sys
 from models.item import Item
 from services.simulation import write_tweet
+from services.items import get_item_list
 from models.tweet_type import Tweet_type
 from data.literals import *
 from data.constants import *
@@ -20,7 +22,7 @@ class Player(object):
     infected = False
 
     # Constructor
-    def __init__(self, name, location, gender, username = None, district = None):
+    def __init__(self, name, location, gender, username = None, item_list = None, district = None):
         self.friend_list = []
         self.item_list = []
         self.injury_list = []
@@ -32,6 +34,14 @@ class Player(object):
         self.name = name
         self.username = username
         self.infected = False
+        whole_item_list = get_item_list()
+        if item_list != None and (not isinstance(item_list, list) or len(item_list) > 2):
+            sys.exit('Config error: Item list for player ' + self.name + ' is not an array or contains more than 2 items.')
+        if item_list != None and len(item_list) > 0:
+            for item in whole_item_list:
+                if item.name == item_list[0] or (len(item_list) > 1 and item.name == item_list[1]):
+                    self.item_list.append(item)
+
 
     def pick(self, player_list, place_list, item):
         if len(self.item_list) <= 1:

@@ -111,7 +111,7 @@ def get_find_action():
         u'ha entrado en una casa y ha robado',
         u'ha recogido',
         u'ha recogido',
-        u'tras mucho suplicarle al creador de este bot que le diera algo, se ha llevado',
+        u'por suplicarle al creador de este bot que le diera algo, se ha llevado',
         u'rebuscando entre la basura ha encontrado',
         u'se ha llevado en la tómbola',
         u'se ha llevado',
@@ -139,7 +139,10 @@ def get_find_action():
         u'llevaba meses coleccionando tapas de yogurt para conseguir',
         u'ha ido coleccionando fascículos para montar',
         u'es tan manitas que se ha construido',
-        u'vio a alguien desprevenido por la calle y le robó'
+        u'vio a alguien desprevenido por la calle y le robó',
+        u'se agenció',
+        u'ha conseguido',
+        u'se ha comprado en la deep web'
     ])
 
 def start():
@@ -229,7 +232,7 @@ def somebody_tied_and_became_friend(player_1, player_2):
     player_1.get_name() + ' y ' + player_2.get_name() + u' han hecho una tregua y ahora son ' + get_x_or_y_plural([player_1, player_2],'amigos.', 'amigas.'),
     player_1.get_name() + ' ha formado una alianza con ' + player_2.get_name() + u' y ahora son ' + get_x_or_y_plural([player_1, player_2], 'amigos.', 'amigas.'),
     'Aunque no se caigan muy bien, ' + player_1.get_name() + ' y ' + player_2.get_name() + u' han hecho un pacto y ahora son ' + get_x_or_y_plural([player_1, player_2], 'amigos.', 'amigas.'),
-    player_1.get_name() + ' y ' + player_2.get_name() + u' iban tan ciegos anoche que se habían olvidado de que eran ' + get_x_or_y_plural([player_1, player_2], 'amigos.', 'amigas.'),
+    player_1.get_name() + ' y ' + player_2.get_name() + u' iban tan ' + get_x_or_y_plural([player_1, player_2], 'ciegos.', 'ciegas.') + ' anoche que se habían olvidado de que eran ' + get_x_or_y_plural([player_1, player_2], 'amigos.', 'amigas.'),
     'Usando sus encantos, ' + player_1.get_name() + ' ha conquistado a ' + player_2.get_name() + u' y ahora son ' + get_x_or_y_plural([player_1, player_2], 'amigos.', 'amigas.')
     ]).encode('utf-8')
 
@@ -280,6 +283,7 @@ def somebody_killed(player_1, player_2, are_friends = False, new_item = None, ol
 
     kill_method = random.choice([
         u' con sus puños',
+        u' por quitarle el último rollo de papel higiénico',
         u' a lo jíbiri',
         u' a tortazo limpio',
         u' por la gloria de ESPAÑA',
@@ -298,7 +302,6 @@ def somebody_killed(player_1, player_2, are_friends = False, new_item = None, ol
         u' y le ha cantado una balada',
         u' y le ha recitado un poema',
         u' y le ha quitado el trabajo',
-        u'. A partir de ahora va a hacer su trabajo',
         u' sin esforzarse',
         u' sin inmutarse',
         u' y ha seguido a lo suyo',
@@ -393,43 +396,7 @@ def somebody_died(player):
     ]))).encode('utf-8')
 
 def somebody_moved(player, old_location, new_location):
-    road = False
-
-    for i, c in enumerate(old_location.road_connections):
-        if c.encode('utf-8') == new_location.name.encode('utf-8'):
-            road = True
-
-    if road:
-        action = random.choice([
-            u'ha llamado a un taxi para que le lleve de',
-            u'ha llamado a un Uber para que le lleve de',
-            u'ha llamado a un Cabify para que le lleve de',
-            u'está tan en forma que ha ido en bici de',
-            u'ha hecho dedo desde',
-            u'ha hecho autostop desde',
-            u'ha robado un coche descapotable a lo GTA y se ha ido de',
-            u'ha ido en moto de',
-            u'ha ido en su jet privado de',
-            u'ha ido en su scooter de',
-            u'ha ido en AVE de',
-            u'ha ido en mochillo de',
-            u'ha ido en limusina con su chófer de',
-            u'ha ido en patinete eléctrico de',
-            u'ha ido en tren regional de',
-            u'ha ido en Alsa de',
-            u'ha ido en globo de',
-            u'ha encontrado billetes de avión baratos para ir de',
-            u'ha ido en avión en primera clase de',
-            u'ha cogido un Blablacar de'
-        ])
-    else:
-        action = random.choice([
-            u'ha ido en su barquito velero de',
-            u'ha ido en un crucero de cinco plantas de',
-            u'ha ido en lancha motora de',
-            u'se ha colado de polizón en un barco de',
-            u'ha ido en patera de'
-        ])
+    action = random.choice([u'ha caminado desde', u'ha ido en bici de', u'ha ido en motorrabo de', u'ha hecho dedo desde', u'está tan en forma que ha hecho un sprint de', u'se aburría y ha ido a la pata coja desde', u'ha llamado al taxi de Rebollo para que le lleve de', u'ha llamado al taxi de Santi para que le lleve de', u'ha llamado al taxi de Aquilino para que le lleve de', u'ha llamado al taxi de Germán para que le lleve de', u'ha ido en tractor de', u'ha ido en patinete', u'ha ido en skate haciendo backflips de', u'ha cogido el coche y ha hecho un derrape de', u'ha cogido un Blabacar de'])
 
     return u' '.join((player.get_name(), action, old_location.name, 'a', new_location.name + '.')).encode('utf-8')
 
@@ -524,29 +491,33 @@ def monster_appeared(place):
     ]).encode('utf-8')
 
 def monster_moved(place, new_place):
+    if new_place.name == u'Santa María':
+        return (u'Ratonera sucia, la guardia se ha ido de ' + place.name + '.').encode('utf-8')
+    if new_place.name == u'Bercianos':
+        return (u'Como son las fiestas de Bercianos (#ProjectBercy) y todo el mundo está allí, la guardia se ha tenido que ir de ' + place.name + '.').encode('utf-8')
+
     return random.choice([
-    u'¡La policía se ha movido de ' + place.name + ' a ' + new_place.name + u'! Habrá que ir con cuidado.',
-    u'Ha habido movida en ' + new_place.name + u', por lo que la policía ha tenido que irse de ' + place.name + '.',
-    u'Alguien se ha chivado de que hay una manifestación en ' + new_place.name + u', así que la policía se ha ido de ' + place.name + '.',
-    u'La policía se ha movido de ' + place.name + u' a ' + new_place.name + '.',
-    u'¡La policía se ha ido a un desahucio a ' + new_place.name + '!',
+        u'Alguien se ha chivado de que hay un cultivo de maría en ' + new_place.name + u', por lo que la guardia se ha ido de ' + place.name + '.'
+        u'¡La guardia se ha movido de ' + place.name + ' a ' + new_place.name + u'! Habrá que ir con cuidado.',
+        u'Ha habido movida en ' + new_place.name + u', por lo que la guardia ha tenido que irse de ' + place.name + '.',
+        u'La guardia se ha movido de ' + place.name + u' a ' + new_place.name + '.'
     ]).encode('utf-8')
 
 def monster_disappeared(place):
     return random.choice([
-        u'¡La policía se ha esfumado de ' + place.name + u'!',
-        u'La policía ya no está en ' + place.name + '.',
-        u'Se acabó el turno de la policía, por lo que se han ido de ' + place.name + u'.'
+        u'¡La guardia se ha esfumado de ' + place.name + u'!',
+        u'La guardia ya no está en ' + place.name + '.',
+        u'Se acabó el turno de la guardia, por lo que se han ido de ' + place.name + u'.'
     ]).encode('utf-8')
 
 def monster_killed(player, place):
     return random.choice([
-        player.get_name() + u' ha sido ' + get_x_or_y(player, 'arrestado', 'arrestada') + u' por la policía de ' + place.name + u'. Aquí acaba su aventura.',
+        player.get_name() + u' ha sido ' + get_x_or_y(player, 'arrestado', 'arrestada') + u' por la guardia de ' + place.name + u'. Aquí acaba su aventura.',
         u'¡La guardia le ha pillado una bolsita a ' + player.get_name() + ' en ' + place.name + u' y se ' + get_x_or_y(player, 'lo', 'la') + u' han llevado, hay que esconderla mejor!',
-        u'La policía ha desahuciado a palos a ' + player.get_name() + u' de ' + place.name + u'. ¡Game over!',
-        player.get_name() + u' creía que no iba a pasar nada por meter su voto en una urna, hasta que los antidisturbios de ' + place.name + ' cargaron contra ' + get_x_or_y(player, u'él', 'ella') + u'. ¡Mala suerte!',
-        'A ' + player.get_name() + u' se le ocurrió que era gracioso gritar GORA *** al lado de la policía. Se ' + get_x_or_y(player, 'lo han llevado detenido', 'la han llevado detenida') + ' de ' + place.name + u' por apología al terrorismo.',
-        player.get_name() + u' creía que era ' + get_x_or_y(player, u'el más gracioso', u'la más graciosa') + u' haciendo humor negro en Twitter, hasta que se encontró a la policía en ' + place.name + u'.'
+        u'La guardia ha desahuciado a palos a ' + player.get_name() + u' de ' + place.name + u'. ¡Game over!',
+        u'La guardia ha detenido a ' +player.get_name() + u' por salir a correr en mitad de la cuarentena.',
+        'A ' + player.get_name() + u' se le ocurrió que era gracioso gritar GORA *** al lado de la guardia. Se ' + get_x_or_y(player, 'lo han llevado detenido', 'la han llevado detenida') + ' de ' + place.name + u' por apología al terrorismo.',
+        player.get_name() + u' creía que era ' + get_x_or_y(player, u'el más gracioso', u'la más graciosa') + u' haciendo humor negro en Twitter, hasta que se encontró a la guardia en ' + place.name + u'.'
     ]).encode('utf-8')
 
 def somebody_died_of_infection(player):
@@ -554,6 +525,7 @@ def somebody_died_of_infection(player):
         u'El coronavirus ha acabado con ' + player.get_name() + u'. Aquí acaba su aventura.',
         u'Los hospitales están colapsados y no quedan camas para ' + player.get_name() + u'. Ha muerto por una neumonía provocada por coronavirus.',
         player.get_name() + u' ha fallecido por coronavirus.',
+        player.get_name() + u' ha tosido hasta ahogarse por culpa del coronavirus.'
     ]).encode('utf-8')
 
 def somebody_was_infected(player):
@@ -563,4 +535,5 @@ def somebody_was_infected(player):
         player.get_name() + u' no se ha lavado las manos lo suficiente y ha contraído el coronavirus.',
         player.get_name() + u' debería de haber seguido las recomendaciones para no pillar el coronavirus.',
         player.get_name() + u' ha contraído el coronavirus por ir al Mercadona a comprar papel higiénico.',
+        player.get_name() + u' se saltó la cuarentena para fumarse uno y ha pillado el coronavirus.'
     ]).encode('utf-8')

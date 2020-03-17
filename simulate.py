@@ -317,33 +317,47 @@ def revive():
         player = random.choice(dead_players)
         player.state = 1
 
-        place = player.district
-
-        is_rebuilt = False
+        place = player.location
+        while place.destroyed:
+            place = random.choice(place_list)
         player.location = place
         place.players.append(player)
+        write_tweet(Tweet_type.somebody_revived, player_list, place_list, player.location, [player, False])
+
+        # place = player.district
+        # is_rebuilt = False
+        # player.location = place
+        # place.players.append(player)
         #
         # if place.destroyed:
         #     place.destroyed = False
         #     is_rebuilt = True
-
-        write_tweet(Tweet_type.somebody_revived, player_list, place_list, player.location, [player, is_rebuilt])
     else:
         suicide()
 
 def infect():
     alive_players = filter_player_list_by_state(player_list, 1)
-    player = random.choice(alive_players)
+    infected_players = []
+    healthy_players = []
+    for i, p in enumerate(alive_players):
+        if p.infected:
+            infected_players.append(p)
+        else:
+            healthy_players.append(p)
 
-    if player.infected:
+    action_number = random.randint(1, 100)
+
+    if action_number > 75 or len(infected_players) == 0:
+        player = random.choice(healthy_players)
+        player.infected = True
+        write_tweet(Tweet_type.somebody_was_infected, player_list, place_list, player.location, [player])
+    else:
+        player = random.choice(infected_players)
         player.state = 0
         player.location.players.pop(player.location.players.index(player))
         write_tweet(Tweet_type.somebody_died_of_infection, player_list, place_list, player.location, [player])
         # should_place_be_destroyed(player.district)
-    else:
-        player.infected = True
-        write_tweet(Tweet_type.somebody_was_infected, player_list, place_list, player.location, [player])
-
+        
 def suicide():
     alive_players = filter_player_list_by_state(player_list, 1)
     player = random.choice(alive_players)
