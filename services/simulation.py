@@ -259,8 +259,6 @@ def draw_player(image, coord_x, coord_y, player):
     font_path_2 = os.path.join(current_dir, '../assets/Comic-Sans.ttf')
 
     paste_image(image, coord_x + 24, coord_y + 24, 48, '', player.avatar_dir)
-    if player.infected:
-        paste_image(image, coord_x + 24 + 24, coord_y + 24 + 12, 36, 'infection')
     draw.rectangle((coord_x, coord_y, coord_x + 48, coord_y + 48), outline='rgb(0,0,0)')
 
     if player.kills > 0:
@@ -277,6 +275,13 @@ def draw_player(image, coord_x, coord_y, player):
 
     if player.state == 0:
         draw.text((coord_x + 3, coord_y - 11), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path_2, size=50))
+    else:
+        if player.infected:
+            paste_image(image, coord_x + 24 + 24, coord_y + 24 + 12, 36, 'infection')
+        if len(player.item_list) == 2:
+            paste_image(image, coord_x + 45, coord_y + 5, 32, 'item')
+        if len(player.item_list) > 0:
+            paste_image(image, coord_x + 5, coord_y + 5, 32, 'item')
 
 def calculate_coords(coord_x, coord_y):
     img_width = 50

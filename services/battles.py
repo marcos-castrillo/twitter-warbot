@@ -11,14 +11,16 @@ def kill(player_list, place_list, player_1, player_2, place):
     best_player_2_item = player_2.get_best_item()
     are_friends = is_friend(player_1, player_2)
 
-    if best_player_1_item != None and best_player_2_item != None and (best_player_1_item.get_value() < best_player_2_item.get_value()):
+    if best_player_2_item != None and len(player_1.item_list) == 2 and (best_player_1_item.get_value() < best_player_2_item.get_value()):
         old_item = player_1.get_worst_item()
-        write_tweet(Tweet_type.somebody_killed, player_list, place_list, place, [player_1, player_2, are_friends, best_player_2_item, old_item])
         player_1.item_list = [best_player_1_item, best_player_2_item]
-    elif best_player_2_item != None and best_player_1_item == None:
-        old_item = player_1.get_worst_item()
+        write_tweet(Tweet_type.somebody_killed, player_list, place_list, place, [player_1, player_2, are_friends, best_player_2_item, old_item])
+    elif best_player_2_item != None and len(player_1.item_list) < 2:
+        if best_player_1_item != None:
+            player_1.item_list = [best_player_1_item, best_player_2_item]
+        else:
+            player_1.item_list = [best_player_2_item]
         write_tweet(Tweet_type.somebody_killed, player_list, place_list, place, [player_1, player_2, are_friends, best_player_2_item])
-        player_1.item_list = [best_player_2_item]
     else:
         write_tweet(Tweet_type.somebody_killed, player_list, place_list, place, [player_1, player_2, are_friends])
 
