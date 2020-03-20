@@ -111,12 +111,15 @@ def draw_image(type, player_list, place_list, location = None, args = None):
         zoomed_image = get_zoomed_image(type, image_1, alive_players_list, dead_players_list, place_list, location, args)
         summary_image = get_summary_image(type, image_2, alive_players_list, dead_players_list, place_list, location)
 
-        if type == Tweet_type.destroyed:
-            zoomed_image.save(output_dir + '/' + str(line_number - 1) + 'bis.png')
-            summary_image.save(output_dir + '/' + str(line_number - 1) + 'bisb.png')
-        else:
-            zoomed_image.save(output_dir + '/' + str(line_number) + '.png')
-            summary_image.save(output_dir + '/' + str(line_number) + 'b.png')
+        zoomed_image.save(output_dir + '/' + str(line_number) + '.png')
+        summary_image.save(output_dir + '/' + str(line_number) + 'b.png')
+
+        # if type == Tweet_type.destroyed:
+        #     zoomed_image.save(output_dir + '/' + str(line_number - 1) + 'bis.png')
+        #     summary_image.save(output_dir + '/' + str(line_number - 1) + 'bisb.png')
+        # else:
+        #     zoomed_image.save(output_dir + '/' + str(line_number) + '.png')
+        #     summary_image.save(output_dir + '/' + str(line_number) + 'b.png')
 
 def get_zoomed_image(type, image, alive_players_list, dead_players_list, place_list, location = None, args = None):
     draw = ImageDraw.Draw(image)
