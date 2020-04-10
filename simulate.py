@@ -24,7 +24,7 @@ item_list = get_item_list()
 place_list = get_place_list()
 player_list = get_player_list(place_list)
 initialize_avatars(player_list)
-simulation_probab = Simulation_Probab(PROBAB_ITEM[0], PROBAB_MOVE[0], PROBAB_BATTLE[0], PROBAB_MONSTER[0], PROBAB_AOP[0], PROBAB_DESTROY[0], PROBAB_TRAP[0], PROBAB_INFECT[0], PROBAB_ATRACT[0], PROBAB_SUICIDE[0], PROBAB_REVIVE[0])
+simulation_probab = Simulation_Probab(PROBAB_ITEM[0], PROBAB_MOVE[0], PROBAB_BATTLE[0], PROBAB_AOP[0], PROBAB_STEAL[0], PROBAB_MONSTER[0], PROBAB_DESTROY[0], PROBAB_TRAP[0], PROBAB_INFECT[0], PROBAB_ATRACT[0], PROBAB_SUICIDE[0], PROBAB_REVIVE[0])
 item_rarity_probab = Item_Rarity_Probab(PROBAB_RARITY_1[0], PROBAB_RARITY_2[0], PROBAB_RARITY_3[0])
 finished = False
 hour_count = 0
@@ -44,7 +44,7 @@ def simulate_day():
     hour_count = hour_count + 1
     for i, th in enumerate(THRESHOLD_LIST):
         if hour_count == th:
-            simulation_probab = Simulation_Probab(PROBAB_ITEM[i], PROBAB_MOVE[i], PROBAB_BATTLE[i], PROBAB_MONSTER[i], PROBAB_AOP[i], PROBAB_DESTROY[i], PROBAB_TRAP[i], PROBAB_INFECT[i], PROBAB_ATRACT[i], PROBAB_SUICIDE[i], PROBAB_REVIVE[i])
+            simulation_probab = Simulation_Probab(PROBAB_ITEM[i], PROBAB_MOVE[i], PROBAB_BATTLE[i], PROBAB_AOP[i], PROBAB_STEAL[i], PROBAB_MONSTER[i], PROBAB_DESTROY[i], PROBAB_TRAP[i], PROBAB_INFECT[i], PROBAB_ATRACT[i], PROBAB_SUICIDE[i], PROBAB_REVIVE[i])
             item_rarity_probab = Item_Rarity_Probab(PROBAB_RARITY_1[i], PROBAB_RARITY_2[i], PROBAB_RARITY_3[i])
 
     do_something()
@@ -66,10 +66,12 @@ def do_something():
         move()
     elif action_number < simulation_probab.battle_action_number:
         battle()
-    elif action_number < simulation_probab.monster_action_number:
-        monster()
     elif action_number < simulation_probab.aop_action_number:
         accident_or_powerup()
+    elif action_number < simulation_probab.steal_action_number:
+        steal()
+    elif action_number < simulation_probab.monster_action_number:
+        monster()
     elif action_number < simulation_probab.destroy_action_number:
         destroy()
     elif action_number < simulation_probab.trap_action_number:
@@ -170,8 +172,6 @@ def battle():
     else:
         if kill_number == int((factor_2 - factor_1) / 2):
             run_away(player_list, place_list, player_1, player_2)
-        elif kill_number <= int((factor_2 - factor_1) / 2) + 2 and kill_number >= int((factor_2 - factor_1) / 2) - 2 and (len(player_1.item_list) > 0 or len(player_2.item_list) > 0):
-            steal(player_list, place_list, player_1, player_2)
         elif kill_number < winner_1:
             kill(player_list, place_list, player_1, player_2, place)
         elif kill_number > winner_2:
@@ -302,6 +302,16 @@ def accident_or_powerup():
         injure(player)
     else:
         illness(player)
+
+def steal():
+    alive_players = filter_player_list_by_state(player_list, 1)
+    player_1, player_2, place = get_two_players_in_random_place(place_list)
+
+    if (player_1, player_2) == (None, None):
+        do_something()
+        return
+
+    stealing(player_list, place_list, player_1, player_2)
 
 def illness(player):
     illness = get_random_illness()

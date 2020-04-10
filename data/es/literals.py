@@ -28,11 +28,13 @@ def get_x_or_y_plural(player_list, x, y):
 
 ALSO_STOLE = u'Además, le ha robado'
 AND = 'y'
-ATRACTION_NOBODY = random.choice([
-    u' pero por desgracia nadie ha ido...',
-    u' pero no ha ido ni dios...',
-    u' pero a nadie le interesan...'
-])
+
+def ATRACTION_NOBODY():
+    return random.choice([
+        u' pero por desgracia nadie ha ido...',
+        u' pero no ha ido ni dios...',
+        u' pero a nadie le interesan...'
+    ])
 
 def BETTER_LOOT(place):
     return random.choice([
@@ -41,7 +43,8 @@ def BETTER_LOOT(place):
         u' Ha tenido suerte porque está en ' + place + u'.'
         ])
 
-CROSSING = random.choice([u'atravesando', u'cruzando'])
+def CROSSING():
+    return random.choice([u'atravesando', u'cruzando'])
 
 def COULDNT_MOVE(player):
     return random.choice([
@@ -92,53 +95,54 @@ def ESCAPED(player_1, player_2):
         player_1.get_name() + u' se ha encarado con ' + player_2.get_name() + u', pero ' + player_2.get_name() + u' se ha achantado y salido corriendo.'
     ])
 
-FIND_ACTION = random.choice([
-    u'ahora tiene',
-    u'ahora tiene',
-    u'ha encontrado',
-    u'ha encontrado',
-    u'se ha encontrado',
-    u'se ha encontrado',
-    u'ha cogido',
-    u'ha cogido',
-    u'ha entrado en una casa y ha robado',
-    u'ha robado',
-    u'ha robado',
-    u'ha recogido',
-    u'ha recogido',
-    u'se ha agenciado',
-    u'ha conseguido',
-    u'ha conseguido',
-    u'por suplicarle al creador de este bot que le diera algo, se ha llevado',
-    u'tiene enchufe con el programador de esto y se ha llevado',
-    u'rebuscando entre la basura ha encontrado',
-    u'se ha llevado en la tómbola',
-    u'se ha llevado',
-    u'se ha llevado',
-    u'ha intercambiado ' + random.choice(['un gramo', u'dos cigarros', u'medio porro', u'un porro', u'una chusta', u'cuatro cigarros', u'tres cigarros', 'una calada']) + ' por',
-    u'ha ganado en una apuesta',
-    u'se ha comprado en un estanco',
-    u'se ha comprado en un todo a cien',
-    u'se ha comprado clandestinamente en un kiosko',
-    u'ha comprado en el ' + random.choice([u'Lidl', u'Corte Inglés', u'Alcampo', u'Carrefour', u'Mercadona', u'Día%', u'Masymas']),
-    u'ha recibido un paquete de ' + random.choice([u'Ebay', u'Amazon', u'PcComponentes', u'MediaMarkt']) + u' con',
-    u'ha comprado por ' + random.choice([u'Wallapop']),
-    u'ha ido al mercadillo y ha comprado',
-    u'se ha llevado en una caja de cereales',
-    u'se ha encontrado una caja misteriosa en la que había',
-    u'ha recibido por su cumpleaños',
-    u'se ha llevado por la puta cara',
-    u'se ha llevado por su cara bonita',
-    u'se ha llevado como premio en ' + random.choice([u'un concurso de talentos', u'una batalla de gallos', u'una concurso de baile', u'un show de belleza']),
-    u'se ha llevado en un sorteo de ' + random.choice([u'HTCMania', u'PcComponentes', u'la ONCE', u'Forocoches']),
-    u'llevaba mucho tiempo ahorrando para comprarse',
-    u'iba andando por la calle cuando alguien le regaló',
-    u'llevaba meses coleccionando tapas de yogurt para conseguir',
-    u'ha ido coleccionando fascículos para montar',
-    u'es tan manitas que se ha construido',
-    u'vio a alguien desprevenido por la calle y le robó',
-    u'se ha comprado en la deep web'
-])
+def FIND_ACTION():
+    return random.choice([
+        u'ahora tiene',
+        u'ahora tiene',
+        u'ha encontrado',
+        u'ha encontrado',
+        u'se ha encontrado',
+        u'se ha encontrado',
+        u'ha cogido',
+        u'ha cogido',
+        u'ha entrado en una casa y ha robado',
+        u'ha robado',
+        u'ha robado',
+        u'ha recogido',
+        u'ha recogido',
+        u'se ha agenciado',
+        u'ha conseguido',
+        u'ha conseguido',
+        u'por suplicarle al creador de este bot que le diera algo, se ha llevado',
+        u'tiene enchufe con el programador de esto y se ha llevado',
+        u'rebuscando entre la basura ha encontrado',
+        u'se ha llevado en la tómbola',
+        u'se ha llevado',
+        u'se ha llevado',
+        u'ha intercambiado ' + random.choice(['un gramo', u'dos cigarros', u'medio porro', u'un porro', u'una chusta', u'cuatro cigarros', u'tres cigarros', 'una calada']) + ' por',
+        u'ha ganado en una apuesta',
+        u'se ha comprado en un estanco',
+        u'se ha comprado en un todo a cien',
+        u'se ha comprado clandestinamente en un kiosko',
+        u'ha comprado en el ' + random.choice([u'Lidl', u'Corte Inglés', u'Alcampo', u'Carrefour', u'Mercadona', u'Día%', u'Masymas']),
+        u'ha recibido un paquete de ' + random.choice([u'Ebay', u'Amazon', u'PcComponentes', u'MediaMarkt']) + u' con',
+        u'ha comprado por ' + random.choice([u'Wallapop']),
+        u'ha ido al mercadillo y ha comprado',
+        u'se ha llevado en una caja de cereales',
+        u'se ha encontrado una caja misteriosa en la que había',
+        u'ha recibido por su cumpleaños',
+        u'se ha llevado por la puta cara',
+        u'se ha llevado por su cara bonita',
+        u'se ha llevado como premio en ' + random.choice([u'un concurso de talentos', u'una batalla de gallos', u'una concurso de baile', u'un show de belleza']),
+        u'se ha llevado en un sorteo de ' + random.choice([u'HTCMania', u'PcComponentes', u'la ONCE', u'Forocoches']),
+        u'llevaba mucho tiempo ahorrando para comprarse',
+        u'iba andando por la calle cuando alguien le regaló',
+        u'llevaba meses coleccionando tapas de yogurt para conseguir',
+        u'ha ido coleccionando fascículos para montar',
+        u'es tan manitas que se ha construido',
+        u'vio a alguien desprevenido por la calle y le robó',
+        u'se ha comprado en la deep web'
+    ])
 
 def FRIENDS_TIED(player_1, player_2):
     return (random.choice([
@@ -158,38 +162,45 @@ def HAS_ALREADY_KILLED(kills_count):
 def I_COMPOSED(player, action, event, has_now):
     return u' '.join((u'¡' + player.get_name(), action, event.name + '!', has_now))
 
-ILLNESS_ACTION = random.choice([U'ha cogido', u'ha contraído', u'ha padecido'])
+def ILLNESS_ACTION():
+    return random.choice([U'ha cogido', u'ha contraído', u'ha padecido'])
+
 IN_ATTACK = u'en ataque'
 IN_DEFENSE = u'en defensa'
-INJURE_ACTION = random.choice([u'ha recibido', u'ha cogido'])
-KILL_ACTION = random.choice([u'se ha cargado a',
-    u'ha matado a',
-    u'se ha llevado por delante a',
-    u'ha destrozado a',
-    u'ha desintegrado a',
-    u'ha dejado KO a',
-    u'ha ejecutado a',
-    u'ha despachado a',
-    u'ha emboscado a',
-    u'ha terminado con el sufrimiento que era la vida de',
-    u'ha asesinado a sangre fría a',
-    u'se ha quitado de en medio a',
-    u'se ha quitado de encima a',
-    u'ha degollado a',
-    u'ha asfixiado a',
-    u'ha lapidado a',
-    u'ha desnucado a',
-    u'ha mandado al otro barrio a',
-    u'ha reventado a',
-    u'ha liquidado a',
-    u'ha aniquilado a',
-    u'ha despachado a',
-    u'ha acabado con',
-    u'ha apuñalado a',
-    u'ha acribillado a',
-    u'ha estrangulado a',
-    u'ha apaleado a'
-])
+
+def INJURE_ACTION():
+    return random.choice([u'ha recibido', u'ha cogido'])
+
+def KILL_ACTION():
+    return random.choice([
+        u'se ha cargado a',
+        u'ha matado a',
+        u'se ha llevado por delante a',
+        u'ha destrozado a',
+        u'ha desintegrado a',
+        u'ha dejado KO a',
+        u'ha ejecutado a',
+        u'ha despachado a',
+        u'ha emboscado a',
+        u'ha terminado con el sufrimiento que era la vida de',
+        u'ha asesinado a sangre fría a',
+        u'se ha quitado de en medio a',
+        u'se ha quitado de encima a',
+        u'ha degollado a',
+        u'ha asfixiado a',
+        u'ha lapidado a',
+        u'ha desnucado a',
+        u'ha mandado al otro barrio a',
+        u'ha reventado a',
+        u'ha liquidado a',
+        u'ha aniquilado a',
+        u'ha despachado a',
+        u'ha acabado con',
+        u'ha apuñalado a',
+        u'ha acribillado a',
+        u'ha estrangulado a',
+        u'ha apaleado a'
+    ])
 
 def KILL_METHOD(player):
     return random.choice([
@@ -313,32 +324,42 @@ def INFECTED_DIED(player):
         player.get_name() + u' ha tosido hasta ahogarse por culpa del coronavirus.'
     ])
 
-MOVED_SING = random.choice([
-    u'se ha movido a',
-    u'ha ido a',
-    u'se ha ido a'
-])
-MOVED_PL = random.choice([
-    u'se han movido a',
-    u'se han ido a',
-    u'han ido a'
-])
-MOVED_ATRACTION_SING = random.choice([
-    u' se ha acercado a ver qué se cuece.',
-    u' ha llamado a un taxi para ir.',
-    u' ha ido en coche.',
-    u' ha ido a bailar.'
-])
-MOVED_ATRACTION_PL = random.choice([
-    u' se han acercado a ver qué se cuece.',
-    u' han llamado a un taxi para ir.',
-    u' han ido en coche.',
-    u' han ido a bailar.'
-])
-POWERUP_ACTION = random.choice([
-    'ha cogido',
-    u'ha encontrado'
-])
+def MOVED_SING():
+    return random.choice([
+        u'se ha movido a',
+        u'ha ido a',
+        u'se ha ido a'
+    ])
+
+def MOVED_PL():
+    return random.choice([
+        u'se han movido a',
+        u'se han ido a',
+        u'han ido a'
+    ])
+
+def MOVED_ATRACTION_SING():
+    return random.choice([
+        u' se ha acercado a ver qué se cuece.',
+        u' ha llamado a un taxi para ir.',
+        u' ha ido en coche.',
+        u' ha ido a bailar.'
+    ])
+
+def MOVED_ATRACTION_PL():
+    return random.choice([
+        u' se han acercado a ver qué se cuece.',
+        u' han llamado a un taxi para ir.',
+        u' han ido en coche.',
+        u' han ido a bailar.'
+    ])
+
+def POWERUP_ACTION():
+    return random.choice([
+        'ha cogido',
+        u'ha encontrado'
+    ])
+
 START = u'¡Los participantes están listos! Ya conocemos la ubicación de cada uno de ellos. Que empiece el juego.'
 
 def STOLE(robber, robbed, item):
@@ -350,20 +371,21 @@ def STOLE_AND_REPLACED(robber, robbed, item, old_item):
 def STOLE_AND_THREW(robber, robbed, item):
     return u' '.join((STOLE + u'. Como tiene cosas mejores, lo ha tirado a la basura.'))
 
-SUICIDE = random.choice([
-    u'ha sido víctima de un rayo y se ha muerto en el acto.',
-    u'ha bebido un chupito de lejía.',
-    u'ha bebido un chupito de cianuro.',
-    u'se ha pegado un tiro.',
-    u'se ha olvidado de cómo respirar.',
-    u'se ha esnucado.',
-    u'se la ha pegado por conducir con unas copas de más.',
-    u'tuvo un piñazo con un Seat Panda.',
-    u'ha muerto repentinamente por un fallo cardíaco. ¡Hay que hacer más deporte!',
-    u'ha empezado a toser, a toser y a toser y se ha acabado asfixiando. Estos chavalitos...',
-    u'ha amochado de repente.',
-    u'ha sido atropellado por una moto y se fue a la puta.'
-])
+def SUICIDE():
+    return random.choice([
+        u'ha sido víctima de un rayo y se ha muerto en el acto.',
+        u'ha bebido un chupito de lejía.',
+        u'ha bebido un chupito de cianuro.',
+        u'se ha pegado un tiro.',
+        u'se ha olvidado de cómo respirar.',
+        u'se ha esnucado.',
+        u'se la ha pegado por conducir con unas copas de más.',
+        u'tuvo un piñazo con un Seat Panda.',
+        u'ha muerto repentinamente por un fallo cardíaco. ¡Hay que hacer más deporte!',
+        u'ha empezado a toser, a toser y a toser y se ha acabado asfixiando. Estos chavalitos...',
+        u'ha amochado de repente.',
+        u'ha sido atropellado por una moto y se fue a la puta.'
+    ])
 
 def TIED_AND_BEFRIEND(player_1, player_2):
     return random.choice([
@@ -382,10 +404,10 @@ def TRAP(player):
     return u' '.join((player.get_name(), u'ha puesto una trampa en', player.location.name + '.'))
 
 def TRAP_DODGED(player, trapped_by, location):
-    return u' '.join((player.get_name(), MOVED_SING, location.name + u', ha visto la trampa que había puesto', trapped_by.get_name(), 'y la ha destruido.'))
+    return u' '.join((player.get_name(), MOVED_SING(), location.name + u', ha visto la trampa que había puesto', trapped_by.get_name(), 'y la ha destruido.'))
 
 def TRAPPED(player, trapped_by, location):
-    return u' '.join((player.get_name(), MOVED_SING, location.name, u'pero se ha comido la trampa que había puesto', trapped_by.get_name() + u'. ¡Qué torpe!'))
+    return u' '.join((player.get_name(), MOVED_SING(), location.name, u'pero se ha comido la trampa que había puesto', trapped_by.get_name() + u'. ¡Qué torpe!'))
 
 def TREASON(player_1, player_2):
     return random.choice([

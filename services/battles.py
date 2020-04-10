@@ -38,7 +38,7 @@ def run_away(player_list, place_list, player_1, player_2):
     else:
         write_tweet(Tweet_type.somebody_escaped, player_list, place_list, player_1.location, [player_1, player_2])
 
-def steal(player_list, place_list, player_1, player_2):
+def stealing(player_list, place_list, player_1, player_2):
     if len(player_1.item_list) > 0:
         robbed = player_1
         robber = player_2

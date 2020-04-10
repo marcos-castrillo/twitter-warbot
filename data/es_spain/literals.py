@@ -54,24 +54,25 @@ def MONSTER_MOVED(place, new_place):
         u'La guardia se ha movido de ' + place.name + u' a ' + new_place.name + '.'
     ])
 
-MOVE_ACTION_ROAD = random.choice([
-    u'ha ido desde',
-    u'ha ido desde',
-    u'ha ido desde',
-    u'ha ido de',
-    u'ha ido de',
-    u'ha caminado desde',
-    u'ha caminado desde',
-    u'ha conducido de',
-    u'ha hecho dedo desde',
-    u'está tan en forma que ha hecho un sprint de',
-    u'se aburría y ha ido a la pata coja desde',
-    u'ha llamado al taxi de ' + random.choice([u'Rebollo', u'Santi', u'Aquilino', u'Germán']) + u' para que le lleve de',
-    u'ha llamado al taxi de ' + random.choice([u'Rebollo', u'Santi', u'Aquilino', u'Germán']) + u' para que le lleve de',
-    u'ha ido en ' + random.choice([u'tractor', u'patinete', u'motorrabo', u'bici']) + u' de',
-    u'ha ido en ' + random.choice([u'tractor', u'patinete', u'motorrabo', u'bici']) + u' de',
-    u'ha ido en skate haciendo backflips de',
-    u'ha cogido el coche y ha hecho un derrape de',
-    u'ha ido patinando de',
-    u'ha cogido un Blabacar de'
-])
+def MOVE_ACTION_ROAD():
+    return random.choice([
+        u'ha ido desde',
+        u'ha ido desde',
+        u'ha ido desde',
+        u'ha ido de',
+        u'ha ido de',
+        u'ha caminado desde',
+        u'ha caminado desde',
+        u'ha conducido de',
+        u'ha hecho dedo desde',
+        u'está tan en forma que ha hecho un sprint de',
+        u'se aburría y ha ido a la pata coja desde',
+        u'ha llamado al taxi de ' + random.choice([u'Rebollo', u'Santi', u'Aquilino', u'Germán']) + u' para que le lleve de',
+        u'ha llamado al taxi de ' + random.choice([u'Rebollo', u'Santi', u'Aquilino', u'Germán']) + u' para que le lleve de',
+        u'ha ido en ' + random.choice([u'tractor', u'patinete', u'motorrabo', u'bici']) + u' de',
+        u'ha ido en ' + random.choice([u'tractor', u'patinete', u'motorrabo', u'bici']) + u' de',
+        u'ha ido en skate haciendo backflips de',
+        u'ha cogido el coche y ha hecho un derrape de',
+        u'ha ido patinando de',
+        u'ha cogido un Blabacar de'
+    ])

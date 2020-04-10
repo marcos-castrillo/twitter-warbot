@@ -9,13 +9,11 @@ This is my first twitter bot. It's a fictional tournament where players can 'fig
 5. Run simulate.py
 
 ## To Do
-- Convertir el bot en juegos del hambre. Cada provincia/CA tiene 1/2 tributos que van en equipo.
 - Cuando te encuentras con un infectado te infectas
 - Posibilidad de matarse dos entre ellos
 - Ver items que quedan en los sitios en el mapa
-- Robar items
+- Las trampas son multiusos
+- Hacer los objetos mas utiles (objetos especiales? -> botas)
 
 ## Bugs
-Sometimes it says it got rid of sth when it didnt ??
-Como son las fiestas de Zambroncinos, Lorena(@lore_macu16) han llamado a un taxi para ir.
 Crown doesnt work

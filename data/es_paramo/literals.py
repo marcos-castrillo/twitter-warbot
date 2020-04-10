@@ -1,11 +1,11 @@
 from data.es.literals import *
 import random
 
-def ATRACTION():
+def ATRACTION(place):
     return random.choice([
-        u'Se han celebrado las fiestas de ' + place.name + u' y',
-        u'Como son las fiestas de ' + place.name + u', ',
-        u'Todo el mundo está en las fiestas de ' + place.name + u', ',
+        u'Se han celebrado las fiestas de ' + place + u' y',
+        u'Como son las fiestas de ' + place + u', ',
+        u'Todo el mundo está en las fiestas de ' + place + u', ',
     ])
 
 def MONSTER_APPEARED(place):
@@ -45,33 +45,35 @@ def MONSTER_MOVED(place, new_place):
         u'¡La policía se ha ido a un desahucio a ' + new_place.name + '!',
     ])
 
-MOVE_ACTION_ROAD = random.choice([
-    u'ha llamado a un taxi para que le lleve de',
-    u'ha llamado a un Uber para que le lleve de',
-    u'ha llamado a un Cabify para que le lleve de',
-    u'está tan en forma que ha ido en bici de',
-    u'ha hecho dedo desde',
-    u'ha hecho autostop desde',
-    u'ha robado un coche descapotable a lo GTA y se ha ido de',
-    u'ha ido en moto de',
-    u'ha ido en su jet privado de',
-    u'ha ido en su scooter de',
-    u'ha ido en AVE de',
-    u'ha ido en mochillo de',
-    u'ha ido en limusina con su chófer de',
-    u'ha ido en patinete eléctrico de',
-    u'ha ido en tren regional de',
-    u'ha ido en Alsa de',
-    u'ha ido en globo de',
-    u'ha encontrado billetes de avión baratos para ir de',
-    u'ha ido en avión en primera clase de',
-    u'ha cogido un Blablacar de'
-])
+def MOVE_ACTION_ROAD():
+    return random.choice([
+        u'ha llamado a un taxi para que le lleve de',
+        u'ha llamado a un Uber para que le lleve de',
+        u'ha llamado a un Cabify para que le lleve de',
+        u'está tan en forma que ha ido en bici de',
+        u'ha hecho dedo desde',
+        u'ha hecho autostop desde',
+        u'ha robado un coche descapotable a lo GTA y se ha ido de',
+        u'ha ido en moto de',
+        u'ha ido en su jet privado de',
+        u'ha ido en su scooter de',
+        u'ha ido en AVE de',
+        u'ha ido en mochillo de',
+        u'ha ido en limusina con su chófer de',
+        u'ha ido en patinete eléctrico de',
+        u'ha ido en tren regional de',
+        u'ha ido en Alsa de',
+        u'ha ido en globo de',
+        u'ha encontrado billetes de avión baratos para ir de',
+        u'ha ido en avión en primera clase de',
+        u'ha cogido un Blablacar de'
+    ])
 
-MOVE_ACTION_WATER = random.choice([
-    u'ha ido en su barquito velero de',
-    u'ha ido en un crucero de cinco plantas de',
-    u'ha ido en lancha motora de',
-    u'se ha colado de polizón en un barco de',
-    u'ha ido en patera de'
-])
+def MOVE_ACTION_WATER():
+    return random.choice([
+        u'ha ido en su barquito velero de',
+        u'ha ido en un crucero de cinco plantas de',
+        u'ha ido en lancha motora de',
+        u'se ha colado de polizón en un barco de',
+        u'ha ido en patera de'
+    ])

@@ -125,23 +125,23 @@ def winner(player):
     return WINNER_COMPOSED(player, kills, item_list, infection)
 
 def somebody_got_ill(player, illness):
-    return I_COMPOSED(player, ILLNESS_ACTION, illness, has_now(player, illness))
+    return I_COMPOSED(player, ILLNESS_ACTION(), illness, has_now(player, illness))
 
 def somebody_got_injured(player, injury):
-    return I_COMPOSED(player, INJURE_ACTION, injury, has_now(player, injury))
+    return I_COMPOSED(player, INJURE_ACTION(), injury, has_now(player, injury))
 
 def somebody_powerup(player, powerup):
-    return I_COMPOSED(player, POWERUP_ACTION, powerup, has_now(player, powerup))
+    return I_COMPOSED(player, POWERUP_ACTION(), powerup, has_now(player, powerup))
 
 def somebody_found_item(player, item):
     loot = ''
     if player.location.loot:
         loot = BETTER_LOOT(player.location.name)
 
-    return I_COMPOSED(player, FIND_ACTION, item, has_now(player, item) + u' ' + loot)
+    return I_COMPOSED(player, FIND_ACTION(), item, has_now(player, item) + u' ' + loot)
 
 def somebody_replaced_item(player, item_new, item_old):
-    return I_COMPOSED(player, FIND_ACTION, item_new, REPLACED + '' + item_old.name + '. ' + has_now(player, item_new, item_old))
+    return I_COMPOSED(player, FIND_ACTION(), item_new, REPLACED + '' + item_old.name + '. ' + has_now(player, item_new, item_old))
 
 def somebody_escaped(player_1, player_2, unfriend = False):
     sufix = ''
@@ -150,7 +150,7 @@ def somebody_escaped(player_1, player_2, unfriend = False):
     return ESCAPED(player_1, player_2) + sufix
 
 def somebody_killed(player_1, player_2, were_friends, killing_item, new_item = None, old_item = None):
-    kill_verb = KILL_ACTION
+    kill_verb = KILL_ACTION()
     kill_method = KILL_METHOD(player_1)
 
     friend_message = ''
@@ -172,7 +172,7 @@ def somebody_killed(player_1, player_2, were_friends, killing_item, new_item = N
     return u' '.join((friend_message + player_1.get_name(), kill_verb, player_2.get_name() + kill_method + kills_count + stole))
 
 def somebody_suicided(player):
-    return u' '.join((player.get_name(), SUICIDE))
+    return u' '.join((player.get_name(), SUICIDE()))
 
 def somebody_moved(player, old_location, new_location, crossed = None):
     crossing = ''
@@ -187,9 +187,9 @@ def somebody_moved(player, old_location, new_location, crossed = None):
         crossing = CROSSING + crossed.name
 
     if road:
-        action = MOVE_ACTION_ROAD
+        action = MOVE_ACTION_ROAD()
     else:
-        action = MOVE_ACTION_WATER
+        action = MOVE_ACTION_WATER()
 
     return u' '.join((player.get_name(), action, old_location.name + crossing, TO, new_location.name + '.'))
 
@@ -234,7 +234,7 @@ def destroyed(place, dead_list, escaped_list, new_location):
 
 def atraction(place, atracted_players, double):
     location = ATRACTION(place.name)
-    players = ATRACTION_NOBODY
+    players = ATRACTION_NOBODY()
 
     if len(atracted_players) > 0:
         players = u' ' + AND + u' '
@@ -248,9 +248,9 @@ def atraction(place, atracted_players, double):
                 players = players + ', ' + player.get_name()
 
         if len(atracted_players) > 1:
-            players = players + MOVED_ATRACTION_PL
+            players = players + MOVED_ATRACTION_PL()
         else:
-            players = players + MOVED_ATRACTION_SING
+            players = players + MOVED_ATRACTION_SING()
 
     return u' '.join([location, players])
 
