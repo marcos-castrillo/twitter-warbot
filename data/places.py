@@ -16,7 +16,7 @@ raw_place_list = [
     [u'Zambroncinos', [u'Soguillo', u'Zotes'], [721, 821]],
     [u'Zotes', [u'Zambroncinos', u'Laguna de Negrillos', u'Cebrones'], [723, 898]],
     [u'Mansilla', [u'Urdiales', u'Antoñanes', u'Matalobos', u'Huerga de Frailes'], [575, 490]],
-    [u'Antoñanes', [u'Mansilla', u'Grisuela', u'Matalobos'], [684, 431]],
+    [u'Antoñanes', [u'Mansilla', u'Grisuela', u'Matalobos'], [584, 431]],
     [u'Grisuela', [u'Antoñanes', u'La Mata', u'Bustillo', u'Matalobos'], [594, 394]],
     [u'La Mata', [u'Grisuela', u'Villarrín', u'Villar de Mazarife', u'Mozóndiga'], [721, 354]],
     [u'Villagallegos', [u'Bercianos', u'Vallejo', u'Palacios', u'Valdevimbre'], [947, 453]],

@@ -9,6 +9,7 @@ class Simulation_Probab(object):
     destroy_probab = 0
     trap_probab = 0
     infect_probab = 0
+    atract_probab = 0
     suicide_probab = 0
     revive_probab = 0
 
@@ -19,13 +20,14 @@ class Simulation_Probab(object):
     aop_action_number = 0
     destroy_action_number = 0
     trap_action_number = 0
+    atract_action_number = 0
     infect_action_number = 0
     suicide_action_number = 0
     revive_action_number = 0
 
     # Constructor
-    def __init__(self, item, move, battle, monster, aop, destroy, trap, infect, suicide, revive):
-        if (item + move + battle + monster + aop + destroy + trap + infect + suicide + revive) != 100:
+    def __init__(self, item, move, battle, monster, aop, destroy, trap, infect, atract, suicide, revive):
+        if (item + move + battle + monster + aop + destroy + trap + infect + atract + suicide + revive) != 100:
             sys.exit('Config error: battle probabilities do not sum up 100')
 
         self.item_probab = item
@@ -36,6 +38,7 @@ class Simulation_Probab(object):
         self.destroy_probab = destroy
         self.trap_probab = trap
         self.infect_probab = infect
+        self.atract_probab = atract
         self.suicide_probab = suicide
         self.revive_probab = revive
 
@@ -50,5 +53,6 @@ class Simulation_Probab(object):
         self.destroy_action_number = self.aop_action_number + self.destroy_probab
         self.trap_action_number = self.destroy_action_number + self.trap_probab
         self.infect_action_number = self.trap_action_number + self.infect_probab
-        self.suicide_action_number = self.infect_action_number + self.suicide_probab
+        self.atract_action_number = self.infect_action_number + self.atract_probab
+        self.suicide_action_number = self.atract_action_number + self.suicide_probab
         self.revive_action_number = self.suicide_action_number + self.revive_probab

@@ -6,6 +6,7 @@ import urllib.request
 from PIL import Image, ImageDraw, ImageFont
 
 from data.literals import get_message
+from data.config import LOCALIZATION
 from models.tweet_type import Tweet_type
 
 date = datetime.datetime.now()
@@ -33,7 +34,7 @@ while os.path.exists(path):
     path = os.path.join(output_dir, filename + '-' + str(i) + ".txt")
 
 def initialize_avatars(player_list):
-    path = 'assets/avatars'
+    path = 'assets/img/avatars'
     if not os.path.exists(path):
         os.makedirs(path)
 
@@ -51,8 +52,8 @@ def write_tweet(type, player_list, place_list, location = None, args = None):
     if args == None:
         args = [player_list]
     write_line(get_message(type, args))
-    line_number = line_number + 1
     draw_image(type, player_list, place_list, location, args)
+    line_number = line_number + 1
     if type == Tweet_type.winner:
         with open(os.path.join(output_dir, '-1.txt'), "w") as file:
             file.write('todo ok')
@@ -70,7 +71,7 @@ def file_len():
     return i + 1
 
 def get_image(image_name, size = None):
-    image = Image.open(os.path.join(current_dir, '../assets/' + image_name + '.png'))
+    image = Image.open(os.path.join(current_dir, '../assets/img/' + image_name + '.png'))
 
     if size != None:
         return image.thumbnail(size)
@@ -81,7 +82,7 @@ def paste_image(image, x, y, dimension, image_name, image_dir = None):
     global current_dir
 
     if image_dir == None:
-        image_dir = '../assets/' + image_name
+        image_dir = '../assets/img/' + image_name
     else:
         image_dir = '../' + image_dir
 
@@ -93,8 +94,8 @@ def paste_image(image, x, y, dimension, image_name, image_dir = None):
 
 def draw_image(type, player_list, place_list, location = None, args = None):
     global line_number, current_dir
-    image_1 = get_image('background')
-    image_2 = get_image('background')
+    image_1 = get_image('maps/' + LOCALIZATION)
+    image_2 = get_image('maps/' + LOCALIZATION)
 
     alive_players_list = []
     dead_players_list = []
@@ -123,24 +124,24 @@ def draw_image(type, player_list, place_list, location = None, args = None):
 
 def get_zoomed_image(type, image, alive_players_list, dead_players_list, place_list, location = None, args = None):
     draw = ImageDraw.Draw(image)
-    font_path = os.path.join(current_dir, '../assets/Comic-Sans.ttf')
+    font_path = os.path.join(current_dir, '../assets/fonts/Comic-Sans.ttf')
     image.putalpha(128)  # Half alpha; alpha argument must be an int
 
     for i, p in enumerate(place_list):
-        if p.destroyed == True:
+        if p.destroyed:
             paste_image(image, p.coord_x, p.coord_y, 60, 'destroyed')
         else:
             if p.loot:
                 paste_image(image, p.coord_x - 16, p.coord_y, 32, 'loot')
             if p.trap_by != None:
-                paste_image(image, location.coord_x, location.coord_y + 16, 32, 'trap')
+                paste_image(image, p.coord_x, p.coord_y + 16, 32, 'trap')
             if p.monster:
-                paste_image(image, location.coord_x, location.coord_y - 16, 32, 'monster')
+                paste_image(image, p.coord_x, p.coord_y - 16, 32, 'monster')
 
-    if type == Tweet_type.somebody_died or type == Tweet_type.monster_killed or type == Tweet_type.trapped or type == Tweet_type.somebody_died_of_infection:
+    if type == Tweet_type.somebody_suicided or type == Tweet_type.monster_killed or type == Tweet_type.trapped or type == Tweet_type.somebody_died_of_infection:
         paste_image(image, args[0].location.coord_x, args[0].location.coord_y, 48, '', args[0].avatar_dir)
         draw.text((args[0].location.coord_x - 12, args[0].location.coord_y - 39), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path, size=50))
-    elif type == Tweet_type.winner or type == Tweet_type.somebody_got_ill or type == Tweet_type.somebody_got_injured or type == Tweet_type.somebody_found_item or type == Tweet_type.somebody_replaced_item or type == Tweet_type.somebody_doesnt_want_item or type == Tweet_type.somebody_revived or type == Tweet_type.somebody_moved or type == Tweet_type.trap or type == Tweet_type.dodged_trap or type == Tweet_type.somebody_powerup or type == Tweet_type.somebody_was_infected:
+    elif type == Tweet_type.winner or type == Tweet_type.somebody_got_ill or type == Tweet_type.somebody_got_injured or type == Tweet_type.somebody_found_item or type == Tweet_type.somebody_replaced_item or type == Tweet_type.somebody_revived or type == Tweet_type.somebody_moved or type == Tweet_type.trap or type == Tweet_type.trap_dodged or type == Tweet_type.somebody_powerup or type == Tweet_type.somebody_was_infected:
         paste_image(image, location.coord_x, location.coord_y, 48, '', args[0].avatar_dir)
         if args[0].infected:
             paste_image(image, location.coord_x + 24, location.coord_y + 12, 36, 'infection')
@@ -166,6 +167,11 @@ def get_zoomed_image(type, image, alive_players_list, dead_players_list, place_l
             draw.text((location.coord_x + 8, location.coord_y - 36), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path, size=50))
         if args[1].state == 0:
             draw.text((location.coord_x + 8, location.coord_y - 36), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path, size=50))
+    elif type == Tweet_type.atraction:
+        for j, player in enumerate(args[1]):
+            paste_image(image, args[0].coord_x + (j * 24), args[0].coord_y, 48, '', player.avatar_dir)
+            if player.infected:
+                paste_image(image, args[0].coord_x + (j * 24) + 24, args[0].coord_y + 12, 36, 'infection')
 
     w, h = image.size
     zoom = 3
@@ -179,7 +185,7 @@ def get_zoomed_image(type, image, alive_players_list, dead_players_list, place_l
     if type == Tweet_type.winner:
         paste_image(image, location.coord_x, location.coord_y - 38, 72, 'crown')
         paste_image(image, 80, 80, 256, 'winner')
-    elif type == Tweet_type.somebody_found_item or type == Tweet_type.somebody_replaced_item or type == Tweet_type.somebody_doesnt_want_item:
+    elif type == Tweet_type.somebody_found_item or type == Tweet_type.somebody_replaced_item:
         paste_image(image, 80, 80, 256, 'item')
     elif type == Tweet_type.somebody_got_ill:
         paste_image(image, 80, 80, 256, 'illness')
@@ -191,11 +197,11 @@ def get_zoomed_image(type, image, alive_players_list, dead_players_list, place_l
         paste_image(image, 80, 80, 256, 'heart')
     elif type == Tweet_type.monster_moved or type == Tweet_type.monster_killed or type == Tweet_type.monster_appeared or type == Tweet_type.monster_disappeared:
         paste_image(image, 80, 80, 256, 'monster')
-    elif type == Tweet_type.dodged_trap or type == Tweet_type.trapped or type == Tweet_type.trap:
+    elif type == Tweet_type.trap_dodged or type == Tweet_type.trapped or type == Tweet_type.trap:
         paste_image(image, 80, 80, 256, 'trap')
     elif type == Tweet_type.somebody_moved:
         paste_image(image, 80, 80, 256, 'move')
-    elif type == Tweet_type.monster_killed or type == Tweet_type.somebody_killed or type == Tweet_type.somebody_died:
+    elif type == Tweet_type.monster_killed or type == Tweet_type.somebody_killed or type == Tweet_type.somebody_suicided:
         paste_image(image, 80, 80, 256, 'skull')
     elif type == Tweet_type.somebody_revived:
         paste_image(image, 80, 80, 256, 'revive')
@@ -207,6 +213,8 @@ def get_zoomed_image(type, image, alive_players_list, dead_players_list, place_l
         paste_image(image, 80, 80, 256, 'destroyed')
     elif type == Tweet_type.somebody_was_infected or type == Tweet_type.somebody_died_of_infection:
         paste_image(image, 80, 80, 256, 'infection')
+    elif type == Tweet_type.atraction:
+        paste_image(image, 80, 80, 256, 'atraction')
 
     return image
 
@@ -258,8 +266,8 @@ def draw_player(image, coord_x, coord_y, player):
     global current_dir
     draw = ImageDraw.Draw(image)
 
-    font_path = os.path.join(current_dir, '../assets/Arial.ttf')
-    font_path_2 = os.path.join(current_dir, '../assets/Comic-Sans.ttf')
+    font_path = os.path.join(current_dir, '../assets/fonts/Arial.ttf')
+    font_path_2 = os.path.join(current_dir, '../assets/fonts/Comic-Sans.ttf')
 
     paste_image(image, coord_x + 24, coord_y + 24, 48, '', player.avatar_dir)
     draw.rectangle((coord_x, coord_y, coord_x + 48, coord_y + 48), outline='rgb(0,0,0)')
@@ -327,8 +335,8 @@ def wrap_text(text, width, font):
 # def draw_big_player(image, draw, player, is_second_player = False):
 #     global current_dir
 #
-#     font_path = os.path.join(current_dir, '../assets/Arial.ttf')
-#     font_path_2 = os.path.join(current_dir, '../assets/Comic-Sans.ttf')
+#     font_path = os.path.join(current_dir, '../assets/fonts/Arial.ttf')
+#     font_path_2 = os.path.join(current_dir, '../assets/fonts/Comic-Sans.ttf')
 #
 #     coord_x = 0
 #     coord_y = 350

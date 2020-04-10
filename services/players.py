@@ -10,18 +10,10 @@ def get_player_list(place_list):
         initial_items = None
         if len(p) > 4:
             initial_items = p[4]
-        # for i, pl in enumerate(place_list):
-        #     if pl.name == p[3]:
-        #         p[3] = pl
-        # player = Player(p[0], location, p[2], p[1], p[3])
+
         player = Player(p[0], location, p[2], p[1], initial_items)
         list.append(player)
         location.players.append(player)
-
-        # if player.district != None and player.district != '':
-        #     player.district.tributes.append(player)
-        # else:
-        #     sys.exit('Config error: wrong district name.')
 
     for i, p in enumerate(list):
         initialize_friend_list(list, p)

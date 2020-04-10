@@ -27,7 +27,7 @@ raw_item_list_1 = [
     [u'un saco de pienso', 1, 0],
     [u'un saco de patatas', 1, 0],
     [u'un picahielos', 0, 2],
-    [u'una gorro de cocinero', 1, 0],
+    [u'un gorro de cocinero', 1, 0],
     [u'una lata de anchoas', 1, 0],
     [u'una sudadera guapa', 2, 0],
     [u'un tirachinas', 0, 2],

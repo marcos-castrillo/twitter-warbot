@@ -44,3 +44,8 @@ def get_place_by_name(place_list, name):
         return place[0]
     else:
         sys.exit('Config error: there are no places with that name: ' + name)
+
+def move_player(player, new_location):
+    player.location.players.pop(player.location.players.index(player))
+    player.location = new_location
+    new_location.players.append(player)
