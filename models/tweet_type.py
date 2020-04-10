@@ -11,23 +11,25 @@ class Tweet_type(object):
     somebody_got_injured = 11
     somebody_found_item = 12
     somebody_replaced_item = 13
-    somebody_doesnt_want_item = 14
     somebody_tied_and_became_friend = 15
     somebody_tied_and_was_friend = 16
     somebody_escaped = 17
     somebody_killed = 18
     somebody_revived = 19
-    somebody_died = 20
+    somebody_suicided = 20
     somebody_moved = 21
     destroyed = 22
     somebody_couldnt_move = 23
     trap = 24
     trapped = 25
-    dodged_trap = 26
+    trap_dodged = 26
     monster_appeared = 28
-    monster_dissappeared = 29
+    monster_disappeared = 29
     monster_moved = 30
     monster_killed = 31
+    somebody_died_of_infection = 32
+    somebody_was_infected = 33
+    atraction = 34
 
     def __init__(self):
         pass

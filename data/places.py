@@ -1,46 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from data.config import LOCALIZATION
 
-# Id, name, coordinates, connections
-raw_place_list = [
-    [u'Bercianos', [461, 335], [u'Santa María', u'Villar del Yermo', u'San Pedro Bercianos', u'Villagallegos']],
-    [u'Santa María', [376, 395], [u'Bercianos', u'San Pedro Bercianos', u'Urdiales', u'Villarrín', u'Laguna Dalga', u'Villar del Yermo', u'Villamañán', u'Zuares', u'Valdefuentes']],
-    [u'Urdiales', [326, 356], [u'Santa María', u'Mansilla']],
-    [u'Villarrín', [383, 303], [u'Santa María', u'La Mata']],
-    [u'San Pedro Bercianos', [444, 302], [u'Santa María', u'Bercianos', u'Fontecha']],
-    [u'Villar del Yermo', [490, 407], [u'Santa María', u'Bercianos', u'Zuares', u'Villamañán']],
-    [u'Laguna Dalga', [369, 463], [u'Santa María', u'Soguillo']],
-    [u'Zuares', [500, 465], [u'Santa María', u'Villar del Yermo', u'Villamañán', u'Pobladura de Pelayo García', u'Soguillo']],
-    [u'Pobladura de Pelayo García', [496, 525], [u'Zuares', u'Laguna de Negrillos']],
-    [u'Soguillo', [383, 521], [u'Laguna Dalga', u'Zambroncinos', u'Azares', u'Zuares']],
-    [u'Zambroncinos', [395, 556], [u'Soguillo', u'Zotes']],
-    [u'Zotes', [395, 614], [u'Zambroncinos', u'Laguna de Negrillos', u'Cebrones']],
-    [u'Mansilla', [290, 318], [u'Urdiales', u'Antoñanes', u'Matalobos', u'Huerga de Frailes']],
-    [u'Antoñanes', [295, 275], [u'Mansilla', u'Grisuela', u'Matalobos']],
-    [u'Grisuela', [303, 247], [u'Antoñanes', u'La Mata', u'Bustillo', u'Matalobos']],
-    [u'La Mata', [396, 220], [u'Grisuela', u'Villarrín', u'Villar de Mazarife', u'Mozóndiga']],
-    [u'Villagallegos', [559, 292], [u'Bercianos', u'Vallejo', u'Palacios', u'Valdevimbre']],
-    [u'Vallejo', [586, 310], [u'Villagallegos', u'Villibañe']],
-    [u'Villibañe', [607, 338], [u'Vallejo', u'Villalobar', u'Villamañán']],
-    [u'Palacios', [545, 234], [u'Villagallegos', u'Pobladura de Fontecha', u'Valdevimbre']],
-    [u'Pobladura de Fontecha', [516, 194], [u'Palacios', u'Fontecha']],
-    [u'Fontecha', [489, 179], [u'Pobladura de Fontecha', u'San Pedro Bercianos', u'Meizara', u'Banuncias']],
-    [u'Meizara', [481, 146], [u'Fontecha', u'Mozóndiga']],
-    [u'Bustillo', [293, 172], [u'Grisuela', u'Matalobos', u'La Milla', u'Acebes']],
-    [u'Matalobos', [243, 233], [u'Bustillo', u'Grisuela', u'Antoñanes', u'Huerga de Frailes', u'Veguellina', u'Mansilla', u'Acebes']],
-    [u'Valdefuentes', [216, 478], [u'Santa María', u'Azares', u'Villoria']],
-    [u'Azares', [217, 561], [u'Valdefuentes', u'Soguillo', u'Cebrones']],
-    [u'Acebes', [190, 171], [u'Bustillo', u'Matalobos', u'Veguellina']],
-    [u'Huerga de Frailes', [188, 305], [u'Matalobos', u'Mansilla']],
-    [u'Veguellina', [114, 185], [u'Acebes', u'Matalobos', u'Villoria']],
-    [u'Villoria', [114, 249], [u'Veguellina', u'Valdefuentes']],
-    [u'Valdevimbre', [627, 232], [u'Villagallegos', u'Palacios', u'Villalobar', u'Banuncias']],
-    [u'Villamañán', [689, 483], [u'Santa María', u'Villar del Yermo', u'Zuares', u'Villibañe', u'Villalobar', u'Laguna de Negrillos']],
-    [u'Villalobar', [706, 292], [u'Villamañán', u'Villibañe', u'Valdevimbre']],
-    [u'Banuncias', [599, 90], [u'Fontecha', u'Valdevimbre']],
-    [u'Mozóndiga', [452, 95], [u'Meizara', u'La Mata', u'Villar de Mazarife']],
-    [u'Villar de Mazarife', [412, 61], [u'Mozóndiga', u'La Mata', u'La Milla']],
-    [u'La Milla', [277, 109], [u'Villar de Mazarife', u'Bustillo']],
-    [u'Laguna de Negrillos', [545, 699], [u'Pobladura de Pelayo García', u'Zotes', u'Villamañán']],
-    [u'Cebrones', [258, 672], [u'Zotes', u'Azares']]
-]
+if LOCALIZATION == "es_paramo":
+    from data.es_paramo.places import *
+elif LOCALIZATION == "es_spain":
+    from data.es_spain.places import *

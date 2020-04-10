@@ -3,4 +3,5 @@
 
 simulations/
 data/secrets.py
-assets/avatars/
+assets/img/avatars
+assets/img/sleep
