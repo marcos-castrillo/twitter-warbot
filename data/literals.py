@@ -3,11 +3,12 @@
 from data.config import LOCALIZATION
 from models.tweet_type import Tweet_type
 
-from data.localization.es import *
-if LOCALIZATION == "paramo":
-    from data.localization.es_paramo import *
-elif LOCALIZATION == "spain":
-    from data.localization.es_spain import *
+if LOCALIZATION == "es_paramo" or LOCALIZATION == "es_spain":
+    from data.es.literals import *
+    if LOCALIZATION == "es_paramo":
+        from data.es_paramo.literals import *
+    elif LOCALIZATION == "es_spain":
+        from data.es_spain.literals import *
 
 def get_message(type, args = None):
     message = ''

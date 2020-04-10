@@ -1,7 +1,7 @@
 THRESHOLD_LIST = [25, 50, 100, 150, 200, 250, 300, 350]
 MAX_PLAYERS = 150
 MENTION_USERS = True
-LOCALIZATION = "spain" #paramo, spain
+LOCALIZATION = "es_paramo" #es_paramo, es_spain
 
 PROBAB_ITEM = [46, 37, 22, 19, 12, 6, 6, 6]
 PROBAB_BATTLE = [50, 50, 49, 47, 44, 46, 46, 46]
