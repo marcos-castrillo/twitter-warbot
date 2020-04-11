@@ -11,8 +11,6 @@ This is my first twitter bot. It's a fictional tournament where players can 'fig
 ## To Do
 - Cuando te encuentras con un infectado te infectas
 - Posibilidad de matarse dos entre ellos
-- Ver items que quedan en los sitios en el mapa
-- Las trampas son multiusos
 - Hacer los objetos mas utiles (objetos especiales? -> botas)
 
 ## Bugs

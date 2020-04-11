@@ -11,7 +11,6 @@ from data.config import *
 from models.player import Player
 from models.item import Item
 from models.tweet_type import Tweet_type
-from models.item_rarity_probab import Item_Rarity_Probab
 from models.simulation_probab import Simulation_Probab
 
 from services.simulation import *
@@ -20,17 +19,15 @@ from services.battles import *
 from services.players import *
 from services.places import *
 
-item_list = get_item_list()
 place_list = get_place_list()
 player_list = get_player_list(place_list)
 initialize_avatars(player_list)
 simulation_probab = Simulation_Probab(PROBAB_ITEM[0], PROBAB_MOVE[0], PROBAB_BATTLE[0], PROBAB_AOP[0], PROBAB_STEAL[0], PROBAB_MONSTER[0], PROBAB_DESTROY[0], PROBAB_TRAP[0], PROBAB_INFECT[0], PROBAB_ATRACT[0], PROBAB_SUICIDE[0], PROBAB_REVIVE[0])
-item_rarity_probab = Item_Rarity_Probab(PROBAB_RARITY_1[0], PROBAB_RARITY_2[0], PROBAB_RARITY_3[0])
 finished = False
 hour_count = 0
 
 def start_battle():
-    global hour_count, player_list, item_list
+    global hour_count, player_list
     if len(player_list) > MAX_PLAYERS:
         sys.exit('Config error: player limit exceeded.')
 
@@ -40,12 +37,11 @@ def start_battle():
         simulate_day()
 
 def simulate_day():
-    global hour_count, simulation_probab, item_rarity_probab
+    global hour_count, simulation_probab
     hour_count = hour_count + 1
     for i, th in enumerate(THRESHOLD_LIST):
         if hour_count == th:
             simulation_probab = Simulation_Probab(PROBAB_ITEM[i], PROBAB_MOVE[i], PROBAB_BATTLE[i], PROBAB_AOP[i], PROBAB_STEAL[i], PROBAB_MONSTER[i], PROBAB_DESTROY[i], PROBAB_TRAP[i], PROBAB_INFECT[i], PROBAB_ATRACT[i], PROBAB_SUICIDE[i], PROBAB_REVIVE[i])
-            item_rarity_probab = Item_Rarity_Probab(PROBAB_RARITY_1[i], PROBAB_RARITY_2[i], PROBAB_RARITY_3[i])
 
     do_something()
 
@@ -91,10 +87,12 @@ def pick_item():
     alive_players = filter_player_list_by_state(player_list, 1)
     player = random.choice(alive_players)
 
-    better_loot = player.location.loot
-    item = get_random_item(item_rarity_probab, better_loot)
-    picked = player.pick(player_list, place_list, item)
-    if not picked:
+    if len(player.location.items) > 0:
+        item = random.choice(player.location.items)
+        picked = player.pick(player_list, place_list, item)
+        if not picked:
+            do_something()
+    else:
         do_something()
 
 def move():
@@ -128,10 +126,9 @@ def move():
     action_number = random.randint(1, 100)
 
     if new_location.trap_by != None and new_location.trap_by != player:
-        if action_number < 75:
+        if action_number < 50:
             trapped_by = new_location.trap_by
             new_location.trap_by.kills = new_location.trap_by.kills + 1
-            new_location.trap_by = None
             move_player(player, new_location)
             kill_player(player)
             write_tweet(Tweet_type.trapped, player_list, place_list, player.location, [player, trapped_by, player.location])
@@ -238,7 +235,6 @@ def destroy():
     place.destroyed = True
     place.monster = False
     place.trap_by = None
-    place.loot = False
     dead_list = []
     escaped_list = []
     route_list = []

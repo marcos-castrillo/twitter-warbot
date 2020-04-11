@@ -90,7 +90,7 @@ def winner(player):
     infection = ''
 
     if player.kills == 0:
-        kills = WINNER_NO_KILL
+        kills = WINNER_NO_KILLS
     elif player.kills == 1:
         kills = WINNER_ONE_KILL
     else:
@@ -134,11 +134,7 @@ def somebody_powerup(player, powerup):
     return I_COMPOSED(player, POWERUP_ACTION(), powerup, has_now(player, powerup))
 
 def somebody_found_item(player, item):
-    loot = ''
-    if player.location.loot:
-        loot = BETTER_LOOT(player.location.name)
-
-    return I_COMPOSED(player, FIND_ACTION(), item, has_now(player, item) + u' ' + loot)
+    return I_COMPOSED(player, FIND_ACTION(), item, has_now(player, item))
 
 def somebody_replaced_item(player, item_new, item_old):
     return I_COMPOSED(player, FIND_ACTION(), item_new, REPLACED + '' + item_old.name + '. ' + has_now(player, item_new, item_old))
@@ -169,7 +165,7 @@ def somebody_killed(player_1, player_2, were_friends, killing_item, new_item = N
     elif new_item != None:
         stole = u' ' + u' '.join((ALSO_STOLE, new_item.name + '.'))
 
-    return u' '.join((friend_message + player_1.get_name(), kill_verb, player_2.get_name() + kill_method + kills_count + stole))
+    return u' '.join((friend_message + player_1.get_name(), kill_verb, player_2.get_name(), kill_method + kills_count + stole))
 
 def somebody_suicided(player):
     return u' '.join((player.get_name(), SUICIDE()))
@@ -228,7 +224,7 @@ def destroyed(place, dead_list, escaped_list, new_location):
             else:
                 susufix_str = susufix_str + ', ' + d
 
-        susufix = u' ' + u' '.join((susufix_str, get_sing_or_pl(escaped_list, MOVED_SING, MOVED_PL), new_location.name + u'.'))
+        susufix = u' ' + u' '.join((susufix_str, get_sing_or_pl(escaped_list, MOVED_SING(), MOVED_PL()), new_location.name + u'.'))
 
     return (prefix + sufix + susufix)
 

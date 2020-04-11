@@ -36,13 +36,6 @@ def ATRACTION_NOBODY():
         u' pero a nadie le interesan...'
     ])
 
-def BETTER_LOOT(place):
-    return random.choice([
-        u' Ha conseguido algo mejor de lo normal porque está en ' + place + u'.',
-        u' Como ' + place + u' tiene mejor loot de lo normal, se ha llevado algo muy bueno.',
-        u' Ha tenido suerte porque está en ' + place + u'.'
-        ])
-
 def CROSSING():
     return random.choice([u'atravesando', u'cruzando'])
 
@@ -204,55 +197,55 @@ def KILL_ACTION():
 
 def KILL_METHOD(player):
     return random.choice([
-        u' con sus puños',
-        u' por quitarle el último rollo de papel higiénico',
-        u' a lo jíbiri',
-        u' y le ha hecho tea-bag',
-        u' a tortazo limpio',
-        u' por la gloria de ESPAÑA',
-        u' de un cabezazo',
-        u' de un codazo en el esternón',
-        u' y le ha hecho un dab',
-        u' y le ha hecho un baile del fortnite',
-        u' sin despeinarse',
-        u' con una llave de kárate',
-        u' con una llave de taekwondo',
-        u' y le ha cantado una canción triste',
-        u' y ha hecho un perreo duro hasta el suelo',
-        u' haciendo capoeira',
-        u' y se ha puesto a bailar',
-        u' a hostia limpia',
-        u' y le ha cantado una bulería',
-        u' y le ha recitado un poema de Neruda',
-        u' y le ha cantado una balada',
-        u' y le ha recitado un poema',
-        u' y le ha quitado el trabajo',
-        u' sin esforzarse',
-        u' sin inmutarse',
-        u' y ha seguido a lo suyo',
-        u' y se ha acabado el bocata tranquilamente',
-        u' con lágrimas en los ojos',
-        u' con mirada de psicópata',
-        u' y ha gritado SUUUUUUUUUUUUUUUUU',
-        u' y ha gritado ' + get_x_or_y(player, u'ESTOY MAMADÍSIMO HIJO DE PUTA', u'ESTOY MAMADÍSIMA HIJO DE PUTA'),
-        u' en una epic prank',
-        u' en un abrir y cerrar de ojos',
-        u' sin pestañear',
-        u' por turras',
+        u'con sus puños',
+        u'por quitarle el último rollo de papel higiénico',
+        u'a lo jíbiri',
+        u'y le ha hecho tea-bag',
+        u'a tortazo limpio',
+        u'por la gloria de ESPAÑA',
+        u'de un cabezazo',
+        u'de un codazo en el esternón',
+        u'y le ha hecho un dab',
+        u'y le ha hecho un baile del fortnite',
+        u'sin despeinarse',
+        u'con una llave de kárate',
+        u'con una llave de taekwondo',
+        u'y le ha cantado una canción triste',
+        u'y ha hecho un perreo duro hasta el suelo',
+        u'haciendo capoeira',
+        u'y se ha puesto a bailar',
+        u'a hostia limpia',
+        u'y le ha cantado una bulería',
+        u'y le ha recitado un poema de Neruda',
+        u'y le ha cantado una balada',
+        u'y le ha recitado un poema',
+        u'y le ha quitado el trabajo',
+        u'sin esforzarse',
+        u'sin inmutarse',
+        u'y ha seguido a lo suyo',
+        u'y se ha acabado el bocata tranquilamente',
+        u'con lágrimas en los ojos',
+        u'con mirada de psicópata',
+        u'y ha gritado SUUUUUUUUUUUUUUUUU',
+        u'y ha gritado ' + get_x_or_y(player, u'ESTOY MAMADÍSIMO HIJO DE PUTA', u'ESTOY MAMADÍSIMA HIJO DE PUTA'),
+        u'en una epic prank',
+        u'en un abrir y cerrar de ojos',
+        u'sin pestañear',
+        u'por turras',
         u', lo ha grabado y lo ha subido a su instagram',
-        u' y lo ha tuiteado',
-        u' y le ha sacado una foto de recuerdo',
-        u' y ha tirado su cadáver al contenedor de basura',
-        u' y se ha ido de cañas',
-        u' haciendo una buena escabechina con sus restos',
-        u' sudando mogollón',
-        u' y se ha fumado un cigarrito',
-        u' mientras sus colegas le gritaban ACÁBALO',
-        u' y se ha tirado un eructo',
-        u' y se ha tirado un pedarro',
-        u' y se ha tirado un cuesco',
-        u' sin mucho esfuerzo',
-        u' a duras penas',
+        u'y lo ha tuiteado',
+        u'y le ha sacado una foto de recuerdo',
+        u'y ha tirado su cadáver al contenedor de basura',
+        u'y se ha ido de cañas',
+        u'haciendo una buena escabechina con sus restos',
+        u'sudando mogollón',
+        u'y se ha fumado un cigarrito',
+        u'mientras sus colegas le gritaban ACÁBALO',
+        u'y se ha tirado un eructo',
+        u'y se ha tirado un pedarro',
+        u'y se ha tirado un cuesco',
+        u'sin mucho esfuerzo',
+        u'a duras penas',
         u'',
         u'',
         u''
@@ -366,10 +359,10 @@ def STOLE(robber, robbed, item):
     return u' '.join((robber.get_name(), u'le ha robado', item.name, u'a', robbed.get_name() + '.'))
 
 def STOLE_AND_REPLACED(robber, robbed, item, old_item):
-    return u' '.join((STOLE + u'.', 'Como es mejor, se ha deshecho de su' + old_item.name + '.'))
+    return u' '.join((STOLE(robber, robbed, item) + u'.', 'Como es mejor, se ha deshecho de su' + old_item.name + '.'))
 
 def STOLE_AND_THREW(robber, robbed, item):
-    return u' '.join((STOLE + u'. Como tiene cosas mejores, lo ha tirado a la basura.'))
+    return u' '.join((STOLE(robber, robbed, item) + u'. Como tiene cosas mejores, lo ha tirado a la basura.'))
 
 def SUICIDE():
     return random.choice([
@@ -398,7 +391,7 @@ def TIED_AND_BEFRIEND(player_1, player_2):
         'Usando sus encantos, ' + player_1.get_name() + ' ha conquistado a ' + player_2.get_name() + u' y ahora son ' + get_x_or_y_plural([player_1, player_2], 'amigos.', 'amigas.')
     ])
 
-TO = 'A'
+TO = 'a'
 
 def TRAP(player):
     return u' '.join((player.get_name(), u'ha puesto una trampa en', player.location.name + '.'))

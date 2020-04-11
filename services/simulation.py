@@ -13,6 +13,9 @@ date = datetime.datetime.now()
 time_stamp = u'-'.join([str(date.year), str(date.month), str(date.day), str(date.hour), str(date.minute)])
 current_dir = os.path.abspath(os.path.dirname(__file__))
 output_dir = os.path.join(current_dir, '../simulations', time_stamp)
+font_path = os.path.join(current_dir, '../assets/fonts/Comic-Sans.ttf')
+font_path_2 = os.path.join(current_dir, '../assets/fonts/Comic-Sans.ttf')
+
 filename = u'simulation'
 line_number = 0
 
@@ -115,24 +118,14 @@ def draw_image(type, player_list, place_list, location = None, args = None):
         zoomed_image.save(output_dir + '/' + str(line_number) + '.png')
         summary_image.save(output_dir + '/' + str(line_number) + 'b.png')
 
-        # if type == Tweet_type.destroyed:
-        #     zoomed_image.save(output_dir + '/' + str(line_number - 1) + 'bis.png')
-        #     summary_image.save(output_dir + '/' + str(line_number - 1) + 'bisb.png')
-        # else:
-        #     zoomed_image.save(output_dir + '/' + str(line_number) + '.png')
-        #     summary_image.save(output_dir + '/' + str(line_number) + 'b.png')
-
 def get_zoomed_image(type, image, alive_players_list, dead_players_list, place_list, location = None, args = None):
     draw = ImageDraw.Draw(image)
-    font_path = os.path.join(current_dir, '../assets/fonts/Comic-Sans.ttf')
     image.putalpha(128)  # Half alpha; alpha argument must be an int
 
     for i, p in enumerate(place_list):
         if p.destroyed:
             paste_image(image, p.coord_x, p.coord_y, 60, 'destroyed')
         else:
-            if p.loot:
-                paste_image(image, p.coord_x - 16, p.coord_y, 32, 'loot')
             if p.trap_by != None:
                 paste_image(image, p.coord_x, p.coord_y + 16, 32, 'trap')
             if p.monster:
@@ -186,7 +179,7 @@ def get_zoomed_image(type, image, alive_players_list, dead_players_list, place_l
         paste_image(image, location.coord_x, location.coord_y - 38, 72, 'crown')
         paste_image(image, 80, 80, 256, 'winner')
     elif type == Tweet_type.somebody_found_item or type == Tweet_type.somebody_replaced_item:
-        paste_image(image, 80, 80, 256, 'item')
+        paste_image(image, 80, 80, 256, get_item_rarity(args[1]))
     elif type == Tweet_type.somebody_got_ill:
         paste_image(image, 80, 80, 256, 'illness')
     elif type == Tweet_type.somebody_got_injured:
@@ -239,12 +232,13 @@ def get_summary_image(type, image, alive_players_list, dead_players_list, place_
             paste_image(image, p.coord_x, p.coord_y, 60, 'destroyed')
 
         else:
-            if p.loot:
-                paste_image(image, p.coord_x - 16, p.coord_y, 32, 'loot')
             if p.trap_by != None:
                 paste_image(image, p.coord_x, p.coord_y + 16, 32, 'trap')
             if p.monster:
                 paste_image(image, p.coord_x, p.coord_y - 16, 32, 'monster')
+            if len(p.items) > 0:
+                for i, item in enumerate(p.items):
+                    paste_image(image, p.coord_x + 16 + i*5, p.coord_y, 32, get_item_rarity(item))
 
     draw_ranking(image, alive_players_list, dead_players_list)
     return image
@@ -265,9 +259,6 @@ def draw_ranking(image, alive_players_list, dead_players_list):
 def draw_player(image, coord_x, coord_y, player):
     global current_dir
     draw = ImageDraw.Draw(image)
-
-    font_path = os.path.join(current_dir, '../assets/fonts/Arial.ttf')
-    font_path_2 = os.path.join(current_dir, '../assets/fonts/Comic-Sans.ttf')
 
     paste_image(image, coord_x + 24, coord_y + 24, 48, '', player.avatar_dir)
     draw.rectangle((coord_x, coord_y, coord_x + 48, coord_y + 48), outline='rgb(0,0,0)')
@@ -290,9 +281,9 @@ def draw_player(image, coord_x, coord_y, player):
         if player.infected:
             paste_image(image, coord_x + 24 + 24, coord_y + 24 + 12, 36, 'infection')
         if len(player.item_list) == 2:
-            paste_image(image, coord_x + 45, coord_y + 5, 32, 'item')
+            paste_image(image, coord_x + 45, coord_y + 5, 32, get_item_rarity(player.item_list[1]))
         if len(player.item_list) > 0:
-            paste_image(image, coord_x + 5, coord_y + 5, 32, 'item')
+            paste_image(image, coord_x + 5, coord_y + 5, 32, get_item_rarity(player.item_list[0]))
 
 def calculate_coords(coord_x, coord_y):
     img_width = 50
@@ -332,11 +323,17 @@ def wrap_text(text, width, font):
 
     return text_lines
 
+def get_item_rarity(item):
+    if item.rarity == 1:
+        return 'item_1'
+    elif item.rarity == 2:
+        return 'item_2'
+    elif item.rarity == 3:
+        return 'item_3'
+
 # def draw_big_player(image, draw, player, is_second_player = False):
 #     global current_dir
 #
-#     font_path = os.path.join(current_dir, '../assets/fonts/Arial.ttf')
-#     font_path_2 = os.path.join(current_dir, '../assets/fonts/Comic-Sans.ttf')
 #
 #     coord_x = 0
 #     coord_y = 350

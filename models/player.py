@@ -39,11 +39,12 @@ class Player(object):
             for item in whole_item_list:
                 if item.name == item_list[0] or (len(item_list) > 1 and item.name == item_list[1]):
                     self.item_list.append(item)
-
+                    whole_item_list.pop(whole_item_list.index(item))
 
     def pick(self, player_list, place_list, item):
         if len(self.item_list) <= 1:
             self.item_list.append(item)
+            self.location.items.pop(self.location.items.index(item))
             write_tweet(Tweet_type.somebody_found_item, player_list, place_list, self.location, [self, item])
             return True
         else:
@@ -56,6 +57,7 @@ class Player(object):
 
             if item.get_value() > worst_item.get_value():
                 self.item_list = [item, best_item]
+                self.location.items.pop(self.location.items.index(item))
                 write_tweet(Tweet_type.somebody_replaced_item, player_list, place_list, self.location, [self, item, worst_item])
                 return True
             else:
