@@ -3,10 +3,10 @@
 from data.es.items import *
 
 # Name, defense, attack
-raw_item_list = raw_item_list + [
+raw_weapon_list = raw_weapon_list + [
 ]
 
-raw_illness_list = raw_illness_list + [
+raw_special_list = raw_special_list + [
 ]
 
 raw_injury_list = raw_injury_list + [

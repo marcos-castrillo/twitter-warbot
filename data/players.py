@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from data.config import LOCALIZATION
+from config import LOCALIZATION
 
 if LOCALIZATION == "es_paramo":
     from data.es_paramo.players import *

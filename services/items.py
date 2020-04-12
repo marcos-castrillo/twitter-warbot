@@ -1,38 +1,140 @@
 import random
 from data.items import *
-from models.item import Item
+from store import get_two_players_in_random_place, get_alive_players, injury_list, kill_player
+from models.tweet import Tweet
+from models.tweet_type import Tweet_type
+from models.item_type import Item_type
+from services.simulation import write_tweet
 
-def get_item_list():
-    list = []
-
-    for i, p in enumerate(raw_item_list):
-        list.append(Item(p[1], p[2], p[3], p[0]))
-    return list
-
-def get_illness_list():
-    list = []
-    for i, p in enumerate(raw_illness_list):
-        list.append(Item(p[0], p[1], p[2]))
-    return list
-
-def get_injury_list():
-    list = []
-    for i, p in enumerate(raw_injury_list):
-        list.append(Item(p[0], p[1], p[2]))
-    return list
-
-def get_powerup_list():
-    list = []
-    for i, p in enumerate(raw_powerup_list):
-        list.append(Item(p[0], p[1], p[2]))
-    return list
-
-def get_random_illness():
-    return random.choice(get_illness_list())
+first_infection = False
 
 
-def get_random_injury():
-    return random.choice(get_injury_list())
+def pick_item():
+    alive_players = get_alive_players()
+    players_with_items = [x for x in alive_players if len(x.location.items) > 0]
 
-def get_random_powerup():
-    return random.choice(get_powerup_list())
+    if len(players_with_items) == 0:
+        return False
+
+    player = random.choice(players_with_items)
+    item = random.choice(player.location.items)
+
+    success = False
+
+    if item.type == Item_type.weapon:
+        success = pick_weapon(player, item)
+    elif item.type == Item_type.powerup:
+        success = pick_powerup(player, item)
+    elif item.type == Item_type.special:
+        success = pick_special(player, item)
+
+    return success
+
+def pick_weapon(player, weapon):
+    if len(player.item_list) <= 1:
+        player.item_list.append(weapon)
+        player.location.items.pop(player.location.items.index(weapon))
+        tweet = Tweet()
+        tweet.type = Tweet_type.somebody_found_item
+        tweet.player = player
+        tweet.place = player.location
+        tweet.item = weapon
+        write_tweet(tweet)
+    else:
+        if player.item_list[0].get_value() >= player.item_list[1].get_value():
+            worst_item = player.item_list[1]
+            best_item = player.item_list[0]
+        else:
+            worst_item = player.item_list[0]
+            best_item = player.item_list[1]
+
+        if weapon.get_value() > worst_item.get_value():
+            player.item_list = [weapon, best_item]
+            player.location.items.pop(player.location.items.index(weapon))
+            tweet = Tweet()
+            tweet.type = Tweet_type.somebody_replaced_item
+            tweet.place = player.location
+            tweet.item = weapon
+            tweet.old_item = worst_item
+            tweet.player = player
+            write_tweet(tweet)
+        else:
+            return False
+    return True
+
+def pick_powerup(player, powerup):
+    player.powerup_list.append(powerup)
+    player.location.items.pop(player.location.items.index(powerup))
+    tweet = Tweet()
+    tweet.type = Tweet_type.somebody_powerup
+    tweet.place = player.location
+    tweet.item = powerup
+    tweet.player = player
+    write_tweet(tweet)
+    return True
+
+def pick_special(player, special):
+    if special.injure_immunity:
+        player.injure_immunity = True
+    if special.monster_immunity:
+        player.monster_immunity = True
+    if special.infection_immunity:
+        player.infection_immunity = True
+    player.location.items.pop(player.location.items.index(special))
+    tweet = Tweet()
+    tweet.type = Tweet_type.somebody_got_special
+    tweet.place = player.location
+    tweet.item = special
+    tweet.player = player
+    write_tweet(tweet)
+    return True
+
+def infect():
+    global first_infection
+    alive_players = get_alive_players()
+    infected_players = []
+    healthy_players = []
+    for i, p in enumerate(alive_players):
+        if p.infected:
+            infected_players.append(p)
+        elif not p.infection_immunity:
+            healthy_players.append(p)
+
+    if not first_infection:
+        player = random.choice(healthy_players)
+        player.location.infected = True
+        player.infected = True
+        affected = [x for x in player.location.players if x.name != player.name]
+        for i,p in enumerate(affected):
+            p.infected = True
+        first_infection = True
+
+        tweet = Tweet()
+        tweet.type = Tweet_type.somebody_was_infected
+        tweet.place = player.location
+        tweet.player = player
+        tweet.player_list = affected
+        write_tweet(tweet)
+    elif len(infected_players) > 0:
+        player = random.choice(infected_players)
+        kill_player(player)
+        tweet = Tweet()
+        tweet.type = Tweet_type.somebody_died_of_infection
+        tweet.place = player.location
+        tweet.player = player
+        write_tweet(tweet)
+    else:
+        return False
+    return True
+
+def injure():
+    alive_players = [x for x in get_alive_players() if not x.injure_immunity]
+    player = random.choice(alive_players)
+    injury = random.choice(injury_list)
+    player.injury_list.append(injury)
+    tweet = Tweet()
+    tweet.type = Tweet_type.somebody_got_injured
+    tweet.place = player.location
+    tweet.item = injury
+    tweet.player = player
+    write_tweet(tweet)

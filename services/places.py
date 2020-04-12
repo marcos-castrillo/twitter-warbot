@@ -3,82 +3,233 @@
 
 import random
 import sys
+from models.tweet import Tweet
+from models.tweet_type import Tweet_type
+from services.simulation import write_tweet
 
-from data.config import MAX_ITEMS, PROBAB_RARITY_1, PROBAB_RARITY_2, PROBAB_RARITY_3
-from data.places import raw_place_list
-from models.place import Place
-from services.items import get_item_list
+from store import get_alive_players, place_list, move_player, kill_player
+from config import MAX_ITEMS, PROBAB_RARITY_1, PROBAB_RARITY_2, PROBAB_RARITY_3
 
-def get_place_list():
-    list = []
-    item_list_1 = []
-    item_list_2 = []
-    item_list_3 = []
-    item_list = get_item_list()
+def atract():
+    loc_candidates = []
+    action_number = random.randint(0, 100)
+    double = True
 
-    for i, item in enumerate(item_list):
-        if item.rarity == 1:
-            item_list_1.append(item)
-        if item.rarity == 2:
-            item_list_2.append(item)
-        if item.rarity == 3:
-            item_list_3.append(item)
-    for i, p in enumerate(raw_place_list):
-        if len(p) == 3:
-            p.append(None)
+    for i, p in enumerate(place_list):
+        if not p.destroyed:
+            loc_candidates.append(p)
 
-        items = get_items_in_place(item_list_1, item_list_2, item_list_3)
-        place = Place(p[0], p[1], p[2], items, p[3])
-        list.append(place)
+    place = random.choice(loc_candidates)
+    atracted_players = []
 
-    for i, p in enumerate(list):
-        initialize_connections_list(list, p)
+    def append_players_from(location):
+        for j, player in enumerate(location.players):
+            if player.state == 1 and player not in atracted_players:
+                atracted_players.append(player)
 
-    for i, p in enumerate(list):
-        if len(p.connections) == 0:
-            sys.exit('Config error: place without connections: ' + p.name)
+    append_players_from(place)
+    for i, connection in enumerate(place.connections):
+        append_players_from(connection)
+        if double:
+            for j, subconnection in enumerate(connection.connections):
+                 append_players_from(subconnection)
 
-    return list
+    if len(atracted_players) > 0:
+        alive_players = get_alive_players()
+        for i, player in enumerate(alive_players):
+            if player in atracted_players:
+                move_player(player, place)
 
-def initialize_connections_list(places_list, place):
-    connections_list = []
-    for i, c in enumerate(place.connections):
-        connection = get_place_by_name(places_list, c)
-        if connection != None:
-            connections_list.append(connection)
-    place.connections = connections_list
-
-def get_place_by_name(place_list, name):
-    place = [p for p in place_list if p.name == name]
-
-    if place:
-        return place[0]
+        tweet = Tweet()
+        tweet.type = Tweet_type.atraction
+        tweet.place = place
+        tweet.player_list = atracted_players
+        tweet.double = double
+        write_tweet(tweet)
+        return True
     else:
-        sys.exit('Config error: there are no places with that name: ' + name)
+        atract()
 
-def move_player(player, new_location):
-    player.location.players.pop(player.location.players.index(player))
-    player.location = new_location
-    new_location.players.append(player)
+def trap():
+    list = []
+    for i, p in enumerate(place_list):
+        if p.trap_by == None and len(p.players) > 0:
+            any_alive = False
+            for j, q in enumerate(p.players):
+                if q.state == 1:
+                    any_alive = True
+            if any_alive:
+                list.append(p)
 
-def get_items_in_place(item_list_1, item_list_2, item_list_3):
-    items = []
-    item_count = random.randint(0, MAX_ITEMS)
+    if len(list) > 0:
+        candidates_list = []
+        while len(candidates_list) == 0:
+            place = random.choice(list)
+            for i, p in enumerate(place.players):
+                if p.state == 1:
+                    candidates_list.append(p)
 
-    while item_count > 0:
-        action_number = random.randint(1, 100)
-        print(len(item_list_1),len(item_list_2),len(item_list_3))
-        if action_number < PROBAB_RARITY_1:
-            item = random.choice(item_list_1)
-            item_list_1.pop(item_list_1.index(item))
-        elif action_number < PROBAB_RARITY_1 + PROBAB_RARITY_2:
-            item = random.choice(item_list_2)
-            item_list_2.pop(item_list_2.index(item))
+        player = random.choice(candidates_list)
+
+        place.trap_by = player
+        tweet = Tweet()
+        tweet.type = Tweet_type.trap
+        tweet.place = place
+        tweet.player = player
+        write_tweet(tweet)
+        return True
+    else:
+        return False
+
+def move():
+    alive_players = get_alive_players()
+    player = random.choice(alive_players)
+
+    loc_candidates = []
+    jump_candidates = []
+
+    for i, l in enumerate(player.location.connections):
+        if not l.destroyed:
+            loc_candidates.append(l)
+
+    if len(loc_candidates) == 0:
+        for i, l in enumerate(player.location.connections):
+            for j, sl in enumerate(l.connections):
+                if not sl.destroyed:
+                    loc_candidates.append(sl)
+                    jump_candidates.append(l)
+
+    if len(loc_candidates) == 0:
+        return False
+
+    new_location = random.choice(loc_candidates)
+    jump = None
+    if len(jump_candidates) > 0:
+        jump = jump_candidates[loc_candidates.index(new_location)]
+    action_number = random.randint(1, 100)
+
+    if new_location.trap_by != None and new_location.trap_by != player:
+        if action_number < 50:
+            trapped_by = new_location.trap_by
+            new_location.trap_by.kills = new_location.trap_by.kills + 1
+            move_player(player, new_location)
+            kill_player(player)
+            tweet = Tweet()
+            tweet.type = Tweet_type.trapped
+            tweet.place = player.location
+            tweet.player = player
+            tweet.player_2 = trapped_by
+            write_tweet(tweet)
         else:
-            item = random.choice(item_list_3)
-            item_list_3.pop(item_list_3.index(item))
+            trapped_by = new_location.trap_by
+            new_location.trap_by = None
 
-        items.append(item)
-        item_count = item_count - 1
+            move_player(player, new_location)
+            tweet = Tweet()
+            tweet.type = Tweet_type.trap_dodged
+            tweet.place = player.location
+            tweet.player = player
+            tweet.player_2 = trapped_by
+            write_tweet(tweet)
+    else:
+        old_location = player.location
+        move_player(player, new_location)
 
-    return items
+        tweet = Tweet()
+        tweet.type = Tweet_type.somebody_moved
+        tweet.place = player.location
+        tweet.place_2 = old_location
+        tweet.player = player
+        tweet.double = jump
+        write_tweet(tweet)
+    return True
+
+def monster():
+    place = None
+    for i, p in enumerate(place_list):
+        if p.monster:
+            place = p
+
+    if place != None:
+        action_number = random.randint(1, 100)
+        people_list = [x for x in place.players if x.state == 1 and not x.monster_immunity]
+
+        if action_number > 50 and len(people_list) > 0:
+            player = random.choice(people_list)
+            kill_player(player)
+            tweet = Tweet()
+            tweet.type = Tweet_type.monster_killed
+            tweet.place = player.location
+            tweet.player = player
+            write_tweet(tweet)
+        else:
+            place.monster = False
+
+            loc_candidates = []
+            for i, l in enumerate(place.connections):
+                if not l.destroyed:
+                    loc_candidates.append(l)
+
+            if len(loc_candidates) > 0 and action_number < 75:
+                new_place = random.choice(loc_candidates)
+                new_place.monster = True
+                tweet = Tweet()
+                tweet.type = Tweet_type.monster_moved
+                tweet.place = new_place
+                tweet.place_2 = place
+                write_tweet(tweet)
+            else:
+                tweet = Tweet()
+                tweet.type = Tweet_type.monster_disappeared
+                tweet.place = place
+                write_tweet(tweet)
+    else:
+        loc_candidates = []
+
+        for i, p in enumerate(place_list):
+            if not p.destroyed:
+                loc_candidates.append(p)
+
+        new_place = random.choice(loc_candidates)
+        new_place.monster = True
+    return True
+
+def destroy():
+    list = [x for x in place_list if not x.destroyed]
+    place = random.choice(list)
+
+    place.destroyed = True
+    place.monster = False
+    place.trap_by = None
+    dead_list = []
+    escaped_list = []
+    route_list = []
+    new_location = False
+
+    for j, c in enumerate(place.connections):
+        if not c.destroyed:
+            route_list.append(c)
+
+    if len(route_list) > 0:
+        new_location = random.choice(route_list)
+
+    for i, p in enumerate(place.players):
+        if p.state == 1:
+            if new_location and random.randint(0, 100) >= 75:
+                move_player(p, new_location)
+                escaped_list.append(p)
+            else:
+                kill_player(p)
+                dead_list.append(p)
+
+    if place.monster:
+        place.monster = None
+
+    tweet = Tweet()
+    tweet.type = Tweet_type.destroyed
+    tweet.place = place
+    tweet.place_2 = new_location
+    tweet.player_list = dead_list
+    tweet.player_list_2 = escaped_list
+    write_tweet(tweet)
+    return True

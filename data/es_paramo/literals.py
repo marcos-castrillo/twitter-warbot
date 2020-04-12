@@ -8,7 +8,8 @@ def ATRACTION(place):
         u'Todo el mundo está en las fiestas de ' + place + u', ',
     ])
 
-def MONSTER_APPEARED(place):
+def MONSTER_APPEARED(tweet):
+    place = tweet.place
     return random.choice([
         u'Una patrulla de la guardia ha aparecido en ' + place.name + '.',
         u'Una patrulla de la guardia ha sido avistada en ' + place.name + '.',
@@ -17,14 +18,20 @@ def MONSTER_APPEARED(place):
         u'Se ha producido una serie de altercados en ' + place.name + u', por lo que la policía se ha visto obligada a desplazarse allí.',
     ])
 
-def MONSTER_DISAPPEARED(place):
+def MONSTER_DISAPPEARED(tweet):
+    place = tweet.place
     return random.choice([
         u'¡La guardia se ha esfumado de ' + place.name + u'!',
         u'La guardia ya no está en ' + place.name + '.',
         u'Se acabó el turno de la guardia, por lo que se han ido de ' + place.name + u'.'
     ])
 
-def MONSTER_KILLED(player, place):
+def MONSTER_IMMUNITY():
+    return random.choice([u'¡A partir de ahora la guardia no le hará nada!.'])
+
+def MONSTER_KILLED(tweet):
+    player = tweet.player
+    place = tweet.place
     return random.choice([
         player.get_name() + u' ha sido ' + get_x_or_y(player, 'arrestado', 'arrestada') + u' por la guardia de ' + place.name + u'. Aquí acaba su aventura.',
          player.get_name() + ' tiene una pinta sospechosa y la guardia se lo ha llevado de ' + place.name + u' sólo por si acaso.',
@@ -36,7 +43,9 @@ def MONSTER_KILLED(player, place):
         player.get_name() + u' creía que era ' + get_x_or_y(player, u'el más gracioso', u'la más graciosa') + u' haciendo humor negro en Twitter, hasta que se encontró a la guardia en ' + place.name + u'.'
     ])
 
-def MONSTER_MOVED(place, new_place):
+def MONSTER_MOVED(tweet):
+    new_place = tweet.place
+    place = tweet.place_2
     return random.choice([
         u'¡La policía se ha movido de ' + place.name + ' a ' + new_place.name + u'! Habrá que ir con cuidado.',
         u'Ha habido movida en ' + new_place.name + u', por lo que la policía ha tenido que irse de ' + place.name + '.',
@@ -47,33 +56,23 @@ def MONSTER_MOVED(place, new_place):
 
 def MOVE_ACTION_ROAD():
     return random.choice([
-        u'ha llamado a un taxi para que le lleve de',
-        u'ha llamado a un Uber para que le lleve de',
-        u'ha llamado a un Cabify para que le lleve de',
-        u'está tan en forma que ha ido en bici de',
+        u'ha ido desde',
+        u'ha ido desde',
+        u'ha ido desde',
+        u'ha ido de',
+        u'ha ido de',
+        u'ha caminado desde',
+        u'ha caminado desde',
+        u'ha conducido de',
         u'ha hecho dedo desde',
-        u'ha hecho autostop desde',
-        u'ha robado un coche descapotable a lo GTA y se ha ido de',
-        u'ha ido en moto de',
-        u'ha ido en su jet privado de',
-        u'ha ido en su scooter de',
-        u'ha ido en AVE de',
-        u'ha ido en mochillo de',
-        u'ha ido en limusina con su chófer de',
-        u'ha ido en patinete eléctrico de',
-        u'ha ido en tren regional de',
-        u'ha ido en Alsa de',
-        u'ha ido en globo de',
-        u'ha encontrado billetes de avión baratos para ir de',
-        u'ha ido en avión en primera clase de',
-        u'ha cogido un Blablacar de'
-    ])
-
-def MOVE_ACTION_WATER():
-    return random.choice([
-        u'ha ido en su barquito velero de',
-        u'ha ido en un crucero de cinco plantas de',
-        u'ha ido en lancha motora de',
-        u'se ha colado de polizón en un barco de',
-        u'ha ido en patera de'
+        u'está tan en forma que ha hecho un sprint de',
+        u'se aburría y ha ido a la pata coja desde',
+        u'ha llamado al taxi de ' + random.choice([u'Rebollo', u'Santi', u'Aquilino', u'Germán']) + u' para que le lleve de',
+        u'ha llamado al taxi de ' + random.choice([u'Rebollo', u'Santi', u'Aquilino', u'Germán']) + u' para que le lleve de',
+        u'ha ido en ' + random.choice([u'tractor', u'patinete', u'motorrabo', u'bici']) + u' de',
+        u'ha ido en ' + random.choice([u'tractor', u'patinete', u'motorrabo', u'bici']) + u' de',
+        u'ha ido en skate haciendo backflips de',
+        u'ha cogido el coche y ha hecho un derrape de',
+        u'ha ido patinando de',
+        u'ha cogido un Blabacar de'
     ])

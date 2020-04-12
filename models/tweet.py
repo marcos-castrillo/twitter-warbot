@@ -1,12 +1,20 @@
-from tweet_types import Tweet_type
-
 class Tweet(object):
-    line = 0
-    image = ""
     type = None
+    place = None
+    place_2 = None
+    player = None
+    player_2 = None
+    player_list = []
+    player_list_2 = []
+    factor = None
+    action_number = None
+    item = None
+    new_item = None
+    old_item = None
+    unfriend = False
+    double = False
+    inverse = False
 
     # Constructor
-    def __init__(self, type, args = None):
-        if type == Tweet_type.final:
-            message = get_message(type, args)
-            image = get_image(type, args)
+    def __init__(self):
+        return

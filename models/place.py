@@ -11,6 +11,7 @@ class Place(object):
     trap_by = None
     monster = None
     tributes = []
+    infected = False
 
     # Constructor
     def __init__(self, name, road_connections, coordinates, items, sea_connections = None):
@@ -28,3 +29,4 @@ class Place(object):
         self.players = []
         self.tributes = []
         self.trap_by = None
+        self.infected = False

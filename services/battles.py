@@ -1,53 +1,170 @@
 from data.literals import *
-from services.simulation import write_tweet
+from config import PROBAB_TIE
+from store import get_alive_players, get_two_players_in_random_place, are_friends, move_player
+from models.tweet import Tweet
 from models.tweet_type import Tweet_type
+from services.simulation import write_tweet
 
-def kill(player_list, place_list, player_1, player_2, place):
-    player_2.state = 0
-    place.players.pop(place.players.index(player_2))
+def battle():
+    alive_players = get_alive_players()
+    player_1, player_2, place = get_two_players_in_random_place()
 
-    player_1.kills = player_1.kills + 1
-    best_player_1_item = player_1.get_best_item()
-    best_player_2_item = player_2.get_best_item()
-    are_friends = is_friend(player_1, player_2)
+    if (player_1, player_2) == (None, None):
+        return False
 
-    if best_player_2_item != None and len(player_1.item_list) == 2 and (best_player_1_item.get_value() < best_player_2_item.get_value()):
-        player_1.item_list = [best_player_1_item, best_player_2_item]
-        player_2.item_list.pop(player_2.item_list.index(best_player_2_item))
+    kill_number = random.randint(0, 100)
 
-        old_item = player_1.get_worst_item()
-        player_1.location.items.append(old_item)
-        player_1.location.items = player_1.location.items + player_2.item_list
+    if are_friends(player_1, player_2) and (kill_number > 20 or kill_number < 80):
+        return False
 
-        write_tweet(Tweet_type.somebody_killed, player_list, place_list, place, [player_1, player_2, are_friends, best_player_1_item, best_player_2_item, old_item])
-    elif best_player_2_item != None and len(player_1.item_list) < 2:
-        if best_player_1_item != None:
-            player_1.item_list = [best_player_1_item, best_player_2_item]
+    factor = 50 + 2*(player_1.get_defense() + player_1.get_attack()) - 2*(player_2.get_attack() + player_2.get_defense())
+    if factor > 100:
+        factor = 100
+    if factor < 0:
+        factor = 0
+
+    success = False
+    if kill_number == factor:
+        success = tie(player_1, player_2, factor, kill_number)
+    elif kill_number > factor - PROBAB_TIE and kill_number < factor:
+        success = run_away(player_1, player_2, factor, kill_number, True)
+    elif kill_number > factor and kill_number < factor + PROBAB_TIE:
+        success = run_away(player_1, player_2, factor, kill_number, False)
+    elif kill_number < factor - PROBAB_TIE:
+        success = kill(player_1, player_2, place, factor, kill_number, False)
+    elif kill_number > factor + PROBAB_TIE:
+        success = kill(player_1, player_2, place, factor, kill_number, True)
+    return success
+
+def kill(player_1, player_2, place, factor, action_number, inverse):
+    killer = player_1
+    killed = player_2
+    if inverse:
+        killer = player_2
+        killed = player_1
+
+    killed.state = 0
+
+    place.players.pop(place.players.index(killed))
+
+    killer.kills = killer.kills + 1
+    best_killer_item = killer.get_best_item()
+    best_killed_item = killed.get_best_item()
+    friendship = are_friends(killer, killed)
+
+    if best_killed_item != None and len(killer.item_list) == 2 and (best_killer_item.get_value() < best_killed_item.get_value()):
+        killer.item_list = [best_killer_item, best_killed_item]
+        killed.item_list.pop(killed.item_list.index(best_killed_item))
+
+        old_item = killer.get_worst_item()
+        killer.location.items.append(old_item)
+        killer.location.items = killer.location.items + killed.item_list
+
+        tweet = Tweet()
+        tweet.type = Tweet_type.somebody_killed
+        tweet.place = place
+        tweet.player = player_1
+        tweet.player_2 = player_2
+        tweet.item = best_killer_item
+        tweet.old_item = old_item
+        tweet.new_item = best_killed_item
+        tweet.factor = factor
+        tweet.action_number = action_number
+        tweet.inverse = inverse
+        write_tweet(tweet)
+    elif best_killed_item != None and len(killer.item_list) < 2:
+        if best_killer_item != None:
+            killer.item_list = [best_killer_item, best_killed_item]
         else:
-            player_1.item_list = [best_player_2_item]
-        player_2.item_list.pop(player_2.item_list.index(best_player_2_item))
+            killer.item_list = [best_killed_item]
+        killed.item_list.pop(killed.item_list.index(best_killed_item))
+        killer.location.items = killer.location.items + killed.item_list
 
-        player_1.location.items = player_1.location.items + player_2.item_list
-        write_tweet(Tweet_type.somebody_killed, player_list, place_list, place, [player_1, player_2, are_friends, best_player_1_item, best_player_2_item])
+        tweet = Tweet()
+        tweet.type = Tweet_type.somebody_killed
+        tweet.place = place
+        tweet.player = player_1
+        tweet.player_2 = player_2
+        tweet.item = best_killer_item
+        tweet.new_item = best_killed_item
+        tweet.factor = factor
+        tweet.action_number = action_number
+        tweet.inverse = inverse
+        write_tweet(tweet)
     else:
-        player_1.location.items = player_1.location.items + player_2.item_list
-        write_tweet(Tweet_type.somebody_killed, player_list, place_list, place, [player_1, player_2, are_friends, best_player_1_item])
-
-def tie(player_list, place_list, player_1, player_2):
-    if not is_friend(player_1, player_2):
+        killer.location.items = killer.location.items + killed.item_list
+        tweet = Tweet()
+        tweet.type = Tweet_type.somebody_killed
+        tweet.place = place
+        tweet.player = player_1
+        tweet.player_2 = player_2
+        tweet.item = best_killer_item
+        tweet.factor = factor
+        tweet.action_number = action_number
+        tweet.inverse = inverse
+        write_tweet(tweet)
+    return True
+    
+def tie(player_1, player_2, factor, action_number):
+    if not are_friends(player_1, player_2):
         friend(player_1, player_2)
-        write_tweet(Tweet_type.somebody_tied_and_became_friend, player_list, place_list, player_1.location, [player_1, player_2])
+        tweet = Tweet()
+        tweet.type = Tweet_type.somebody_tied_and_became_friend
+        tweet.place = player_1.location
+        tweet.player = player_1
+        tweet.player_2 = player_2
+        tweet.factor = factor
+        tweet.action_number = action_number
+        write_tweet(tweet)
     else:
-        write_tweet(Tweet_type.somebody_tied_and_was_friend, player_list, place_list, player_1.location, [player_1, player_2])
+        tweet = Tweet()
+        tweet.type = Tweet_type.somebody_tied_and_was_friend
+        tweet.place = player_1.location
+        tweet.player = player_1
+        tweet.player_2 = player_2
+        tweet.factor = factor
+        tweet.action_number = action_number
+        write_tweet(tweet)
+    return True
 
-def run_away(player_list, place_list, player_1, player_2):
-    if is_friend(player_1, player_2):
+def run_away(player_1, player_2, factor, action_number, inverse):
+    tweet = Tweet()
+
+    candidates = [x for x in player_1.location.connections if not x.destroyed]
+
+    if len(candidates) == 0:
+        return False
+
+    new_location = random.choice(candidates)
+    tweet.place = player_1.location
+
+    if inverse:
+        move_player(player_1, new_location)
+    else:
+        move_player(player_2, new_location)
+
+    tweet.type = Tweet_type.somebody_escaped
+    tweet.place_2 = new_location
+    tweet.player = player_1
+    tweet.player_2 = player_2
+    tweet.factor = factor
+    tweet.action_number = action_number
+    tweet.inverse = inverse
+
+    if are_friends(player_1, player_2):
         unfriend(player_1, player_2)
-        write_tweet(Tweet_type.somebody_escaped, player_list, place_list, player_1.location, [player_1, player_2, True])
-    else:
-        write_tweet(Tweet_type.somebody_escaped, player_list, place_list, player_1.location, [player_1, player_2])
+        tweet.unfriend = True
 
-def stealing(player_list, place_list, player_1, player_2):
+    write_tweet(tweet)
+    return True
+
+def steal():
+    alive_players = get_alive_players()
+    player_1, player_2, place = get_two_players_in_random_place()
+
+    if (player_1, player_2) == (None, None):
+        return False
+
     if len(player_1.item_list) > 0:
         robbed = player_1
         robber = player_2
@@ -63,9 +180,13 @@ def stealing(player_list, place_list, player_1, player_2):
 
     if len(robber.item_list) <= 1:
         robber.item_list.append(item)
-        write_tweet(Tweet_type.somebody_stole, player_list, place_list, robber.location, [robber, robbed, item])
-        return True
-
+        tweet = Tweet()
+        tweet.type = Tweet_type.somebody_stole
+        tweet.place = robber.location
+        tweet.player = robber
+        tweet.player_2 = robbed
+        tweet.item = item
+        write_tweet(tweet)
     else:
         if robber.item_list[0].get_value() >= robber.item_list[1].get_value():
             worst_item = robber.item_list[1]
@@ -76,11 +197,23 @@ def stealing(player_list, place_list, player_1, player_2):
 
         if item.get_value() > worst_item.get_value():
             robber.item_list = [item, best_item]
-            write_tweet(Tweet_type.somebody_stole_and_replaced, player_list, place_list, robber.location, [robber, robbed, item, worst_item])
-            return True
+            tweet = Tweet()
+            tweet.type = Tweet_type.somebody_stole_and_replaced
+            tweet.place = robber.location
+            tweet.player = robber
+            tweet.player_2 = robbed
+            tweet.item = item
+            tweet.old_item = worst_item
+            write_tweet(tweet)
         else:
-            write_tweet(Tweet_type.somebody_stole_and_threw, player_list, place_list, robber.location, [robber, robbed, item])
-            return True
+            tweet = Tweet()
+            tweet.type = Tweet_type.somebody_stole_and_threw
+            tweet.place = robber.location
+            tweet.player = robber
+            tweet.player_2 = robbed
+            tweet.item = item
+            write_tweet(tweet)
+    return True
 
 def friend(player_1, player_2):
     if not player_2 in player_1.friend_list:
@@ -93,14 +226,3 @@ def unfriend(player_1, player_2):
         player_1.friend_list.remove(player_2)
     if player_1 in player_2.friend_list:
         player_2.friend_list.remove(player_1)
-
-def is_friend(player, candidate):
-    if candidate in player.friend_list:
-        return True
-
-def kill_player(player):
-    place = player.location
-    player.state = 0
-    place.items = place.items + player.item_list
-    player.item_list = []
-    place.players.pop(place.players.index(player))

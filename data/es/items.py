@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Name, defense, attack
-raw_item_list = [
+raw_weapon_list = [
     [1, u'un gato chino que mueve el brazo', 1, 0],
     [1, u'una pistola sin balas', 1, 0],
     [1, u'unas chinchetas', 0, 1],
@@ -88,7 +88,67 @@ raw_item_list = [
     [3, u'la cabra de la Legión', 2, 8]
 ]
 
-raw_illness_list = [
+raw_powerup_list = [
+    [1, u'una bolsa de magdalenas', 2, 0],
+    [1, u'una bocata de calamares', 2, 1],
+    [1, u'un Monster', 0, 2],
+    [1, u'un Red Bull', 0, 2],
+    [1, 'un café con leche', 1, 1],
+    [1, u'un hummus de lentejas del Mercadona', 2, 0],
+    [1, u'unas patatas bravas del Mercadona', 2, 0],
+    [1, u'un Maxibon', 0, 2],
+    [1, u'un Calippo', 0, 2],
+    [1, u'un Negritón', 2, 0],
+    [1, u'un Frigopie', 2, 0],
+    [1, u'una lata de Steinburg', 2, 0],
+    [1, u'unos Risketos', 1, 1],
+    [1, u'unas Lays', 1, 1],
+    [1, u'una caja de Fresón de Palos', 1, 1],
+    [1, u'un jamón de Jabugo', 1, 1],
+    [1, u'una morcilla de León', 1, 1],
+    [1, u'unas Pringles', 1, 1],
+    [1, u'una botella de agua (¡hay que hidratarse!)', 1, 1],
+    [1, u'unos Doritos', 1, 1],
+    [1, u'unas Papadeltas', 1, 1],
+    [2, u'un paquete de cereales rellenos de leche del Mercadona', 2, 1],
+    [2, u'un porrito', 2, 2],
+    [2, u'un cacharro de kalimotxo', 2, 1],
+    [3, u'un Knebep limón', 3, 3],
+    [3, u'un Larios limón', 3, 3],
+    [3, u'un Almirante cola', 3, 3],
+    [3, u'un Cacique cola', 3, 3],
+    [3, u'un Brugal cola', 3, 3],
+    [3, u'una botella de sidra', 3, 3],
+    [3, u'un JB cola', 3, 3]
+]
+
+raw_special_list = [
+    [u'una placa de policía', True, False, False],
+    [u'un uniforme de policía', True, False, False],
+    [u'un ibuprofeno', False, True, False],
+    [u'un botiquín', False, True, False],
+    [u'la vacuna del coronavirus', False, False, True],
+    [u'una mascarilla', False, False, True]
+]
+
+raw_injury_list = [
+    [u'una cagada de pájaro', -1, -1],
+    [u'un esguince de tobillo', -1, -1],
+    [u'una torta bien dada', -1, -1],
+    [u'una colleja', -1, -1],
+    [u'una hostia a mano abierta', -2, -2],
+    [u'una seta venenosa', -2, -2],
+    [u'un corte leve en el brazo derecho', -2, -2],
+    [u'una picadura de cobra', -2, -2],
+    [u'una patada en el pecho', -2, -2],
+    [u'una ensalada de codazos', -2, -2],
+    [u'un dedo en el ojo', -2, -2],
+    [u'un rodillazo en la boca del estómago', -3, -3],
+    [u'un puñetazo en el estómago', -3, -3],
+    [u'un corte profundo en el pecho', -3, -3],
+    [u'una patada en sus partes', -4, -4],
+    [u'una puñetazo en la nariz', -4, -4],
+    [u'una necrosis en el brazo', -5, -5],
     [u'un dolor de espalda', -1, -1],
     [u'una caries', -1, -1],
     [u'una sinusitis', -1, -1],
@@ -118,59 +178,4 @@ raw_illness_list = [
     [u'un sida', -5, -5],
     [u'un cáncer', -5, -5],
     [u'un infarto', -5, -5]
-]
-
-raw_injury_list = [
-    [u'una cagada de pájaro', -1, -1],
-    [u'un esguince de tobillo', -1, -1],
-    [u'una torta bien dada', -1, -1],
-    [u'una colleja', -1, -1],
-    [u'una hostia a mano abierta', -2, -2],
-    [u'una seta venenosa', -2, -2],
-    [u'un corte leve en el brazo derecho', -2, -2],
-    [u'una picadura de cobra', -2, -2],
-    [u'una patada en el pecho', -2, -2],
-    [u'una ensalada de codazos', -2, -2],
-    [u'un dedo en el ojo', -2, -2],
-    [u'un rodillazo en la boca del estómago', -3, -3],
-    [u'un puñetazo en el estómago', -3, -3],
-    [u'un corte profundo en el pecho', -3, -3],
-    [u'una patada en sus partes', -4, -4],
-    [u'una puñetazo en la nariz', -4, -4],
-    [u'una necrosis en el brazo', -5, -5]
-]
-
-raw_powerup_list = [
-    [u'una bolsa de magdalenas', 2, 0],
-    [u'un botiquín', 3, 0],
-    [u'una bocata de calamares', 2, 1],
-    [u'un Knebep limón', 3, 3],
-    [u'un Larios limón', 3, 3],
-    [u'un Almirante cola', 3, 3],
-    [u'un Cacique cola', 3, 3],
-    [u'un Brugal cola', 3, 3],
-    [u'una botella de sidra', 3, 3],
-    [u'un JB cola', 3, 3],
-    [u'un porrito', 2, 2],
-    [u'un Monster', 0, 2],
-    [u'un Red Bull', 0, 2],
-    [u'un café con leche', 1, 1],
-    [u'un cacharro de kalimotxo', 2, 1],
-    [u'un hummus de lentejas del Mercadona', 2, 0],
-    [u'unas patatas bravas del Mercadona', 2, 0],
-    [u'un Maxibon', 0, 2],
-    [u'un Calippo', 0, 2],
-    [u'un Negritón', 2, 0],
-    [u'un Frigopie', 2, 0],
-    [u'una lata de Steinburg', 2, 0],
-    [u'un paquete de cereales rellenos de leche del Mercadona', 2, 1],
-    [u'unos Risketos', 1, 1],
-    [u'unas Lays', 1, 1],
-    [u'una caja de Fresón de Palos', 1, 1],
-    [u'un jamón de Jabugo', 1, 1],
-    [u'una morcilla de León', 1, 1],
-    [u'unas Pringles', 1, 1],
-    [u'una botella de agua (¡hay que hidratarse!)', 1, 1],
-    [u'unos Doritos', 1, 1],
-    [u'unas Papadeltas', 1, 1]
 ]
