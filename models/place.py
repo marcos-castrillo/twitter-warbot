@@ -1,16 +1,16 @@
 class Place(object):
     coord_x = None
     coord_y = None
+    name = None
+    trap_by = None
+    monster = None
     connections = []
     items = []
     road_connections = []
     sea_connections = []
-    destroyed = False
-    name = None
     players = []
-    trap_by = None
-    monster = None
     tributes = []
+    destroyed = False
     infected = False
 
     # Constructor

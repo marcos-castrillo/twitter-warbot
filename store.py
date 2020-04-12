@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import random
+import sys
 
 from data.items import raw_weapon_list, raw_special_list, raw_injury_list, raw_powerup_list
 from data.places import raw_place_list
@@ -119,19 +120,26 @@ def get_place_list():
 def get_player_list(place_list):
     list = []
 
-    def initialize_friend_list(player_list, player):
-        friend_list = []
-        for i, f in enumerate(player.friend_list):
-            friend = get_player_by_name(f)
-            if friend != None:
-                friend_list.append(friend)
-        player.friend_list = friend_list
+    if USE_DISTRICTS and len(raw_player_list) > len(place_list) * MAX_TRIBUTES_PER_DISTRICT:
+        sys.exit(u'Config error: player limit exceeded: Players: ' + str(len(raw_player_list)) + u', Locations: ' + str(len(place_list)) + u', Tributes/location: ' + str(MAX_TRIBUTES_PER_DISTRICT))
 
     for i, p in enumerate(raw_player_list):
-        location = random.choice(place_list)
-        initial_items = None
+        player = Player()
+        player.name = p[0]
+        player.username = p[1]
+        player.gender = p[2]
+
+        if USE_DISTRICTS and p[3] != None:
+            district = next(x for x in place_list if x.name == p[3])
+            player.district = district  #will override later, just to save p[3]
+            district.tributes.append(player)
+        else:
+            location = random.choice(place_list)
+            player.location = location
+
+        #initial items
+        initial_items = []
         if len(p) > 4:
-            initial_items = []
             if initial_items != None and (not isinstance(initial_items, list) or len(initial_items) > 2):
                 sys.exit('Config error: Item list for player ' + self.name + ' is not an array or contains more than 2 items.')
             for item in p[4]:
@@ -139,13 +147,38 @@ def get_player_list(place_list):
                 initial_items.append(reserved_item)
                 item_list.pop(item_list.index(reserved_item))
 
-        player = Player(p[0], location, p[2], p[1], initial_items)
+        player.item_list = initial_items
+
         list.append(player)
-        location.players.append(player)
+        if not USE_DISTRICTS:
+            location.players.append(player)
 
-    for i, p in enumerate(list):
-        initialize_friend_list(list, p)
+    if USE_DISTRICTS:
+        free_tributes = [x for x in list if x.district == None]
+        tributes_per_district = round(len(list) / len(place_list))
+        place_list_sorted = sorted(place_list, key=lambda x: len(x.tributes), reverse=True)
+        enough_tributes_list = [x for x in place_list_sorted if len(x.tributes) >= tributes_per_district]
+        not_enough_tributes_list = [x for x in place_list_sorted if len(x.tributes) < tributes_per_district]
 
+        for j, place in enumerate(enough_tributes_list):
+            index = len(place.tributes) - tributes_per_district
+            while index > 0:
+                player = random.choice(place.tributes)
+                free_tributes.append(player)
+                place.tributes.remove(player)
+                index = index - 1
+
+        while len(free_tributes) > 0:
+            place = min(not_enough_tributes_list, key=lambda x: len(x.tributes))
+            player = random.choice(free_tributes)
+            free_tributes.remove(player)
+            place.tributes.append(player)
+
+        for j, place in enumerate(place_list):
+            for k, player in enumerate(place.tributes):
+                player.district = place
+                player.location = place
+                place.players.append(player)
     return list
 
 def get_injury_list():

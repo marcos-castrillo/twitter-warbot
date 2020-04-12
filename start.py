@@ -23,8 +23,6 @@ hour_count = 0
 def initialize():
     if len(player_list) == 0:
         sys.exit('Config error: no players configured.')
-    if len(player_list) > MAX_PLAYERS:
-        sys.exit('Config error: player limit exceeded.')
     initialize_avatars()
     start_battle()
 

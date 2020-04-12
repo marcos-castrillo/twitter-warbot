@@ -6,9 +6,10 @@ class Player(object):
     name = ""
     username = ""
     kills = 0
-    location = 0
-    state = 0
+    state = 1
+    location = None
     gender = None
+    district = None
     item_list = []
     friend_list = []
     injury_list = []
@@ -19,20 +20,8 @@ class Player(object):
     infected = False
 
     # Constructor
-    def __init__(self, name, location, gender, username = None, item_list = None):
-        self.friend_list = []
-        self.item_list = []
-        self.injury_list = []
-        self.powerup_list = []
-        self.location = location
-        self.state = 1
-        self.gender = gender
-        self.name = name
-        self.username = username
-        self.infected = False
-
-        if item_list != None:
-            self.item_list = item_list
+    def __init__(self):
+        return
 
     def get_attack(self):
         attack = 0

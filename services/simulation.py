@@ -297,6 +297,7 @@ def get_summary_image(image, tweet):
         d = ImageDraw.Draw(ellipse)
         d.ellipse((tweet.place.coord_x - 2000, tweet.place.coord_y - 2000, tweet.place.coord_x + 2000, tweet.place.coord_y + 2000), outline=(255,255,255,100), width=1925)
         image = Image.alpha_composite(image, ellipse)
+        draw = ImageDraw.Draw(image)
 
     for i, p in enumerate(place_list):
         if p.destroyed == True:
@@ -310,8 +311,8 @@ def get_summary_image(image, tweet):
             if p.infected:
                 paste_image(image, p.coord_x + 16, p.coord_y, 32, 'infection')
             if len(p.items) > 0:
-                for i, item in enumerate(p.items):
-                    paste_image(image, p.coord_x - 16 + i*5, p.coord_y, 32, get_item_rarity(item))
+                paste_image(image, p.coord_x - 24, p.coord_y, 32, 'item_transparent')
+                draw.text((p.coord_x - 32, p.coord_y - 10), 'x' + str(len(p.items)), fill='rgb(72,255,0)', font=ImageFont.truetype(font_path, size=13))
 
     draw_ranking(image)
     return image

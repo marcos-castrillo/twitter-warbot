@@ -8,12 +8,11 @@ from models.tweet_type import Tweet_type
 from services.simulation import write_tweet
 
 from store import get_alive_players, place_list, move_player, kill_player
-from config import MAX_ITEMS, PROBAB_RARITY_1, PROBAB_RARITY_2, PROBAB_RARITY_3
+from config import MAX_ITEMS, PROBAB_RARITY_1, PROBAB_RARITY_2, PROBAB_RARITY_3, ATRACT_RANGE
 
 def atract():
     loc_candidates = []
     action_number = random.randint(0, 100)
-    double = True
 
     for i, p in enumerate(place_list):
         if not p.destroyed:
@@ -30,9 +29,13 @@ def atract():
     append_players_from(place)
     for i, connection in enumerate(place.connections):
         append_players_from(connection)
-        if double:
+        if ATRACT_RANGE > 1:
             for j, subconnection in enumerate(connection.connections):
                  append_players_from(subconnection)
+                 if ATRACT_RANGE > 2:
+                     for k, subsubconnection in enumerate(subconnection.connections):
+                          append_players_from(subsubconnection)
+
 
     if len(atracted_players) > 0:
         alive_players = get_alive_players()
