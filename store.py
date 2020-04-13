@@ -9,8 +9,10 @@ from data.players import raw_player_list
 from config import *
 from models.item import Item
 from models.place import Place
+from models.tweet import Tweet
 from models.player import Player
 from models.item_type import Item_type
+from models.tweet_type import Tweet_type
 
 def get_item_list():
     list = []
@@ -179,6 +181,7 @@ def get_player_list(place_list):
                 player.district = place
                 player.location = place
                 place.players.append(player)
+                player.friend_list = player.friend_list + [x for x in place.tributes if x.name != player.name]
     return list
 
 def get_injury_list():
@@ -232,7 +235,7 @@ def get_two_players_in_random_place():
     return None, None, None
 
 def are_friends(player, candidate):
-    return candidate in player.friend_list
+    return any(x for x in player.friend_list if x.get_name() == candidate.get_name()) and any(x for x in candidate.friend_list if x.get_name() == player.get_name())
 
 def get_alive_players():
     return [p for p in player_list if p.state == 1]
@@ -253,6 +256,59 @@ def move_player(player, new_location):
     new_location.players.append(player)
     if player.infected:
         new_location.infected = True
+
+def destroy_district_if_needed(district):
+    if any(x for x in district.tributes if x.state == 1):
+        return None
+
+    district.destroyed = True
+    district.monster = False
+    district.trap_by = None
+    tributes_list = district.tributes
+    escaped_list = []
+    route_list = []
+    new_location = False
+
+    for j, c in enumerate(district.connections):
+        if not c.destroyed:
+            route_list.append(c)
+
+    if len(route_list) == 0:
+        for j, c in enumerate(district.connections):
+            for k, sc in enumerate(c.connections):
+                if not sc.destroyed:
+                    route_list.append(sc)
+
+    if len(route_list) == 0:
+        for j, c in enumerate(district.connections):
+            for k, sc in enumerate(c.connections):
+                for l, ssc in enumerate(sc.connections):
+                    if not ssc.destroyed:
+                        route_list.append(ssc)
+
+    if len(route_list) == 0:
+        for j, c in enumerate(district.connections):
+            for k, sc in enumerate(c.connections):
+                for l, ssc in enumerate(sc.connections):
+                    for m, sssc in enumerate(ssc.connections):
+                        if not sssc.destroyed:
+                            route_list.append(sssc)
+
+    new_location = random.choice(route_list)
+
+    for i, p in enumerate(district.players):
+        if p.state == 1:
+            if new_location:
+                move_player(p, new_location)
+                escaped_list.append(p)
+
+    tweet = Tweet()
+    tweet.type = Tweet_type.destroyed_district
+    tweet.place = district
+    tweet.place_2 = new_location
+    tweet.player_list = tributes_list
+    tweet.player_list_2 = escaped_list
+    return tweet
 
 def kill_player(player):
     place = player.location

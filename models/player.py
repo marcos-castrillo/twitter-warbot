@@ -21,6 +21,10 @@ class Player(object):
 
     # Constructor
     def __init__(self):
+        self.item_list = []
+        self.injury_list = []
+        self.friend_list = []
+        self.powerup_list = []
         return
 
     def get_attack(self):

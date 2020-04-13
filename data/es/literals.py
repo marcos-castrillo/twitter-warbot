@@ -51,7 +51,12 @@ def DESTROYED(place):
        u'El mundo está mejor sin ' + place  + u', así que el creador de este bot ha decidido cargárselo sin más',
        place + u' se ha ido a la puta mierda',
        u'Una terrible sequía ha asolado ' + place
-       ])
+      ])
+
+def DESTROYED_DISTRICT(place, tributes_str):
+    return random.choice([
+       u'Todos los tributos de ' + place + u'(' + tributes_str  + u')' + u' han sido derrotados, por lo que ha sido reducida a escombros.'
+    ])
 
 def DIED(player, multiple = False):
     if multiple:
@@ -71,6 +76,11 @@ def DIED(player, multiple = False):
         u' y hay un luto de 3 días por ' + player + u'.',
         u' . DEP ' + player + u'.'
         u' . F ' + player + u'.'
+    ])
+
+def DISTRICT_REBUILD(tweet):
+    return random.choice([
+        u'Además, ¡su distrito (' + tweet.player.district.name + u') ha sido reconstruido!'
     ])
 
 def ESCAPED(player_1, player_2):
@@ -389,10 +399,10 @@ def STOLE(tweet):
     return u' '.join((tweet.player.get_name(), u'le ha robado', tweet.item.name, u'a', tweet.player_2.get_name() + '.'))
 
 def STOLE_AND_REPLACED(tweet):
-    return u' '.join((STOLE(tweet) + u'.', 'Como es mejor, se ha deshecho de su' + tweet.old_item.name + '.'))
+    return u' '.join((STOLE(tweet), u'Como es mejor, se ha deshecho de su', tweet.old_item.name + '.'))
 
 def STOLE_AND_THREW(tweet):
-    return u' '.join((STOLE(tweet) + u'. Como tiene cosas mejores, lo ha tirado a la basura.'))
+    return u' '.join((STOLE(tweet), u'Como tiene cosas mejores, lo ha tirado a la basura.'))
 
 def SUICIDE():
     return random.choice([
@@ -442,7 +452,7 @@ def TRAPPED(tweet):
     return u' '.join((player.get_name(), MOVED_SING(), location.name, u'pero se ha comido la trampa que había puesto', trapped_by.get_name() + u'. ¡Qué torpe!'))
 
 def TREASON(tweet):
-    player = tweet.player
+    player_1 = tweet.player
     player_2 = tweet.player_2
     return random.choice([
         u'Aunque eran ' + get_x_or_y_plural([player_1, player_2], u'amigos, ', u'amigas, '),

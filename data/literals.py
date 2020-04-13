@@ -37,13 +37,15 @@ def get_message(tweet):
     elif tweet.type == Tweet_type.somebody_killed:
         message = somebody_killed(tweet)
     elif tweet.type == Tweet_type.somebody_revived:
-        message = REVIVED(tweet)
+        message = somebody_revived(tweet)
     elif tweet.type == Tweet_type.somebody_suicided:
         message = somebody_suicided(tweet)
     elif tweet.type == Tweet_type.somebody_moved:
         message = somebody_moved(tweet)
     elif tweet.type == Tweet_type.destroyed:
         message = destroyed(tweet)
+    elif tweet.type == Tweet_type.destroyed_district:
+        message = destroyed_district(tweet)
     elif tweet.type == Tweet_type.somebody_couldnt_move:
         message = COULDNT_MOVE(tweet)
     elif tweet.type == Tweet_type.trap:
@@ -170,7 +172,7 @@ def somebody_killed(tweet):
     fav = ''
 
     if were_friends:
-        friend_message = TREASON
+        friend_message = TREASON(tweet)
     if killing_item != None:
         kill_method = u' '.join((WITH, killing_item.name))
     if player_1.kills > 1:
@@ -181,6 +183,13 @@ def somebody_killed(tweet):
         stole = u' ' + u' '.join((ALSO_STOLE, new_item.name + '.'))
 
     return u' '.join((friend_message + player_1.get_name(), kill_verb, player_2.get_name(), kill_method + kills_count + stole))
+
+def somebody_revived(tweet):
+    revived = REVIVED(tweet)
+    sufix = ''
+    if tweet.double:
+        sufix = u' ' + DISTRICT_REBUILD(tweet)
+    return revived + sufix
 
 def somebody_suicided(tweet):
     return u' '.join((tweet.player.get_name(), SUICIDE()))
@@ -248,6 +257,49 @@ def destroyed(tweet):
 
     return (prefix + sufix + susufix)
 
+def destroyed_district(tweet):
+    place = tweet.place
+    new_location = tweet.place_2
+    tribute_list = tweet.player_list
+    escaped_list = tweet.player_list_2
+
+    if len(tribute_list) == 0:
+        tributes_str = '.'
+    elif len(tribute_list) == 1:
+        tributes_str = tribute_list[0].get_name()
+    else:
+        tributes = []
+        tributes_str = ''
+        for i, d in enumerate(tribute_list):
+            tributes.append(d.get_name())
+        for i, d in enumerate(tributes):
+            if i == 0:
+                tributes_str = d
+            elif i == len(tributes) - 1:
+                tributes_str = tributes_str + AND + ' ' + d
+            else:
+                tributes_str = tributes_str + ', ' + d
+
+    prefix = DESTROYED_DISTRICT(place.name, tributes_str)
+
+    sufix = ''
+    escaped = []
+
+    if new_location and len(escaped_list) > 0:
+        for i, d in enumerate(escaped_list):
+            escaped.append(d.get_name())
+        for i, d in enumerate(escaped):
+            if i == 0:
+                sufix_str = d
+            elif i == len(escaped) - 1:
+                sufix_str = sufix_str + AND + d
+            else:
+                sufix_str = sufix_str + ', ' + d
+
+        sufix = u' ' + u' '.join((sufix_str, get_sing_or_pl(escaped_list, MOVED_SING(), MOVED_PL()), new_location.name + u'.'))
+
+    return (prefix + sufix)
+
 def infected(tweet):
     player = tweet.player
     place_infected = PLACE_INFECTED(tweet)
@@ -265,7 +317,6 @@ def infected(tweet):
 def atraction(tweet):
     place = tweet.place
     atracted_players = tweet.player_list
-    double = tweet.double
 
     location = ATRACTION(place.name)
     players = u' ' + AND + u' '

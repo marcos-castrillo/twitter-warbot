@@ -13,8 +13,7 @@ def battle():
         return False
 
     kill_number = random.randint(0, 100)
-
-    if are_friends(player_1, player_2) and (kill_number > 20 or kill_number < 80):
+    if are_friends(player_1, player_2) and (kill_number > 5 and kill_number < 95):
         return False
 
     factor = 50 + 2*(player_1.get_defense() + player_1.get_attack()) - 2*(player_2.get_attack() + player_2.get_defense())
@@ -104,10 +103,10 @@ def kill(player_1, player_2, place, factor, action_number, inverse):
         tweet.inverse = inverse
         write_tweet(tweet)
     return True
-    
+
 def tie(player_1, player_2, factor, action_number):
     if not are_friends(player_1, player_2):
-        friend(player_1, player_2)
+        befriend(player_1, player_2)
         tweet = Tweet()
         tweet.type = Tweet_type.somebody_tied_and_became_friend
         tweet.place = player_1.location
@@ -162,7 +161,7 @@ def steal():
     alive_players = get_alive_players()
     player_1, player_2, place = get_two_players_in_random_place()
 
-    if (player_1, player_2) == (None, None):
+    if (player_1, player_2) == (None, None) or are_friends(player_1, player_2):
         return False
 
     if len(player_1.item_list) > 0:
@@ -215,7 +214,7 @@ def steal():
             write_tweet(tweet)
     return True
 
-def friend(player_1, player_2):
+def befriend(player_1, player_2):
     if not player_2 in player_1.friend_list:
         player_1.friend_list.append(player_2)
     if not player_1 in player_2.friend_list:

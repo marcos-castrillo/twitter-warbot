@@ -1,6 +1,7 @@
 import random
 from data.items import *
-from store import get_two_players_in_random_place, get_alive_players, injury_list, kill_player
+from store import get_two_players_in_random_place, get_alive_players, injury_list, kill_player, destroy_district_if_needed
+from config import USE_DISTRICTS
 from models.tweet import Tweet
 from models.tweet_type import Tweet_type
 from models.item_type import Item_type
@@ -70,6 +71,7 @@ def pick_powerup(player, powerup):
     tweet.place = player.location
     tweet.item = powerup
     tweet.player = player
+
     write_tweet(tweet)
     return True
 
@@ -80,6 +82,7 @@ def pick_special(player, special):
         player.monster_immunity = True
     if special.infection_immunity:
         player.infection_immunity = True
+
     player.location.items.pop(player.location.items.index(special))
     tweet = Tweet()
     tweet.type = Tweet_type.somebody_got_special
@@ -123,6 +126,10 @@ def infect():
         tweet.place = player.location
         tweet.player = player
         write_tweet(tweet)
+        if USE_DISTRICTS:
+            destroy_tweet = destroy_district_if_needed(player.district)
+            if destroy_tweet != None:
+                write_tweet(destroy_tweet)
     else:
         return False
     return True

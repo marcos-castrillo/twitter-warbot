@@ -7,8 +7,8 @@ from models.tweet import Tweet
 from models.tweet_type import Tweet_type
 from services.simulation import write_tweet
 
-from store import get_alive_players, place_list, move_player, kill_player
-from config import MAX_ITEMS, PROBAB_RARITY_1, PROBAB_RARITY_2, PROBAB_RARITY_3, ATRACT_RANGE
+from store import get_alive_players, place_list, move_player, kill_player, destroy_district_if_needed
+from config import MAX_ITEMS, PROBAB_RARITY_1, PROBAB_RARITY_2, PROBAB_RARITY_3, ATRACT_RANGE, USE_DISTRICTS
 
 def atract():
     loc_candidates = []
@@ -47,7 +47,6 @@ def atract():
         tweet.type = Tweet_type.atraction
         tweet.place = place
         tweet.player_list = atracted_players
-        tweet.double = double
         write_tweet(tweet)
         return True
     else:
@@ -123,6 +122,10 @@ def move():
             tweet.player = player
             tweet.player_2 = trapped_by
             write_tweet(tweet)
+            if USE_DISTRICTS:
+                destroy_tweet = destroy_district_if_needed(player.district)
+                if destroy_tweet != None:
+                    write_tweet(destroy_tweet)
         else:
             trapped_by = new_location.trap_by
             new_location.trap_by = None
@@ -165,6 +168,10 @@ def monster():
             tweet.place = player.location
             tweet.player = player
             write_tweet(tweet)
+            if USE_DISTRICTS:
+                destroy_tweet = destroy_district_if_needed(player.district)
+                if destroy_tweet != None:
+                    write_tweet(destroy_tweet)
         else:
             place.monster = False
 
@@ -198,12 +205,15 @@ def monster():
     return True
 
 def destroy():
+    if USE_DISTRICTS:
+        return False
     list = [x for x in place_list if not x.destroyed]
     place = random.choice(list)
 
     place.destroyed = True
     place.monster = False
     place.trap_by = None
+    place.infected = False
     dead_list = []
     escaped_list = []
     route_list = []
@@ -224,9 +234,6 @@ def destroy():
             else:
                 kill_player(p)
                 dead_list.append(p)
-
-    if place.monster:
-        place.monster = None
 
     tweet = Tweet()
     tweet.type = Tweet_type.destroyed

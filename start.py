@@ -16,7 +16,7 @@ from services.battles import *
 from services.players import *
 from services.places import *
 
-simulation_probab = Simulation_Probab(PROBAB_ITEM[0], PROBAB_MOVE[0], PROBAB_BATTLE[0], PROBAB_INJURE[0], PROBAB_STEAL[0], PROBAB_MONSTER[0], PROBAB_DESTROY[0], PROBAB_TRAP[0], PROBAB_INFECT[0], PROBAB_ATRACT[0], PROBAB_SUICIDE[0], PROBAB_REVIVE[0])
+simulation_probab = Simulation_Probab(PROBAB_ITEM[0], PROBAB_MOVE[0], PROBAB_BATTLE[0], PROBAB_INJURE[0], PROBAB_STEAL[0], PROBAB_MONSTER[0], PROBAB_DESTROY[0], PROBAB_INFECT[0], PROBAB_ATRACT[0], PROBAB_SUICIDE[0], PROBAB_REVIVE[0], PROBAB_TRAP[0])
 finished = False
 hour_count = 0
 
@@ -36,12 +36,12 @@ def start_battle():
         simulate_day()
 
 def simulate_day():
-    global hour_count, simulation_probab
+    global hour_count, simulation_probab, ATRACT_RANGE
     hour_count = hour_count + 1
     for i, th in enumerate(THRESHOLD_LIST):
         if hour_count == th:
-            simulation_probab = Simulation_Probab(PROBAB_ITEM[i], PROBAB_MOVE[i], PROBAB_BATTLE[i], PROBAB_INJURE[i], PROBAB_STEAL[i], PROBAB_MONSTER[i], PROBAB_DESTROY[i], PROBAB_TRAP[i], PROBAB_INFECT[i], PROBAB_ATRACT[i], PROBAB_SUICIDE[i], PROBAB_REVIVE[i])
-
+            simulation_probab = Simulation_Probab(PROBAB_ITEM[i], PROBAB_MOVE[i], PROBAB_BATTLE[i], PROBAB_INJURE[i], PROBAB_STEAL[i], PROBAB_MONSTER[i], PROBAB_DESTROY[i], PROBAB_INFECT[i], PROBAB_ATRACT[i], PROBAB_SUICIDE[i], PROBAB_REVIVE[i], PROBAB_TRAP[i])
+            ATRACT_RANGE = ATRACT_RANGE_LIST[i]
     do_something()
 
     stop = True
@@ -70,16 +70,16 @@ def do_something():
         completed = monster()
     elif action_number < simulation_probab.destroy_action_number:
         completed = destroy()
-    elif action_number < simulation_probab.trap_action_number:
-        completed = trap()
     elif action_number < simulation_probab.infect_action_number:
         completed = infect()
     elif action_number < simulation_probab.atract_action_number:
         completed = atract()
     elif action_number < simulation_probab.suicide_action_number:
         completed = suicide()
-    elif action_number == simulation_probab.revive_action_number:
+    elif action_number < simulation_probab.revive_action_number:
         completed = revive()
+    elif action_number <= simulation_probab.trap_action_number:
+        completed = trap()
 
     if not completed:
          do_something()
