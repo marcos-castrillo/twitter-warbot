@@ -88,26 +88,37 @@ def move():
     player = random.choice(alive_players)
 
     loc_candidates = []
-    jump_candidates = []
 
     for i, l in enumerate(player.location.connections):
         if not l.destroyed:
             loc_candidates.append(l)
 
     if len(loc_candidates) == 0:
-        for i, l in enumerate(player.location.connections):
-            for j, sl in enumerate(l.connections):
-                if not sl.destroyed:
-                    loc_candidates.append(sl)
-                    jump_candidates.append(l)
+        for j, c in enumerate(player.location.connections):
+            for k, sc in enumerate(c.connections):
+                if not sc.destroyed and sc.name != player.location.name:
+                    loc_candidates.append(sc)
 
     if len(loc_candidates) == 0:
-        return False
+        for j, c in enumerate(player.location.connections):
+            for k, sc in enumerate(c.connections):
+                for l, ssc in enumerate(sc.connections):
+                    if not ssc.destroyed and ssc.name != player.location.name:
+                        loc_candidates.append(ssc)
 
-    new_location = random.choice(loc_candidates)
-    jump = None
-    if len(jump_candidates) > 0:
-        jump = jump_candidates[loc_candidates.index(new_location)]
+    if len(loc_candidates) == 0:
+        for j, c in enumerate(player.location.connections):
+            for k, sc in enumerate(c.connections):
+                for l, ssc in enumerate(sc.connections):
+                    for m, sssc in enumerate(ssc.connections):
+                        if not sssc.destroyed and sssc.name != player.location.name:
+                            loc_candidates.append(sssc)
+
+    if len(loc_candidates) == 0:
+        new_location = random.choice([x for x in place_list if not x.destroyed and x.name != player.location.name])
+    else:
+        new_location = random.choice(loc_candidates)
+
     action_number = random.randint(1, 100)
 
     if new_location.trap_by != None and new_location.trap_by != player:
@@ -146,7 +157,6 @@ def move():
         tweet.place = player.location
         tweet.place_2 = old_location
         tweet.player = player
-        tweet.double = jump
         write_tweet(tweet)
     return True
 

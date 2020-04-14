@@ -1,6 +1,6 @@
 from data.literals import *
-from config import PROBAB_TIE
-from store import get_alive_players, get_two_players_in_random_place, are_friends, move_player
+from config import PROBAB_TIE, USE_DISTRICTS, TREASONS_ENABLED
+from store import *
 from models.tweet import Tweet
 from models.tweet_type import Tweet_type
 from services.simulation import write_tweet
@@ -13,7 +13,7 @@ def battle():
         return False
 
     kill_number = random.randint(0, 100)
-    if are_friends(player_1, player_2) and (kill_number > 5 and kill_number < 95):
+    if are_friends(player_1, player_2) and not TREASONS_ENABLED and (kill_number > 5 and kill_number < 95):
         return False
 
     factor = 50 + 2*(player_1.get_defense() + player_1.get_attack()) - 2*(player_2.get_attack() + player_2.get_defense())
@@ -42,14 +42,20 @@ def kill(player_1, player_2, place, factor, action_number, inverse):
         killer = player_2
         killed = player_1
 
-    killed.state = 0
-
-    place.players.pop(place.players.index(killed))
-
     killer.kills = killer.kills + 1
     best_killer_item = killer.get_best_item()
     best_killed_item = killed.get_best_item()
     friendship = are_friends(killer, killed)
+
+    tweet = Tweet()
+    tweet.type = Tweet_type.somebody_killed
+    tweet.place = place
+    tweet.player = player_1
+    tweet.player_2 = player_2
+    tweet.factor = factor
+    tweet.action_number = action_number
+    tweet.inverse = inverse
+    tweet.item = best_killer_item
 
     if best_killed_item != None and len(killer.item_list) == 2 and (best_killer_item.get_value() < best_killed_item.get_value()):
         killer.item_list = [best_killer_item, best_killed_item]
@@ -57,51 +63,24 @@ def kill(player_1, player_2, place, factor, action_number, inverse):
 
         old_item = killer.get_worst_item()
         killer.location.items.append(old_item)
-        killer.location.items = killer.location.items + killed.item_list
 
-        tweet = Tweet()
-        tweet.type = Tweet_type.somebody_killed
-        tweet.place = place
-        tweet.player = player_1
-        tweet.player_2 = player_2
-        tweet.item = best_killer_item
         tweet.old_item = old_item
         tweet.new_item = best_killed_item
-        tweet.factor = factor
-        tweet.action_number = action_number
-        tweet.inverse = inverse
-        write_tweet(tweet)
     elif best_killed_item != None and len(killer.item_list) < 2:
         if best_killer_item != None:
             killer.item_list = [best_killer_item, best_killed_item]
         else:
             killer.item_list = [best_killed_item]
         killed.item_list.pop(killed.item_list.index(best_killed_item))
-        killer.location.items = killer.location.items + killed.item_list
 
-        tweet = Tweet()
-        tweet.type = Tweet_type.somebody_killed
-        tweet.place = place
-        tweet.player = player_1
-        tweet.player_2 = player_2
-        tweet.item = best_killer_item
         tweet.new_item = best_killed_item
-        tweet.factor = factor
-        tweet.action_number = action_number
-        tweet.inverse = inverse
-        write_tweet(tweet)
-    else:
-        killer.location.items = killer.location.items + killed.item_list
-        tweet = Tweet()
-        tweet.type = Tweet_type.somebody_killed
-        tweet.place = place
-        tweet.player = player_1
-        tweet.player_2 = player_2
-        tweet.item = best_killer_item
-        tweet.factor = factor
-        tweet.action_number = action_number
-        tweet.inverse = inverse
-        write_tweet(tweet)
+
+    kill_player(killed)
+    write_tweet(tweet)
+    if USE_DISTRICTS:
+        destroy_tweet = destroy_district_if_needed(killed.district)
+        if destroy_tweet != None:
+            write_tweet(destroy_tweet)
     return True
 
 def tie(player_1, player_2, factor, action_number):

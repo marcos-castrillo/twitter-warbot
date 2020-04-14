@@ -244,11 +244,10 @@ def get_dead_players():
     return [p for p in player_list if p.state == 0]
 
 def get_alive_players_count():
-    count = 0
-    for i, p in enumerate(player_list):
-        if p.state == 1:
-            count = count + 1
-    return count
+    return len([x for x in player_list if x.state == 1])
+
+def get_alive_districts_count():
+    return len([x for x in place_list if not x.destroyed])
 
 def move_player(player, new_location):
     player.location.players.pop(player.location.players.index(player))
@@ -276,14 +275,14 @@ def destroy_district_if_needed(district):
     if len(route_list) == 0:
         for j, c in enumerate(district.connections):
             for k, sc in enumerate(c.connections):
-                if not sc.destroyed:
+                if not sc.destroyed and sc.name != district.name:
                     route_list.append(sc)
 
     if len(route_list) == 0:
         for j, c in enumerate(district.connections):
             for k, sc in enumerate(c.connections):
                 for l, ssc in enumerate(sc.connections):
-                    if not ssc.destroyed:
+                    if not ssc.destroyed and ssc.name != district.name:
                         route_list.append(ssc)
 
     if len(route_list) == 0:
@@ -291,10 +290,13 @@ def destroy_district_if_needed(district):
             for k, sc in enumerate(c.connections):
                 for l, ssc in enumerate(sc.connections):
                     for m, sssc in enumerate(ssc.connections):
-                        if not sssc.destroyed:
+                        if not sssc.destroyed and sssc.name != district.name:
                             route_list.append(sssc)
 
-    new_location = random.choice(route_list)
+    if len(route_list) == 0:
+        new_location = random.choice([x for x in place_list if not x.destroyed and x.name != district.name])
+    else:
+        new_location = random.choice(route_list)
 
     for i, p in enumerate(district.players):
         if p.state == 1:
@@ -312,11 +314,17 @@ def destroy_district_if_needed(district):
 
 def kill_player(player):
     place = player.location
-    player.state = 0
-    player.infected = False
     place.items = place.items + player.item_list
-    player.item_list = []
     place.players.pop(place.players.index(player))
+
+    player.state = 0
+    player.item_list = []
+    player.injury_list = []
+    player.powerup_list = []
+    player.infected = False
+    player.monster_immunity = False
+    player.injure_immunity = False
+    player.infection_immunity = False
 
 place_list = get_place_list()
 player_list = get_player_list(place_list)

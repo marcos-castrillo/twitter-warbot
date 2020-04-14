@@ -29,9 +29,6 @@ def get_x_or_y_plural(player_list, x, y):
 ALSO_STOLE = u'Además, le ha robado'
 AND = 'y'
 
-def CROSSING():
-    return random.choice([u'atravesando', u'cruzando'])
-
 def COULDNT_MOVE(player):
     return random.choice([
         u' '.join((player.get_name(), u'se ha terminado toda la comida de', player.location.name, u'y no ha podido acceder a otros lugares, por lo que ha muerto de hambre.'))
@@ -55,7 +52,7 @@ def DESTROYED(place):
 
 def DESTROYED_DISTRICT(place, tributes_str):
     return random.choice([
-       u'Todos los tributos de ' + place + u'(' + tributes_str  + u')' + u' han sido derrotados, por lo que ha sido reducida a escombros.'
+       u'Todos los representantes de ' + place + u'(' + tributes_str  + u')' + u' han sido derrotados, por lo que ha sido reducida a escombros.'
     ])
 
 def DIED(player, multiple = False):
@@ -482,5 +479,8 @@ def WINNER_MULTI_KILL(kill_count):
 
 def WINNER_COMPOSED(winner, kills, item_list, infection):
     return u' '.join((u'¡' + winner.get_name(), u'ha ganado en ' + winner.location.name + '! ' + kills + item_list, 'El ataque de', winner.get_name(), u'llegó a ser de', str(winner.get_attack()), u'y su defensa de', str(winner.get_defense()) + '.', infection))
+
+def WINNER_DISTRICTS_COMPOSED(winners_str, district, kills_count):
+    return u' '.join((winners_str, u'han ganado, consiguiendo entre todos un total de', str(kills_count), u'muertes. ¡', district, u'es la última ciudad en pie de España!'))
 
 WITH = u'con'

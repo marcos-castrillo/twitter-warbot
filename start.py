@@ -42,14 +42,13 @@ def simulate_day():
         if hour_count == th:
             simulation_probab = Simulation_Probab(PROBAB_ITEM[i], PROBAB_MOVE[i], PROBAB_BATTLE[i], PROBAB_INJURE[i], PROBAB_STEAL[i], PROBAB_MONSTER[i], PROBAB_DESTROY[i], PROBAB_INFECT[i], PROBAB_ATRACT[i], PROBAB_SUICIDE[i], PROBAB_REVIVE[i], PROBAB_TRAP[i])
             ATRACT_RANGE = ATRACT_RANGE_LIST[i]
+            if hour_count == 200:
+                TREASONS_ENABLED = True
     do_something()
 
-    stop = True
-    for i, p in enumerate(place_list):
-        if not p.destroyed:
-            stop = False
-
-    if stop or get_alive_players_count() <= 1:
+    if USE_DISTRICTS and get_alive_districts_count() <= 1:
+        end_districts()
+    elif get_alive_players_count() <= 1:
         end()
 
 def do_something():
@@ -98,6 +97,17 @@ def end():
         tweet = Tweet()
         tweet.type = Tweet_type.nobody_won
         write_tweet(tweet)
+    finished = True
+
+def end_districts():
+    global finished
+    alive_players = get_alive_players()
+    tweet = Tweet()
+    tweet.type = Tweet_type.winner_districts
+    tweet.player_list = alive_players
+    tweet.player_list_2 = [x for x in player_list if x.district.name == alive_players[0].district]
+    tweet.place = alive_players[0].district
+    write_tweet(tweet)
     finished = True
 
 initialize()

@@ -18,6 +18,8 @@ def get_message(tweet):
         message = START(tweet)
     elif tweet.type == Tweet_type.winner:
         message = winner(tweet)
+    elif tweet.type == Tweet_type.winner_districts:
+        message = winner_districts(tweet)
     elif tweet.type == Tweet_type.nobody_won:
         message = NOBODY_WON(tweet)
     elif tweet.type == Tweet_type.somebody_got_injured:
@@ -119,17 +121,33 @@ def winner(tweet):
 
     return WINNER_COMPOSED(tweet.player, kills, item_list, infection)
 
+def winner_districts(tweet):
+    tributes_str = ''
+    for i, winner in enumerate(tweet.player_list):
+        if i == 0:
+            tributes_str = winner.get_name()
+        elif i == len(tweet.player_list):
+            tributes_str = u' '.join([tributes_str, AND, winner.get_name()])
+        else:
+            tributes_str = tributes_str + ', ' + winner.get_name()
+
+    kills = 0
+    for i, player in enumerate(tweet.player_list):
+        kills = kills + player.kills
+
+    return WINNER_DISTRICTS_COMPOSED(tributes_str, tweet.place.name, kills)
+
 def somebody_got_injured(tweet):
     return I_COMPOSED(tweet.player, INJURE_ACTION(), tweet.item, has_now(tweet.player, tweet.item))
 
 def somebody_got_special(tweet):
-    immunity = ' '
+    immunity = ''
     if tweet.item.injure_immunity:
-        immunity = immunity + INJURE_IMMUNITY()
+        immunity = INJURE_IMMUNITY()
     if tweet.item.monster_immunity:
-        immunity = immunity + MONSTER_IMMUNITY()
+        immunity = MONSTER_IMMUNITY()
     if tweet.item.infection_immunity:
-        immunity = immunity + INFECTION_IMMUNITY()
+        immunity = INFECTION_IMMUNITY()
     return I_COMPOSED(tweet.player, SPECIAL_ACTION(), tweet.item, immunity)
 
 def somebody_powerup(tweet):
@@ -195,7 +213,6 @@ def somebody_suicided(tweet):
     return u' '.join((tweet.player.get_name(), SUICIDE()))
 
 def somebody_moved(tweet):
-    crossing = ''
     action = ''
     road = False
 
@@ -203,15 +220,12 @@ def somebody_moved(tweet):
         if c.encode('utf-8') == tweet.place.name.encode('utf-8'):
             road = True
 
-    if tweet.double != None:
-        crossing = CROSSING() + tweet.place.name
-
     if road:
         action = MOVE_ACTION_ROAD()
     else:
         action = MOVE_ACTION_WATER()
 
-    return u' '.join((tweet.player.get_name(), action, tweet.place_2.name + crossing, TO, tweet.place.name + '.'))
+    return u' '.join((tweet.player.get_name(), action, tweet.place_2.name, TO, tweet.place.name + '.'))
 
 def destroyed(tweet):
     place = tweet.place

@@ -1,5 +1,6 @@
 class Tweet_type(object):
     start = 1
+    winner_districts = 2
     hour_threshold = 3
     somebody_powerup = 4
     winner = 5
@@ -19,11 +20,11 @@ class Tweet_type(object):
     somebody_suicided = 20
     somebody_moved = 21
     destroyed = 22
-    destroyed_district = 27
     somebody_couldnt_move = 23
     trap = 24
     trapped = 25
     trap_dodged = 26
+    destroyed_district = 27
     monster_appeared = 28
     monster_disappeared = 29
     monster_moved = 30

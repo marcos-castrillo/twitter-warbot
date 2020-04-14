@@ -20,6 +20,7 @@ PROBAB_TRAP = [1, 1, 1, 1, 1, 1, 1, 1]
 
 ATRACT_RANGE_LIST =  [1, 1, 1, 1, 2, 2, 2, 3]
 ATRACT_RANGE =  1   # Don't change
+TREASONS_ENABLED =  False   # Don't change
 
 PROBAB_RARITY_1 = 65
 PROBAB_RARITY_2 = 30

@@ -58,7 +58,7 @@ def write_tweet(tweet):
     draw_image(tweet)
 
     line_number = line_number + 1
-    if tweet.type == Tweet_type.winner:
+    if tweet.type == Tweet_type.winner or tweet.type == Tweet_type.winner_districts:
         with open(os.path.join(output_dir, '-1.txt'), "w") as file:
             file.write('todo ok')
 
@@ -83,8 +83,6 @@ def get_image(image_name, size = None):
         return image
 
 def paste_image(image, x, y, dimension, image_name, image_dir = None):
-    global current_dir
-
     if image_dir == None:
         image_dir = '../assets/img/' + image_name
     else:
@@ -104,6 +102,12 @@ def draw_image(tweet):
     if tweet.type == Tweet_type.start:
         summary_image = get_summary_image(image_2, tweet)
         summary_image.save(output_dir + '/' + str(line_number) + '.png')
+    elif tweet.type == Tweet_type.destroyed_district:
+        zoomed_image = get_zoomed_image(image_1, tweet)
+        summary_image = get_summary_image(image_2, tweet)
+
+        zoomed_image.save(output_dir + '/' + str(line_number) + '_bis.png')
+        summary_image.save(output_dir + '/' + str(line_number) + 'b_bis.png')
     else:
         zoomed_image = get_zoomed_image(image_1, tweet)
         summary_image = get_summary_image(image_2, tweet)
@@ -120,9 +124,9 @@ def get_zoomed_image(image, tweet):
             paste_image(image, p.coord_x, p.coord_y, 60, 'destroyed')
         else:
             if p.trap_by != None:
-                paste_image(image, p.coord_x, p.coord_y + 16, 32, 'trap')
+                paste_image(image, p.coord_x, p.coord_y + 32, 32, 'trap')
             if p.monster:
-                paste_image(image, p.coord_x, p.coord_y - 16, 32, 'monster')
+                paste_image(image, p.coord_x, p.coord_y - 32, 32, 'monster')
             if p.infected:
                 paste_image(image, p.coord_x + 16, p.coord_y, 32, 'infection')
 
@@ -133,16 +137,19 @@ def get_zoomed_image(image, tweet):
         paste_image(image, tweet.place.coord_x, tweet.place.coord_y, 48, '', tweet.player.avatar_dir)
         if tweet.player.infected:
             paste_image(image, tweet.place.coord_x + 24, tweet.place.coord_y + 12, 36, 'infection')
-    elif tweet.type == Tweet_type.destroyed or tweet.type == Tweet_type.destroyed_district:
+    elif tweet.type == Tweet_type.destroyed or tweet.type == Tweet_type.destroyed_district or tweet.type == Tweet_type.winner_districts:
         for i, p in enumerate(tweet.player_list):
             paste_image(image, tweet.place.coord_x + (i * 30) - 16, tweet.place.coord_y, 48, '', p.avatar_dir)
             if p.infected:
                 paste_image(image, tweet.place.coord_x + (i * 30) - 16 + 24, tweet.place.coord_y + 12, 36, 'infection')
+            if p.state == 0:
+                draw.text((tweet.place.coord_x + (i * 30) - 46, tweet.place.coord_y - 36), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path_2, size=50))
         if tweet.place_2 != None:
             for i, p in enumerate(tweet.player_list_2):
                 paste_image(image, tweet.place_2.coord_x + (i * 30) - 16, tweet.place_2.coord_y, 48, '', p.avatar_dir)
                 if p.infected:
                     paste_image(image, tweet.place_2.coord_x + (i * 30) - 16 + 24, tweet.place_2.coord_y + 12, 36, 'infection')
+
     elif tweet.type == Tweet_type.somebody_tied_and_became_friend or tweet.type == Tweet_type.somebody_tied_and_was_friend or tweet.type == Tweet_type.somebody_escaped or tweet.type == Tweet_type.somebody_killed or tweet.type == Tweet_type.somebody_stole or tweet.type == Tweet_type.somebody_stole_and_threw or tweet.type == Tweet_type.somebody_stole_and_replaced:
         if tweet.type == Tweet_type.somebody_tied_and_became_friend or tweet.type == Tweet_type.somebody_tied_and_was_friend or tweet.type == Tweet_type.somebody_escaped or tweet.type == Tweet_type.somebody_killed:
             color_1 = 'rgb(255,0,0)'
@@ -192,6 +199,14 @@ def get_zoomed_image(image, tweet):
             if player.infected:
                 paste_image(image, tweet.place.coord_x + (j * 24) + 24, tweet.place.coord_y + 12, 36, 'infection')
 
+    if tweet.type == Tweet_type.destroyed_district or tweet.type == Tweet_type.winner_districts or tweet.type == Tweet_type.atraction:
+        if USE_DISTRICTS:
+            dimension_1 = 424
+            dimension_2 = 286
+            image_to_paste = Image.open(os.path.join(current_dir, '../assets/img/flags/' + tweet.place.name + '.gif'))
+            image_to_paste.thumbnail([dimension_1/2, dimension_2/2])
+            image.paste(image_to_paste, (tweet.place.coord_x - 110, tweet.place.coord_y + 100), image_to_paste.convert('RGBA'))
+
     if tweet.type == Tweet_type.somebody_tied_and_became_friend or tweet.type == Tweet_type.somebody_tied_and_was_friend or tweet.type == Tweet_type.somebody_killed or tweet.type == Tweet_type.somebody_escaped:
         min = tweet.place.coord_x - 100
         max = tweet.place.coord_x + 100
@@ -228,6 +243,9 @@ def get_zoomed_image(image, tweet):
     if tweet.place != None:
         if tweet.type == Tweet_type.winner:
             paste_image(image, tweet.place.coord_x, tweet.place.coord_y - 48, 72, 'crown')
+        elif tweet.type == Tweet_type.winner_districts:
+            for i, winner in enumerate(tweet.player_list_2):
+                paste_image(image, tweet.place.coord_x + (i * 30), tweet.place.coord_y - 48, 72, 'crown')
 
         x = tweet.place.coord_x
         y = tweet.place.coord_y
@@ -235,7 +253,7 @@ def get_zoomed_image(image, tweet):
         image = image.crop((x - w / zoom2, y - h / zoom2, x + w / zoom2, y + h / zoom2))
         image.resize((w, h), Image.LANCZOS)
 
-    if tweet.type == Tweet_type.winner:
+    if tweet.type == Tweet_type.winner or tweet.type == Tweet_type.winner_districts:
         paste_image(image, 80, 80, 256, 'winner')
     if tweet.type == Tweet_type.somebody_found_item or tweet.type == Tweet_type.somebody_replaced_item:
         if tweet.item.rarity == 1:
@@ -301,19 +319,19 @@ def get_summary_image(image, tweet):
         draw = ImageDraw.Draw(image)
 
     for i, p in enumerate(place_list):
-        if p.destroyed == True:
+        if p.destroyed:
             paste_image(image, p.coord_x, p.coord_y, 60, 'destroyed')
-
         else:
             if p.trap_by != None:
-                paste_image(image, p.coord_x, p.coord_y + 16, 32, 'trap')
+                paste_image(image, p.coord_x + 10, p.coord_y + 16, 32, 'trap')
             if p.monster:
                 paste_image(image, p.coord_x, p.coord_y - 16, 32, 'monster')
             if p.infected:
                 paste_image(image, p.coord_x + 16, p.coord_y, 32, 'infection')
-            if len(p.items) > 0:
-                paste_image(image, p.coord_x - 24, p.coord_y, 32, 'item_transparent')
-                draw.text((p.coord_x - 32, p.coord_y - 10), 'x' + str(len(p.items)), fill='rgb(72,255,0)', font=ImageFont.truetype(font_path, size=13))
+            items = len(p.items)
+            while items > 0:
+                paste_image(image, p.coord_x - 24, p.coord_y - 32 + items * 16, 32, 'item_transparent')
+                items = items - 1
 
     draw_ranking(image)
     return image
@@ -322,7 +340,17 @@ def draw_ranking(image):
     coord_x = RANKING_FIRST_COLUMN_X
     coord_y = RANKING_FIRST_ROW_Y
 
+    def cross_district_if_needed(tributes):
+        count = 0
+        for j, tribute in enumerate(tributes):
+            if tribute == '' or tribute.state == 0:
+                count = count + 1
+        if count == MAX_TRIBUTES_PER_DISTRICT:
+            draw.line((coord_x - 200, coord_y - 40, coord_x, coord_y + 60), fill='rgb(255,0,0)', width=5)
+
     if USE_DISTRICTS:
+        draw = ImageDraw.Draw(image)
+
         player_list_by_district = sorted(player_list, key=lambda x: x.district.name, reverse=False)
         player_list_by_district_fixed = []
         previous_district = None
@@ -339,8 +367,13 @@ def draw_ranking(image):
             tributes_in_district = tributes_in_district + 1
 
         for i, player in enumerate(player_list_by_district_fixed):
-            if i > 0 and (i - MAX_TRIBUTES_PER_DISTRICT) % MAX_TRIBUTES_PER_DISTRICT == 0:
+            if i == len(player_list_by_district_fixed) - 1: #last tribute
+                cross_district_if_needed(player_list_by_district_fixed[i-3:i])
+
+            if i > 0 and (i - MAX_TRIBUTES_PER_DISTRICT) % MAX_TRIBUTES_PER_DISTRICT == 0:  #next district
+                cross_district_if_needed(player_list_by_district_fixed[i-3:i])
                 if coord_x + RANKING_SPACE_BETWEEN_DISTRICTS + 3 * (RANKING_IMG_WIDTH + RANKING_SPACE_BETWEEN_COLS) >= RANKING_FIRST_COLUMN_X + RANKING_IMGS_PER_ROW * (RANKING_IMG_WIDTH + RANKING_SPACE_BETWEEN_COLS):
+                    #linebreak
                     coord_x = RANKING_FIRST_COLUMN_X
                     coord_y = coord_y + RANKING_SPACE_BETWEEN_ROWS
                 else:
@@ -386,9 +419,15 @@ def draw_player(image, coord_x, coord_y, player):
         if player.infected:
             paste_image(image, coord_x + 24 + 24, coord_y + 24 + 12, 36, 'infection')
         if len(player.item_list) == 2:
-            paste_image(image, coord_x + 45, coord_y + 5, 32, get_item_rarity(player.item_list[1]))
+            paste_image(image, coord_x + 5, coord_y + 5, 32, get_item_rarity(player.item_list[1]))
         if len(player.item_list) > 0:
             paste_image(image, coord_x + 5, coord_y + 5, 32, get_item_rarity(player.item_list[0]))
+        if player.injure_immunity:
+            paste_image(image, coord_x, coord_y + 48, 32, 'special')
+        if player.monster_immunity:
+            paste_image(image, coord_x, coord_y + 36, 32, 'special')
+        if player.infection_immunity:
+            paste_image(image, coord_x, coord_y + 24, 32, 'special')
 
 def calculate_coords(coord_x, coord_y):
     delta_x = RANKING_IMG_WIDTH + RANKING_SPACE_BETWEEN_COLS

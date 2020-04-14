@@ -9,10 +9,8 @@ This is my first twitter bot. It's a fictional tournament where players can 'fig
 5. Run start.py
 
 ## To Do
-- Cross destroyed districts
-- fix winner conditions with districts
+Add celebrations
 
 ## Bugs
 - too many treasons at the beginning
 - improve treason text
-- districts are often not destroyed
