@@ -16,6 +16,8 @@ def get_message(tweet):
 
     if tweet.type == Tweet_type.start:
         message = START(tweet)
+    elif tweet.type == Tweet_type.introduce_players:
+        message = introduce_players(tweet)
     elif tweet.type == Tweet_type.winner:
         message = winner(tweet)
     elif tweet.type == Tweet_type.winner_districts:
@@ -79,6 +81,19 @@ def get_message(tweet):
     elif tweet.type == Tweet_type.monster_killed:
         message = MONSTER_KILLED(tweet)
     return (message + '\n').encode('utf-8')
+
+def introduce_players(tweet):
+    players_str = ''
+    if len(tweet.player_list) > 0:
+        for i, player in enumerate(tweet.player_list):
+            if i == 0:
+                players_str = player.get_name()
+            elif i == len(tweet.player_list) - 1:
+                players_str = u' '.join([players_str, AND, player.get_name()])
+            else:
+                players_str = players_str + ', ' + player.get_name()
+
+    return u' '.join([players_str, INTRODUCE_PLACE(tweet.place.name)])
 
 def winner(tweet):
     item_list = ''

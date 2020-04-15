@@ -170,6 +170,21 @@ def INJURE_ACTION():
 def INJURE_IMMUNITY():
     return random.choice([u'¡A partir de ahora no sufrirá más heridas!.'])
 
+def INTRODUCE_PLACE(place_name):
+    intro = random.choice([
+        u'representarán a ' + place_name + u'.',
+        u'ya están preparados para representar a ' + place_name + u'.',
+        u'han sido elegidos para representar a ' + place_name + u'.',
+        u'son los elegidos para representar a ' + place_name + u'.',
+    ])
+
+    city = ''
+    if place_name == 'Murcia':
+        city = ' ¡Acho!'
+    elif place_name == '':
+        city = ''
+
+    return intro + city
 def KILL_ACTION():
     return random.choice([
         u'se ha cargado a',

@@ -48,6 +48,7 @@ def initialize_avatars():
         else:
             filename = path + '/' + player.name
         if not (os.path.exists(filename + '.png')):
+            print('Downloading ' + player.get_name() + '\'s avatar...')
             urllib.request.urlretrieve('http://avatars.io/twitter/' + player.username + '/medium', filename + '.png')
         player.avatar_dir = filename
 
@@ -102,6 +103,9 @@ def draw_image(tweet):
     if tweet.type == Tweet_type.start:
         summary_image = get_summary_image(image_2, tweet)
         summary_image.save(output_dir + '/' + str(line_number) + '.png')
+    elif tweet.type == Tweet_type.introduce_players:
+        summary_image = get_zoomed_image(image_1, tweet)
+        summary_image.save(output_dir + '/' + str(line_number) + '.png')
     elif tweet.type == Tweet_type.destroyed_district:
         zoomed_image = get_zoomed_image(image_1, tweet)
         summary_image = get_summary_image(image_2, tweet)
@@ -137,18 +141,18 @@ def get_zoomed_image(image, tweet):
         paste_image(image, tweet.place.coord_x, tweet.place.coord_y, 48, '', tweet.player.avatar_dir)
         if tweet.player.infected:
             paste_image(image, tweet.place.coord_x + 24, tweet.place.coord_y + 12, 36, 'infection')
-    elif tweet.type == Tweet_type.destroyed or tweet.type == Tweet_type.destroyed_district or tweet.type == Tweet_type.winner_districts:
+    elif tweet.type == Tweet_type.introduce_players or tweet.type == Tweet_type.destroyed or tweet.type == Tweet_type.destroyed_district or tweet.type == Tweet_type.winner_districts:
         for i, p in enumerate(tweet.player_list):
-            paste_image(image, tweet.place.coord_x + (i * 30) - 16, tweet.place.coord_y, 48, '', p.avatar_dir)
+            paste_image(image, tweet.place.coord_x + (i * 50) - 16, tweet.place.coord_y, 48, '', p.avatar_dir)
             if p.infected:
-                paste_image(image, tweet.place.coord_x + (i * 30) - 16 + 24, tweet.place.coord_y + 12, 36, 'infection')
+                paste_image(image, tweet.place.coord_x + (i * 50) - 16 + 24, tweet.place.coord_y + 12, 36, 'infection')
             if p.state == 0:
-                draw.text((tweet.place.coord_x + (i * 30) - 46, tweet.place.coord_y - 36), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path_2, size=50))
+                draw.text((tweet.place.coord_x + (i * 50) - 30, tweet.place.coord_y - 36), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path_2, size=50))
         if tweet.place_2 != None:
             for i, p in enumerate(tweet.player_list_2):
-                paste_image(image, tweet.place_2.coord_x + (i * 30) - 16, tweet.place_2.coord_y, 48, '', p.avatar_dir)
+                paste_image(image, tweet.place_2.coord_x + (i * 50) - 16, tweet.place_2.coord_y, 48, '', p.avatar_dir)
                 if p.infected:
-                    paste_image(image, tweet.place_2.coord_x + (i * 30) - 16 + 24, tweet.place_2.coord_y + 12, 36, 'infection')
+                    paste_image(image, tweet.place_2.coord_x + (i * 50) - 16 + 24, tweet.place_2.coord_y + 12, 36, 'infection')
 
     elif tweet.type == Tweet_type.somebody_tied_and_became_friend or tweet.type == Tweet_type.somebody_tied_and_was_friend or tweet.type == Tweet_type.somebody_escaped or tweet.type == Tweet_type.somebody_killed or tweet.type == Tweet_type.somebody_stole or tweet.type == Tweet_type.somebody_stole_and_threw or tweet.type == Tweet_type.somebody_stole_and_replaced:
         if tweet.type == Tweet_type.somebody_tied_and_became_friend or tweet.type == Tweet_type.somebody_tied_and_was_friend or tweet.type == Tweet_type.somebody_escaped or tweet.type == Tweet_type.somebody_killed:
@@ -199,7 +203,7 @@ def get_zoomed_image(image, tweet):
             if player.infected:
                 paste_image(image, tweet.place.coord_x + (j * 24) + 24, tweet.place.coord_y + 12, 36, 'infection')
 
-    if tweet.type == Tweet_type.destroyed_district or tweet.type == Tweet_type.winner_districts or tweet.type == Tweet_type.atraction:
+    if tweet.type == Tweet_type.introduce_players or tweet.type == Tweet_type.destroyed_district or tweet.type == Tweet_type.winner_districts or tweet.type == Tweet_type.atraction:
         if USE_DISTRICTS:
             dimension_1 = 424
             dimension_2 = 286

@@ -12,6 +12,7 @@ class Tweet_type(object):
     somebody_got_injured = 11
     somebody_found_item = 12
     somebody_replaced_item = 13
+    introduce_players = 14
     somebody_tied_and_became_friend = 15
     somebody_tied_and_was_friend = 16
     somebody_escaped = 17

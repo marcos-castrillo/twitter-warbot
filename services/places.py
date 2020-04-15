@@ -15,10 +15,11 @@ def atract():
     action_number = random.randint(0, 100)
 
     for i, p in enumerate(place_list):
-        if not p.destroyed:
+        if not p.destroyed and not p.atracted:
             loc_candidates.append(p)
 
     place = random.choice(loc_candidates)
+    place.atracted = True
     atracted_players = []
 
     def append_players_from(location):
@@ -212,6 +213,10 @@ def monster():
 
         new_place = random.choice(loc_candidates)
         new_place.monster = True
+        tweet = Tweet()
+        tweet.type = Tweet_type.monster_appeared
+        tweet.place = place
+        write_tweet(tweet)
     return True
 
 def destroy():

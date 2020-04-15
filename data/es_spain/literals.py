@@ -2,16 +2,110 @@ from data.es.literals import *
 import random
 
 def ATRACTION(place):
-    if place == u'Bercianos':
-        return u'Como son las grandes fiestas de Bercianos (#ProjectBercy),'
-
-    return random.choice([
-        u'Se han celebrado las fiestas de ' + place + u' y',
-        u'Como son las fiestas de ' + place + u',',
-        u'Todo el mundo está en las fiestas de ' + place + u',',
-        u'Se ha montado un tremendo fiestón en ' + place + u' y',
-        u'Hoy se lía en ' + place + u','
-    ])
+    if place == u'A Coruña':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Albacete':
+        return u'Se ha celebrado la feria de Albacete y'
+    elif place == u'Alicante':
+        return u'Se han celebrado las Fogueres d\'Alacant y'
+    elif place == u'Almería':
+        return u'Se ha celebrado la fiesta de Almería y'
+    elif place == u'Ávila':
+        return u'Se han celebrado las fiestas de Santa Teresa en Ávila y'
+    elif place == u'Badajoz':
+        return u'Se ha celebrado la feria de San Juan en Badajoz y'
+    elif place == u'Barcelona':
+        return u'Se han celebrado las fiestas de La Mercé en Barcelona y'
+    elif place == u'Bilbao':
+        return u'Se ha celebrado la Bilboko Aste Nagusia en Bilbao y'
+    elif place == u'Burgos':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Cáceres':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Cádiz':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Castellón de la Plana':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Ceuta':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Ciudad Real':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Córdoba':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Cuenca':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Girona':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Granada':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Guadalajara':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Huelva':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Huesca':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Jaén':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Las Palmas de Gran Canaria':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'León':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Logroño':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Lugo':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Madrid':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Málaga':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Melilla':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Murcia':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Ourense':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Oviedo':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Palencia':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Palma de Mallorca':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Pamplona':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Pontevedra':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Salamanca':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'San Sebastián':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Santa Cruz de Tenerife':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Santander':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Segovia':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Sevilla':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Soria':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Tarragona':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Teruel':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Toledo':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Valencia':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Valladolid':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Vitoria':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Zamora':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    elif place == u'Zaragoza':
+        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+    else:
+        return u'Se han celebrado las fiestas de ' + place + u' y',
 
 def MONSTER_APPEARED(tweet):
     place = tweet.place

@@ -12,6 +12,7 @@ class Place(object):
     tributes = []
     destroyed = False
     infected = False
+    atracted = False
 
     # Constructor
     def __init__(self, name, road_connections, coordinates, items, sea_connections = None):

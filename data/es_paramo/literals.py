@@ -2,6 +2,9 @@ from data.es.literals import *
 import random
 
 def ATRACTION(place):
+    if place == u'Bercianos':
+        return u'Como son las grandes fiestas de Bercianos (#ProjectBercy),'
+
     return random.choice([
         u'Se han celebrado las fiestas de ' + place + u' y',
         u'Como son las fiestas de ' + place + u', ',
