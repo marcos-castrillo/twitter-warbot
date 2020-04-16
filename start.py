@@ -21,23 +21,18 @@ finished = False
 hour_count = 0
 
 def initialize():
-    if len(player_list) == 0:
-        sys.exit('Config error: no players configured.')
     initialize_avatars()
     if USE_DISTRICTS:
-        introduce_players()
+        for i, tweet in enumerate(introduction_tweet_list):
+            write_tweet(tweet)
     start_battle()
-
-def introduce_players():
-    for i, district in enumerate(place_list):
-        tweet = Tweet()
-        tweet.type = Tweet_type.introduce_players
-        tweet.place = district
-        tweet.player_list = district.tributes
-        write_tweet(tweet)
 
 def start_battle():
     global hour_count
+
+    if len(player_list) == 0:
+        sys.exit('Config error: no players configured.')
+
     tweet = Tweet()
     tweet.type = Tweet_type.start
     write_tweet(tweet)

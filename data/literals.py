@@ -83,17 +83,39 @@ def get_message(tweet):
     return (message + '\n').encode('utf-8')
 
 def introduce_players(tweet):
-    players_str = ''
+    locals_str = ''
     if len(tweet.player_list) > 0:
         for i, player in enumerate(tweet.player_list):
             if i == 0:
-                players_str = player.get_name()
+                locals_str = player.get_name()
             elif i == len(tweet.player_list) - 1:
-                players_str = u' '.join([players_str, AND, player.get_name()])
+                locals_str = u' '.join([locals_str, AND, player.get_name()])
             else:
-                players_str = players_str + ', ' + player.get_name()
+                locals_str = locals_str + ', ' + player.get_name()
+        locals_str = u' '.join([locals_str, INTRODUCE_PLACE(tweet)])
 
-    return u' '.join([players_str, INTRODUCE_PLACE(tweet.place.name)])
+    sufix = ''
+
+    if len(tweet.player_list_2) > 0:
+        if tweet.inverse:
+            sufix = 'Como no había más participantes de ' + tweet.place.name + u', '
+        else:
+            sufix = 'El resto de participantes de ' + tweet.place.name + u', '
+
+        for i, player in enumerate(tweet.player_list_2):
+            if i == 0:
+                sufix = sufix + player.get_name()
+            elif i == len(tweet.player_list_2) - 1:
+                sufix = u' '.join([sufix, AND, player.get_name()])
+            else:
+                sufix = sufix + ', ' + player.get_name()
+
+        if tweet.inverse:
+            sufix = sufix + ' han sido seleccionados al azar como representantes.'
+        else:
+            sufix = sufix + ' serán repartidos al azar entre otros lugares.'
+
+    return u' '.join([locals_str, sufix])
 
 def winner(tweet):
     item_list = ''

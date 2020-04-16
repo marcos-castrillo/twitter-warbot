@@ -170,21 +170,27 @@ def INJURE_ACTION():
 def INJURE_IMMUNITY():
     return random.choice([u'¡A partir de ahora no sufrirá más heridas!.'])
 
-def INTRODUCE_PLACE(place_name):
-    intro = random.choice([
-        u'representarán a ' + place_name + u'.',
-        u'ya están preparados para representar a ' + place_name + u'.',
-        u'han sido elegidos para representar a ' + place_name + u'.',
-        u'son los elegidos para representar a ' + place_name + u'.',
-    ])
+def INTRODUCE_PLACE(tweet):
+    place_name = tweet.place.name
+    players = tweet.player_list
+    singular = len(players) == 1
 
-    city = ''
-    if place_name == 'Murcia':
-        city = ' ¡Acho!'
-    elif place_name == '':
-        city = ''
+    if singular:
+        return random.choice([
+            u'representará a ' + place_name + u'.',
+            u'ya está ' + get_x_or_y(players[0], 'preparado', 'preparada') + ' para representar a ' + place_name + u'.',
+            u'ha sido ' + get_x_or_y(players[0], 'elegido', 'elegida') + ' para representar a ' + place_name + u'.',
+            u'es ' + get_x_or_y(players[0], 'el elegido', 'la elegida') + ' para representar a ' + place_name + u'.',
+            u'ha sido ' + get_x_or_y(players[0], 'seleccionado', 'seleccionada') + ' para representar a ' + place_name + u'.',
+        ])
+    else:
+        return random.choice([
+            u'representarán a ' + place_name + u'.',
+            u'ya están ' + get_x_or_y_plural(players, 'preparados', 'preparadas') + ' para representar a ' + place_name + u'.',
+            u'han sido ' + get_x_or_y_plural(players, 'elegidos', 'elegidas') + ' para representar a ' + place_name + u'.',
+            u'han sido ' + get_x_or_y_plural(players, 'seleccionados', 'seleccionadas') + ' para representar a ' + place_name + u'.',
+        ])
 
-    return intro + city
 def KILL_ACTION():
     return random.choice([
         u'se ha cargado a',

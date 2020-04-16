@@ -3,7 +3,7 @@ import random
 
 def ATRACTION(place):
     if place == u'A Coruña':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se han celebrado las Fiestas de Maria Pita en A Coruña y'
     elif place == u'Albacete':
         return u'Se ha celebrado la feria de Albacete y'
     elif place == u'Alicante':
@@ -11,99 +11,99 @@ def ATRACTION(place):
     elif place == u'Almería':
         return u'Se ha celebrado la fiesta de Almería y'
     elif place == u'Ávila':
-        return u'Se han celebrado las fiestas de Santa Teresa en Ávila y'
+        return u'Se han celebrado las Fiestas de Santa Teresa en Ávila y'
     elif place == u'Badajoz':
         return u'Se ha celebrado la feria de San Juan en Badajoz y'
     elif place == u'Barcelona':
-        return u'Se han celebrado las fiestas de La Mercé en Barcelona y'
+        return u'Se han celebrado las Fiestas de La Mercé en Barcelona y'
     elif place == u'Bilbao':
         return u'Se ha celebrado la Bilboko Aste Nagusia en Bilbao y'
     elif place == u'Burgos':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se han celebrado los Sampedros en Burgos y'
     elif place == u'Cáceres':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se ha celebrado la Feria de Mayo en Cáceres y'
     elif place == u'Cádiz':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se ha celebrado el Carnaval de Cádiz y'
     elif place == u'Castellón de la Plana':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se han celebrado las Fiestas de la Magdalena en Castellón de la Plana y'
     elif place == u'Ceuta':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se han celebrado las Fiestas de la Virgen de África en Ceuta y'
     elif place == u'Ciudad Real':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se han celebrado las Fiestas de la Virgen del Prado en Ciudad Real y'
     elif place == u'Córdoba':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se ha celebrado la Feria de Córdoba y'
     elif place == u'Cuenca':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se han celebrado las Fiestas de San Julián en Cuenca y'
     elif place == u'Girona':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se han celebrado les fires de Sant Narcís en Girona y'
     elif place == u'Granada':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se ha celebrado el Día de la Cruz en Granada y'
     elif place == u'Guadalajara':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se ha celebrado la Semana Grande de Guadalajara y'
     elif place == u'Huelva':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se han celebrado las Fiestas Colombinas de Huelva y'
     elif place == u'Huesca':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se han celebrado las Fiestas de San Lorenzo en Huesca y'
     elif place == u'Jaén':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se ha celebrado la feria San Lucas en Jaén y'
     elif place == u'Las Palmas de Gran Canaria':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se ha celebrado el Carnaval de Las Palmas de Gran Canaria y'
     elif place == u'León':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se ha celebrado la fiesta de Genarín en León y'
     elif place == u'Logroño':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se han celebrado las Fiestas de San Mateo en Logroño y'
     elif place == u'Lugo':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se han celebrado las Fiestas de San Froilán en Lugo y'
     elif place == u'Madrid':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se han celebrado las Fiestas de San Isidro en Madrid y'
     elif place == u'Málaga':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se ha celebrado la Feria de Málaga y'
     elif place == u'Melilla':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se han celebrado las Fiestas de la Virgen de la Victoria en Melilla y'
     elif place == u'Murcia':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se han celebrado las Fiestas de Primavera en Murcia y'
     elif place == u'Ourense':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se han celebrado las Festas de Ourense y'
     elif place == u'Oviedo':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se han celebrado las Fiestas de San Mateo en Oviedo y'
     elif place == u'Palencia':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se han celebrado las Fiestas de San Antolín en Palencia y'
     elif place == u'Palma de Mallorca':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se han celebrado las Festes de Sant Sebastià en Palma de Mallorca y'
     elif place == u'Pamplona':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se han celebrado los Sanfermines en Pamplona y'
     elif place == u'Pontevedra':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se han celebrado las Fiestas de la Peregrina en Pontevedra y'
     elif place == u'Salamanca':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se ha celebrado el Lunes de Aguas en Salamanca y'
     elif place == u'San Sebastián':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se ha celebrado la Semana Grande de San Sebastián y'
     elif place == u'Santa Cruz de Tenerife':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se ha celebrado el Carnaval de Santa Cruz de Tenerife y'
     elif place == u'Santander':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se ha celebrado la Semana Grande de Santander y'
     elif place == u'Segovia':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se han celebrado las Fiestas de San Juan y San Pedro en Segovia y'
     elif place == u'Sevilla':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se han celebrado la Feria de Abril en Sevilla y'
     elif place == u'Soria':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se han celebrado las Fiestas de San Juan en Soria y'
     elif place == u'Tarragona':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se han celebrado las Festes de Santa Tecla en Tarragona y'
     elif place == u'Teruel':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se han celebrado las Fiestas del Ángel en Teruel y'
     elif place == u'Toledo':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se han celebrado las Fiestas de la Virgen del Sagrario en Toledo y'
     elif place == u'Valencia':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se han celebrado las Fallas de Valencia y'
     elif place == u'Valladolid':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se han celebrado las Fiestas de la Virgen de San Lorenzo y'
     elif place == u'Vitoria':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se han celebrado las Fiestas de La Blanca en Vitoria y'
     elif place == u'Zamora':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se han celebrado las Fiestas de San Pedro en Zamora y'
     elif place == u'Zaragoza':
-        return u'Se han celebrado las fiestas de Maria Pita en A Coruña y'
+        return u'Se han celebrado las Fiestas del Pilar en Zaragoza y'
     else:
         return u'Se han celebrado las fiestas de ' + place + u' y',
 
