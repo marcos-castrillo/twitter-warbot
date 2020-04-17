@@ -215,7 +215,7 @@ def monster():
         new_place.monster = True
         tweet = Tweet()
         tweet.type = Tweet_type.monster_appeared
-        tweet.place = place
+        tweet.place = new_place
         write_tweet(tweet)
     return True
 

@@ -95,27 +95,24 @@ def introduce_players(tweet):
         locals_str = u' '.join([locals_str, INTRODUCE_PLACE(tweet)])
 
     sufix = ''
+    if len(tweet.player_list) > 0:
+        sufix = ' '
 
     if len(tweet.player_list_2) > 0:
         if tweet.inverse:
-            sufix = 'Como no había más participantes de ' + tweet.place.name + u', '
+            sufix = TRIBUTES_NOT_ENOUGH(tweet.place.name)
+            for i, player in enumerate(tweet.player_list_2):
+                if i == 0:
+                    sufix = sufix + player.get_name()
+                elif i == len(tweet.player_list_2) - 1:
+                    sufix = u' '.join([sufix, AND, player.get_name()])
+                else:
+                    sufix = sufix + ', ' + player.get_name()
+            sufix = u' '.join([sufix, TRIBUTES_RANDOMLY_CHOSEN(tweet.player_list_2)])
         else:
-            sufix = 'El resto de participantes de ' + tweet.place.name + u', '
+            sufix = sufix +  TRIBUTES_WERE_DIVIDED(tweet.place.name)
 
-        for i, player in enumerate(tweet.player_list_2):
-            if i == 0:
-                sufix = sufix + player.get_name()
-            elif i == len(tweet.player_list_2) - 1:
-                sufix = u' '.join([sufix, AND, player.get_name()])
-            else:
-                sufix = sufix + ', ' + player.get_name()
-
-        if tweet.inverse:
-            sufix = sufix + ' han sido seleccionados al azar como representantes.'
-        else:
-            sufix = sufix + ' serán repartidos al azar entre otros lugares.'
-
-    return u' '.join([locals_str, sufix])
+    return locals_str + sufix
 
 def winner(tweet):
     item_list = ''
@@ -327,7 +324,7 @@ def destroyed_district(tweet):
             if i == 0:
                 tributes_str = d
             elif i == len(tributes) - 1:
-                tributes_str = tributes_str + AND + ' ' + d
+                tributes_str = tributes_str + ' ' + AND + ' ' + d
             else:
                 tributes_str = tributes_str + ', ' + d
 
@@ -396,11 +393,11 @@ def has_now(player, event, previous_event = None):
         previous_defense = previous_event.defense
 
     if event.attack != 0:
-        composed = u' '.join([HAS_NOW(), str(player.get_attack()), get_amount(event.attack - previous_attack), IN_ATTACK])
+        composed = u' '.join([HAS_NOW(), str(player.get_attack()) + get_amount(event.attack - previous_attack), IN_ATTACK])
     if event.attack != 0 and event.defense != 0:
-        composed = u' '.join([composed, AND, str(player.get_defense()), get_amount(event.defense - previous_defense), IN_DEFENSE + '.'])
+        composed = u' '.join([composed, AND, str(player.get_defense()) + get_amount(event.defense - previous_defense), IN_DEFENSE + '.'])
     elif event.defense != 0:
-        composed = u' '.join([HAS_NOW(), str(player.get_defense()), get_amount(event.defense - previous_defense), IN_DEFENSE + '.'])
+        composed = u' '.join([HAS_NOW(), str(player.get_defense()) + get_amount(event.defense - previous_defense), IN_DEFENSE + '.'])
     elif event.attack == 0:
         composed = ''
     else:

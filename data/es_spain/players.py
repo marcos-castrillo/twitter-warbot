@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# Name, username, friend_list
+# Name, username, gender, place, weapon_list
 raw_player_list = [
     [u'Abraham Mateo', u'AbrahamMateo', 0, u'Cádiz'],
     [u'Álex Ubago', u'AlexUbagoficial', 0, u'Vitoria'],

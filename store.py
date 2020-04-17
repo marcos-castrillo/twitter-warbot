@@ -119,109 +119,108 @@ def get_place_list():
 
     return list
 
-def get_player_list(place_list):
-    list = []
+def initialize_tributes():
+    global player_list
     tweet_list = []
+
+    #Initialize and distribute the tributes per district
+    free_tributes = [x for x in player_list if x.district == None]
+    tributes_per_district = round(len(player_list) / len(place_list))
+    place_list_sorted = sorted(place_list, key=lambda x: len(x.tributes), reverse=True)
+    enough_tributes_list = [x for x in place_list_sorted if len(x.tributes) >= tributes_per_district]
+    not_enough_tributes_list = [x for x in place_list_sorted if len(x.tributes) < tributes_per_district]
+
+    #Districts with enough tributes
+    for j, enough_tributes_district in enumerate(enough_tributes_list):
+        exported_tributes = []
+
+        index = len(enough_tributes_district.tributes) - tributes_per_district
+        while index > 0:
+            excess_tribute = random.choice(enough_tributes_district.tributes)
+            free_tributes.append(excess_tribute)
+            exported_tributes.append(excess_tribute)
+            enough_tributes_district.tributes.remove(excess_tribute)
+            index = index - 1
+
+        tweet = Tweet()
+        tweet.type = Tweet_type.introduce_players
+        tweet.place = enough_tributes_district
+        tweet.player_list = enough_tributes_district.tributes
+        tweet.player_list_2 = exported_tributes
+        tweet_list.append(tweet)
+
+    #Districts with not enough tributes
+    index = tributes_per_district
+
+    while index > 0:
+        for j, not_enough_tributes_district in enumerate(not_enough_tributes_list):
+            if len(not_enough_tributes_district.tributes) < tributes_per_district and len(free_tributes) > 0:
+                chosen_tribute = random.choice(free_tributes)
+                free_tributes.remove(chosen_tribute)
+                chosen_tribute.location = not_enough_tributes_district
+                not_enough_tributes_district.tributes.append(chosen_tribute)
+        index = index - 1
+
+    for j, not_enough_tributes_district in enumerate(not_enough_tributes_list):
+        imported_tributes = [x for x in not_enough_tributes_district.tributes if x.district.name != not_enough_tributes_district.name]
+        local_tributes = [x for x in not_enough_tributes_district.tributes if x.district.name == not_enough_tributes_district.name]
+
+        for j, imported in enumerate(imported_tributes):
+            imported.district = not_enough_tributes_district
+
+        tweet = Tweet()
+        tweet.type = Tweet_type.introduce_players
+        tweet.place = not_enough_tributes_district
+        tweet.player_list = local_tributes
+        tweet.player_list_2 = imported_tributes
+        tweet.inverse = True
+        tweet_list.append(tweet)
+
+    #Friends list
+    for j, place in enumerate(place_list):
+        for k, tribute in enumerate(place.tributes):
+            tribute.district = place
+            tribute.location = place
+            place.players.append(tribute)
+            tribute.friend_list = tribute.friend_list + [x for x in place.tributes if x.name != tribute.name]
+    return tweet_list
+
+def get_player_list(place_list):
+    player_list = []
 
     if USE_DISTRICTS and len(raw_player_list) > len(place_list) * MAX_TRIBUTES_PER_DISTRICT:
         sys.exit(u'Config error: player limit exceeded: Players: ' + str(len(raw_player_list)) + u', Locations: ' + str(len(place_list)) + u', Tributes/location: ' + str(MAX_TRIBUTES_PER_DISTRICT))
 
     for i, p in enumerate(raw_player_list):
+        # Name, username, gender, place, weapon_list
         player = Player()
         player.name = p[0]
         player.username = p[1]
         player.gender = p[2]
 
-        if USE_DISTRICTS and p[3] != None:
-            district = next(x for x in place_list if x.name == p[3])
-            player.district = district  #will override later, just to save p[3]
-            district.tributes.append(player)
-        else:
-            location = random.choice(place_list)
-            player.location = location
-
         #initial items
         initial_items = []
         if len(p) > 4:
-            if initial_items != None and (not isinstance(initial_items, list) or len(initial_items) > 2):
+            if initial_items != None and (not isinstance(initial_items, player_list) or len(initial_items) > 2):
                 sys.exit('Config error: Item list for player ' + self.name + ' is not an array or contains more than 2 items.')
             for item in p[4]:
                 reserved_item = [x for x in item_list if not x.name == item.name]
                 initial_items.append(reserved_item)
                 item_list.pop(item_list.index(reserved_item))
-
         player.item_list = initial_items
 
-        list.append(player)
-        if not USE_DISTRICTS:
+        player_list.append(player)
+
+        if USE_DISTRICTS and p[3] != None:
+            location = next(x for x in place_list if x.name == p[3])
+            player.district = location #only to store p[3]
+            location.tributes.append(player) #idem
+        elif not USE_DISTRICTS:
+            location = random.choice(place_list)
+            player.location = location
             location.players.append(player)
 
-    if USE_DISTRICTS:
-        #Initialize and distribute the tributes per district
-        free_tributes = [x for x in list if x.district == None]
-        tributes_per_district = round(len(list) / len(place_list))
-        place_list_sorted = sorted(place_list, key=lambda x: len(x.tributes), reverse=True)
-        enough_tributes_list = [x for x in place_list_sorted if len(x.tributes) >= tributes_per_district]
-        not_enough_tributes_list = [x for x in place_list_sorted if len(x.tributes) < tributes_per_district]
-
-        #Districts with enough tributes
-        for j, place in enumerate(enough_tributes_list):
-            local_tributes = place.tributes.copy()
-            exported_tributes = []
-
-            index = len(place.tributes) - tributes_per_district
-            while index > 0:
-                tribute = random.choice(place.tributes)
-                free_tributes.append(tribute)
-                exported_tributes.append(tribute)
-                place.tributes.remove(tribute)
-                index = index - 1
-
-            tweet = Tweet()
-            tweet.type = Tweet_type.introduce_players
-            tweet.place = place
-            tweet.player_list = local_tributes
-            tweet.player_list_2 = exported_tributes
-            tweet_list.append(tweet)
-
-        #Districts with not enough tributes
-        index = tributes_per_district
-
-        while index > 0:
-            for j, place in enumerate(not_enough_tributes_list):
-                if len(place.tributes) < tributes_per_district and len(free_tributes) > 0:
-                    local_tributes = place.tributes.copy()
-                    imported_tributes = []
-
-                    tribute = random.choice(free_tributes)
-                    free_tributes.remove(tribute)
-                    imported_tributes.append(tribute)
-                    place.tributes.append(tribute)
-                    tribute.district = place
-
-                    tweet = Tweet()
-                    tweet.type = Tweet_type.introduce_players
-                    tweet.place = place
-                    tweet.player_list = local_tributes
-                    tweet.player_list_2 = imported_tributes
-                    tweet.inverse = True
-
-                    existing = [x for x in tweet_list if x.place == tweet.place]
-                    if len(existing) > 0:
-                        tweet_list[tweet_list.index(existing[0])] = tweet
-
-                    tweet_list.append(tweet)
-            index = index - 1
-
-        #Friends list
-        for j, place in enumerate(place_list):
-            for k, tribute in enumerate(place.tributes):
-                tribute.district = place
-                tribute.location = place
-                place.players.append(tribute)
-                tribute.friend_list = tribute.friend_list + [x for x in place.tributes if x.name != tribute.name]
-
-    return list, tweet_list
+    return player_list
 
 def get_injury_list():
     list = []
@@ -235,17 +234,10 @@ def get_injury_list():
     return list
 
 def get_player_by_name(name):
-    player = [p for p in player_list if p.name == name]
-    if player:
-        return player[0]
-    else:
-        return None
+    return next(p for p in player_list if p.name == name)
 
 def get_two_players_in_random_place():
-    list = []
-    for i, p in enumerate(place_list):
-        if len(p.players) > 1:
-            list.append(p)
+    list = [x for x in place_list if len(x.players) > 1]
 
     while len(list) > 0:
         place = random.choice(list)
@@ -366,5 +358,7 @@ def kill_player(player):
     player.infection_immunity = False
 
 place_list = get_place_list()
-player_list, introduction_tweet_list = get_player_list(place_list)
+player_list = get_player_list(place_list)
+if USE_DISTRICTS:
+    introduction_tweet_list = initialize_tributes()
 injury_list = get_injury_list()

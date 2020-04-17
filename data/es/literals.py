@@ -52,7 +52,14 @@ def DESTROYED(place):
 
 def DESTROYED_DISTRICT(place, tributes_str):
     return random.choice([
-       u'Todos los representantes de ' + place + u'(' + tributes_str  + u')' + u' han sido derrotados, por lo que ha sido reducida a escombros.'
+        u'Todos los representantes de ' + place + u'(' + tributes_str  + u')' + u' han sido derrotados, por lo que ha sido reducida a escombros.',
+        u'Ninguno de los representantes de ' + place + u'(' + tributes_str  + u')' + u' sigue con vida, por lo que ha sido destruida.',
+        place + u' está en ruinas, ya que ' + tributes_str  + u' han caído en combate. Otra vez será.',
+        u'Los representantes de ' + place + u'(' + tributes_str  + u')' + u' no han estado a la altura y no han logrado salvarla de la destrucción.',
+        tributes_str + u' no han dado la talla y ' + place + u' ha sido demolida. ¡Una pena!',
+        u'Por desgracia, ' + place + u' no ha sido salvada por sus representantes (' + tributes_str  + u')',
+        tributes_str + u' han sido derrotados. El mundo echará de menos a ' + place,
+        tributes_str + u' nos han decepcionado a todos y ' + place + u' ha tenido que ser derruida.',
     ])
 
 def DIED(player, multiple = False):
@@ -481,6 +488,26 @@ def TREASON(tweet):
         u'Por lo visto no eran tan ' + get_x_or_y_plural([player_1, player_2], u'amigos, ', u'amigas, '),
         u'Premio ' + get_x_or_y(player_1, u'al mejor amigo', u'a la mejor amiga') + u' del año. ',
         ''
+    ])
+
+def TRIBUTES_NOT_ENOUGH(place_name):
+    return random.choice([
+        u'Como no había suficientes participantes de ' + place_name + u', '
+    ])
+
+def TRIBUTES_RANDOMLY_CHOSEN(tributes_list):
+    if len(tributes_list) == 1:
+        return random.choice([
+            u'ha sido ' + get_x_or_y(tributes_list[0], u'seleccionado al azar.', u'seleccionada al azar.')
+        ])
+    else:
+        return random.choice([
+            u'han sido ' + get_x_or_y_plural(tributes_list, u'seleccionados al azar.', u'seleccionadas al azar.')
+        ])
+
+def TRIBUTES_WERE_DIVIDED(place_name):
+    return random.choice([
+        u'El resto de participantes de ' + place_name + u' serán repartidos entre otros lugares.'
     ])
 
 def UNFRIEND():

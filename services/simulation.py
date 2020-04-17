@@ -141,7 +141,7 @@ def get_zoomed_image(image, tweet):
         paste_image(image, tweet.place.coord_x, tweet.place.coord_y, 48, '', tweet.player.avatar_dir)
         if tweet.player.infected:
             paste_image(image, tweet.place.coord_x + 24, tweet.place.coord_y + 12, 36, 'infection')
-    elif tweet.type == Tweet_type.introduce_players or tweet.type == Tweet_type.destroyed or tweet.type == Tweet_type.destroyed_district or tweet.type == Tweet_type.winner_districts:
+    elif tweet.type == Tweet_type.destroyed or tweet.type == Tweet_type.destroyed_district or tweet.type == Tweet_type.winner_districts:
         for i, p in enumerate(tweet.player_list):
             paste_image(image, tweet.place.coord_x + (i * 50) - 16, tweet.place.coord_y, 48, '', p.avatar_dir)
             if p.infected:
@@ -153,6 +153,9 @@ def get_zoomed_image(image, tweet):
                 paste_image(image, tweet.place_2.coord_x + (i * 50) - 16, tweet.place_2.coord_y, 48, '', p.avatar_dir)
                 if p.infected:
                     paste_image(image, tweet.place_2.coord_x + (i * 50) - 16 + 24, tweet.place_2.coord_y + 12, 36, 'infection')
+    elif tweet.type == Tweet_type.introduce_players:
+        for i, p in enumerate(tweet.player_list + tweet.player_list_2):
+            paste_image(image, tweet.place.coord_x + (i * 50) - 16, tweet.place.coord_y, 48, '', p.avatar_dir)
 
     elif tweet.type == Tweet_type.somebody_tied_and_became_friend or tweet.type == Tweet_type.somebody_tied_and_was_friend or tweet.type == Tweet_type.somebody_escaped or tweet.type == Tweet_type.somebody_killed or tweet.type == Tweet_type.somebody_stole or tweet.type == Tweet_type.somebody_stole_and_threw or tweet.type == Tweet_type.somebody_stole_and_replaced:
         if tweet.type == Tweet_type.somebody_tied_and_became_friend or tweet.type == Tweet_type.somebody_tied_and_was_friend or tweet.type == Tweet_type.somebody_escaped or tweet.type == Tweet_type.somebody_killed:

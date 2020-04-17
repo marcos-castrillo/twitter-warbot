@@ -13,7 +13,7 @@ def battle():
         return False
 
     kill_number = random.randint(0, 100)
-    if are_friends(player_1, player_2) and not TREASONS_ENABLED and (kill_number > 5 and kill_number < 95):
+    if are_friends(player_1, player_2) and (not TREASONS_ENABLED or (kill_number > 5 and kill_number < 95)):
         return False
 
     factor = 50 + 2*(player_1.get_defense() + player_1.get_attack()) - 2*(player_2.get_attack() + player_2.get_defense())
