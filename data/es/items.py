@@ -106,6 +106,7 @@ raw_powerup_list = [
 raw_special_list = [
     [u'una placa de policía', True, False, False],
     [u'un uniforme de policía', True, False, False],
+    [u'la corona de España', True, False, False],
     [u'un ibuprofeno', False, True, False],
     [u'un botiquín', False, True, False],
     [u'la vacuna del coronavirus', False, False, True],

@@ -100,7 +100,7 @@ def introduce_players(tweet):
 
     if len(tweet.player_list_2) > 0:
         if tweet.inverse:
-            sufix = TRIBUTES_NOT_ENOUGH(tweet.place.name)
+            sufix = sufix + TRIBUTES_NOT_ENOUGH(tweet.place.name)
             for i, player in enumerate(tweet.player_list_2):
                 if i == 0:
                     sufix = sufix + player.get_name()
@@ -230,9 +230,9 @@ def somebody_killed(tweet):
     if player_1.kills > 1:
         kills_count = u' ' + u' '.join((HAS_ALREADY_KILLED(str(player_1.kills)), PRAISE(player_1)))
     if new_item != None and old_item != None:
-        stole = u' ' + u' '.join((ALSO_STOLE, new_item.name, AND, GETS_RID_OF, old_item.name + '.'))
+        stole = u' ' + u' '.join((ALSO_STOLE(), new_item.name, AND, GETS_RID_OF, old_item.name + '.'))
     elif new_item != None:
-        stole = u' ' + u' '.join((ALSO_STOLE, new_item.name + '.'))
+        stole = u' ' + u' '.join((ALSO_STOLE(), new_item.name + '.'))
 
     return u' '.join((friend_message + player_1.get_name(), kill_verb, player_2.get_name(), kill_method + kills_count + stole))
 
@@ -248,9 +248,9 @@ def somebody_suicided(tweet):
 
 def somebody_moved(tweet):
     action = ''
-    road = False
+    road = True
 
-    for i, c in enumerate(tweet.place_2.road_connections):
+    for i, c in enumerate(tweet.place_2.sea_connections):
         if c.encode('utf-8') == tweet.place.name.encode('utf-8'):
             road = True
 
@@ -301,7 +301,7 @@ def destroyed(tweet):
             else:
                 susufix_str = susufix_str + ', ' + d
 
-        susufix = u' ' + u' '.join((susufix_str, get_sing_or_pl(escaped_list, MOVED_SING(), MOVED_PL()), new_location.name + u'.'))
+        susufix = u' ' + u' '.join((susufix_str + '.', get_sing_or_pl(escaped_list, MOVED_SING(), MOVED_PL()), new_location.name + u'.'))
 
     return (prefix + sufix + susufix)
 
@@ -340,7 +340,7 @@ def destroyed_district(tweet):
             if i == 0:
                 sufix_str = d
             elif i == len(escaped) - 1:
-                sufix_str = sufix_str + AND + d
+                sufix_str = sufix_str + ' ' +  AND + ' ' + d
             else:
                 sufix_str = sufix_str + ', ' + d
 
@@ -355,7 +355,9 @@ def infected(tweet):
     if len(tweet.player_list) > 0:
         also = u' infectando también a'
         for i, player in enumerate(tweet.player_list):
-            if i == len(tweet.player_list) - 1:
+            if i == 0:
+                also = player.get_name()
+            elif i == len(tweet.player_list) - 1:
                 also = u' '.join((also, AND, player.get_name()))
             else:
                 also = also + ', ' + player.get_name()

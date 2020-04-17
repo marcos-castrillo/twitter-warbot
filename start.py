@@ -110,7 +110,7 @@ def end_districts():
     tweet = Tweet()
     tweet.type = Tweet_type.winner_districts
     tweet.player_list = alive_players
-    tweet.player_list_2 = [x for x in player_list if x.district.name == alive_players[0].district]
+    tweet.player_list_2 = [x for x in player_list if x.district.name == alive_players[0].district.name]
     tweet.place = alive_players[0].district
     write_tweet(tweet)
     finished = True

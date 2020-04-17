@@ -23,10 +23,11 @@ class Place(object):
         self.road_connections = road_connections
         self.sea_connections = sea_connections
         self.connections = road_connections
-        if sea_connections != None:
-            self.connections = self.connections + sea_connections
         self.destroyed = False
         self.monster = None
+        self.sea_connections = []
+        if sea_connections != None:
+            self.connections = self.connections + sea_connections
         self.players = []
         self.tributes = []
         self.trap_by = None

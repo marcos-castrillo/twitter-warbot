@@ -18,6 +18,9 @@ def atract():
         if not p.destroyed and not p.atracted:
             loc_candidates.append(p)
 
+    if len(loc_candidates) == 0:
+        return False
+        
     place = random.choice(loc_candidates)
     place.atracted = True
     atracted_players = []

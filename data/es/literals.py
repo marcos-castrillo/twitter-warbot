@@ -26,7 +26,14 @@ def get_x_or_y_plural(player_list, x, y):
             return x
     return y
 
-ALSO_STOLE = u'Además, le ha robado'
+def ALSO_STOLE():
+    return random.choice([
+        u'Además, le ha robado',
+        u'Ya que no lo va a necesitar, le ha robado',
+        u'Además, le ha quitado',
+        u'También ha saqueado su cadáver y ha encontrado'
+    ])
+
 AND = 'y'
 
 def COULDNT_MOVE(player):
@@ -84,15 +91,18 @@ def DIED(player, multiple = False):
 
 def DISTRICT_REBUILD(tweet):
     return random.choice([
-        u'Además, ¡su distrito (' + tweet.player.district.name + u') ha sido reconstruido!'
+        u'Además, ¡su ciudad (' + tweet.player.district.name + u') ha sido reconstruida!'
+        u'¡' + tweet.player.district.name + u' ha sido reconstruida!',
+        u'¡' + tweet.player.district.name + u' vuelve a estar en pie!',
+        u'¡' + tweet.player.district.name + u' vuelve a la vida!'
     ])
 
 def ESCAPED(player_1, player_2):
     return random.choice([
-        player_1.get_name() + u' y ' + player_2.get_name() + u' se han encontrado, pero ' + player_2.get_name() + u' ha salido por patas cual cobarde a ' + player_2.location.name + u'.',
-        player_1.get_name() + u' y ' + player_2.get_name() + u' han empezado a pelear, pero ' + player_2.get_name() + u' sabía que tenía las de perder. Cogió un puñado de arena, se lo echó a ' + player_1.get_name() + u' en los ojos y salió corriendo a ' + player_2.location.name + u'.',
-        player_2.get_name() + u' iba a asesinar a ' + player_1.get_name() + u' por la espalda, pero éste se dio cuenta en el último momento. ' + player_2.get_name() + u' ha huido a ' + player_2.location.name + u'.',
-        player_1.get_name() + u' se ha encarado con ' + player_2.get_name() + u', pero ' + player_2.get_name() + u' se ha achantado y salido corriendo a ' + player_2.location.name + u'.'
+        player_1.get_name() + u' y ' + player_2.get_name() + u' se han encontrado, pero ' + player_2.name + u' ha salido por patas cual cobarde a ' + player_2.location.name + u'.',
+        player_1.get_name() + u' y ' + player_2.get_name() + u' han empezado a pelear, pero ' + player_2.name + u' sabía que tenía las de perder. Cogió un puñado de arena, se lo echó a ' + player_1.name + u' en los ojos y salió corriendo a ' + player_2.location.name + u'.',
+        player_2.get_name() + u' iba a asesinar a ' + player_1.get_name() + u' por la espalda, pero éste se dio cuenta en el último momento. ' + player_2.name + u' ha huido a ' + player_2.location.name + u'.',
+        player_1.get_name() + u' se ha encarado con ' + player_2.get_name() + u', pero ' + player_2.name + u' se ha achantado y salido corriendo a ' + player_2.location.name + u'.'
     ])
 
 def FIND_ACTION():
@@ -169,13 +179,22 @@ IN_ATTACK = u'en ataque'
 IN_DEFENSE = u'en defensa'
 
 def INFECTION_IMMUNITY():
-    return random.choice([u'¡A partir de ahora es inmune al coronavirus!'])
+    return random.choice([
+        u'¡A partir de ahora es inmune al coronavirus!',
+        u'¡A partir de ahora tiene inmunidad contra el coronavirus!',
+        u'¡A partir de ahora el coronavirus no le afecta!',
+        u'¡A partir de ahora no puede ser infectado con el coronavirus!'
+    ])
 
 def INJURE_ACTION():
     return random.choice([u'ha recibido', u'ha cogido', u'ha padecido'])
 
 def INJURE_IMMUNITY():
-    return random.choice([u'¡A partir de ahora no sufrirá más heridas!.'])
+    return random.choice([
+        u'¡A partir de ahora no sufrirá heridas ni lesiones!',
+        u'¡A partir de ahora es inmune a heridas y lesiones!',
+        u'¡A partir de ahora tiene inmunidad contra lesiones y heridas!',
+    ])
 
 def INTRODUCE_PLACE(tweet):
     place_name = tweet.place.name
@@ -285,39 +304,6 @@ def KILL_METHOD(player):
 def NOBODY_WON(tweet):
     return u'Por algún motivo, todos los jugadores están muertos. Nadie ha ganado... ¡otra vez será!'
 
-def PRAISE(player):
-    return random.choice([
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        u'Qué ' + get_x_or_y(player, u'tío.', u'tía.'),
-        u'Vaya fiera.',
-        u'Impresionante.',
-        u'Es ' + get_x_or_y(player, u'un', u'una') + u' máquina.',
-        u'Menudo monstruo.',
-        u'Está ' + get_x_or_y(player, u'rocoso.', u'rocosa.'),
-        u'Qué crack.',
-        u'JO-DER.',
-        u'Redios.',
-        u'Es un tifón.',
-        u'No hay quién ' + get_x_or_y(player, u'lo', u'la') + ' pare.',
-        u'A por la MOAB.',
-        u'Tra tra.',
-        u'WOW.',
-        u'BIMBA.',
-        u'Menudo hostiazo.',
-        u'Está on fire.',
-        u'Está a tope.',
-        u'Campear tanto da sus frutos.',
-        u'No lo vio venir.',
-        u'Y ya estaría.',
-        get_x_or_y(player, u'Esta mamadísimo.', u'Está mamadísima.')
-    ])
-
 REPLACED = u'Se lo queda y se deshace de'
 
 def REVIVED(tweet):
@@ -368,25 +354,9 @@ def MOVED_PL():
         u'han ido a'
     ])
 
-def MOVED_ATRACTION_SING():
-    return random.choice([
-        u' se ha acercado a ver qué se cuece.',
-        u' ha llamado a un taxi para ir.',
-        u' ha ido en coche.',
-        u' ha ido a bailar.'
-    ])
-
-def MOVED_ATRACTION_PL():
-    return random.choice([
-        u' se han acercado a ver qué se cuece.',
-        u' han llamado a un taxi para ir.',
-        u' han ido en coche.',
-        u' han ido a bailar.'
-    ])
-
 def POWERUP_ACTION():
     return random.choice([
-        'ha cogido',
+        u'ha cogido',
         u'ha encontrado'
     ])
 
@@ -482,17 +452,24 @@ def TREASON(tweet):
     return random.choice([
         u'Aunque eran ' + get_x_or_y_plural([player_1, player_2], u'amigos, ', u'amigas, '),
         u'Parece que no se caían tan bien, ',
-        u'Menudo judas, ',
+        get_x_or_y([player_1, u'Menudo', u'Menuda']) + ' judas, ',
         u'Vaya puñalada por la espalda, ',
         u'Menuda traición, ',
+        u'Por el interés te quiero Andrés, ',
         u'Por lo visto no eran tan ' + get_x_or_y_plural([player_1, player_2], u'amigos, ', u'amigas, '),
-        u'Premio ' + get_x_or_y(player_1, u'al mejor amigo', u'a la mejor amiga') + u' del año. ',
         ''
     ])
 
 def TRIBUTES_NOT_ENOUGH(place_name):
     return random.choice([
-        u'Como no había suficientes participantes de ' + place_name + u', '
+        u'Dado que no había suficientes participantes de ' + place_name + u', ',
+        u'Por la falta de participación en ' + place_name + u', ',
+        u'Debido a la despoblación de ' + place_name + u', ',
+        u'Dado que ' + place_name + ' no tenía suficientes participantes, ',
+        u'Debido a que en ' + place_name + ' escasean los participantes, ',
+        u'Ya que ' + place_name + ' no tenía suficientes participantes, ',
+        u'Como no había suficientes participantes de ' + place_name + u', ',
+        place_name + u' no tenía sufientes representantes, por lo que '
     ])
 
 def TRIBUTES_RANDOMLY_CHOSEN(tributes_list):
