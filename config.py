@@ -5,22 +5,21 @@ USE_DISTRICTS = True
 MAX_TRIBUTES_PER_DISTRICT = 3
 LOCALIZATION = "es_spain" #es_paramo, es_spain
 
-PROBAB_ITEM =    [45, 40, 33, 28, 22, 16, 16, 12]
-PROBAB_BATTLE =  [50, 49, 49, 47, 48, 48, 48, 46]
-PROBAB_MOVE =    [4,  5,  7,  8,  10, 13, 13, 17]
-PROBAB_INJURE =  [0,  1,  2,  2,  2,  2,  2,  2]
-PROBAB_STEAL =   [0,  1,  3,  6,  7,  7,  7,  7]
-PROBAB_MONSTER = [0,  1,  2,  4,  5,  5,  5,  7]
-PROBAB_INFECT =  [0,  1,  1,  1,  1,  1,  1,  1]
-PROBAB_ATRACT =  [0,  1,  0,  1,  2,  5,  5,  5]
-PROBAB_DESTROY = [0,  0,  1,  1,  1,  1,  1,  2]
 PROBAB_SUICIDE = [0,  0,  1,  0,  1,  0,  1,  0]
 PROBAB_REVIVE =  [0,  0,  0,  1,  0,  1,  0,  0]
-PROBAB_TRAP =    [1,  1,  1,  1,  1,  1,  1,  1]
+PROBAB_TRAP =    [0,  1,  1,  1,  1,  1,  1,  1]
+PROBAB_INFECT =  [0,  1,  1,  1,  1,  1,  1,  1]
+PROBAB_DESTROY = [0,  0,  1,  1,  1,  1,  1,  2]
+PROBAB_INJURE =  [0,  1,  2,  2,  2,  2,  2,  2]
+PROBAB_ATRACT =  [0,  1,  0,  1,  2,  5,  5,  5]
+PROBAB_MONSTER = [0,  1,  2,  4,  5,  5,  5,  7]
+PROBAB_STEAL =   [1,  1,  3,  6,  7,  7,  7,  7]
+PROBAB_MOVE =    [7,  7,  7,  8,  10, 13, 13, 17]
+PROBAB_ITEM =    [42, 38, 33, 28, 22, 16, 16, 12]
+PROBAB_BATTLE =  [50, 49, 49, 47, 48, 48, 48, 46]
 
 ATRACT_RANGE_LIST =  [1, 1, 1, 1, 2, 2, 2, 3]
-ATRACT_RANGE =  1   # Don't change
-TREASONS_ENABLED =  False   # Don't change
+TREASONS_ENABLED_LIST =  [False, False, False, True, True, True, True, True]
 
 PROBAB_RARITY_1 = 65
 PROBAB_RARITY_2 = 30

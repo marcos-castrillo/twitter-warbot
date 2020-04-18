@@ -57,7 +57,6 @@ raw_weapon_list = [
     [2, u'un Nokia 6300', 0, 3],
     [2, u'un escudo de hierro', 4, 0],
     [2, u'un hacha', 0, 4],
-    [2, u'los guantes de Casillas', 3, 0],
     [2, u'unas botas de regar', 4, 0],
     [3, u'un bazooka', -3, 10],
     [3, u'un cinturón con la bandera de ESPAÑA', 3, 5],

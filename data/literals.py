@@ -160,7 +160,7 @@ def winner_districts(tweet):
     for i, winner in enumerate(tweet.player_list):
         if i == 0:
             tributes_str = winner.get_name()
-        elif i == len(tweet.player_list):
+        elif i == len(tweet.player_list) - 1:
             tributes_str = u' '.join([tributes_str, AND, winner.get_name()])
         else:
             tributes_str = tributes_str + ', ' + winner.get_name()
@@ -247,16 +247,9 @@ def somebody_suicided(tweet):
     return u' '.join((tweet.player.get_name(), SUICIDE()))
 
 def somebody_moved(tweet):
-    action = ''
-    road = True
+    action = MOVE_ACTION_ROAD()
 
-    for i, c in enumerate(tweet.place_2.sea_connections):
-        if c.encode('utf-8') == tweet.place.name.encode('utf-8'):
-            road = True
-
-    if road:
-        action = MOVE_ACTION_ROAD()
-    else:
+    if any(x for x in tweet.place_2.water_connections if x.name == tweet.place.name):
         action = MOVE_ACTION_WATER()
 
     return u' '.join((tweet.player.get_name(), action, tweet.place_2.name, TO, tweet.place.name + '.'))
@@ -344,7 +337,7 @@ def destroyed_district(tweet):
             else:
                 sufix_str = sufix_str + ', ' + d
 
-        sufix = u' ' + u' '.join((sufix_str, get_sing_or_pl(escaped_list, MOVED_SING(), MOVED_PL()), new_location.name + u'.'))
+        sufix = u'. ' + u' '.join((sufix_str, get_sing_or_pl(escaped_list, MOVED_SING(), MOVED_PL()), new_location.name + u'.'))
 
     return (prefix + sufix)
 
@@ -356,9 +349,9 @@ def infected(tweet):
         also = u' infectando también a'
         for i, player in enumerate(tweet.player_list):
             if i == 0:
-                also = player.get_name()
+                also = also + player.get_name()
             elif i == len(tweet.player_list) - 1:
-                also = u' '.join((also, AND, player.get_name()))
+                also = also + u' '.join((also, AND, player.get_name()))
             else:
                 also = also + ', ' + player.get_name()
 

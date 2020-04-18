@@ -1,5 +1,5 @@
 from data.literals import *
-from config import PROBAB_TIE, USE_DISTRICTS, TREASONS_ENABLED
+from config import PROBAB_TIE, USE_DISTRICTS, TREASONS_ENABLED_LIST
 from store import *
 from models.tweet import Tweet
 from models.tweet_type import Tweet_type
@@ -13,7 +13,8 @@ def battle():
         return False
 
     kill_number = random.randint(0, 100)
-    if are_friends(player_1, player_2) and (not TREASONS_ENABLED or (kill_number > 5 and kill_number < 95)):
+    treasons_enabled = TREASONS_ENABLED_LIST[hour_count]
+    if are_friends(player_1, player_2) and (not treasons_enabled or (kill_number > 5 and kill_number < 95)):
         return False
 
     factor = 50 + 2*(player_1.get_defense() + player_1.get_attack()) - 2*(player_2.get_attack() + player_2.get_defense())
@@ -75,8 +76,22 @@ def kill(player_1, player_2, place, factor, action_number, inverse):
 
         tweet.new_item = best_killed_item
 
-    kill_player(killed)
+
+    place = killed.location
+    place.players.pop(place.players.index(killed))
+    killed.state = 0
+
     write_tweet(tweet)
+
+    place.items = place.items + killed.item_list
+    killed.item_list = []
+    killed.injury_list = []
+    killed.powerup_list = []
+    killed.infected = False
+    killed.monster_immunity = False
+    killed.injure_immunity = False
+    killed.infection_immunity = False
+    
     if USE_DISTRICTS:
         destroy_tweet = destroy_district_if_needed(killed.district)
         if destroy_tweet != None:
@@ -114,12 +129,13 @@ def run_away(player_1, player_2, factor, action_number, inverse):
         return False
 
     new_location = random.choice(candidates)
-    tweet.place = player_1.location
 
     if inverse:
         move_player(player_1, new_location)
+        tweet.place = player_2.location
     else:
         move_player(player_2, new_location)
+        tweet.place = player_1.location
 
     tweet.type = Tweet_type.somebody_escaped
     tweet.place_2 = new_location

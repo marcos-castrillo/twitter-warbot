@@ -16,9 +16,8 @@ from services.battles import *
 from services.players import *
 from services.places import *
 
-simulation_probab = Simulation_Probab(PROBAB_ITEM[0], PROBAB_MOVE[0], PROBAB_BATTLE[0], PROBAB_INJURE[0], PROBAB_STEAL[0], PROBAB_MONSTER[0], PROBAB_DESTROY[0], PROBAB_INFECT[0], PROBAB_ATRACT[0], PROBAB_SUICIDE[0], PROBAB_REVIVE[0], PROBAB_TRAP[0])
+simulation_probab = Simulation_Probab(PROBAB_SUICIDE[0], PROBAB_REVIVE[0], PROBAB_TRAP[0], PROBAB_INFECT[0], PROBAB_DESTROY[0], PROBAB_INJURE[0], PROBAB_ATRACT[0], PROBAB_MONSTER[0], PROBAB_STEAL[0], PROBAB_MOVE[0], PROBAB_ITEM[0], PROBAB_BATTLE[0])
 finished = False
-hour_count = 0
 
 def initialize():
     initialize_avatars()
@@ -28,8 +27,6 @@ def initialize():
     start_battle()
 
 def start_battle():
-    global hour_count
-
     if len(player_list) == 0:
         sys.exit('Config error: no players configured.')
 
@@ -41,14 +38,11 @@ def start_battle():
         simulate_day()
 
 def simulate_day():
-    global hour_count, simulation_probab, ATRACT_RANGE
+    global hour_count, simulation_probab
     hour_count = hour_count + 1
     for i, th in enumerate(THRESHOLD_LIST):
         if hour_count == th:
-            simulation_probab = Simulation_Probab(PROBAB_ITEM[i], PROBAB_MOVE[i], PROBAB_BATTLE[i], PROBAB_INJURE[i], PROBAB_STEAL[i], PROBAB_MONSTER[i], PROBAB_DESTROY[i], PROBAB_INFECT[i], PROBAB_ATRACT[i], PROBAB_SUICIDE[i], PROBAB_REVIVE[i], PROBAB_TRAP[i])
-            ATRACT_RANGE = ATRACT_RANGE_LIST[i]
-            if hour_count == 200:
-                TREASONS_ENABLED = True
+            simulation_probab = Simulation_Probab(PROBAB_SUICIDE[i], PROBAB_REVIVE[i], PROBAB_TRAP[i], PROBAB_INFECT[i], PROBAB_DESTROY[i], PROBAB_INJURE[i], PROBAB_ATRACT[i], PROBAB_MONSTER[i], PROBAB_STEAL[i], PROBAB_MOVE[i], PROBAB_ITEM[i], PROBAB_BATTLE[i])
     do_something()
 
     if USE_DISTRICTS and get_alive_districts_count() <= 1:
@@ -60,30 +54,30 @@ def do_something():
     completed = False
     action_number = random.randint(1, 100)
 
-    if action_number < simulation_probab.item_action_number:
-        completed = pick_item()
-    elif action_number < simulation_probab.move_action_number:
-        completed = move()
-    elif action_number < simulation_probab.battle_action_number:
-        completed = battle()
-    elif action_number < simulation_probab.injure_action_number:
-        completed = injure()
-    elif action_number < simulation_probab.steal_action_number:
-        completed = steal()
-    elif action_number < simulation_probab.monster_action_number:
-        completed = monster()
-    elif action_number < simulation_probab.destroy_action_number:
-        completed = destroy()
-    elif action_number < simulation_probab.infect_action_number:
-        completed = infect()
-    elif action_number < simulation_probab.atract_action_number:
-        completed = atract()
-    elif action_number < simulation_probab.suicide_action_number:
+    if action_number < simulation_probab.suicide_action_number:
         completed = suicide()
     elif action_number < simulation_probab.revive_action_number:
         completed = revive()
     elif action_number <= simulation_probab.trap_action_number:
         completed = trap()
+    elif action_number < simulation_probab.infect_action_number:
+        completed = infect()
+    elif action_number < simulation_probab.destroy_action_number:
+        completed = destroy()
+    elif action_number < simulation_probab.injure_action_number:
+        completed = injure()
+    elif action_number < simulation_probab.atract_action_number:
+        completed = atract()
+    elif action_number < simulation_probab.monster_action_number:
+        completed = monster()
+    elif action_number < simulation_probab.steal_action_number:
+        completed = steal()
+    elif action_number < simulation_probab.move_action_number:
+        completed = move()
+    elif action_number < simulation_probab.item_action_number:
+        completed = pick_item()
+    elif action_number < simulation_probab.battle_action_number:
+        completed = battle()
 
     if not completed:
          do_something()
@@ -109,8 +103,7 @@ def end_districts():
     alive_players = get_alive_players()
     tweet = Tweet()
     tweet.type = Tweet_type.winner_districts
-    tweet.player_list = alive_players
-    tweet.player_list_2 = [x for x in player_list if x.district.name == alive_players[0].district.name]
+    tweet.player_list = [x for x in player_list if x.district.name == alive_players[0].district.name]
     tweet.place = alive_players[0].district
     write_tweet(tweet)
     finished = True

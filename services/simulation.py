@@ -154,7 +154,10 @@ def get_zoomed_image(image, tweet):
                 if p.infected:
                     paste_image(image, tweet.place_2.coord_x + (i * 50) - 16 + 24, tweet.place_2.coord_y + 12, 36, 'infection')
     elif tweet.type == Tweet_type.introduce_players:
-        for i, p in enumerate(tweet.player_list + tweet.player_list_2):
+        list = tweet.player_list
+        if tweet.inverse:
+            list = list + tweet.player_list_2
+        for i, p in enumerate(list):
             paste_image(image, tweet.place.coord_x + (i * 50) - 16, tweet.place.coord_y, 48, '', p.avatar_dir)
 
     elif tweet.type == Tweet_type.somebody_tied_and_became_friend or tweet.type == Tweet_type.somebody_tied_and_was_friend or tweet.type == Tweet_type.somebody_escaped or tweet.type == Tweet_type.somebody_killed or tweet.type == Tweet_type.somebody_stole or tweet.type == Tweet_type.somebody_stole_and_threw or tweet.type == Tweet_type.somebody_stole_and_replaced:
@@ -191,6 +194,9 @@ def get_zoomed_image(image, tweet):
             paste_image(image, tweet.place.coord_x + 72, tweet.place.coord_y + 12, 32, 'defense')
             draw.text((tweet.place.coord_x + 85, tweet.place.coord_y - 22), str(tweet.player_2.get_attack()), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path_2, size=15))
             draw.text((tweet.place.coord_x + 85, tweet.place.coord_y), str(tweet.player_2.get_defense()), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path_2, size=15))
+        elif tweet.type == Tweet_type.somebody_stole or tweet.type == Tweet_type.somebody_stole_and_threw or tweet.type == Tweet_type.somebody_stole_and_replaced:
+            paste_image(image, tweet.place.coord_x - 28, tweet.place.coord_y, 48, '', tweet.player.avatar_dir)
+            paste_image(image, tweet.place.coord_x + 28, tweet.place.coord_y, 48, '', tweet.player_2.avatar_dir)
 
         if tweet.player.infected:
             paste_image(image, tweet.place_2.coord_x - 28 + 24, tweet.place_2.coord_y + 12, 36, 'infection')
@@ -251,13 +257,29 @@ def get_zoomed_image(image, tweet):
         if tweet.type == Tweet_type.winner:
             paste_image(image, tweet.place.coord_x, tweet.place.coord_y - 48, 72, 'crown')
         elif tweet.type == Tweet_type.winner_districts:
-            for i, winner in enumerate(tweet.player_list_2):
-                paste_image(image, tweet.place.coord_x + (i * 30), tweet.place.coord_y - 48, 72, 'crown')
+            for i, winner in enumerate(tweet.player_list):
+                paste_image(image, tweet.place.coord_x - 15 + (i * 50), tweet.place.coord_y - 48, 72, 'crown')
 
         x = tweet.place.coord_x
         y = tweet.place.coord_y
         zoom2 = zoom * 2
-        image = image.crop((x - w / zoom2, y - h / zoom2, x + w / zoom2, y + h / zoom2))
+
+        x_1 = x - w / zoom2
+        x_2 = x + w / zoom2
+        y_1 = y - h / zoom2
+        y_2 = y + h / zoom2
+
+        if x_1 < 0:
+            x_2 = x_2 - x_1
+            x_1 = 0
+        if y_1 < 0:
+            y_2 = y_2 - y_1
+            y_1 = 0
+        if x_2 < 0:
+            x_1 = x_1 - x_2
+            x_2 = 0
+            
+        image = image.crop((x_1, y_1, x_2, y_2))
         image.resize((w, h), Image.LANCZOS)
 
     if tweet.type == Tweet_type.winner or tweet.type == Tweet_type.winner_districts:
@@ -330,14 +352,14 @@ def get_summary_image(image, tweet):
             paste_image(image, p.coord_x, p.coord_y, 60, 'destroyed')
         else:
             if p.trap_by != None:
-                paste_image(image, p.coord_x + 10, p.coord_y + 16, 32, 'trap')
+                paste_image(image, p.coord_x + 10, p.coord_y + 12, 48, 'trap')
             if p.monster:
-                paste_image(image, p.coord_x, p.coord_y - 16, 32, 'monster')
+                paste_image(image, p.coord_x, p.coord_y - 12, 48, 'monster')
             if p.infected:
-                paste_image(image, p.coord_x + 16, p.coord_y, 32, 'infection')
+                paste_image(image, p.coord_x + 12, p.coord_y, 48, 'infection')
             items = len(p.items)
             while items > 0:
-                paste_image(image, p.coord_x - 24, p.coord_y - 32 + items * 16, 32, 'item_transparent')
+                paste_image(image, p.coord_x - 24, p.coord_y - 32 + items * 16, 48, 'item_transparent')
                 items = items - 1
 
     draw_ranking(image)
@@ -353,7 +375,7 @@ def draw_ranking(image):
             if tribute == '' or tribute.state == 0:
                 count = count + 1
         if count == MAX_TRIBUTES_PER_DISTRICT:
-            draw.line((coord_x - 200, coord_y - 40, coord_x, coord_y + 60), fill='rgb(255,0,0)', width=5)
+            draw.line((coord_x - 205, coord_y - 40, coord_x, coord_y + 60), fill='rgb(255,0,0)', width=5)
 
     if USE_DISTRICTS:
         draw = ImageDraw.Draw(image)
@@ -373,37 +395,52 @@ def draw_ranking(image):
             previous_district = player.district
             tributes_in_district = tributes_in_district + 1
 
-        for i, player in enumerate(player_list_by_district_fixed):
-            if i == len(player_list_by_district_fixed) - 1: #last tribute
-                cross_district_if_needed(player_list_by_district_fixed[i-3:i])
+        district_list = [player_list_by_district_fixed[x:x+MAX_TRIBUTES_PER_DISTRICT] for x in range(0, len(player_list_by_district_fixed), MAX_TRIBUTES_PER_DISTRICT)]
+        district_list = sorted(district_list, key=lambda x: sum(1 for y in x if y != '' and y.state == 1), reverse=True)
 
-            if i > 0 and (i - MAX_TRIBUTES_PER_DISTRICT) % MAX_TRIBUTES_PER_DISTRICT == 0:  #next district
-                cross_district_if_needed(player_list_by_district_fixed[i-3:i])
-                if coord_x + RANKING_SPACE_BETWEEN_DISTRICTS + 3 * (RANKING_IMG_WIDTH + RANKING_SPACE_BETWEEN_COLS) >= RANKING_FIRST_COLUMN_X + RANKING_IMGS_PER_ROW * (RANKING_IMG_WIDTH + RANKING_SPACE_BETWEEN_COLS):
-                    #linebreak
-                    coord_x = RANKING_FIRST_COLUMN_X
-                    coord_y = coord_y + RANKING_SPACE_BETWEEN_ROWS
-                else:
-                    coord_x = coord_x + RANKING_SPACE_BETWEEN_DISTRICTS
-
-            if player == '':
-                coord_x = coord_x + RANKING_IMG_WIDTH + RANKING_SPACE_BETWEEN_COLS
+        for i, players_in_district in enumerate(district_list):
+            alive_count = sum(1 for y in players_in_district if y != '' and y.state == 1)
+            if alive_count == MAX_TRIBUTES_PER_DISTRICT:
+                fill_color = 'rgb(206, 255, 176)'
+            elif alive_count == MAX_TRIBUTES_PER_DISTRICT - 1:
+                fill_color = 'rgb(248, 255, 176)'
+            elif alive_count == MAX_TRIBUTES_PER_DISTRICT - 2:
+                fill_color = 'rgb(255, 225, 176)'
             else:
-                draw_player(image, coord_x, coord_y, player_list_by_district_fixed[i])
-                coord_x, coord_y = calculate_coords(coord_x, coord_y)
+                fill_color = 'rgb(255, 196, 176)'
+
+            draw.rectangle((coord_x - 18, coord_y - 42, coord_x + 187, coord_y + 62), outline='rgb(0,0,0)', fill=fill_color, width=1)
+
+            for j, player in enumerate(players_in_district):
+                if player == '':
+                    coord_x = coord_x + RANKING_IMG_WIDTH + RANKING_SPACE_BETWEEN_COLS
+                else:
+                    draw_player_ranking(image, coord_x, coord_y, player)
+                    coord_x, coord_y = calculate_coords(coord_x, coord_y)
+
+            cross_district_if_needed(players_in_district)
+            draw.text((coord_x - 200, coord_y + 47), players_in_district[0].district.name, fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=10))
+
+            if coord_x + RANKING_SPACE_BETWEEN_DISTRICTS + 3 * (RANKING_IMG_WIDTH + RANKING_SPACE_BETWEEN_COLS) >= RANKING_FIRST_COLUMN_X + RANKING_IMGS_PER_ROW * (RANKING_IMG_WIDTH + RANKING_SPACE_BETWEEN_COLS):
+                #linebreak
+                coord_x = RANKING_FIRST_COLUMN_X
+                coord_y = coord_y + RANKING_SPACE_BETWEEN_ROWS
+            else:
+                coord_x = coord_x + RANKING_SPACE_BETWEEN_DISTRICTS
+
     else:
         alive_players_list = get_alive_players()
         dead_players_list = get_dead_players()
 
         for i, p in enumerate(alive_players_list):
-            draw_player(image, coord_x, coord_y, alive_players_list[i])
+            draw_player_ranking(image, coord_x, coord_y, alive_players_list[i])
             coord_x, coord_y = calculate_coords(coord_x, coord_y)
 
         for i, p in enumerate(dead_players_list):
-            draw_player(image, coord_x, coord_y, dead_players_list[i])
+            draw_player_ranking(image, coord_x, coord_y, dead_players_list[i])
             coord_x, coord_y = calculate_coords(coord_x, coord_y)
 
-def draw_player(image, coord_x, coord_y, player):
+def draw_player_ranking(image, coord_x, coord_y, player):
     draw = ImageDraw.Draw(image)
     paste_image(image, coord_x + 24, coord_y + 24, 48, '', player.avatar_dir)
     draw.rectangle((coord_x, coord_y, coord_x + 48, coord_y + 48), outline='rgb(0,0,0)')
@@ -421,7 +458,7 @@ def draw_player(image, coord_x, coord_y, player):
         draw.text((coord_x + 42, coord_y - 35), str(player.get_defense()), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=10))
 
     if player.state == 0:
-        draw.text((coord_x + 3, coord_y - 11), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path_2, size=50))
+        draw.text((coord_x - 7, coord_y - 35), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path_2, size=70))
     else:
         if player.infected:
             paste_image(image, coord_x + 24 + 24, coord_y + 24 + 12, 36, 'infection')

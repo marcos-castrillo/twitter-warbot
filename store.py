@@ -42,6 +42,7 @@ def get_item_list():
         item.name = p[0]
         item.monster_immunity = p[1]
         item.injure_immunity = p[2]
+        item.infection_immunity = p[3]
         list.append(item)
 
     return list
@@ -89,11 +90,24 @@ def get_place_list():
 
     def initialize_connections_list(places_list, place):
         connections_list = []
+        road_connections_list = []
+        water_connections_list = []
+
         for i, c in enumerate(place.connections):
             connection = get_place_by_name(places_list, c)
             if connection != None:
                 connections_list.append(connection)
+        for i, c in enumerate(place.road_connections):
+            connection = get_place_by_name(places_list, c)
+            if connection != None:
+                road_connections_list.append(connection)
+        for i, c in enumerate(place.water_connections):
+            connection = get_place_by_name(places_list, c)
+            if connection != None:
+                water_connections_list.append(connection)
         place.connections = connections_list
+        place.road_connections = road_connections_list
+        place.water_connections = water_connections_list
 
     for i, item in enumerate(item_list):
         if item.rarity == 1:
@@ -104,7 +118,7 @@ def get_place_list():
             item_list_3.append(item)
     for i, p in enumerate(raw_place_list):
         if len(p) == 3:
-            p.append(None)
+            p.append([])
 
         items = get_items_in_place(item_list_1, item_list_2, item_list_3)
         place = Place(p[0], p[1], p[2], items, p[3])
@@ -362,3 +376,4 @@ player_list = get_player_list(place_list)
 if USE_DISTRICTS:
     introduction_tweet_list = initialize_tributes()
 injury_list = get_injury_list()
+hour_count = 0

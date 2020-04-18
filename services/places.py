@@ -7,8 +7,8 @@ from models.tweet import Tweet
 from models.tweet_type import Tweet_type
 from services.simulation import write_tweet
 
-from store import get_alive_players, place_list, move_player, kill_player, destroy_district_if_needed
-from config import MAX_ITEMS, PROBAB_RARITY_1, PROBAB_RARITY_2, PROBAB_RARITY_3, ATRACT_RANGE, USE_DISTRICTS
+from store import *
+from config import *
 
 def atract():
     loc_candidates = []
@@ -20,7 +20,7 @@ def atract():
 
     if len(loc_candidates) == 0:
         return False
-        
+
     place = random.choice(loc_candidates)
     place.atracted = True
     atracted_players = []
@@ -30,13 +30,13 @@ def atract():
             if player.state == 1 and player not in atracted_players:
                 atracted_players.append(player)
 
-    append_players_from(place)
+    atract_range = ATRACT_RANGE_LIST[hour_count]
     for i, connection in enumerate(place.connections):
         append_players_from(connection)
-        if ATRACT_RANGE > 1:
+        if atract_range > 1:
             for j, subconnection in enumerate(connection.connections):
                  append_players_from(subconnection)
-                 if ATRACT_RANGE > 2:
+                 if atract_range > 2:
                      for k, subsubconnection in enumerate(subconnection.connections):
                           append_players_from(subsubconnection)
 
@@ -165,16 +165,14 @@ def move():
     return True
 
 def monster():
-    place = None
-    for i, p in enumerate(place_list):
-        if p.monster:
-            place = p
+    place = [x for x in place_list if x.monster]
 
-    if place != None:
+    if len(place) > 0:
+        place = place[0]
         action_number = random.randint(1, 100)
         people_list = [x for x in place.players if x.state == 1 and not x.monster_immunity]
 
-        if action_number > 50 and len(people_list) > 0:
+        if action_number < 50 and len(people_list) > 0:
             player = random.choice(people_list)
             kill_player(player)
             tweet = Tweet()
@@ -188,11 +186,7 @@ def monster():
                     write_tweet(destroy_tweet)
         else:
             place.monster = False
-
-            loc_candidates = []
-            for i, l in enumerate(place.connections):
-                if not l.destroyed:
-                    loc_candidates.append(l)
+            loc_candidates = [x for x in place.connections if not x.destroyed]
 
             if len(loc_candidates) > 0 and action_number < 75:
                 new_place = random.choice(loc_candidates)
@@ -208,11 +202,7 @@ def monster():
                 tweet.place = place
                 write_tweet(tweet)
     else:
-        loc_candidates = []
-
-        for i, p in enumerate(place_list):
-            if not p.destroyed:
-                loc_candidates.append(p)
+        loc_candidates = [x for x in place_list if not x.destroyed]
 
         new_place = random.choice(loc_candidates)
         new_place.monster = True
