@@ -12,4 +12,4 @@ This is my first twitter bot. It's a fictional tournament where players can 'fig
 
 ## Bugs
 Check the weapons and its values
-Black borders between provinces
+Check the list of players

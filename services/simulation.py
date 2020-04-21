@@ -138,23 +138,33 @@ def get_zoomed_image(image, tweet):
             if p.infected:
                 paste_image(image, p.coord_x + 12, p.coord_y, 48, 'infection')
             if len(p.items) == 1:
-                paste_image(image, p.coord_x, p.coord_y - 20, 48, 'item')
+                paste_image(image, p.coord_x, p.coord_y - 26, 48, 'item_transparent')
             elif len(p.items) == 2:
-                paste_image(image, p.coord_x - 12, p.coord_y - 20, 48, 'item')
-                paste_image(image, p.coord_x + 12, p.coord_y - 20, 48, 'item')
+                paste_image(image, p.coord_x - 12, p.coord_y - 26, 48, 'item_transparent')
+                paste_image(image, p.coord_x + 12, p.coord_y - 26, 48, 'item_transparent')
             else:
                 items = len(p.items)
                 while items > 0:
-                    paste_image(image, p.coord_x - 48 + items * 24, p.coord_y - 20, 48, 'item')
+                    paste_image(image, p.coord_x - 48 + items * 24, p.coord_y - 26, 48, 'item_transparent')
                     items = items - 1
 
-    if tweet.type == Tweet_type.introduce_players or tweet.type == Tweet_type.destroyed_district or tweet.type == Tweet_type.winner_districts or tweet.type == Tweet_type.atraction:
-        if USE_DISTRICTS:
-            dimension_1 = 424
-            dimension_2 = 286
-            image_to_paste = Image.open(os.path.join(current_dir, '../assets/img/flags/' + tweet.place.name + '.gif'))
-            image_to_paste.thumbnail([dimension_1/2, dimension_2/2])
-            image.paste(image_to_paste, (tweet.place.coord_x - 110, tweet.place.coord_y - 130), image_to_paste.convert('RGBA'))
+    if USE_DISTRICTS and (tweet.type == Tweet_type.introduce_players or tweet.type == Tweet_type.destroyed_district or tweet.type == Tweet_type.winner_districts or tweet.type == Tweet_type.atraction):
+        dimension_1 = 424
+        dimension_2 = 286
+        image_to_paste = Image.open(os.path.join(current_dir, '../assets/img/flags/' + tweet.place.name + '.gif'))
+        image_to_paste.thumbnail([dimension_1/2, dimension_2/2])
+        image.paste(image_to_paste, (tweet.place.coord_x - 110, tweet.place.coord_y - 130), image_to_paste.convert('RGBA'))
+
+        if len(tweet.place.items) == 1:
+            paste_image(image, tweet.place.coord_x, tweet.place.coord_y - 26, 48, 'item')
+        elif len(tweet.place.items) == 2:
+            paste_image(image, tweet.place.coord_x - 12, tweet.place.coord_y - 26, 48, 'item')
+            paste_image(image, tweet.place.coord_x + 12, tweet.place.coord_y - 26, 48, 'item')
+        else:
+            items = len(tweet.place.items)
+            while items > 0:
+                paste_image(image, tweet.place.coord_x - 48 + items * 24, tweet.place.coord_y - 26, 48, 'item')
+                items = items - 1
 
     if tweet.type == Tweet_type.somebody_suicided or tweet.type == Tweet_type.monster_killed or tweet.type == Tweet_type.trapped or tweet.type == Tweet_type.somebody_died_of_infection:
         paste_image(image, tweet.place.coord_x, tweet.place.coord_y, 48, '', tweet.player.avatar_dir)
@@ -197,7 +207,7 @@ def get_zoomed_image(image, tweet):
 
             if not tweet.type == Tweet_type.somebody_escaped:
                 tweet.place_2 = tweet.place
-                
+
             #avatar player_1
             paste_image(image, tweet.player.location.coord_x - 28, tweet.player.location.coord_y, 48, '', tweet.player.avatar_dir)
             draw.rectangle((tweet.player.location.coord_x - 55, tweet.player.location.coord_y - 28, tweet.player.location.coord_x - 1, tweet.player.location.coord_y + 27), outline=color_1, width=4)
@@ -346,14 +356,14 @@ def get_summary_image(image, tweet):
     for i, p in enumerate(place_list):
         if not p.destroyed:
             if len(p.items) == 1:
-                paste_image(image, p.coord_x, p.coord_y - 20, 48, 'item')
+                paste_image(image, p.coord_x, p.coord_y - 26, 48, 'item')
             elif len(p.items) == 2:
-                paste_image(image, p.coord_x - 12, p.coord_y - 20, 48, 'item')
-                paste_image(image, p.coord_x + 12, p.coord_y - 20, 48, 'item')
+                paste_image(image, p.coord_x - 12, p.coord_y - 26, 48, 'item')
+                paste_image(image, p.coord_x + 12, p.coord_y - 26, 48, 'item')
             else:
                 items = len(p.items)
                 while items > 0:
-                    paste_image(image, p.coord_x - 48 + items * 24, p.coord_y - 20, 48, 'item')
+                    paste_image(image, p.coord_x - 48 + items * 24, p.coord_y - 26, 48, 'item')
                     items = items - 1
 
     for i, place in enumerate(place_list):
