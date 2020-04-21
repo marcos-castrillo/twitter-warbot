@@ -176,7 +176,7 @@ def initialize_tributes():
         index = index - 1
 
     for j, not_enough_tributes_district in enumerate(not_enough_tributes_list):
-        imported_tributes = [x for x in not_enough_tributes_district.tributes if x.district.name != not_enough_tributes_district.name]
+        imported_tributes = [x for x in not_enough_tributes_district.tributes if (x.district.name == None or x.district.name != not_enough_tributes_district.name)]
         local_tributes = [x for x in not_enough_tributes_district.tributes if x.district.name == not_enough_tributes_district.name]
 
         for j, imported in enumerate(imported_tributes):
@@ -225,7 +225,7 @@ def get_player_list(place_list):
 
         player_list.append(player)
 
-        if USE_DISTRICTS and p[3] != None:
+        if USE_DISTRICTS and p[3] != None and p[3] != '':
             location = next(x for x in place_list if x.name == p[3])
             player.district = location #only to store p[3]
             location.tributes.append(player) #idem

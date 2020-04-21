@@ -47,6 +47,7 @@ def initialize_avatars():
             filename = path + '/' + player.username
         else:
             filename = path + '/' + player.name
+            
         if not (os.path.exists(filename + '.png')):
             print('Downloading ' + player.get_name() + '\'s avatar...')
             urllib.request.urlretrieve('http://avatars.io/twitter/' + player.username + '/medium', filename + '.png')
@@ -128,11 +129,19 @@ def get_zoomed_image(image, tweet):
             paste_image(image, p.coord_x, p.coord_y, 60, 'destroyed')
         else:
             if p.trap_by != None:
-                paste_image(image, p.coord_x, p.coord_y + 32, 32, 'trap')
+                paste_image(image, p.coord_x, p.coord_y + 24, 48, 'trap')
             if p.monster:
-                paste_image(image, p.coord_x, p.coord_y - 32, 32, 'monster')
+                paste_image(image, p.coord_x, p.coord_y - 12, 48, 'monster')
             if p.infected:
-                paste_image(image, p.coord_x + 16, p.coord_y, 32, 'infection')
+                paste_image(image, p.coord_x + 12, p.coord_y, 48, 'infection')
+
+    if tweet.type == Tweet_type.introduce_players or tweet.type == Tweet_type.destroyed_district or tweet.type == Tweet_type.winner_districts or tweet.type == Tweet_type.atraction:
+        if USE_DISTRICTS:
+            dimension_1 = 424
+            dimension_2 = 286
+            image_to_paste = Image.open(os.path.join(current_dir, '../assets/img/flags/' + tweet.place.name + '.gif'))
+            image_to_paste.thumbnail([dimension_1/2, dimension_2/2])
+            image.paste(image_to_paste, (tweet.place.coord_x - 110, tweet.place.coord_y - 130), image_to_paste.convert('RGBA'))
 
     if tweet.type == Tweet_type.somebody_suicided or tweet.type == Tweet_type.monster_killed or tweet.type == Tweet_type.trapped or tweet.type == Tweet_type.somebody_died_of_infection:
         paste_image(image, tweet.place.coord_x, tweet.place.coord_y, 48, '', tweet.player.avatar_dir)
@@ -142,23 +151,27 @@ def get_zoomed_image(image, tweet):
         if tweet.player.infected:
             paste_image(image, tweet.place.coord_x + 24, tweet.place.coord_y + 12, 36, 'infection')
     elif tweet.type == Tweet_type.destroyed or tweet.type == Tweet_type.destroyed_district or tweet.type == Tweet_type.winner_districts:
-        for i, p in enumerate(tweet.player_list):
-            paste_image(image, tweet.place.coord_x + (i * 50) - 16, tweet.place.coord_y, 48, '', p.avatar_dir)
-            if p.infected:
-                paste_image(image, tweet.place.coord_x + (i * 50) - 16 + 24, tweet.place.coord_y + 12, 36, 'infection')
-            if p.state == 0:
-                draw.text((tweet.place.coord_x + (i * 50) - 30, tweet.place.coord_y - 36), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path_2, size=50))
+        draw_multiple_players(tweet.player_list, tweet.place.coord_x, tweet.place.coord_y, image, 50)
         if tweet.place_2 != None:
-            for i, p in enumerate(tweet.player_list_2):
-                paste_image(image, tweet.place_2.coord_x + (i * 50) - 16, tweet.place_2.coord_y, 48, '', p.avatar_dir)
-                if p.infected:
-                    paste_image(image, tweet.place_2.coord_x + (i * 50) - 16 + 24, tweet.place_2.coord_y + 12, 36, 'infection')
+            draw_multiple_players(tweet.player_list_2, tweet.place_2.coord_x, tweet.place_2.coord_y, image, 50)
     elif tweet.type == Tweet_type.introduce_players:
-        list = tweet.player_list
-        if tweet.inverse:
-            list = list + tweet.player_list_2
-        for i, p in enumerate(list):
-            paste_image(image, tweet.place.coord_x + (i * 50) - 16, tweet.place.coord_y, 48, '', p.avatar_dir)
+        if len(tweet.player_list) == 1:
+            paste_image(image, tweet.place.coord_x, tweet.place.coord_y, 48, '', tweet.player_list[0].avatar_dir)
+        elif len(tweet.player_list) == 2:
+            paste_image(image, tweet.place.coord_x - 25, tweet.place.coord_y, 48, '', tweet.player_list[0].avatar_dir)
+            paste_image(image, tweet.place.coord_x + 25, tweet.place.coord_y, 48, '', tweet.player_list[1].avatar_dir)
+        elif len(tweet.player_list) == 3:
+                paste_image(image, tweet.place.coord_x - 50, tweet.place.coord_y, 48, '', tweet.player_list[0].avatar_dir)
+                paste_image(image, tweet.place.coord_x, tweet.place.coord_y, 48, '', tweet.player_list[1].avatar_dir)
+                paste_image(image, tweet.place.coord_x + 50, tweet.place.coord_y, 48, '', tweet.player_list[2].avatar_dir)
+
+        if len(tweet.player_list_2) > 0:
+            draw_multiple_players(tweet.player_list_2, tweet.place.coord_x, tweet.place.coord_y + 140, image, 50)
+
+            if tweet.inverse:
+                paste_image(image, tweet.place.coord_x, tweet.place.coord_y + 70, 128, 'merge')
+            else:
+                paste_image(image, tweet.place.coord_x, tweet.place.coord_y + 70, 128, 'split')
 
     elif tweet.type == Tweet_type.somebody_tied_and_became_friend or tweet.type == Tweet_type.somebody_tied_and_was_friend or tweet.type == Tweet_type.somebody_escaped or tweet.type == Tweet_type.somebody_killed or tweet.type == Tweet_type.somebody_stole or tweet.type == Tweet_type.somebody_stole_and_threw or tweet.type == Tweet_type.somebody_stole_and_replaced:
         if tweet.type == Tweet_type.somebody_tied_and_became_friend or tweet.type == Tweet_type.somebody_tied_and_was_friend or tweet.type == Tweet_type.somebody_escaped or tweet.type == Tweet_type.somebody_killed:
@@ -207,18 +220,7 @@ def get_zoomed_image(image, tweet):
         if tweet.player_2.state == 0:
             draw.text((tweet.place.coord_x + 8, tweet.place.coord_y - 36), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path, size=50))
     elif tweet.type == Tweet_type.atraction:
-        for j, player in enumerate(tweet.player_list):
-            paste_image(image, tweet.place.coord_x + (j * 24), tweet.place.coord_y, 48, '', player.avatar_dir)
-            if player.infected:
-                paste_image(image, tweet.place.coord_x + (j * 24) + 24, tweet.place.coord_y + 12, 36, 'infection')
-
-    if tweet.type == Tweet_type.introduce_players or tweet.type == Tweet_type.destroyed_district or tweet.type == Tweet_type.winner_districts or tweet.type == Tweet_type.atraction:
-        if USE_DISTRICTS:
-            dimension_1 = 424
-            dimension_2 = 286
-            image_to_paste = Image.open(os.path.join(current_dir, '../assets/img/flags/' + tweet.place.name + '.gif'))
-            image_to_paste.thumbnail([dimension_1/2, dimension_2/2])
-            image.paste(image_to_paste, (tweet.place.coord_x - 110, tweet.place.coord_y + 100), image_to_paste.convert('RGBA'))
+        draw_multiple_players(tweet.player_list, tweet.place.coord_x, tweet.place.coord_y, image, 50)
 
     if tweet.type == Tweet_type.somebody_tied_and_became_friend or tweet.type == Tweet_type.somebody_tied_and_was_friend or tweet.type == Tweet_type.somebody_killed or tweet.type == Tweet_type.somebody_escaped:
         min = tweet.place.coord_x - 100
@@ -275,10 +277,10 @@ def get_zoomed_image(image, tweet):
         if y_1 < 0:
             y_2 = y_2 - y_1
             y_1 = 0
-        if x_2 < 0:
-            x_1 = x_1 - x_2
-            x_2 = 0
-            
+        if x_2 > WIDTH_MAP:
+            x_1 = x_1 - x_2 + WIDTH_MAP
+            x_2 = WIDTH_MAP
+
         image = image.crop((x_1, y_1, x_2, y_2))
         image.resize((w, h), Image.LANCZOS)
 
@@ -335,9 +337,21 @@ def get_zoomed_image(image, tweet):
 def get_summary_image(image, tweet):
     draw = ImageDraw.Draw(image)
 
+    for i, p in enumerate(place_list):
+        if not p.destroyed:
+            if len(p.items) == 1:
+                paste_image(image, p.coord_x, p.coord_y - 20, 48, 'item')
+            elif len(p.items) == 2:
+                paste_image(image, p.coord_x - 12, p.coord_y - 20, 48, 'item')
+                paste_image(image, p.coord_x + 12, p.coord_y - 20, 48, 'item')
+            else:
+                items = len(p.items)
+                while items > 0:
+                    paste_image(image, p.coord_x - 48 + items * 24, p.coord_y - 20, 48, 'item')
+                    items = items - 1
+
     for i, place in enumerate(place_list):
-        for j, player in enumerate(place.players):
-            paste_image(image, place.coord_x + (j * 24), place.coord_y, 48, '', player.avatar_dir)
+        draw_multiple_players(place.players, place.coord_x, place.coord_y, image, 24, True)
 
     if tweet.place != None:
         draw.ellipse((tweet.place.coord_x - 75, tweet.place.coord_y - 75, tweet.place.coord_x + 75, tweet.place.coord_y + 75), outline='rgb(255,0,0)', width=5)
@@ -352,15 +366,11 @@ def get_summary_image(image, tweet):
             paste_image(image, p.coord_x, p.coord_y, 60, 'destroyed')
         else:
             if p.trap_by != None:
-                paste_image(image, p.coord_x + 10, p.coord_y + 12, 48, 'trap')
+                paste_image(image, p.coord_x, p.coord_y + 24, 48, 'trap')
             if p.monster:
                 paste_image(image, p.coord_x, p.coord_y - 12, 48, 'monster')
             if p.infected:
                 paste_image(image, p.coord_x + 12, p.coord_y, 48, 'infection')
-            items = len(p.items)
-            while items > 0:
-                paste_image(image, p.coord_x - 24, p.coord_y - 32 + items * 16, 48, 'item_transparent')
-                items = items - 1
 
     draw_ranking(image)
     return image
@@ -492,6 +502,97 @@ def calculate_coords_district(coord_x, coord_y, district):
         coord_y = coord_y + RANKING_SPACE_BETWEEN_ROWS
 
     return coord_x, coord_y
+
+def draw_multiple_players(players, coord_x, coord_y, image, delta_x, single_line = False):
+    draw = ImageDraw.Draw(image)
+    if len(players) > 0:
+        if len(players) == 1:
+            paste_image(image, coord_x, coord_y, 48, '', players[0].avatar_dir)
+            if players[0].state == 0:
+                draw.text((coord_x - 30, coord_y - 36), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path_2, size=50))
+            elif players[0].infected:
+                paste_image(image, coord_x + 24, coord_y + 12, 36, 'infection')
+
+        elif len(players) == 2:
+            paste_image(image, coord_x - int(delta_x/2), coord_y, 48, '', players[0].avatar_dir)
+            if players[0].state == 0:
+                draw.text((coord_x - 30 - int(delta_x/2), coord_y - 36), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path_2, size=50))
+            elif players[0].infected:
+                paste_image(image, coord_x - int(delta_x/2) + 24, coord_y + 12, 36, 'infection')
+
+            paste_image(image, coord_x + int(delta_x/2), coord_y, 48, '', players[1].avatar_dir)
+            if players[1].state == 0:
+                draw.text((coord_x - 30 + int(delta_x/2), coord_y - 36), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path_2, size=50))
+            elif players[1].infected:
+                paste_image(image, coord_x + int(delta_x/2) + 24, coord_y + 12, 36, 'infection')
+        elif single_line:
+            x = coord_x - int(len(players)/2)*delta_x
+            y = coord_y
+            for i, player in enumerate(players):
+                paste_image(image, x, y, 48, '', players[i].avatar_dir)
+                if players[i].state == 0:
+                    draw.text((x - 30, y - 36), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path_2, size=50))
+                elif players[i].infected:
+                    paste_image(image, x + 24, y + 12, 36, 'infection')
+
+                x = x + delta_x
+
+        elif len(players) <= 12:
+            x = coord_x - delta_x
+            y = coord_y
+            for i, player in enumerate(players):
+                paste_image(image, x, y, 48, '', players[i].avatar_dir)
+                if players[i].state == 0:
+                    draw.text((x - 30, y - 36), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path_2, size=50))
+                elif players[i].infected:
+                    paste_image(image, x + 24, y + 12, 36, 'infection')
+
+                x = x + delta_x
+                if (i-2)%3 == 0:
+                    x = coord_x - delta_x
+                    y = y + 50
+        elif len(players) <= 20:
+            x = coord_x - delta_x*2
+            y = coord_y
+            for i, player in enumerate(players):
+                paste_image(image, x, y, 48, '', players[i].avatar_dir)
+                if players[i].state == 0:
+                    draw.text((x - 30, y - 36), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path_2, size=50))
+                elif players[i].infected:
+                    paste_image(image, x + 24, y + 12, 36, 'infection')
+
+                x = x + delta_x
+                if (i-4)%5 == 0:
+                    x = coord_x - 100
+                    y = y + delta_x
+        elif len(players) <= 28:
+            x = coord_x - delta_x*3
+            y = coord_y
+            for i, player in enumerate(players):
+                paste_image(image, x, y, 48, '', players[i].avatar_dir)
+                if players[i].state == 0:
+                    draw.text((x - 30, y - 36), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path_2, size=50))
+                elif players[i].infected:
+                    paste_image(image, x + 24, y + 12, 36, 'infection')
+
+                x = x + delta_x
+                if (i-6)%7 == 0:
+                    x = coord_x - delta_x*3
+                    y = y + 50
+        else:
+            x = coord_x - delta_x*4
+            y = coord_y
+            for i, player in enumerate(players):
+                paste_image(image, x, y, 48, '', players[i].avatar_dir)
+                if players[i].state == 0:
+                    draw.text((x - 30, y - 36), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path_2, size=50))
+                elif players[i].infected:
+                    paste_image(image, x + 24, y + 12, 36, 'infection')
+
+                x = x + delta_x
+                if (i-8)%9 == 0:
+                    x = coord_x - delta_x*4
+                    y = y + 50
 
 def wrap_text(text, width, font):
     text_lines = []

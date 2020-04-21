@@ -10,11 +10,11 @@ PROBAB_REVIVE =  [0,  0,  0,  1,  0,  1,  0,  0]
 PROBAB_TRAP =    [0,  1,  1,  1,  1,  1,  1,  1]
 PROBAB_INFECT =  [0,  1,  1,  1,  1,  1,  1,  1]
 PROBAB_DESTROY = [0,  0,  1,  1,  1,  1,  1,  2]
-PROBAB_INJURE =  [0,  1,  2,  2,  2,  2,  2,  2]
-PROBAB_ATRACT =  [0,  1,  0,  1,  2,  5,  5,  5]
+PROBAB_INJURE =  [0,  0,  1,  1,  1,  1,  1,  1]
+PROBAB_ATRACT =  [0,  1,  1,  1,  2,  5,  5,  5]
 PROBAB_MONSTER = [0,  1,  2,  4,  5,  5,  5,  7]
-PROBAB_STEAL =   [1,  1,  3,  6,  7,  7,  7,  7]
-PROBAB_MOVE =    [7,  7,  7,  8,  10, 13, 13, 17]
+PROBAB_STEAL =   [1,  1,  2,  6,  7,  7,  7,  7]
+PROBAB_MOVE =    [7,  8,  8,  9,  11, 14, 14, 18]
 PROBAB_ITEM =    [42, 38, 33, 28, 22, 16, 16, 12]
 PROBAB_BATTLE =  [50, 49, 49, 47, 48, 48, 48, 46]
 
@@ -27,6 +27,7 @@ PROBAB_RARITY_3 = 5
 
 PROBAB_TIE = 10
 
+WIDTH_MAP = 1496
 RANKING_IMG_WIDTH = 50
 RANKING_IMGS_PER_ROW = 24
 RANKING_SPACE_BETWEEN_ROWS = 105

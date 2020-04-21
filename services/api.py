@@ -29,13 +29,11 @@ def tweet_sleep(image_dir):
     return tweet(message, image_path)
 
 def tweet(message, image_path = None, image_2_path = None, last_tweet_id = None):
-    global consumer_key, consumer_secret, access_token, access_token_secret
-
     api = twitter.Api(consumer_key=consumer_key,
                       consumer_secret=consumer_secret,
                       access_token_key=access_token,
                       access_token_secret=access_token_secret)
-
+                      
     image_list = []
     if image_path != None and os.path.exists(image_path):
         image_list.append(image_path)
