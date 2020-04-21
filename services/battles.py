@@ -27,9 +27,9 @@ def battle():
     if kill_number == factor:
         success = tie(player_1, player_2, factor, kill_number)
     elif kill_number > factor - PROBAB_TIE and kill_number < factor:
-        success = run_away(player_1, player_2, factor, kill_number, True)
-    elif kill_number > factor and kill_number < factor + PROBAB_TIE:
         success = run_away(player_1, player_2, factor, kill_number, False)
+    elif kill_number > factor and kill_number < factor + PROBAB_TIE:
+        success = run_away(player_1, player_2, factor, kill_number, True)
     elif kill_number < factor - PROBAB_TIE:
         success = kill(player_1, player_2, place, factor, kill_number, False)
     elif kill_number > factor + PROBAB_TIE:
@@ -91,7 +91,7 @@ def kill(player_1, player_2, place, factor, action_number, inverse):
     killed.monster_immunity = False
     killed.injure_immunity = False
     killed.infection_immunity = False
-    
+
     if USE_DISTRICTS:
         destroy_tweet = destroy_district_if_needed(killed.district)
         if destroy_tweet != None:
@@ -133,12 +133,13 @@ def run_away(player_1, player_2, factor, action_number, inverse):
     if inverse:
         move_player(player_1, new_location)
         tweet.place = player_2.location
+        tweet.place_2 = player_1.location
     else:
         move_player(player_2, new_location)
         tweet.place = player_1.location
+        tweet.place_2 = player_2.location
 
     tweet.type = Tweet_type.somebody_escaped
-    tweet.place_2 = new_location
     tweet.player = player_1
     tweet.player_2 = player_2
     tweet.factor = factor

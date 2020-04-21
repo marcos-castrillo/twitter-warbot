@@ -387,15 +387,16 @@ def has_now(player, event, previous_event = None):
         previous_attack = previous_event.attack
         previous_defense = previous_event.defense
 
-    if event.attack != 0:
-        composed = u' '.join([HAS_NOW(), str(player.get_attack()) + get_amount(event.attack - previous_attack), IN_ATTACK])
+    composed = ''
     if event.attack != 0 and event.defense != 0:
-        composed = u' '.join([composed, AND, str(player.get_defense()) + get_amount(event.defense - previous_defense), IN_DEFENSE + '.'])
+        attack = str(player.get_attack()) + get_amount(event.attack - previous_attack)
+        defense = str(player.get_defense()) + get_amount(event.defense - previous_defense)
+        composed = HAS_NOW(attack, defense)
+    elif event.attack != 0:
+        attack = str(player.get_attack()) + get_amount(event.attack - previous_attack)
+        composed = HAS_NOW(attack, None)
     elif event.defense != 0:
-        composed = u' '.join([HAS_NOW(), str(player.get_defense()) + get_amount(event.defense - previous_defense), IN_DEFENSE + '.'])
-    elif event.attack == 0:
-        composed = ''
-    else:
-        composed = composed + '.'
+        defense = str(player.get_defense()) + get_amount(event.defense - previous_defense)
+        composed = HAS_NOW(None, defense)
 
     return composed

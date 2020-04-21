@@ -48,7 +48,6 @@ raw_player_list = [
     [u'David Bustamante', u'David_Busta', 0, u'Santander'],
     [u'David Suárez', u'DavidSuarez_V', 0, u'Madrid'],
     [u'DjMaRiiO', u'DjMaRiiO_90', 0, u'Madrid'],
-    [u'Don Patricio', u'Don_Patricito', 0, u'Santa Cruz de Tenerife'],
     [u'El Fary', u'', 0, u'Cuenca'],
     [u'El Rubius', u'Rubiu5', 0, u'Málaga'],
     [u'ElRichMC', u'ElRichMC', 0, u'A Coruña'],
@@ -110,6 +109,7 @@ raw_player_list = [
     [u'Mariano Rajoy', u'marianorajoy', 0, u'A Coruña'],
     [u'Martínez-Almeida', u'AlmeidaPP_', 0, u'Madrid'],
     [u'Melendi', u'MelendiOficial', 0, u'Oviedo'],
+    [u'Miare', u'MIAREsproject', 1, u'Barcelona'],
     [u'Miguel Ángel Revilla', u'RevillaMiguelA', 0, u'Santander'],
     [u'Miki Nuñez', u'mikinunez', 0, u'Barcelona'],
     [u'Miquel Montoro', u'', 0, u'Palma de Mallorca'],
@@ -152,5 +152,11 @@ raw_player_list = [
     [u'Vegetta777', u'vegetta777', 0, u'Madrid'],
     [u'Willyrex', u'WillyrexYT', 0, u'Madrid'],
     [u'Wismichu', u'Wismichu', 0, u'A Coruña'],
-    [u'Yung Beef', u'secoweedcodein', 0, u'Granada']
+    [u'Yung Beef', u'secoweedcodein', 0, u'Granada'],
+    [u'Follower 1', u'follower1', 0, u'Madrid'],
+    [u'Follower 2', u'follower2', 0, u'Murcia'],
+    [u'Follower 3', u'follower3', 0, u'Granada'],
+    [u'Follower 4', u'follower4', 0, u'Vitoria'],
+    [u'Follower 5', u'follower5', 0, u'Pontevedra'],
+    [u'Follower 6', u'follower6', 0, u'Segovia']
 ]

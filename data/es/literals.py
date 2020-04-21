@@ -99,10 +99,12 @@ def DISTRICT_REBUILD(tweet):
 
 def ESCAPED(player_1, player_2):
     return random.choice([
-        player_1.get_name() + u' y ' + player_2.get_name() + u' se han encontrado, pero ' + player_2.name + u' ha salido por patas cual cobarde a ' + player_2.location.name + u'.',
-        player_1.get_name() + u' y ' + player_2.get_name() + u' han empezado a pelear, pero ' + player_2.name + u' sabía que tenía las de perder. Cogió un puñado de arena, se lo echó a ' + player_1.name + u' en los ojos y salió corriendo a ' + player_2.location.name + u'.',
-        player_2.get_name() + u' iba a asesinar a ' + player_1.get_name() + u' por la espalda, pero ' + get_x_or_y(player_1, 'éste', 'ésta') + ' se dio cuenta en el último momento. ' + player_2.name + u' ha huido a ' + player_2.location.name + u'.',
-        player_1.get_name() + u' se ha encarado con ' + player_2.get_name() + u', pero ' + player_2.name + u' se ha achantado y salido corriendo a ' + player_2.location.name + u'.'
+        player_1.get_name() + u' y ' + player_2.get_name() + u' se han encontrado, pero ' + player_2.name + u' ha salido por patas a ' + player_2.location.name + u'.',
+        player_1.get_name() + u' y ' + player_2.get_name() + u' se han encontrado, pero ' + player_2.name + u' ha huido cual cobarde a ' + player_2.location.name + u'.',
+        player_1.get_name() + u' y ' + player_2.get_name() + u' han empezado a pelear, pero ' + player_2.name + u' sabía que tenía las de perder. Cogió un puñado de arena, se lo echó a ' + player_1.name + u' en los ojos y huyó a ' + player_2.location.name + u'.',
+        player_2.get_name() + u' iba a pillar a ' + player_1.get_name() + u' por la espalda, pero ' + get_x_or_y(player_1, 'éste', 'ésta') + ' se dio cuenta en el último momento. ' + player_2.name + u' ha huido a ' + player_2.location.name + u'.',
+        u'A ' + player_2.get_name() + u' le da miedo ' + player_2.get_name() + u' y ha huido a ' + player_2.location.name + u'.',
+        player_1.get_name() + u' se ha encarado con ' + player_2.get_name() + u', pero ' + player_2.name + u' se ha achantado y escapado a ' + player_2.location.name + u'.'
     ])
 
 def FIND_ACTION():
@@ -139,7 +141,7 @@ def FIND_ACTION():
         u'ha conseguido',
         u'ha conseguido',
         u'ha conseguido',
-        u'tras suplicarle al creador del bot, se ha llevado',
+        u'tras suplicárselo al creador del bot, se ha llevado',
         u'tiene enchufe con el programador y se ha llevado',
         u'rebuscando entre la basura ha encontrado',
         u'se ha agachado a recoger',
@@ -187,14 +189,30 @@ GETS_RID_OF = u'se ha deshecho de'
 def HAS_ALREADY_KILLED(kills_count):
     return u' '.join((u'y ya lleva', kills_count, u'muertes.'))
 
-def HAS_NOW():
-    return u'Ahora tiene'
-
+def HAS_NOW(attack, defense):
+    if attack != None and defense != None:
+        return random.choice([
+            u' '.join([u'Ahora tiene', attack, u'en ataque y', defense, u'en defensa.']),
+            u' '.join([u'Ataque', attack, u'y defensa', defense + '.']),
+            u' '.join([u'Su ataque es ahora de', attack, u'y su defensa de', defense + '.']),
+        ])
+    elif attack != None:
+        return random.choice([
+            u' '.join([u'Ahora tiene', attack, u'en ataque.']),
+            u' '.join([u'Ataque', attack + u'.']),
+            u' '.join([u'Su ataque es ahora de', attack + u'.']),
+            u' '.join([u'Su nuevo ataque es', attack + u'.'])
+        ])
+    elif defense != None:
+        return random.choice([
+            u' '.join([u'Ahora tiene', defense, u'en defensa.']),
+            u' '.join([u'Defensa', defense + u'.']),
+            u' '.join([u'Su defensa es ahora de', defense + u'.']),
+            u' '.join([u'Su nueva defensa es', defense + u'.'])
+        ])
 def I_COMPOSED(player, action, event, has_now):
     return u' '.join((u'¡' + player.get_name(), action, event.name + '!', has_now))
 
-IN_ATTACK = u'en ataque'
-IN_DEFENSE = u'en defensa'
 
 def INFECTION_IMMUNITY():
     return random.choice([
@@ -268,20 +286,20 @@ def KILL_ACTION():
 
 def KILL_METHOD(player):
     return random.choice([
-        u' ',
-        u' ',
-        u' ',
-        u' ',
-        u' ',
-        u' ',
-        u' ',
-        u' ',
-        u' ',
-        u' ',
-        u' ',
-        u' ',
-        u' ',
-        u' ',
+        u'',
+        u'',
+        u'',
+        u'',
+        u'',
+        u'',
+        u'',
+        u'',
+        u'',
+        u'',
+        u'',
+        u'',
+        u'',
+        u'',
         u'con sus puños',
         u'por quitarle el último rollo de papel higiénico',
         u'a lo jíbiri',
@@ -292,6 +310,7 @@ def KILL_METHOD(player):
         u'de un codazo',
         u'y le ha hecho un dab',
         u'y le ha hecho un baile del fortnite',
+        u'y le ha hecho el Swish Swish',
         u'sin despeinarse',
         u'con una llave de kárate',
         u'con una llave de taekwondo',
@@ -327,10 +346,7 @@ def KILL_METHOD(player):
         u'y se ha fumado un cigarrito',
         u'mientras sus colegas le gritaban ACÁBALO',
         u'y se ha tirado un eructo',
-        u'y se ha tirado un pedarro',
-        u'y se ha tirado un cuesco',
-        u'sin mucho esfuerzo',
-        u'a duras penas'
+        u'sin mucho esfuerzo'
     ])
 
 def NOBODY_WON(tweet):
