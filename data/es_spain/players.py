@@ -2,10 +2,8 @@
 # -*- coding: utf-8 -*-
 
 # Name, username, gender, place, weapon_list
+
 raw_player_list = [
-Marina Yers
-Esperanza Gracia
-Bad Gyal
     [u'Álex Ubago', u'AlexUbagoficial', 0, u'Vitoria'],
     [u'Álvaro Ojeda', u'alvaroojeda80', 0, u'Cádiz'],
     [u'Ada Colau', u'AdaColau', 1, u'Barcelona'],
@@ -34,7 +32,6 @@ Bad Gyal
     [u'Arturo Valls', u'ArturoValls', 0, u'Valencia'],
     [u'AuronPlay', u'auronplay', 0, u'Barcelona'],
     [u'Ayax y Prok', u'ayaxyprok', 0, u'Granada'],
-    [u'Guti', u'GUTY14HAZ', 0, u'Madrid'],
     [u'Belén Esteban', u'BelenEstebanM', 1, u'Madrid'],
     [u'Beret', u'JavierBeret', 0, u'Sevilla'],
     [u'Berto Romero', u'Berto_Romero', 0, u'Barcelona'],
@@ -61,8 +58,8 @@ Bad Gyal
     [u'El Rubius', u'Rubiu5', 0, u'Málaga'],
     [u'ElRichMC', u'ElRichMC', 0, u'A Coruña'],
     [u'Enrique Iglesias', u'enriqueiglesias', 0, u'Madrid'],
-    [u'Ernesto Valverde', u'', 0, u'Cáceres'],
     [u'Esperanza Aguirre', u'EsperanzAguirre', 1, u'Madrid'],
+    [u'Esperanza Gracia', u'esperanzagracia', 1, u'Madrid'],
     [u'Eva Hache', u'eva_hache', 1, u'Segovia'],
     [u'Fernando Alonso', u'alo_oficial', 0, u'Oviedo'],
     [u'Fernando Costa', u'', 0, u'Palma de Mallorca'],
@@ -72,15 +69,17 @@ Bad Gyal
     [u'Frank Cuesta', u'Frank_Cuesta', 0, u'León'],
     [u'Gabriel Rufián', u'gabrielrufian', 0, u'Barcelona'],
     [u'Gerard Piqué', u'3gerardpique', 0, u'Barcelona'],
+    [u'Guti', u'GUTY14HAZ', 0, u'Madrid'],
     [u'Ibai Llanos', u'IbaiLlanos', 0, u'Bilbao'],
     [u'Ignatius Farray', u'IgnatiusFarray', 0, u'Santa Cruz de Tenerife'],
     [u'Iker Casillas', u'IkerCasillas', 0, u'Madrid'],
     [u'Iker Jiménez', u'navedelmisterio', 0, u'Vitoria'],
     [u'Inés Arrimadas', u'InesArrimadas', 1, u'Cádiz'],
     [u'Iñaki Gabilondo', u'', 0, u'San Sebastián'],
+    [u'Iñigo Errejón', u'ierrejon', 0, u'Madrid'],
     [u'Irene Montero', u'IreneMontero', 1, u'Madrid'],
     [u'Jaime Altozano', u'jaimealtozano', 0, u'Madrid'],
-    [u'Felipez360', u'Felipez360', 0, u'Guadalajara '],
+    [u'Felipez360', u'Felipez360', 0, u'Guadalajara'],
     [u'Jesús Calleja', u'JesusCalleja', 0, u'León'],
     [u'Jesús Vázquez', u'_JesusVazquez_', 0, u'A Coruña'],
     [u'Joaquín Reyes', u'enjutomojamuto', 0, u'Albacete'],
@@ -92,7 +91,6 @@ Bad Gyal
     [u'Jorge Javier Vázquez', u'jjaviervazquez', 0, u'Barcelona'],
     [u'Jorge Ponce', u'jponcerivero', 0, u'Málaga'],
     [u'José Mota', u'JoseMotatv', 0, u'Ciudad Real'],
-    [u'Juan Carlos I', u'', 0, u'Madrid'],
     [u'Juan Mata', u'juanmata8', 0, u'Burgos'],
     [u'Juan Ramón Rallo', u'juanrallo', 0, u'Castellón de la Plana'],
     [u'Kase O', u'KaseO_real', 0, u'Zaragoza'],
@@ -134,6 +132,7 @@ Bad Gyal
     [u'Pedro Duque', u'astro_duque', 0, u'Madrid'],
     [u'Pedro Sánchez', u'sanchezcastejon', 0, u'Madrid'],
     [u'Pepe Viyuela', u'PepeViyuelactor', 0, u'Logroño'],
+    [u'Perxitaa', u'Perxitaa', 0, u'Valencia'],
     [u'QuantumFracture', u'QuantumFracture', 0, u'Ciudad Real'],
     [u'Quequé', u'_Queque_', 0, u'Salamanca'],
     [u'Rafa Mora', u'RAFAMORATETE', 0, u'Valencia'],
@@ -142,7 +141,6 @@ Bad Gyal
     [u'Rocío Monasterio', u'monasterioR', 1, u'Madrid'],
     [u'Roberto Leal', u'RobertoLealG', 0, u'Sevilla'],
     [u'Rosalía', u'rosalia', 1, u'Barcelona'],
-    [u'Rosario Flores', u'rosarioficial', 1, u'Madrid'],
     [u'Salvador Raya', u'SalvadorRaya', 0, u'Córdoba'],
     [u'Santiago Abascal', u'Santi_ABASCAL', 0, u'Bilbao'],
     [u'Santiago Segura', u'SSantiagosegura', 0, u'Madrid'],
