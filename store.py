@@ -118,10 +118,17 @@ def get_place_list():
             item_list_3.append(item)
     for i, p in enumerate(raw_place_list):
         if len(p) == 3:
+            p.append(None)
+        if len(p) == 4:
             p.append([])
-
         items = get_items_in_place(item_list_1, item_list_2, item_list_3)
-        place = Place(p[0], p[1], p[2], items, p[3])
+        name = p[0]
+        road_connections = p[1]
+        coordinates = p[2]
+        district_display_name = p[3]
+        water_connections = p[4]
+
+        place = Place(name, road_connections, coordinates, items, district_display_name, water_connections)
         list.append(place)
 
     for i, p in enumerate(list):
@@ -176,8 +183,9 @@ def initialize_tributes():
         index = index - 1
 
     for j, not_enough_tributes_district in enumerate(not_enough_tributes_list):
-        imported_tributes = [x for x in not_enough_tributes_district.tributes if (x.district.name == None or x.district.name != not_enough_tributes_district.name)]
-        local_tributes = [x for x in not_enough_tributes_district.tributes if x.district.name == not_enough_tributes_district.name]
+
+        imported_tributes = [x for x in not_enough_tributes_district.tributes if (x.district == None or x.district.name != not_enough_tributes_district.name)]
+        local_tributes = [x for x in not_enough_tributes_district.tributes if x.district != None and x.district.name == not_enough_tributes_district.name]
 
         for j, imported in enumerate(imported_tributes):
             imported.district = not_enough_tributes_district

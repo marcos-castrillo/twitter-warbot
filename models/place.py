@@ -15,7 +15,7 @@ class Place(object):
     atracted = False
 
     # Constructor
-    def __init__(self, name, road_connections, coordinates, items, water_connections = None):
+    def __init__(self, name, road_connections, coordinates, items, district_display_name = None, water_connections = None):
         self.name = name
         self.coord_x = coordinates[0]
         self.coord_y = coordinates[1]
@@ -31,3 +31,6 @@ class Place(object):
         self.tributes = []
         self.trap_by = None
         self.infected = False
+        self.district_display_name = self.name
+        if district_display_name != None:
+            self.district_display_name = district_display_name

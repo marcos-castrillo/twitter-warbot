@@ -100,7 +100,7 @@ def introduce_players(tweet):
 
     if len(tweet.player_list_2) > 0:
         if tweet.inverse:
-            sufix = sufix + TRIBUTES_NOT_ENOUGH(tweet.place.name)
+            sufix = sufix + TRIBUTES_NOT_ENOUGH(tweet.place.district_display_name)
             for i, player in enumerate(tweet.player_list_2):
                 if i == 0:
                     sufix = sufix + player.get_name()
@@ -110,7 +110,7 @@ def introduce_players(tweet):
                     sufix = sufix + ', ' + player.get_name()
             sufix = u' '.join([sufix, TRIBUTES_RANDOMLY_CHOSEN(tweet.player_list_2)])
         else:
-            sufix = sufix +  TRIBUTES_WERE_DIVIDED(tweet.place.name)
+            sufix = sufix +  TRIBUTES_WERE_DIVIDED(tweet.place.district_display_name)
 
     return locals_str + sufix
 
@@ -169,7 +169,7 @@ def winner_districts(tweet):
     for i, player in enumerate(tweet.player_list):
         kills = kills + player.kills
 
-    return WINNER_DISTRICTS_COMPOSED(tributes_str, tweet.place.name, kills)
+    return WINNER_DISTRICTS_COMPOSED(tributes_str, tweet.place.district_display_name, kills)
 
 def somebody_got_injured(tweet):
     return I_COMPOSED(tweet.player, INJURE_ACTION(), tweet.item, has_now(tweet.player, tweet.item))
@@ -321,7 +321,7 @@ def destroyed_district(tweet):
             else:
                 tributes_str = tributes_str + ', ' + d
 
-    prefix = DESTROYED_DISTRICT(place.name, tributes_str)
+    prefix = DESTROYED_DISTRICT(place.district, tributes_str)
 
     sufix = ''
     escaped = []

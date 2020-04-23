@@ -57,17 +57,21 @@ def DESTROYED(place):
        u'Una terrible sequía ha asolado ' + place
       ])
 
-def DESTROYED_DISTRICT(place, tributes_str):
-    return random.choice([
-        u'Los representantes de ' + place + u'(' + tributes_str  + u')' + u' han sido derrotados, así que ha sido reducida a escombros.',
-        u'Ninguno de los representantes de ' + place + u'(' + tributes_str  + u')' + u' sigue con vida, por lo que ha sido destruida.',
-        place + u' está en ruinas, ya que ' + tributes_str  + u' han caído en combate. Otra vez será.',
-        u'Los representantes de ' + place + u'(' + tributes_str  + u')' + u' no han estado a la altura y no la han conseguido salvar.',
-        tributes_str + u' no han dado la talla y ' + place + u' ha sido demolida. ¡Una pena!',
-        u'Por desgracia, ' + place + u' no ha sido salvada por sus representantes (' + tributes_str  + u')',
-        tributes_str + u' han sido derrotados. El mundo echará de menos a ' + place + '.',
-        tributes_str + u' nos han decepcionado a todos y ' + place + u' ha tenido que ser derruida.',
-    ])
+def DESTROYED_DISTRICT(district, tributes_str):
+    if district.name != district.district_display_name:
+        return random.choice([
+            u'Los representantes de ' + district.district_display_name + u'(' + tributes_str  + u')' + u' han sido derrotados, así que ' + district.name + ' ha sido reducida a escombros.',
+            u'Ninguno de los representantes de ' + district.district_display_name + u'(' + tributes_str  + u')' + u' sigue con vida, por lo que ' + district.name + 'ha sido destruida.',
+        ])
+    else:
+        return random.choice([
+            district.name + u' está en ruinas, ya que ' + tributes_str  + u' han caído en combate. Otra vez será.',
+            u'Los representantes de ' + district.name + u'(' + tributes_str  + u')' + u' no han estado a la altura y no la han conseguido salvar.',
+            tributes_str + u' no han dado la talla y ' + district.name + u' ha sido demolida. ¡Una pena!',
+            u'Por desgracia, ' + district.name + u' no ha sido salvada por sus representantes (' + tributes_str  + u')',
+            tributes_str + u' han sido derrotados. El mundo echará de menos a ' + district.name + '.',
+            tributes_str + u' nos han decepcionado a todos y ' + district.name + u' ha tenido que ser derruida.'
+        ])
 
 def DIED(player, multiple = False):
     if multiple:
@@ -91,10 +95,10 @@ def DIED(player, multiple = False):
 
 def DISTRICT_REBUILD(tweet):
     return random.choice([
-        u'Además, ¡su ciudad (' + tweet.player.district.name + u') ha sido reconstruida!'
-        u'¡' + tweet.player.district.name + u' ha sido reconstruida!',
-        u'¡' + tweet.player.district.name + u' vuelve a estar en pie!',
-        u'¡' + tweet.player.district.name + u' vuelve a la vida!'
+        u'Además, ¡su provincia (' + tweet.player.district.district_display_name + u') ha sido reconstruida!'
+        u'¡' + tweet.player.district.district_display_name + u' ha sido reconstruida!',
+        u'¡' + tweet.player.district.district_display_name + u' vuelve a estar en pie!',
+        u'¡' + tweet.player.district.district_display_name + u' vuelve a la vida!'
     ])
 
 def ESCAPED(player_1, player_2):
@@ -210,6 +214,7 @@ def HAS_NOW(attack, defense):
             u' '.join([u'Su defensa es ahora de', defense + u'.']),
             u' '.join([u'Su nueva defensa es', defense + u'.'])
         ])
+
 def I_COMPOSED(player, action, event, has_now):
     return u' '.join((u'¡' + player.get_name(), action, event.name + '!', has_now))
 
@@ -233,7 +238,7 @@ def INJURE_IMMUNITY():
     ])
 
 def INTRODUCE_PLACE(tweet):
-    place_name = tweet.place.name
+    place_name = tweet.place.district_display_name
     players = tweet.player_list
     singular = len(players) == 1
 
