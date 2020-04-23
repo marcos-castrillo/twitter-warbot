@@ -151,9 +151,9 @@ def get_zoomed_image(image, tweet):
     if USE_DISTRICTS and (tweet.type == Tweet_type.introduce_players or tweet.type == Tweet_type.destroyed_district or tweet.type == Tweet_type.winner_districts or tweet.type == Tweet_type.atraction):
         dimension_1 = 424
         dimension_2 = 286
-        image_to_paste = Image.open(os.path.join(current_dir, '../assets/img/flags/' + tweet.place.name + '.gif'))
+        image_to_paste = Image.open(os.path.join(current_dir, '../assets/img/flags/' + tweet.place.district_display_name + '.jpg'))
         image_to_paste.thumbnail([dimension_1/2, dimension_2/2])
-        image.paste(image_to_paste, (tweet.place.coord_x - 110, tweet.place.coord_y - 130), image_to_paste.convert('RGBA'))
+        image.paste(image_to_paste, (tweet.place.coord_x - 100, tweet.place.coord_y - 130), image_to_paste.convert('RGBA'))
 
         if len(tweet.place.items) == 1:
             paste_image(image, tweet.place.coord_x, tweet.place.coord_y - 26, 48, 'item')

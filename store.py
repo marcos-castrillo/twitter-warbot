@@ -61,6 +61,8 @@ def get_place_list():
 
         while item_count > 0:
             action_number = random.randint(1, 100)
+            item = None
+            
             if action_number < PROBAB_RARITY_1:
                 if len(item_list_1) > 0:
                     item = random.choice(item_list_1)

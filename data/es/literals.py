@@ -107,7 +107,7 @@ def ESCAPED(player_1, player_2):
         player_1.get_name() + u' y ' + player_2.get_name() + u' se han encontrado, pero ' + player_2.name + u' ha huido cual cobarde a ' + player_2.location.name + u'.',
         player_1.get_name() + u' y ' + player_2.get_name() + u' han empezado a pelear, pero ' + player_2.name + u' sabía que tenía las de perder. Cogió un puñado de arena, se lo echó a ' + player_1.name + u' en los ojos y huyó a ' + player_2.location.name + u'.',
         player_2.get_name() + u' iba a pillar a ' + player_1.get_name() + u' por la espalda, pero ' + get_x_or_y(player_1, 'éste', 'ésta') + ' se dio cuenta en el último momento. ' + player_2.name + u' ha huido a ' + player_2.location.name + u'.',
-        u'A ' + player_2.get_name() + u' le da miedo ' + player_2.get_name() + u' y ha huido a ' + player_2.location.name + u'.',
+        u'A ' + player_2.get_name() + u' le da miedo ' + player_1.get_name() + u' y ha huido a ' + player_2.location.name + u'.',
         player_1.get_name() + u' se ha encarado con ' + player_2.get_name() + u', pero ' + player_2.name + u' se ha achantado y escapado a ' + player_2.location.name + u'.'
     ])
 
@@ -163,7 +163,7 @@ def FIND_ACTION():
         u'ha ido al mercadillo y ha comprado',
         u'se ha llevado en una caja de cereales',
         u'se ha encontrado una caja en la que había',
-        u'se ha encontrado una cofre en el que había',
+        u'se ha encontrado un cofre en el que había',
         u'ha recibido por su cumpleaños',
         u'se ha llevado por la puta cara',
         u'se ha llevado por su cara bonita',
@@ -221,10 +221,10 @@ def I_COMPOSED(player, action, event, has_now):
 
 def INFECTION_IMMUNITY():
     return random.choice([
-        u'¡A partir de ahora es inmune al coronavirus!',
-        u'¡A partir de ahora tiene inmunidad contra el coronavirus!',
-        u'¡A partir de ahora el coronavirus no le afecta!',
-        u'¡A partir de ahora no puede ser infectado con el coronavirus!'
+        u'¡A partir de ahora es inmune al COVID-19!',
+        u'¡A partir de ahora tiene inmunidad contra el COVID-19!',
+        u'¡A partir de ahora el COVID-19 no le afecta!',
+        u'¡A partir de ahora no puede ser infectado con el COVID-19!'
     ])
 
 def INJURE_ACTION():
@@ -498,8 +498,8 @@ def TRAP_DODGED(tweet):
     location = tweet.place
     destroyed = random.choice([
         u', ha visto la trampa que había puesto ' + trapped_by.get_name() + ' y la ha destruido.',
-        u' y se ha cargado la trampa de ', trapped_by.get_name() + '.',
-        u' pero no ha caído en la trampa de ', trapped_by.get_name() + '.'
+        u' y se ha cargado la trampa de ' + trapped_by.get_name() + '.',
+        u' pero no ha caído en la trampa de ' + trapped_by.get_name() + '.'
     ])
     return u' '.join((player.get_name(), MOVED_SING(), location.name + destroyed))
 

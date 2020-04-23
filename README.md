@@ -9,5 +9,10 @@ This is my first twitter bot. It's a fictional tournament where players can 'fig
 5. Run start.py
 
 ## To Do
+Choose the last participant
+Put the mark on his avatar
 Determine the categories of items automatically from their values
+
 ## Bugs
+ozano(@jaimealtozano) ha lapidado a Amaia Romero(@amaiaromero) .
+El mundo echará de menos a Palencia.Hamza Zaidi(@hamzazaidi97) ha ido a Valladolid.

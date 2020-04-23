@@ -25,6 +25,8 @@ def battle():
 
     success = False
     if kill_number == factor:
+        if get_alive_players_count() == 2:
+            return
         success = tie(player_1, player_2, factor, kill_number)
     elif kill_number > factor - PROBAB_TIE and kill_number < factor:
         success = run_away(player_1, player_2, factor, kill_number, False)

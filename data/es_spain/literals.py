@@ -99,7 +99,7 @@ def ATRACTION(place):
     elif place == u'Valencia':
         return u'Se han celebrado las Fallas de Valencia y'
     elif place == u'Valladolid':
-        return u'Se han celebrado las Fiestas de la Virgen de San Lorenzo y'
+        return u'Se han celebrado las Fiestas de la Virgen de San Lorenzo en Valladolid y'
     elif place == u'Vitoria':
         return u'Se han celebrado las Fiestas de La Blanca en Vitoria y'
     elif place == u'Zamora':
@@ -130,7 +130,7 @@ def MONSTER_DISAPPEARED(tweet):
 
 def MONSTER_IMMUNITY():
     return random.choice([
-        u'¡A partir de ahora la policía no le hará nada.',
+        u'¡A partir de ahora la policía no le hará nada!',
         u'¡A partir de ahora es inmune ante la justicia!',
         u'¡A partir de ahora es inmune ante la policía!',
     ])
@@ -234,9 +234,9 @@ def MOVED_ATRACTION_PL():
         u' han ido.',
         u' han ido.',
         u' han ido.',
-        u' han ido porque le quedaba cerca.',
+        u' han ido porque les quedaba cerca.',
         u' han ido porque tenían ganas de marcha.',
-        u' han ido porque le quedaba de camino.',
+        u' han ido porque les quedaba de camino.',
         u' se han acercado a ver qué se cuece.',
         u' han ido en coche.',
         u' han ido a bailar.',
@@ -272,5 +272,5 @@ def PRAISE(player):
         u'Campear tanto da sus frutos.',
         u'No lo vio venir.',
         u'Y ya estaría.',
-        get_x_or_y(player, u'Esta mamadísimo.', u'Está mamadísima.')
+        get_x_or_y(player, u'Está mamadísimo.', u'Está mamadísima.')
     ])

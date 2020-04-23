@@ -130,5 +130,5 @@ def PRAISE(player):
         u'Campear tanto da sus frutos.',
         u'No lo vio venir.',
         u'Y ya estaría.',
-        get_x_or_y(player, u'Esta mamadísimo.', u'Está mamadísima.')
+        get_x_or_y(player, u'Está mamadísimo.', u'Está mamadísima.')
     ])

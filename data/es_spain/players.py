@@ -29,7 +29,7 @@ raw_player_list = [
     [u'Arturo Valls', u'ArturoValls', 0, u'Valencia'],
     [u'AuronPlay', u'auronplay', 0, u'Barcelona'],
     [u'Ayax y Prok', u'ayaxyprok', 0, u'Granada'],
-    [u'Bad gyal', u'', 1, u'Barcelona'],
+    [u'Bad Gyal', u'', 1, u'Barcelona'],
     [u'Bejo', u'Bejoflow', 0, u'Santa Cruz de Tenerife'],
     [u'Belén Esteban', u'BelenEstebanM', 1, u'Madrid'],
     [u'Berto Romero', u'Berto_Romero', 0, u'Barcelona'],
@@ -156,7 +156,7 @@ raw_player_list = [
     [u'Yung Beef', u'secoweedcodein', 0, u'Granada'],
 
     [u'Eric Avilés', u'Eric_Almeda', 0, u'Oviedo'],
-    [u'Scab', u'Scab__', 0, u'Lugo'],
+    [u'Scab', u'Scab__', 0, u'A Coruña'],
     [u'Ángela Aparicio', u'Angelaapa', 1, u'León'],
     [u'Project Bercy', u'mariinajoseph', 1, u'León'],
     [u'Mafranpe', u'mafranpe', 0, u'Murcia'],

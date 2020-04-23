@@ -191,7 +191,7 @@ def somebody_found_item(tweet):
     return I_COMPOSED(tweet.player, FIND_ACTION(), tweet.item, has_now(tweet.player, tweet.item))
 
 def somebody_replaced_item(tweet):
-    return I_COMPOSED(tweet.player, FIND_ACTION(), tweet.item, REPLACED + '' + tweet.old_item.name + '. ' + has_now(tweet.player, tweet.item, tweet.old_item))
+    return I_COMPOSED(tweet.player, FIND_ACTION(), tweet.item, REPLACED + ' ' + tweet.old_item.name + '. ' + has_now(tweet.player, tweet.item, tweet.old_item))
 
 def somebody_escaped(tweet):
     if tweet.inverse:
@@ -321,7 +321,7 @@ def destroyed_district(tweet):
             else:
                 tributes_str = tributes_str + ', ' + d
 
-    prefix = DESTROYED_DISTRICT(place.district, tributes_str)
+    prefix = DESTROYED_DISTRICT(place, tributes_str)
 
     sufix = ''
     escaped = []
@@ -337,7 +337,7 @@ def destroyed_district(tweet):
             else:
                 sufix_str = sufix_str + ', ' + d
 
-        sufix = u'. ' + u' '.join((sufix_str, get_sing_or_pl(escaped_list, MOVED_SING(), MOVED_PL()), new_location.name + u'.'))
+        sufix = u' '.join((sufix_str, get_sing_or_pl(escaped_list, MOVED_SING(), MOVED_PL()), new_location.name + u'.'))
 
     return (prefix + sufix)
 

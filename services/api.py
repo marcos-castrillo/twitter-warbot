@@ -22,7 +22,7 @@ def tweet_sleep(image_dir):
     message = u''
     image_path = None
 
-    if action_number > 65:
+    if action_number > 35:
         message = SLEEP()
     else:
         image_path = os.path.join(image_dir, random.choice(os.listdir(image_dir)))
@@ -33,7 +33,7 @@ def tweet(message, image_path = None, image_2_path = None, last_tweet_id = None)
                       consumer_secret=consumer_secret,
                       access_token_key=access_token,
                       access_token_secret=access_token_secret)
-                      
+
     image_list = []
     if image_path != None and os.path.exists(image_path):
         image_list.append(image_path)

@@ -38,7 +38,7 @@ raw_place_list = [
     [u'Oviedo', [u'León', u'Santander'], [618, 120], u'Asturias'],
     [u'Palencia', [u'Burgos', u'Valladolid'], [729, 274]],
     [u'Palma de Mallorca', [], [1356, 526], u'Islas Baleares', [u'Barcelona', u'Valencia']],
-    [u'Pamplona', [u'Logroño', u'San Sebastián', u'Zaragoza'], [966, 186]],
+    [u'Pamplona', [u'Logroño', u'San Sebastián', u'Zaragoza'], [966, 186], u'Navarra'],
     [u'Pontevedra', [u'A Coruña', u'Ourense'], [397, 235]],
     [u'Salamanca', [u'Valladolid'], [633, 387]],
     [u'San Sebastián', [u'Bilbao', u'Pamplona'], [922, 148], u'Guipúzcoa'],
