@@ -28,7 +28,7 @@ raw_player_list = [
     [u'Arturo Pérez Reverte', u'perezreverte', 0, u'Murcia'],
     [u'Arturo Valls', u'ArturoValls', 0, u'Valencia'],
     [u'AuronPlay', u'auronplay', 0, u'Barcelona'],
-    [u'Ayax y Prok', u'ayaxyprok', 0, u'Granada'],
+    [u'Ayax y Prok', u'', 0, u'Granada'],
     [u'Bad Gyal', u'', 1, u'Barcelona'],
     [u'Bejo', u'Bejoflow', 0, u'Santa Cruz de Tenerife'],
     [u'Belén Esteban', u'BelenEstebanM', 1, u'Madrid'],

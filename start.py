@@ -58,7 +58,7 @@ def do_something():
         completed = suicide()
     elif action_number < simulation_probab.revive_action_number:
         completed = revive()
-    elif action_number <= simulation_probab.trap_action_number:
+    elif action_number < simulation_probab.trap_action_number:
         completed = trap()
     elif action_number < simulation_probab.infect_action_number:
         completed = infect()

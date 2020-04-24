@@ -16,3 +16,4 @@ Determine the categories of items automatically from their values
 ## Bugs
 ozano(@jaimealtozano) ha lapidado a Amaia Romero(@amaiaromero) .
 El mundo echará de menos a Palencia.Hamza Zaidi(@hamzazaidi97) ha ido a Valladolid.
+ infectando también aBejo(@Bejoflow) infectando también aBejo(@Bejoflow) y Ignatius Farray(@IgnatiusFarray)
