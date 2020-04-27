@@ -4,12 +4,14 @@ from config import LOCALIZATION
 from models.tweet_type import Tweet_type
 from store import are_friends
 
-if LOCALIZATION == "es_paramo" or LOCALIZATION == "es_spain":
+if LOCALIZATION == "es_paramo" or LOCALIZATION == "es_spain" or LOCALIZATION == "es_interneto":
     from data.es.literals import *
     if LOCALIZATION == "es_paramo":
         from data.es_paramo.literals import *
     elif LOCALIZATION == "es_spain":
         from data.es_spain.literals import *
+    elif LOCALIZATION == "es_interneto":
+        from data.es_interneto.literals import *
 
 def get_message(tweet):
     message = ''

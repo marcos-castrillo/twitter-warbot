@@ -3,7 +3,7 @@ MAX_ITEMS = 3
 MENTION_USERS = True
 USE_DISTRICTS = True
 MAX_TRIBUTES_PER_DISTRICT = 3
-LOCALIZATION = "es_spain" #es_paramo, es_spain
+LOCALIZATION = "es_interneto" #es_paramo, es_spain, es_interneto
 
 PROBAB_SUICIDE = [0,  0,  1,  0,  1,  0,  1,  0]
 PROBAB_REVIVE =  [0,  0,  0,  1,  0,  1,  0,  0]
