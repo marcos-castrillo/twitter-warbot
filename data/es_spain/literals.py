@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from data.es.literals import *
 import random
 
@@ -87,7 +90,7 @@ def ATRACTION(place):
     elif place == u'Segovia':
         return u'Se han celebrado las Fiestas de San Juan y San Pedro en Segovia y'
     elif place == u'Sevilla':
-        return u'Se han celebrado la Feria de Abril en Sevilla y'
+        return u'Se ha celebrado la Feria de Abril en Sevilla y'
     elif place == u'Soria':
         return u'Se han celebrado las Fiestas de San Juan en Soria y'
     elif place == u'Tarragona':

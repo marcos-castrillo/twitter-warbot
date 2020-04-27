@@ -333,7 +333,7 @@ def destroyed_district(tweet):
             escaped.append(d.get_name())
         for i, d in enumerate(escaped):
             if i == 0:
-                sufix_str = d
+                sufix_str = ' ' + d
             elif i == len(escaped) - 1:
                 sufix_str = sufix_str + ' ' +  AND + ' ' + d
             else:
@@ -348,7 +348,7 @@ def infected(tweet):
     place_infected = PLACE_INFECTED(tweet)
     also = '.'
     if len(tweet.player_list) > 0:
-        also = u' infectando también a'
+        also = u' infectando también a '
         for i, player in enumerate(tweet.player_list):
             if i == 0:
                 also = also + player.get_name()

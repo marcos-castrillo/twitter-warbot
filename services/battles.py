@@ -58,7 +58,7 @@ def kill(player_1, player_2, place, factor, action_number, inverse):
     tweet.factor = factor
     tweet.action_number = action_number
     tweet.inverse = inverse
-    tweet.item = best_killer_item
+    tweet.item = killer.get_best_attack_item()
 
     if best_killed_item != None and len(killer.item_list) == 2 and (best_killer_item.get_value() < best_killed_item.get_value()):
         killer.item_list = [best_killer_item, best_killed_item]

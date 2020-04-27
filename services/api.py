@@ -8,6 +8,7 @@ import random
 
 from data.secrets import *
 from config import *
+from data.literals import SLEEP
 
 def tweet_line_from_file(file_path, line_number, image_path = None, image_2_path = None, last_tweet_id = None):
     with open(image_path, 'rb') as image:
@@ -22,10 +23,12 @@ def tweet_sleep(image_dir):
     message = u''
     image_path = None
 
-    if action_number > 35:
+    if action_number > 60:
         message = SLEEP()
     else:
         image_path = os.path.join(image_dir, random.choice(os.listdir(image_dir)))
+
+    print(message, image_path)
     return tweet(message, image_path)
 
 def tweet(message, image_path = None, image_2_path = None, last_tweet_id = None):

@@ -9,11 +9,12 @@ This is my first twitter bot. It's a fictional tournament where players can 'fig
 5. Run start.py
 
 ## To Do
-Choose the last participant
-Put the mark on his avatar
 Determine the categories of items automatically from their values
-
+Add names of cars
+Make the cup bigger
 ## Bugs
 ozano(@jaimealtozano) ha lapidado a Amaia Romero(@amaiaromero) .
-El mundo echará de menos a Palencia.Hamza Zaidi(@hamzazaidi97) ha ido a Valladolid.
- infectando también aBejo(@Bejoflow) infectando también aBejo(@Bejoflow) y Ignatius Farray(@IgnatiusFarray)
+rebuscando entre la basura ha encontrado  > ha encontrado rebuscando entre la basura
+én a Pablo Iglesias(@PabloIglesias) infectando también a Pablo Iglesia
+alguien no huyó cuando se destruyó un distrito
+infecting places doesnt work too good

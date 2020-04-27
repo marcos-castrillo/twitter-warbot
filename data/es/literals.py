@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import random
 
 def get_amount(number):
@@ -61,7 +64,7 @@ def DESTROYED_DISTRICT(district, tributes_str):
     if district.name != district.district_display_name:
         return random.choice([
             u'Los representantes de ' + district.district_display_name + u'(' + tributes_str  + u')' + u' han sido derrotados, así que ' + district.name + ' ha sido reducida a escombros.',
-            u'Ninguno de los representantes de ' + district.district_display_name + u'(' + tributes_str  + u')' + u' sigue con vida, por lo que ' + district.name + 'ha sido destruida.',
+            u'Ninguno de los representantes de ' + district.district_display_name + u'(' + tributes_str  + u')' + u' sigue con vida, por lo que ' + district.name + ' ha sido destruida.',
         ])
     else:
         return random.choice([
@@ -95,7 +98,7 @@ def DIED(player, multiple = False):
 
 def DISTRICT_REBUILD(tweet):
     return random.choice([
-        u'Además, ¡su provincia (' + tweet.player.district.district_display_name + u') ha sido reconstruida!'
+        u'Además, ¡su provincia (' + tweet.player.district.district_display_name + u') ha sido reconstruida!',
         u'¡' + tweet.player.district.district_display_name + u' ha sido reconstruida!',
         u'¡' + tweet.player.district.district_display_name + u' vuelve a estar en pie!',
         u'¡' + tweet.player.district.district_display_name + u' vuelve a la vida!'
@@ -158,7 +161,7 @@ def FIND_ACTION():
         u'se ha comprado en un todo a cien',
         u'se ha comprado clandestinamente en un kiosko',
         u'ha comprado en el ' + random.choice([u'Lidl', u'Corte Inglés', u'Alcampo', u'Carrefour', u'Mercadona', u'Día%', u'Masymas']),
-        u'ha recibido un paquete de ' + random.choice([u'Ebay', u'Amazon', u'PcComponentes', u'MediaMarkt']) + u' con',
+        u'ha recibido un paquete de ' + random.choice([u'Ebay', u'Amazon', u'MediaMarkt']) + u' con',
         u'ha comprado por ' + random.choice([u'Wallapop']),
         u'ha ido al mercadillo y ha comprado',
         u'se ha llevado en una caja de cereales',
@@ -168,7 +171,7 @@ def FIND_ACTION():
         u'se ha llevado por la puta cara',
         u'se ha llevado por su cara bonita',
         u'se ha llevado como premio en ' + random.choice([u'un concurso de talentos', u'una batalla de gallos', u'una concurso de baile', u'un show de belleza']),
-        u'se ha llevado en un sorteo de ' + random.choice([u'HTCMania', u'PcComponentes', u'la ONCE', u'Forocoches']),
+        u'se ha llevado en un sorteo de ' + random.choice([u'@HTCMania', u'@PcComponentes', u'la ONCE', u'Forocoches']),
         u'llevaba mucho tiempo ahorrando para comprarse',
         u'iba por la calle cuando alguien le regaló',
         u'llevaba meses coleccionando tapas de yogurt para conseguir',
@@ -414,7 +417,7 @@ def POWERUP_ACTION():
     ])
 
 def SLEEP():
-    random.choice([
+    return random.choice([
         u'Los participantes se han ido a dormir tras un largo día.',
         u'Los participantes se han ido a dormir tras un largo día.',
         u'Los participantes se han ido a dormir tras un largo día.',

@@ -30,7 +30,7 @@ raw_place_list = [
     [u'Lleida', [u'Barcelona', u'Tarragona', u'Zaragoza'], [1164, 312]],
     [u'Logroño', [u'Pamplona', u'Vitoria', u'Zaragoza'], [901, 229], u'La Rioja'],
     [u'Lugo', [u'A Coruña', u'León'], [472, 153]],
-    [u'Madrid', [u'Badajoz', u'Burgos', u'Cáceres', u'Ciudad Real', u'Cuenca', u'Guadalajara', u'Jaén', u'Segovia', u'Sevilla', u'Toledo'], [792, 450]],
+    [u'Madrid', [u'Badajoz', u'Burgos', u'Ciudad Real', u'Cuenca', u'Guadalajara', u'Jaén', u'Segovia', u'Sevilla', u'Toledo'], [792, 450]],
     [u'Málaga', [u'Córdoba', u'Granada'], [712, 862]],
     [u'Melilla', [], [854, 1054], None, [u'Ceuta']],
     [u'Murcia', [u'Albacete', u'Alicante', u'Almería'], [1022, 727]],
