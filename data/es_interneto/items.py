@@ -34,6 +34,7 @@ raw_special_list = raw_special_list + [
 raw_injury_list = raw_injury_list + [
     [2, u'tumor en la mano', 0, 3],
     [2, u'gripe española', 0, 3],
+    [2, u'rata de la peste', 0, 3],
 
 ]
 
@@ -44,7 +45,6 @@ raw_powerup_list = raw_powerup_list + [
     [2, u'con toda la puestada', 0, 3],
     [2, u'footjob', 0, 3],
     [2, u'clenca de amistad', 0, 3],
-    [2, u'rata de la peste', 0, 3],
     [2, u'alto fumese uno', 0, 3],
     [2, u'gamers en pie', 0, 3],
 
