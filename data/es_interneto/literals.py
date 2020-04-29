@@ -94,17 +94,6 @@ def MOVE_ACTION_ROAD():
         u'ha cogido un Blablacar de'
     ])
 
-def MOVE_ACTION_WATER():
-    return random.choice(
-        MOVE_ACTION_AIR() + [
-        u'ha ido en barco de',
-        u'ha ido en su barquito velero de',
-        u'ha ido en un crucero de ocho plantas de',
-        u'ha ido en lancha motora de',
-        u'se ha colado de polizón en un barco de',
-        u'ha ido en patera de'
-    ])
-
 def MOVED_ATRACTION_SING():
     return random.choice([
         u' ha ido.',
@@ -112,14 +101,6 @@ def MOVED_ATRACTION_SING():
         u' ha ido.',
         u' ha ido.',
         u' ha ido.',
-        u' ha ido porque tenía ganas de marcha.',
-        u' ha ido porque le quedaba cerca.',
-        u' ha ido porque le quedaba de camino.',
-        u' se ha acercado a ver qué se cuece.',
-        u' ha ido en coche.',
-        u' ha ido a bailar.',
-        u' ha ido a mover el esqueleto.',
-        u' ha ido de copas.'
     ])
 
 def MOVED_ATRACTION_PL():
@@ -129,14 +110,6 @@ def MOVED_ATRACTION_PL():
         u' han ido.',
         u' han ido.',
         u' han ido.',
-        u' han ido porque les quedaba cerca.',
-        u' han ido porque tenían ganas de marcha.',
-        u' han ido porque les quedaba de camino.',
-        u' se han acercado a ver qué se cuece.',
-        u' han ido en coche.',
-        u' han ido a bailar.',
-        u' han ido a mover el esqueleto.',
-        u' han ido de copas.'
     ])
 
 def PRAISE(player):

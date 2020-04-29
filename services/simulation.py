@@ -367,7 +367,7 @@ def get_summary_image(image, tweet):
                     items = items - 1
 
     for i, place in enumerate(place_list):
-        draw_multiple_players(tweet, place.players, place.coord_x, place.coord_y, image, 24, True)
+        draw_multiple_players(tweet, place.players, place.coord_x, place.coord_y, image, WIDTH_BETWEEN_PLAYERS, PLAYERS_IN_SINGLE_LINE)
 
     if tweet.place != None:
         draw.ellipse((tweet.place.coord_x - 75, tweet.place.coord_y - 75, tweet.place.coord_x + 75, tweet.place.coord_y + 75), outline='rgb(255,0,0)', width=5)

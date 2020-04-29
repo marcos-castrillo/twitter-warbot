@@ -62,7 +62,7 @@ raw_weapon_list = [
 ]
 
 raw_powerup_list = [
-    [1, u'una bocata de calamares', 2, 1],
+    [1, u'un bocata de calamares', 2, 1],
     [1, u'un Monster', 0, 2],
     [1, u'un Red Bull', 0, 2],
     [1, u'un café con leche', 1, 1],

@@ -28,6 +28,8 @@ PROBAB_RARITY_3 = 5
 PROBAB_TIE = 10
 
 WIDTH_MAP = 1496
+WIDTH_BETWEEN_PLAYERS = 48  #es_paramo, es_spain 24, es_interneto 48
+PLAYERS_IN_SINGLE_LINE = False  #es_paramo, es_spain True, es_interneto False
 RANKING_IMG_WIDTH = 50
 RANKING_IMGS_PER_ROW = 24  #es_paramo, es_spain 24, es_interneto 10
 RANKING_SPACE_BETWEEN_ROWS = 105
