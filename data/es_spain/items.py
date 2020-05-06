@@ -4,7 +4,7 @@ from data.es.items import *
 
 # Name, defense, attack
 raw_weapon_list = raw_weapon_list + [
-    [2, u'un cuerno de mamut', 0, 3]
+    [u'un cuerno de mamut', 0, 3]
 ]
 
 raw_special_list = raw_special_list + [

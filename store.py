@@ -6,7 +6,7 @@ import sys
 from data.items import raw_weapon_list, raw_special_list, raw_injury_list, raw_powerup_list
 from data.places import raw_place_list
 from data.players import raw_player_list
-from config import *
+from data.config import *
 from models.item import Item
 from models.place import Place
 from models.tweet import Tweet
@@ -20,25 +20,22 @@ def get_item_list():
     for i, p in enumerate(raw_weapon_list):
         item = Item()
         item.type = Item_type.weapon
-        item.rarity = p[0]
-        item.name = p[1]
-        item.defense = p[2]
-        item.attack = p[3]
+        item.name = p[0]
+        item.defense = p[1]
+        item.attack = p[2]
         list.append(item)
 
     for i, p in enumerate(raw_powerup_list):
         item = Item()
         item.type = Item_type.powerup
-        item.rarity = p[0]
-        item.name = p[1]
-        item.defense = p[2]
-        item.attack = p[3]
+        item.name = p[0]
+        item.defense = p[1]
+        item.attack = p[2]
         list.append(item)
 
     for i, p in enumerate(raw_special_list):
         item = Item()
         item.type = Item_type.special
-        item.rarity = 3
         item.name = p[0]
         item.monster_immunity = p[1]
         item.injure_immunity = p[2]
@@ -62,7 +59,7 @@ def get_place_list():
         while item_count > 0:
             action_number = random.randint(1, 100)
             item = None
-            
+
             if action_number < PROBAB_RARITY_1:
                 if len(item_list_1) > 0:
                     item = random.choice(item_list_1)
@@ -112,11 +109,11 @@ def get_place_list():
         place.water_connections = water_connections_list
 
     for i, item in enumerate(item_list):
-        if item.rarity == 1:
+        if item.get_rarity() == 1:
             item_list_1.append(item)
-        if item.rarity == 2:
+        if item.get_rarity() == 2:
             item_list_2.append(item)
-        if item.rarity == 3:
+        if item.get_rarity() == 3:
             item_list_3.append(item)
     for i, p in enumerate(raw_place_list):
         if len(p) == 3:
@@ -308,8 +305,14 @@ def move_player(player, new_location):
     player.location.players.pop(player.location.players.index(player))
     player.location = new_location
     new_location.players.append(player)
+
     if player.infected:
         new_location.infected = True
+        for j, p in enumerate(new_location.players):
+            p.infected = True
+
+    if new_location.infected:
+        player.infected = True
 
 def destroy_district_if_needed(district):
     if any(x for x in district.tributes if x.state == 1):
@@ -355,9 +358,10 @@ def destroy_district_if_needed(district):
 
     for i, p in enumerate(district.players):
         if p.state == 1:
-            if new_location:
-                move_player(p, new_location)
-                escaped_list.append(p)
+            escaped_list.append(p)
+
+    for i, p in enumerate(escaped_list):
+        move_player(p, new_location)
 
     tweet = Tweet()
     tweet.type = Tweet_type.destroyed_district

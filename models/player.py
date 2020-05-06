@@ -1,5 +1,5 @@
 import sys
-from config import MENTION_USERS
+from data.config import MENTION_USERS
 
 class Player(object):
     avatar_dir = None

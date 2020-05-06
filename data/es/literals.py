@@ -54,7 +54,7 @@ def DESTROYED(place):
        u'Una bomba nuclear ha reducido ' + place + u' a pedazos',
        u'Un huracán ha arrasado todo ' + place,
        u'Una nube de gas tóxico ha llegado a ' + place + u' haciéndolo inhabitable',
-       u'Una epidemia de listeriosis se ha extendido por ' + place + u'.',
+       u'Una epidemia de listeriosis se ha extendido por ' + place,
        u'El mundo está mejor sin ' + place  + u', así que el creador de este bot ha decidido cargárselo sin más',
        place + u' se ha ido a la puta mierda',
        u'Una terrible sequía ha asolado ' + place
@@ -150,7 +150,7 @@ def FIND_ACTION():
         u'ha conseguido',
         u'tras suplicárselo al creador del bot, se ha llevado',
         u'tiene enchufe con el programador y se ha llevado',
-        u'rebuscando entre la basura ha encontrado',
+        u'ha encontrado rebuscando entre la basura',
         u'se ha agachado a recoger',
         u'se ha llevado en la tómbola',
         u'se ha llevado',
@@ -194,7 +194,7 @@ def FRIENDS_TIED(player_1, player_2):
 GETS_RID_OF = u'se ha deshecho de'
 
 def HAS_ALREADY_KILLED(kills_count):
-    return u' '.join((u'y ya lleva', kills_count, u'muertes.'))
+    return u' '.join((u'y ya lleva', kills_count, u'muertes'))
 
 def HAS_NOW(attack, defense):
     if attack != None and defense != None:
@@ -294,20 +294,6 @@ def KILL_ACTION():
 
 def KILL_METHOD(player):
     return random.choice([
-        u'',
-        u'',
-        u'',
-        u'',
-        u'',
-        u'',
-        u'',
-        u'',
-        u'',
-        u'',
-        u'',
-        u'',
-        u'',
-        u'',
         u'con sus puños',
         u'por quitarle el último rollo de papel higiénico',
         u'a lo jíbiri',
@@ -394,6 +380,48 @@ def INFECTED_DIED(tweet):
         u'Los hospitales están colapsados y no quedan camas para ' + player.get_name() + u'. Ha muerto por una neumonía provocada por coronavirus.',
         player.get_name() + u' ha fallecido por coronavirus.',
         player.get_name() + u' ha tosido hasta ahogarse por culpa del coronavirus.'
+    ])
+
+def MOVE_ACTION_AIR():
+    return random.choice([
+        u'ha ido en helicóptero de',
+        u'ha ido en su jet privado de',
+        u'ha ido en globo de',
+        u'ha ido en avión de',
+        u'ha ido en Ryanair de',
+        u'ha ido en Iberia de',
+        u'ha ido en zeppelin de',
+        u'ha encontrado billetes de avión baratos para ir de',
+        u'ha ido en avión en primera clase de',
+    ])
+
+def MOVE_ACTION_ROAD():
+    return random.choice([
+        MOVE_ACTION_AIR(),
+        u'ha ido de',
+        u'ha viajado de',
+        u'se ha movido de',
+        u'ha conducido su ' + random.choice([u'Seat León', u'Fiat Multipla', u'Renault Megane', u'Seat Ibiza', u'Golf', u'Opel Corsa', u'Ford Focus', u'Opel Astra', u'BMW Serie 3']) + ' de',
+        random.choice([u'está tan en forma que ha ', u'se aburría y ha ', u'está tan cachas que ha ', u'está tan fuerte que ha ']) + random.choice([u'ido en bici', u'ido a trote', u'hecho un sprint', u'ido a la pata coja', u'ido corriendo', u'ha hecho footing']) + u' de',
+        u'ha llamado a ' + random.choice([u'un taxi', u'un Uber', u'un Cabify']) + u' para que le lleve de',
+        u'ha hecho ' + random.choice([u'autostop', u'dedo']) + u' para que le lleve de',
+        u'ha ido en ' + random.choice([u'moto', u'su scooter', u'AVE', u'mochillo', u'limusina con su chófer', u'patinete eléctrico', u'tren regional', u'Alsa', u'Blablacar', u'un coche robado a lo GTA']) + u' de'
+    ])
+
+def MOVE_ACTION_WATER():
+    return random.choice([
+        MOVE_ACTION_AIR(),
+        u'ha ido en barco de',
+        u'ha ido en su barquito velero de',
+        u'ha ido en un crucero de ocho plantas de',
+        u'ha ido en barcaza de',
+        u'ha ido en canoa de',
+        u'ha ido en kayak de',
+        u'ha ido en submarino nuclear de',
+        u'ha ido en lancha motora de',
+        u'ha ido en un barco pesquero de',
+        u'ha ido en patera de',
+        u'se ha colado de polizón en un barco de'
     ])
 
 def MOVED_SING():

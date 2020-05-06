@@ -1,5 +1,5 @@
 from data.literals import *
-from config import PROBAB_TIE, USE_DISTRICTS, TREASONS_ENABLED_LIST
+from data.config import PROBAB_TIE, USE_DISTRICTS, TREASONS_ENABLED_LIST
 from store import *
 from models.tweet import Tweet
 from models.tweet_type import Tweet_type

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from config import LOCALIZATION
+from data.config import LOCALIZATION
 from models.tweet_type import Tweet_type
 from store import are_friends
 
@@ -221,22 +221,31 @@ def somebody_killed(tweet):
     kill_method = KILL_METHOD(player_1)
     were_friends = are_friends(player_1, player_2)
     friend_message = ''
-    kills_count = '.'
+    kills_count = ''
     stole = ''
     fav = ''
+    sufix = ''
 
     if were_friends:
         friend_message = TREASON(tweet)
     if killing_item != None:
         kill_method = u' '.join((WITH, killing_item.name))
     if player_1.kills > 1:
-        kills_count = u' ' + u' '.join((HAS_ALREADY_KILLED(str(player_1.kills)), PRAISE(player_1)))
+        kills_count = u' '.join((HAS_ALREADY_KILLED(str(player_1.kills)), PRAISE(player_1)))
     if new_item != None and old_item != None:
-        stole = u' ' + u' '.join((ALSO_STOLE(), new_item.name, AND, GETS_RID_OF, old_item.name + '.'))
+        stole = u' '.join((ALSO_STOLE(), new_item.name, AND, GETS_RID_OF, old_item.name))
     elif new_item != None:
-        stole = u' ' + u' '.join((ALSO_STOLE(), new_item.name + '.'))
+        stole = u' '.join((ALSO_STOLE(), new_item.name))
 
-    return u' '.join((friend_message + player_1.get_name(), kill_verb, player_2.get_name(), kill_method + kills_count + stole))
+    if len(kill_method) > 0:
+        sufix = sufix + u' ' + kill_method
+    elif len(kills_count) > 0:
+        sufix = sufix + u' ' + kills_count
+    elif len(stole) > 0:
+        sufix = sufix + u' ' + stole
+    sufix = sufix + '.'
+
+    return u' '.join((friend_message + player_1.get_name(), kill_verb, player_2.get_name() + sufix))
 
 def somebody_revived(tweet):
     revived = REVIVED(tweet)
@@ -323,7 +332,7 @@ def destroyed_district(tweet):
             else:
                 tributes_str = tributes_str + ', ' + d
 
-    prefix = DESTROYED_DISTRICT(place, tributes_str)
+    prefix = DESTROYED_DISTRICT(place, tributes_str) + '.'
 
     sufix = ''
     escaped = []
@@ -339,14 +348,15 @@ def destroyed_district(tweet):
             else:
                 sufix_str = sufix_str + ', ' + d
 
-        sufix = u' '.join((sufix_str, get_sing_or_pl(escaped_list, MOVED_SING(), MOVED_PL()), new_location.name + u'.'))
+        sufix = u' ' + u' '.join((sufix_str, get_sing_or_pl(escaped_list, MOVED_SING(), MOVED_PL()), new_location.name + u'.'))
 
-    return (prefix + sufix)
+    return (prefix + \
+    sufix)
 
 def infected(tweet):
     player = tweet.player
-    place_infected = PLACE_INFECTED(tweet)
-    also = '.'
+    place_infected = PLACE_INFECTED(tweet) + '.'
+    also = ''
     if len(tweet.player_list) > 0:
         also = u' infectando también a '
         for i, player in enumerate(tweet.player_list):
@@ -357,7 +367,8 @@ def infected(tweet):
             else:
                 also = also + ', ' + player.get_name()
 
-    return u' '.join((WAS_INFECTED(tweet), PLACE_INFECTED(tweet) + also))
+    return u' '.join((WAS_INFECTED(tweet), PLACE_INFECTED(tweet) + \
+    also))
 
 def atraction(tweet):
     place = tweet.place

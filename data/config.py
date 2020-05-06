@@ -1,10 +1,8 @@
-THRESHOLD_LIST = [50, 100, 150, 200, 250, 300, 400, 500]
+# General
 MAX_ITEMS = 3
-MENTION_USERS = False
-USE_DISTRICTS = False
-MAX_TRIBUTES_PER_DISTRICT = 3
-LOCALIZATION = "es_interneto" #es_paramo, es_spain, es_interneto
 
+# Probabilities
+PROBAB_TIE = 10
 PROBAB_SUICIDE = [0,  0,  1,  0,  1,  0,  1,  0]
 PROBAB_REVIVE =  [0,  0,  1,  1,  1,  1,  0,  0]
 PROBAB_TRAP =    [0,  1,  1,  1,  1,  1,  2,  2]
@@ -17,23 +15,20 @@ PROBAB_STEAL =   [1,  1,  2,  6,  7,  7,  7,  7]
 PROBAB_MOVE =    [7,  8,  8,  9,  11, 14, 15, 16]
 PROBAB_ITEM =    [42, 38, 32, 30, 23, 18, 16, 16]
 PROBAB_BATTLE =  [50, 49, 49, 47, 48, 48, 48, 47]
-
-ATRACT_RANGE_LIST =  [1, 1, 1, 1, 2, 2, 2, 3]
 TREASONS_ENABLED_LIST =  [False, False, False, True, True, True, True, True]
 
+# Item rarities
 PROBAB_RARITY_1 = 65
 PROBAB_RARITY_2 = 30
 PROBAB_RARITY_3 = 5
+MAX_VALUE_RARITY_1 = 2
+MAX_VALUE_RARITY_2 = 6
 
-PROBAB_TIE = 10
-
-WIDTH_MAP = 1496
-WIDTH_BETWEEN_PLAYERS = 48  #es_paramo, es_spain 24, es_interneto 48
-PLAYERS_IN_SINGLE_LINE = False  #es_paramo, es_spain True, es_interneto False
-RANKING_IMG_WIDTH = 50
-RANKING_IMGS_PER_ROW = 24  #es_paramo, es_spain 24, es_interneto 10
-RANKING_SPACE_BETWEEN_ROWS = 105
-RANKING_SPACE_BETWEEN_COLS = 12
-RANKING_SPACE_BETWEEN_DISTRICTS = 20
-RANKING_FIRST_COLUMN_X = 45
-RANKING_FIRST_ROW_Y = 1450 + 25  #es_paramo, es_spain 1150 + 25, es_interneto
+# Localization
+LOCALIZATION = "es_interneto" #es_paramo, es_spain, es_interneto
+if LOCALIZATION == "es_paramo":
+    from data.es_paramo.config import *
+elif LOCALIZATION == "es_spain":
+    from data.es_spain.config import *
+elif LOCALIZATION == "es_interneto":
+    from data.es_interneto.config import *

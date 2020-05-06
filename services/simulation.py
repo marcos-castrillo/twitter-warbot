@@ -6,7 +6,7 @@ import urllib.request
 from PIL import Image, ImageDraw, ImageFont
 
 from data.literals import get_message
-from config import *
+from data.config import *
 
 from models.tweet_type import Tweet_type
 from store import place_list, player_list, get_alive_players, get_dead_players
@@ -36,7 +36,7 @@ path = os.path.join(output_dir, filename + '.txt')
 i = 1
 while os.path.exists(path):
     i = i + 1
-    path = os.path.join(output_dir, filename + '-' + str(i) + '.txt')
+    path = os.path.join(output_dir, filename + '-' + str(i) + ".txt")
 
 def initialize_avatars():
     path = 'assets/img/avatars'
@@ -64,16 +64,16 @@ def write_tweet(tweet):
 
     line_number = line_number + 1
     if tweet.type == Tweet_type.winner or tweet.type == Tweet_type.winner_districts:
-        with open(os.path.join(output_dir, '-1_line.txt'), "w") as file:
-            file.write('todo ok')
         with open(os.path.join(output_dir, '-1_image.txt'), "w") as file:
+            file.write('todo ok')
+        with open(os.path.join(output_dir, '-1_line.txt'), "w") as file:
             file.write('todo ok')
 
 def write_line(message):
     print(str(line_number) + u': ' + message.decode('utf-8'))
 
     with open(os.path.join(path), "a+", encoding="utf-8") as file:
-        file.write(message.decode('utf8'))
+        file.write(message.decode('utf-8'))
 
 def file_len():
     with open(os.path.join(path)) as f:
@@ -280,6 +280,9 @@ def get_zoomed_image(image, tweet):
         if tweet.type == Tweet_type.winner:
             paste_image(image, tweet.place.coord_x, tweet.place.coord_y - 48, 72, 'crown')
 
+        if tweet.type == Tweet_type.winner or tweet.type == Tweet_type.winner_districts:
+            paste_image(image, tweet.place.coord_x, tweet.place.coord_y + 170, 384, 'winner')
+
         x = tweet.place.coord_x
         y = tweet.place.coord_y
         zoom2 = zoom * 2
@@ -302,30 +305,28 @@ def get_zoomed_image(image, tweet):
         image = image.crop((x_1, y_1, x_2, y_2))
         image.resize((w, h), Image.LANCZOS)
 
-    if tweet.type == Tweet_type.winner or tweet.type == Tweet_type.winner_districts:
-        paste_image(image, 80, 80, 256, 'winner')
     if tweet.type == Tweet_type.somebody_found_item or tweet.type == Tweet_type.somebody_replaced_item:
-        if tweet.item.rarity == 1:
+        if tweet.item.get_rarity() == 1:
             paste_image(image, 80, 80, 256, 'weapon_1')
-        elif tweet.item.rarity == 2:
+        elif tweet.item.get_rarity() == 2:
             paste_image(image, 80, 80, 256, 'weapon_2')
-        elif tweet.item.rarity == 3:
+        elif tweet.item.get_rarity() == 3:
             paste_image(image, 80, 80, 256, 'weapon_3')
     elif tweet.type == Tweet_type.somebody_got_injured:
         paste_image(image, 80, 80, 256, 'injure')
     elif tweet.type == Tweet_type.somebody_got_special:
-        if tweet.item.rarity == 1:
+        if tweet.item.get_rarity() == 1:
             paste_image(image, 80, 80, 256, 'special_1')
-        elif tweet.item.rarity == 2:
+        elif tweet.item.get_rarity() == 2:
             paste_image(image, 80, 80, 256, 'special_2')
-        elif tweet.item.rarity == 3:
+        elif tweet.item.get_rarity() == 3:
             paste_image(image, 80, 80, 256, 'special_3')
     elif tweet.type == Tweet_type.somebody_powerup:
-        if tweet.item.rarity == 1:
+        if tweet.item.get_rarity() == 1:
             paste_image(image, 80, 80, 256, 'powerup_1')
-        elif tweet.item.rarity == 2:
+        elif tweet.item.get_rarity() == 2:
             paste_image(image, 80, 80, 256, 'powerup_2')
-        elif tweet.item.rarity == 3:
+        elif tweet.item.get_rarity() == 3:
             paste_image(image, 80, 80, 256, 'powerup_3')
     elif tweet.type == Tweet_type.somebody_tied_and_became_friend or tweet.type == Tweet_type.somebody_tied_and_was_friend:
         paste_image(image, 80, 80, 256, 'heart')
@@ -390,10 +391,10 @@ def get_summary_image(image, tweet):
             if p.infected:
                 paste_image(image, p.coord_x + 12, p.coord_y, 48, 'infection')
 
-    draw_ranking(image)
+    draw_ranking(image, tweet)
     return image
 
-def draw_ranking(image):
+def draw_ranking(image, tweet):
     coord_x = RANKING_FIRST_COLUMN_X
     coord_y = RANKING_FIRST_ROW_Y
 
@@ -443,11 +444,11 @@ def draw_ranking(image):
                 if player == '':
                     coord_x = coord_x + RANKING_IMG_WIDTH + RANKING_SPACE_BETWEEN_COLS
                 else:
-                    draw_player_ranking(image, coord_x, coord_y, player)
+                    draw_player_ranking(tweet, image, coord_x, coord_y, player)
                     coord_x, coord_y = calculate_coords(coord_x, coord_y)
 
             cross_district_if_needed(players_in_district)
-            draw.text((coord_x - 200, coord_y + 47), players_in_district[0].district.name, fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=10))
+            draw.text((coord_x - 200, coord_y + 47), players_in_district[0].district.district_display_name, fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=10))
 
             if coord_x + RANKING_SPACE_BETWEEN_DISTRICTS + 3 * (RANKING_IMG_WIDTH + RANKING_SPACE_BETWEEN_COLS) >= RANKING_FIRST_COLUMN_X + RANKING_IMGS_PER_ROW * (RANKING_IMG_WIDTH + RANKING_SPACE_BETWEEN_COLS):
                 #linebreak
@@ -461,14 +462,14 @@ def draw_ranking(image):
         dead_players_list = get_dead_players()
 
         for i, p in enumerate(alive_players_list):
-            draw_player_ranking(image, coord_x, coord_y, alive_players_list[i])
+            draw_player_ranking(tweet, image, coord_x, coord_y, alive_players_list[i])
             coord_x, coord_y = calculate_coords(coord_x, coord_y)
 
         for i, p in enumerate(dead_players_list):
-            draw_player_ranking(image, coord_x, coord_y, dead_players_list[i])
+            draw_player_ranking(tweet, image, coord_x, coord_y, dead_players_list[i])
             coord_x, coord_y = calculate_coords(coord_x, coord_y)
 
-def draw_player_ranking(image, coord_x, coord_y, player):
+def draw_player_ranking(tweet, image, coord_x, coord_y, player):
     draw = ImageDraw.Draw(image)
     paste_image(image, coord_x + 24, coord_y + 24, 48, '', player.avatar_dir)
     draw.rectangle((coord_x, coord_y, coord_x + 48, coord_y + 48), outline='rgb(0,0,0)')
@@ -500,6 +501,9 @@ def draw_player_ranking(image, coord_x, coord_y, player):
             paste_image(image, coord_x, coord_y + 36, 32, 'special')
         if player.infection_immunity:
             paste_image(image, coord_x, coord_y + 24, 32, 'special')
+
+    if (tweet.player != None and player.get_name() == tweet.player.get_name()) or (tweet.player_2 != None and player.get_name() == tweet.player_2.get_name()):
+        draw.ellipse((coord_x - 50, coord_y - 50, coord_x + 100, coord_y + 100), outline='rgb(255,0,0)', width=5)
 
 def calculate_coords(coord_x, coord_y):
     delta_x = RANKING_IMG_WIDTH + RANKING_SPACE_BETWEEN_COLS
@@ -653,9 +657,9 @@ def wrap_text(text, width, font):
     return text_lines
 
 def get_item_rarity(item):
-    if item.rarity == 1:
+    if item.get_rarity() == 1:
         return 'item_1'
-    elif item.rarity == 2:
+    elif item.get_rarity() == 2:
         return 'item_2'
-    elif item.rarity == 3:
+    elif item.get_rarity() == 3:
         return 'item_3'

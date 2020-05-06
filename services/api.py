@@ -7,7 +7,7 @@ import os
 import random
 
 from data.secrets import *
-from config import *
+from data.config import *
 from data.literals import SLEEP
 
 def tweet_line_from_file(file_path, line_number, image_path = None, image_2_path = None, last_tweet_id = None):
@@ -16,7 +16,7 @@ def tweet_line_from_file(file_path, line_number, image_path = None, image_2_path
             for i, line in enumerate(file):
                 if int(i) == int(line_number):
                     print(line)
-                    return tweet(line, image_path, image_2_path, last_tweet_id)
+                    return tweet(line.decode("utf-8"), image_path, image_2_path, last_tweet_id)
 
 def tweet_sleep(image_dir):
     action_number = random.randint(0, 100)
@@ -43,5 +43,5 @@ def tweet(message, image_path = None, image_2_path = None, last_tweet_id = None)
     if image_2_path != None and os.path.exists(image_2_path):
         image_list.append(image_2_path)
 
-    tweet = api.PostUpdate(status = message.decode("utf8"), in_reply_to_status_id=last_tweet_id, media=image_list)
+    tweet = api.PostUpdate(status = message, in_reply_to_status_id=last_tweet_id, media=image_list)
     return tweet.id_str

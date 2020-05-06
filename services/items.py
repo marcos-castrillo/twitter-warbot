@@ -1,7 +1,7 @@
 import random
 from data.items import *
 from store import get_two_players_in_random_place, get_alive_players, injury_list, kill_player, destroy_district_if_needed
-from config import USE_DISTRICTS
+from data.config import USE_DISTRICTS
 from models.tweet import Tweet
 from models.tweet_type import Tweet_type
 from models.item_type import Item_type

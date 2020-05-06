@@ -52,64 +52,14 @@ def MONSTER_MOVED(tweet):
         u'La policía se ha movido de ' + place.name + u' a ' + new_place.name + '.',
         u'¡La policía se ha ido a un desahucio a ' + new_place.name + '!',    ])
 
-def MOVE_ACTION_AIR():
-    return [
-        u'ha ido en su jet privado de',
-        u'ha ido en globo de',
-        u'ha encontrado billetes de avión baratos para ir de',
-        u'ha ido en avión en primera clase de',
-    ]
-
-def MOVE_ACTION_ROAD():
-    return random.choice(
-        MOVE_ACTION_AIR() + [
-        u'ha ido de',
-        u'ha ido de',
-        u'ha ido de',
-        u'ha ido de',
-        u'ha ido de',
-        u'ha ido de',
-        u'ha viajado de',
-        u'ha viajado de',
-        u'ha viajado de',
-        u'se ha movido de',
-        u'se ha movido de',
-        u'se ha movido de',
-        u'se ha movido de',
-        u'ha llamado a un taxi para que le lleve de',
-        u'ha llamado a un Uber para que le lleve de',
-        u'ha llamado a un Cabify para que le lleve de',
-        u'está tan en forma que ha ido en bici de',
-        u'ha hecho dedo desde',
-        u'ha hecho autostop desde',
-        u'ha robado un coche a lo GTA y se ha ido de',
-        u'ha ido en moto de',
-        u'ha ido en su scooter de',
-        u'ha ido en AVE de',
-        u'ha ido en mochillo de',
-        u'ha ido en limusina con su chófer de',
-        u'ha ido en patinete eléctrico de',
-        u'ha ido en tren regional de',
-        u'ha ido en Alsa de',
-        u'ha cogido un Blablacar de'
-    ])
-
 def MOVED_ATRACTION_SING():
     return random.choice([
-        u' ha ido.',
-        u' ha ido.',
-        u' ha ido.',
-        u' ha ido.',
-        u' ha ido.',
+        u' ha ido.'
     ])
 
 def MOVED_ATRACTION_PL():
     return random.choice([
-        u' han ido.',
-        u' han ido.',
-        u' han ido.',
-        u' han ido.',
-        u' han ido.',
+        u' han ido.'
     ])
 
 def PRAISE(player):
@@ -121,24 +71,24 @@ def PRAISE(player):
         '',
         '',
         '',
-        u'Qué ' + get_x_or_y(player, u'tío.', u'tía.'),
-        u'Vaya fiera.',
-        u'Impresionante.',
-        u'Es ' + get_x_or_y(player, u'un', u'una') + u' máquina.',
-        u'Menudo monstruo.',
-        u'Está ' + get_x_or_y(player, u'rocoso.', u'rocosa.'),
-        u'Qué crack.',
-        u'JO-DER.',
-        u'Es un tifón.',
-        u'No hay quién ' + get_x_or_y(player, u'lo', u'la') + ' pare.',
-        u'A por la MOAB.',
-        u'Tra tra.',
-        u'WOW.',
-        u'BIMBA.',
-        u'Está on fire.',
-        u'Está a tope.',
-        u'Campear tanto da sus frutos.',
-        u'No lo vio venir.',
-        u'Y ya estaría.',
-        get_x_or_y(player, u'Está mamadísimo.', u'Está mamadísima.')
+        u'Qué ' + get_x_or_y(player, u'tío', u'tía'),
+        u'Vaya fiera',
+        u'Impresionante',
+        u'Es ' + get_x_or_y(player, u'un', u'una') + u' máquina',
+        u'Menudo monstruo',
+        u'Está ' + get_x_or_y(player, u'rocoso', u'rocosa'),
+        u'Qué crack',
+        u'JO-DER',
+        u'Es un tifón',
+        u'No hay quién ' + get_x_or_y(player, u'lo', u'la') + ' pare',
+        u'A por la MOAB',
+        u'Tra tra',
+        u'WOW',
+        u'BIMBA',
+        u'Está on fire',
+        u'Está a tope',
+        u'Campear tanto da sus frutos',
+        u'No lo vio venir',
+        u'Y ya estaría',
+        get_x_or_y(player, u'Está mamadísimo', u'Está mamadísima')
     ])

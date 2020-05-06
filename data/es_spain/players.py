@@ -63,7 +63,7 @@ raw_player_list = [
     [u'Fernando Simón', u'', 0, u'Zaragoza'],
     [u'Fernando Tejero', u'fertejerom', 0, u'Córdoba'],
     [u'Florentino Pérez', u'', 0, u'Madrid'],
-    [u'Fortfast', u'SrFortfast', 0, u'Granada'],
+    [u'Fortfast', u'SrFortfast', 0, u'Jaén'],
     [u'Frank Cuesta', u'Frank_Cuesta', 0, u'León'],
     [u'Gerard Piqué', u'3gerardpique', 0, u'Barcelona'],
     [u'Guti', u'GUTY14HAZ', 0, u'Madrid'],

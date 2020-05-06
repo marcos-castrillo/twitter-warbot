@@ -4,7 +4,7 @@ from models.tweet import Tweet
 from models.tweet_type import Tweet_type
 from services.simulation import write_tweet
 from store import get_dead_players, get_alive_players, kill_player, place_list, destroy_district_if_needed
-from config import USE_DISTRICTS
+from data.config import USE_DISTRICTS
 
 def befriend(player_1, player_2):
     if not player_2 in player_1.friend_list:

@@ -8,7 +8,7 @@ from models.tweet_type import Tweet_type
 from services.simulation import write_tweet
 
 from store import *
-from config import *
+from data.config import *
 
 def atract():
     loc_candidates = []
@@ -225,7 +225,7 @@ def destroy():
     dead_list = []
     escaped_list = []
     route_list = []
-    new_location = False
+    new_location = None
 
     for j, c in enumerate(place.connections):
         if not c.destroyed:

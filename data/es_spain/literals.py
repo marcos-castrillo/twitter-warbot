@@ -160,59 +160,6 @@ def MONSTER_MOVED(tweet):
         u'La policía se ha movido de ' + place.name + u' a ' + new_place.name + '.',
         u'¡La policía se ha ido a un desahucio a ' + new_place.name + '!',    ])
 
-def MOVE_ACTION_AIR():
-    return [
-        u'ha ido en su jet privado de',
-        u'ha ido en globo de',
-        u'ha encontrado billetes de avión baratos para ir de',
-        u'ha ido en avión en primera clase de',
-    ]
-
-def MOVE_ACTION_ROAD():
-    return random.choice(
-        MOVE_ACTION_AIR() + [
-        u'ha ido de',
-        u'ha ido de',
-        u'ha ido de',
-        u'ha ido de',
-        u'ha ido de',
-        u'ha ido de',
-        u'ha viajado de',
-        u'ha viajado de',
-        u'ha viajado de',
-        u'se ha movido de',
-        u'se ha movido de',
-        u'se ha movido de',
-        u'se ha movido de',
-        u'ha llamado a un taxi para que le lleve de',
-        u'ha llamado a un Uber para que le lleve de',
-        u'ha llamado a un Cabify para que le lleve de',
-        u'está tan en forma que ha ido en bici de',
-        u'ha hecho dedo desde',
-        u'ha hecho autostop desde',
-        u'ha robado un coche a lo GTA y se ha ido de',
-        u'ha ido en moto de',
-        u'ha ido en su scooter de',
-        u'ha ido en AVE de',
-        u'ha ido en mochillo de',
-        u'ha ido en limusina con su chófer de',
-        u'ha ido en patinete eléctrico de',
-        u'ha ido en tren regional de',
-        u'ha ido en Alsa de',
-        u'ha cogido un Blablacar de'
-    ])
-
-def MOVE_ACTION_WATER():
-    return random.choice(
-        MOVE_ACTION_AIR() + [
-        u'ha ido en barco de',
-        u'ha ido en su barquito velero de',
-        u'ha ido en un crucero de ocho plantas de',
-        u'ha ido en lancha motora de',
-        u'se ha colado de polizón en un barco de',
-        u'ha ido en patera de'
-    ])
-
 def MOVED_ATRACTION_SING():
     return random.choice([
         u' ha ido.',
