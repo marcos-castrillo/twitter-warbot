@@ -36,7 +36,7 @@ path = os.path.join(output_dir, filename + '.txt')
 i = 1
 while os.path.exists(path):
     i = i + 1
-    path = os.path.join(output_dir, filename + '-' + str(i) + ".txt")
+    path = os.path.join(output_dir, filename + '-' + str(i) + '.txt')
 
 def initialize_avatars():
     path = 'assets/img/avatars'
@@ -64,7 +64,9 @@ def write_tweet(tweet):
 
     line_number = line_number + 1
     if tweet.type == Tweet_type.winner or tweet.type == Tweet_type.winner_districts:
-        with open(os.path.join(output_dir, '-1.txt'), "w") as file:
+        with open(os.path.join(output_dir, '-1_line.txt'), "w") as file:
+            file.write('todo ok')
+        with open(os.path.join(output_dir, '-1_image.txt'), "w") as file:
             file.write('todo ok')
 
 def write_line(message):
