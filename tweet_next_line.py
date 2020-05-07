@@ -46,9 +46,10 @@ os.rename(next_image_path, new_image_path)
 second_image_path = os.path.join(current_dir, 'simulations', dir_files[-1], str(next_image) + '_bis.png')
 if os.path.exists(second_image_path):
     second_image_bis_path = os.path.join(current_dir, 'simulations', dir_files[-1], str(next_image) + 'b_bis.png')
+    previous_line_path = os.path.join(current_dir, 'simulations', dir_files[-1], str(next_line) + '_line.txt')
     next_line = next_line + 1
 
     tweet_line_from_file(simulation_path, next_line, second_image_path, second_image_bis_path)
 
     new_line_path = os.path.join(current_dir, 'simulations', dir_files[-1], str(next_line) + '_line.txt')
-    os.rename(next_line_path, new_line_path)
+    os.rename(previous_line_path, new_line_path)
