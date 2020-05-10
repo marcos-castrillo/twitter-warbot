@@ -61,15 +61,17 @@ def kill(player_1, player_2, place, factor, action_number, inverse):
     tweet.item = killer.get_best_attack_item()
 
     if best_killed_item != None and len(killer.item_list) == 2 and (best_killer_item.get_value() < best_killed_item.get_value()):
+        # Steal item and throw away
         killer.item_list = [best_killer_item, best_killed_item]
         killed.item_list.pop(killed.item_list.index(best_killed_item))
 
         old_item = killer.get_worst_item()
         killer.location.items.append(old_item)
-
+        old_item.thrown_away_by = killer
         tweet.old_item = old_item
         tweet.new_item = best_killed_item
     elif best_killed_item != None and len(killer.item_list) < 2:
+        # Steal item
         if best_killer_item != None:
             killer.item_list = [best_killer_item, best_killed_item]
         else:
@@ -78,10 +80,12 @@ def kill(player_1, player_2, place, factor, action_number, inverse):
 
         tweet.new_item = best_killed_item
 
-
     place = killed.location
     place.players.pop(place.players.index(killed))
     killed.state = 0
+
+    for i, item in enumerate(killed.item_list):
+        item.thrown_away_by = killed
 
     write_tweet(tweet)
 

@@ -37,7 +37,19 @@ def ALSO_STOLE():
         u'También ha saqueado su cadáver y ha encontrado'
     ])
 
-AND = 'y'
+def ALSO_INFECTING():
+    return random.choice([
+        u'infectando también a'
+    ])
+
+def AND():
+    return 'y'
+
+def OTHERS(amount):
+    if amount == 1:
+        return 'otro más'
+    else:
+        return 'otros ' + str(amount)
 
 def COULDNT_MOVE(player):
     return random.choice([
@@ -87,13 +99,13 @@ def DIED(player, multiple = False):
         ' y ' + player + ' ' + conj + u' amochado.',
         ' y ' + player + ' ' + conj + u' sobrevivido.',
         ' y ' + player + ' ' + conj + u' muerto.',
-        ' y ' + player + ' ' + conj + u' ha palmado.',
-        ' y ' + player + ' ' + conj + u' ha espichado.',
+        ' y ' + player + ' ' + conj + u' palmado.',
+        ' y ' + player + ' ' + conj + u' espichado.',
         ' y ' + player + u' se ' + conj + u' ido al otro barrio.',
         ' y se ha llevado por delante a ' + player + u'.',
         u' y hay un luto de 3 días por ' + player + u'.',
-        u' . DEP ' + player + u'.'
-        u' . F ' + player + u'.'
+        u'. DEP ' + player + u'.',
+        u'. F ' + player + u'.'
     ])
 
 def DISTRICT_REBUILD(tweet):
@@ -111,7 +123,23 @@ def ESCAPED(player_1, player_2):
         player_1.get_name() + u' y ' + player_2.get_name() + u' han empezado a pelear, pero ' + player_2.name + u' sabía que tenía las de perder. Cogió un puñado de arena, se lo echó a ' + player_1.name + u' en los ojos y huyó a ' + player_2.location.name + u'.',
         player_2.get_name() + u' iba a pillar a ' + player_1.get_name() + u' por la espalda, pero ' + get_x_or_y(player_1, 'éste', 'ésta') + ' se dio cuenta en el último momento. ' + player_2.name + u' ha huido a ' + player_2.location.name + u'.',
         u'A ' + player_2.get_name() + u' le da miedo ' + player_1.get_name() + u' y ha huido a ' + player_2.location.name + u'.',
+        u'A ' + player_2.get_name() + u' le da asco ' + player_1.get_name() + u' y se ha ido a ' + player_2.location.name + u'.',
         player_1.get_name() + u' se ha encarado con ' + player_2.get_name() + u', pero ' + player_2.name + u' se ha achantado y escapado a ' + player_2.location.name + u'.'
+    ])
+
+def FROM(owner):
+    return random.choice([
+        u'(que antes era de ' + owner + u')',
+        u'(que era de ' + owner + u')',
+        u'(que pertenecía a ' + owner + u')'
+    ])
+
+def FIND_ACTION_SIMPLE():
+    return random.choice([
+        u'ha encontrado',
+        u'se ha encontrado',
+        u'ha cogido',
+        u'ha recogido'
     ])
 
 def FIND_ACTION():
@@ -159,7 +187,8 @@ def FIND_ACTION():
         u'ha ganado en una apuesta',
         u'se ha comprado en un estanco',
         u'se ha comprado en un todo a cien',
-        u'se ha comprado clandestinamente en un kiosko',
+        u'se ha comprado clandestinamente',
+        u'se ha comprado en un kiosko',
         u'ha comprado en el ' + random.choice([u'Lidl', u'Corte Inglés', u'Alcampo', u'Carrefour', u'Mercadona', u'Día%', u'Masymas']),
         u'ha recibido un paquete de ' + random.choice([u'Ebay', u'Amazon', u'MediaMarkt']) + u' con',
         u'ha comprado por ' + random.choice([u'Wallapop']),
@@ -218,8 +247,8 @@ def HAS_NOW(attack, defense):
             u' '.join([u'Su nueva defensa es', defense + u'.'])
         ])
 
-def I_COMPOSED(player, action, event, has_now):
-    return u' '.join((u'¡' + player.get_name(), action, event.name + '!', has_now))
+def I_COMPOSED(player, action, event, has_now, thrown_away_by = ''):
+    return u' '.join((u'¡' + player.get_name(), action, event + thrown_away_by + '!', has_now))
 
 
 def INFECTION_IMMUNITY():
@@ -296,7 +325,6 @@ def KILL_METHOD(player):
     return random.choice([
         u'con sus puños',
         u'por quitarle el último rollo de papel higiénico',
-        u'a lo jíbiri',
         u'y le ha hecho tea-bag',
         u'a tortazo limpio',
         u'por la gloria de ESPAÑA',
@@ -470,9 +498,6 @@ def SLEEP():
 
 def SPECIAL_ACTION():
     return random.choice([u'ha encontrado', u'ha cogido'])
-
-def START(tweet):
-    return u'¡Los participantes están listos! Ya conocemos la ubicación de cada uno de ellos. Que empiece el juego.'
 
 def STOLE(tweet):
     return u' '.join((tweet.player.get_name(), u'le ha robado', tweet.item.name, u'a', tweet.player_2.get_name() + '.'))

@@ -106,10 +106,12 @@ def infect():
     if not first_infection:
         player = random.choice(healthy_players)
         player.location.infected = True
-        player.infected = True
+        if not player.infection_immunity:
+            player.infected = True
         affected = [x for x in player.location.players if x.name != player.name]
         for i,p in enumerate(affected):
-            p.infected = True
+            if not p.infection_immunity:
+                p.infected = True
         first_infection = True
 
         tweet = Tweet()

@@ -86,6 +86,8 @@ raw_powerup_list = [
     [u'un jamón de Jabugo', 2, 1],
     [u'unas patatas bravas del Mercadona', 3, 0],
     [u'un cacharro de kalimotxo', 2, 1],
+    [u'un rebujito', 2, 1],
+    [u'un licor café', 2, 1],
     [u'una horchata', 3, 3],
     [u'un Knebep limón', 3, 3],
     [u'un Larios limón', 3, 3],

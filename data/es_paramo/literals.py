@@ -4,6 +4,9 @@
 from data.es.literals import *
 import random
 
+def START(tweet):
+    return u'¡Los participantes están listos! Ya conocemos la ubicación de cada uno de ellos. Que empiece la batalla.'
+
 def ATRACTION(place):
     if place == u'Bercianos':
         return u'Como son las grandes fiestas de Bercianos (#ProjectBercy),'
@@ -89,18 +92,18 @@ def MOVE_ACTION_ROAD():
 
 def MOVED_ATRACTION_SING():
     return random.choice([
-        u' se ha acercado a ver qué se cuece.',
-        u' ha llamado a un taxi para ir.',
-        u' ha ido en coche.',
-        u' ha ido a bailar.'
+        u'se ha acercado a ver qué se cuece',
+        u'ha llamado a un taxi para ir',
+        u'ha ido en coche',
+        u'ha ido a bailar'
     ])
 
 def MOVED_ATRACTION_PL():
     return random.choice([
-        u' se han acercado a ver qué se cuece.',
-        u' han llamado a un taxi para ir.',
-        u' han ido en coche.',
-        u' han ido a bailar.'
+        u'se han acercado a ver qué se cuece',
+        u'han llamado a un taxi para ir',
+        u'han ido en coche',
+        u'han ido a bailar'
     ])
 
 def PRAISE(player):

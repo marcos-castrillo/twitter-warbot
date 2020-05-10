@@ -10,6 +10,5 @@ TTB is a bot that simulates a fictional tournament where players can 'fight' to 
 
 ## To Do
 Readme
-Separate icons for each Map
 
 ## Bugs

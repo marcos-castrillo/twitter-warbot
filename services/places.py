@@ -31,6 +31,7 @@ def atract():
                 atracted_players.append(player)
 
     atract_range = ATRACT_RANGE_LIST[hour_count]
+    append_players_from(place)
     for i, connection in enumerate(place.connections):
         append_players_from(connection)
         if atract_range > 1:
@@ -39,7 +40,6 @@ def atract():
                  if atract_range > 2:
                      for k, subsubconnection in enumerate(subconnection.connections):
                           append_players_from(subsubconnection)
-
 
     if len(atracted_players) > 0:
         alive_players = get_alive_players()
@@ -119,7 +119,11 @@ def move():
                             loc_candidates.append(sssc)
 
     if len(loc_candidates) == 0:
-        new_location = random.choice([x for x in place_list if not x.destroyed and x.name != player.location.name])
+        candidates = [x for x in place_list if not x.destroyed and x.name != player.location.name]
+        if len(candidates) == 0:
+            return False
+        else:
+            new_location = random.choice()
     else:
         new_location = random.choice(loc_candidates)
 
@@ -216,6 +220,8 @@ def destroy():
     if USE_DISTRICTS:
         return False
     list = [x for x in place_list if not x.destroyed]
+    if len(list) == 0:
+        sys.exit('Error: everything is destroyed')
     place = random.choice(list)
 
     place.destroyed = True
@@ -233,15 +239,33 @@ def destroy():
 
     if len(route_list) > 0:
         new_location = random.choice(route_list)
+    else:
+        for j, c in enumerate(place.connections):
+            for k, sc in enumerate(c.connections):
+                if not sc.destroyed:
+                    route_list.append(sc)
+
+    if len(route_list) > 0:
+        new_location = random.choice(route_list)
+    else:
+        for j, c in enumerate(place.connections):
+            for k, sc in enumerate(c.connections):
+                for k, ssc in enumerate(sc.connections):
+                    if not ssc.destroyed:
+                        route_list.append(ssc)
+
+    new_location = random.choice(route_list)
 
     for i, p in enumerate(place.players):
         if p.state == 1:
-            if new_location and random.randint(0, 100) >= 75:
-                move_player(p, new_location)
+            if random.randint(0, 100) >= 75:
                 escaped_list.append(p)
             else:
                 kill_player(p)
                 dead_list.append(p)
+    print(len(escaped_list), len(dead_list))
+    for i, p in enumerate(escaped_list):
+        move_player(p, new_location)
 
     tweet = Tweet()
     tweet.type = Tweet_type.destroyed

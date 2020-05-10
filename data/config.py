@@ -1,6 +1,3 @@
-# General
-MAX_ITEMS = 3
-
 # Probabilities
 PROBAB_TIE = 10
 PROBAB_SUICIDE = [0,  0,  1,  0,  1,  0,  1,  0]

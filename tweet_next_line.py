@@ -34,22 +34,26 @@ while not os.path.isfile(next_image_path):
     next_image_path = os.path.join(current_dir, 'simulations', dir_files[-1], str(next_image) + '_image.txt')
     next_image = next_image + 1
 
-image_path = os.path.join(current_dir, 'simulations', dir_files[-1], str(next_image) + '.png')
-image_2_path = os.path.join(current_dir, 'simulations', dir_files[-1], str(next_image) + 'b.png')
-tweet_line_from_file(simulation_path, next_line, image_path, image_2_path)
+main_image_path = os.path.join(current_dir, 'simulations', dir_files[-1], str(next_image) + '.png')
+map_image_path = os.path.join(current_dir, 'simulations', dir_files[-1], str(next_image) + '_map.png')
+ranking_image_path = os.path.join(current_dir, 'simulations', dir_files[-1], str(next_image) + '_ranking.png')
+image_path_list = [main_image_path, map_image_path, ranking_image_path]
+tweet_line_from_file(simulation_path, next_line, image_path_list)
 
 new_line_path = os.path.join(current_dir, 'simulations', dir_files[-1], str(next_line) + '_line.txt')
 new_image_path = os.path.join(current_dir, 'simulations', dir_files[-1], str(next_image) + '_image.txt')
 os.rename(next_line_path, new_line_path)
 os.rename(next_image_path, new_image_path)
 
-second_image_path = os.path.join(current_dir, 'simulations', dir_files[-1], str(next_image) + '_bis.png')
-if os.path.exists(second_image_path):
-    second_image_bis_path = os.path.join(current_dir, 'simulations', dir_files[-1], str(next_image) + 'b_bis.png')
+main_image_path = os.path.join(current_dir, 'simulations', dir_files[-1], str(next_image) + '_bis.png')
+if os.path.exists(main_image_path):
+    map_image_path = os.path.join(current_dir, 'simulations', dir_files[-1], str(next_image) + '_map_bis.png')
+    ranking_image_path = os.path.join(current_dir, 'simulations', dir_files[-1], str(next_image) + '_ranking_bis.png')
+
     previous_line_path = os.path.join(current_dir, 'simulations', dir_files[-1], str(next_line) + '_line.txt')
     next_line = next_line + 1
-
-    tweet_line_from_file(simulation_path, next_line, second_image_path, second_image_bis_path)
+    image_path_list = [main_image_path, map_image_path, ranking_image_path]
+    tweet_line_from_file(simulation_path, next_line, image_path_list)
 
     new_line_path = os.path.join(current_dir, 'simulations', dir_files[-1], str(next_line) + '_line.txt')
     os.rename(previous_line_path, new_line_path)

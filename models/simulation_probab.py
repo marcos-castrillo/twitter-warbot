@@ -52,7 +52,7 @@ class Simulation_Probab(object):
         self.revive_action_number = self.suicide_action_number + self.revive_probab
         self.trap_action_number = self.revive_action_number + self.trap_probab
         self.infect_action_number = self.trap_action_number + self.infect_probab
-        self.destroy_action_number = self.infect_action_number + self.steal_probab
+        self.destroy_action_number = self.infect_action_number + self.destroy_probab
         self.injure_action_number = self.destroy_action_number + self.injure_probab
         self.atract_action_number = self.injure_action_number + self.atract_probab
         self.monster_action_number = self.atract_action_number + self.monster_probab

@@ -53,10 +53,10 @@ def get_place_list():
 
     def get_items_in_place(item_list_1, item_list_2, item_list_3):
         items = []
-        item_count = random.randint(0, MAX_ITEMS)
+        item_count = random.randint(MIN_ITEMS, MAX_ITEMS)
         item = None
 
-        while item_count > 0:
+        while item_count > 0 and len(item_list_1) + len(item_list_2) + len(item_list_3) > 0:
             action_number = random.randint(1, 100)
             item = None
 
@@ -309,9 +309,10 @@ def move_player(player, new_location):
     if player.infected:
         new_location.infected = True
         for j, p in enumerate(new_location.players):
-            p.infected = True
+            if not p.infection_immunity:
+                p.infected = True
 
-    if new_location.infected:
+    if new_location.infected and not player.infection_immunity:
         player.infected = True
 
 def destroy_district_if_needed(district):
@@ -373,9 +374,12 @@ def destroy_district_if_needed(district):
 
 def kill_player(player):
     place = player.location
+
+    for i, item in enumerate(player.item_list):
+        item.thrown_away_by = player
+
     place.items = place.items + player.item_list
     place.players.pop(place.players.index(player))
-
     player.state = 0
     player.item_list = []
     player.injury_list = []

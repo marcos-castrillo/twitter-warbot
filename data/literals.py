@@ -4,13 +4,13 @@ from data.config import LOCALIZATION
 from models.tweet_type import Tweet_type
 from store import are_friends
 
-if LOCALIZATION == "es_paramo" or LOCALIZATION == "es_spain" or LOCALIZATION == "es_interneto":
+if LOCALIZATION == 'es_paramo' or LOCALIZATION == 'es_spain' or LOCALIZATION == 'es_interneto':
     from data.es.literals import *
-    if LOCALIZATION == "es_paramo":
+    if LOCALIZATION == 'es_paramo':
         from data.es_paramo.literals import *
-    elif LOCALIZATION == "es_spain":
+    elif LOCALIZATION == 'es_spain':
         from data.es_spain.literals import *
-    elif LOCALIZATION == "es_interneto":
+    elif LOCALIZATION == 'es_interneto':
         from data.es_interneto.literals import *
 
 def get_message(tweet):
@@ -91,7 +91,7 @@ def introduce_players(tweet):
             if i == 0:
                 locals_str = player.get_name()
             elif i == len(tweet.player_list) - 1:
-                locals_str = u' '.join([locals_str, AND, player.get_name()])
+                locals_str = u' '.join([locals_str, AND(), player.get_name()])
             else:
                 locals_str = locals_str + ', ' + player.get_name()
         locals_str = u' '.join([locals_str, INTRODUCE_PLACE(tweet)])
@@ -107,7 +107,7 @@ def introduce_players(tweet):
                 if i == 0:
                     sufix = sufix + player.get_name()
                 elif i == len(tweet.player_list_2) - 1:
-                    sufix = u' '.join([sufix, AND, player.get_name()])
+                    sufix = u' '.join([sufix, AND(), player.get_name()])
                 else:
                     sufix = sufix + ', ' + player.get_name()
             sufix = u' '.join([sufix, TRIBUTES_RANDOMLY_CHOSEN(tweet.player_list_2)])
@@ -135,7 +135,7 @@ def winner(tweet):
             if i == 0:
                 list = item.name
             elif i == len(tweet.player.item_list) - 1:
-                list = u' '.join([list, AND, item.name])
+                list = u' '.join([list, AND(), item.name])
             else:
                 list = list + ', ' + item.name
 
@@ -147,7 +147,7 @@ def winner(tweet):
             if i == 0:
                 list = injury.name
             elif i == len(tweet.player.injury_list):
-                list = u' '.join([list, AND, injury.name])
+                list = u' '.join([list, AND(), injury.name])
             else:
                 list = list + ', ' + injury.name
         injury_list = u' ' + u' '.join([WINNER_INJURY_LIST, list + '.'])
@@ -163,7 +163,7 @@ def winner_districts(tweet):
         if i == 0:
             tributes_str = winner.get_name()
         elif i == len(tweet.player_list) - 1:
-            tributes_str = u' '.join([tributes_str, AND, winner.get_name()])
+            tributes_str = u' '.join([tributes_str, AND(), winner.get_name()])
         else:
             tributes_str = tributes_str + ', ' + winner.get_name()
 
@@ -174,7 +174,7 @@ def winner_districts(tweet):
     return WINNER_DISTRICTS_COMPOSED(tributes_str, tweet.place.district_display_name, kills)
 
 def somebody_got_injured(tweet):
-    return I_COMPOSED(tweet.player, INJURE_ACTION(), tweet.item, has_now(tweet.player, tweet.item))
+    return I_COMPOSED(tweet.player, INJURE_ACTION(), tweet.item.name, has_now(tweet.player, tweet.item))
 
 def somebody_got_special(tweet):
     immunity = ''
@@ -184,16 +184,24 @@ def somebody_got_special(tweet):
         immunity = MONSTER_IMMUNITY()
     if tweet.item.infection_immunity:
         immunity = INFECTION_IMMUNITY()
-    return I_COMPOSED(tweet.player, SPECIAL_ACTION(), tweet.item, immunity)
+    return I_COMPOSED(tweet.player, SPECIAL_ACTION(), tweet.item.name, immunity)
 
 def somebody_powerup(tweet):
-    return I_COMPOSED(tweet.player, POWERUP_ACTION(), tweet.item, has_now(tweet.player, tweet.item))
+    return I_COMPOSED(tweet.player, POWERUP_ACTION(), tweet.item.name, has_now(tweet.player, tweet.item))
 
 def somebody_found_item(tweet):
-    return I_COMPOSED(tweet.player, FIND_ACTION(), tweet.item, has_now(tweet.player, tweet.item))
+    if tweet.item.thrown_away_by != None:
+        thrown_away_by = FROM(tweet.item.thrown_away_by.get_name())
+        return I_COMPOSED(tweet.player, FIND_ACTION_SIMPLE(), tweet.item.name, has_now(tweet.player, tweet.item), thrown_away_by)
+    else:
+        return I_COMPOSED(tweet.player, FIND_ACTION(), tweet.item.name, has_now(tweet.player, tweet.item))
 
 def somebody_replaced_item(tweet):
-    return I_COMPOSED(tweet.player, FIND_ACTION(), tweet.item, REPLACED + ' ' + tweet.old_item.name + '. ' + has_now(tweet.player, tweet.item, tweet.old_item))
+    if tweet.item.thrown_away_by != None:
+        thrown_away_by = FROM(tweet.item.thrown_away_by.get_name())
+        return I_COMPOSED(tweet.player, FIND_ACTION_SIMPLE(), tweet.item.name, REPLACED + ' ' + tweet.old_item.name + '. ' + has_now(tweet.player, tweet.item, tweet.old_item), thrown_away_by)
+    else:
+        return I_COMPOSED(tweet.player, FIND_ACTION(), tweet.item.name, REPLACED + ' ' + tweet.old_item.name + '. ' + has_now(tweet.player, tweet.item, tweet.old_item))
 
 def somebody_escaped(tweet):
     if tweet.inverse:
@@ -233,7 +241,7 @@ def somebody_killed(tweet):
     if player_1.kills > 1:
         kills_count = u' '.join((HAS_ALREADY_KILLED(str(player_1.kills)), PRAISE(player_1)))
     if new_item != None and old_item != None:
-        stole = u' '.join((ALSO_STOLE(), new_item.name, AND, GETS_RID_OF, old_item.name))
+        stole = u' '.join((ALSO_STOLE(), new_item.name, AND(), GETS_RID_OF, old_item.name))
     elif new_item != None:
         stole = u' '.join((ALSO_STOLE(), new_item.name))
 
@@ -286,7 +294,7 @@ def destroyed(tweet):
             if i == 0:
                 dead_str = d
             elif i == len(dead) - 1:
-                dead_str = dead_str + AND + d
+                dead_str = dead_str + u' ' + AND() + u' ' + d
             else:
                 dead_str = dead_str + ', ' + d
         sufix = DIED(dead_str, True)
@@ -301,11 +309,11 @@ def destroyed(tweet):
             if i == 0:
                 susufix_str = d
             elif i == len(escaped) - 1:
-                susufix_str = susufix_str + AND + d
+                susufix_str = susufix_str + AND() + d
             else:
                 susufix_str = susufix_str + ', ' + d
 
-        susufix = u' ' + u' '.join((susufix_str + '.', get_sing_or_pl(escaped_list, MOVED_SING(), MOVED_PL()), new_location.name + u'.'))
+        susufix = u' ' + u' '.join((susufix_str, get_sing_or_pl(escaped_list, MOVED_SING(), MOVED_PL()), new_location.name + u'.'))
 
     return (prefix + sufix + susufix)
 
@@ -328,7 +336,7 @@ def destroyed_district(tweet):
             if i == 0:
                 tributes_str = d
             elif i == len(tributes) - 1:
-                tributes_str = tributes_str + ' ' + AND + ' ' + d
+                tributes_str = tributes_str + ' ' + AND() + ' ' + d
             else:
                 tributes_str = tributes_str + ', ' + d
 
@@ -344,51 +352,52 @@ def destroyed_district(tweet):
             if i == 0:
                 sufix_str = ' ' + d
             elif i == len(escaped) - 1:
-                sufix_str = sufix_str + ' ' +  AND + ' ' + d
+                sufix_str = sufix_str + ' ' +  AND() + ' ' + d
             else:
                 sufix_str = sufix_str + ', ' + d
 
         sufix = u' ' + u' '.join((sufix_str, get_sing_or_pl(escaped_list, MOVED_SING(), MOVED_PL()), new_location.name + u'.'))
 
-    return (prefix + \
-    sufix)
+    return (prefix + sufix)
 
 def infected(tweet):
     player = tweet.player
     place_infected = PLACE_INFECTED(tweet) + '.'
     also = ''
     if len(tweet.player_list) > 0:
-        also = u' infectando también a '
+        also = ' ' + ALSO_INFECTING() + ' '
         for i, player in enumerate(tweet.player_list):
             if i == 0:
                 also = also + player.get_name()
             elif i == len(tweet.player_list) - 1:
-                also = also + u' '.join((also, AND, player.get_name()))
+                also = also + u' '.join((also, AND(), player.get_name()))
             else:
                 also = also + ', ' + player.get_name()
-
-    return u' '.join((WAS_INFECTED(tweet), PLACE_INFECTED(tweet) + \
-    also))
+        also = also + '.'
+    return u' '.join((WAS_INFECTED(tweet), PLACE_INFECTED(tweet) + also))
 
 def atraction(tweet):
     place = tweet.place
     atracted_players = tweet.player_list
 
     location = ATRACTION(place.name)
-    players = u' ' + AND + u' '
+    players = u' ' + AND() + u' '
 
     for i, player in enumerate(atracted_players):
+        if len(atracted_players) > 5 and i == 4:
+            players = u' '.join((players, AND(), OTHERS(len(atracted_players) - 1 - i)))
+            break
         if i == 0:
             players = player.get_name()
         elif i == len(atracted_players) - 1:
-            players = u' '.join((players, AND, player.get_name()))
+            players = u' '.join((players, AND(), player.get_name()))
         else:
             players = players + ', ' + player.get_name()
 
     if len(atracted_players) > 1:
-        players = players + MOVED_ATRACTION_PL()
+        players = u' '.join([players, MOVED_ATRACTION_PL() + '.'])
     else:
-        players = players + MOVED_ATRACTION_SING()
+        players = u' '.join([players, MOVED_ATRACTION_SING() + '.'])
 
     return u' '.join([location, players])
 

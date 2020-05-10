@@ -9,6 +9,7 @@ class Item(object):
     monster_immunity = False
     injure_immunity = False
     infection_immunity = False
+    thrown_away_by = None
 
     # Constructor
     def __init__(self):

@@ -4,6 +4,9 @@
 from data.es.literals import *
 import random
 
+def START(tweet):
+    return u'¡Los participantes están listos! Ya conocemos la ubicación de cada uno de ellos. Que empiece la batalla.'
+
 def ATRACTION(place):
     if place == u'A Coruña':
         return u'Se han celebrado las Fiestas de Maria Pita en A Coruña y'
@@ -162,36 +165,36 @@ def MONSTER_MOVED(tweet):
 
 def MOVED_ATRACTION_SING():
     return random.choice([
-        u' ha ido.',
-        u' ha ido.',
-        u' ha ido.',
-        u' ha ido.',
-        u' ha ido.',
-        u' ha ido porque tenía ganas de marcha.',
-        u' ha ido porque le quedaba cerca.',
-        u' ha ido porque le quedaba de camino.',
-        u' se ha acercado a ver qué se cuece.',
-        u' ha ido en coche.',
-        u' ha ido a bailar.',
-        u' ha ido a mover el esqueleto.',
-        u' ha ido de copas.'
+        u'ha ido',
+        u'ha ido',
+        u'ha ido',
+        u'ha ido',
+        u'ha ido',
+        u'ha ido porque tenía ganas de marcha',
+        u'ha ido porque le quedaba cerca',
+        u'ha ido porque le quedaba de camino',
+        u'se ha acercado a ver qué se cuece',
+        u'ha ido en coche',
+        u'ha ido a bailar',
+        u'ha ido a mover el esqueleto',
+        u'ha ido de copas'
     ])
 
 def MOVED_ATRACTION_PL():
     return random.choice([
-        u' han ido.',
-        u' han ido.',
-        u' han ido.',
-        u' han ido.',
-        u' han ido.',
-        u' han ido porque les quedaba cerca.',
-        u' han ido porque tenían ganas de marcha.',
-        u' han ido porque les quedaba de camino.',
-        u' se han acercado a ver qué se cuece.',
-        u' han ido en coche.',
-        u' han ido a bailar.',
-        u' han ido a mover el esqueleto.',
-        u' han ido de copas.'
+        u'han ido',
+        u'han ido',
+        u'han ido',
+        u'han ido',
+        u'han ido',
+        u'han ido porque les quedaba cerca',
+        u'han ido porque tenían ganas de marcha',
+        u'han ido porque les quedaba de camino',
+        u'se han acercado a ver qué se cuece',
+        u'han ido en coche',
+        u'han ido a bailar',
+        u'han ido a mover el esqueleto',
+        u'han ido de copas'
     ])
 
 def PRAISE(player):
