@@ -33,7 +33,9 @@ def ALSO_STOLE():
     return random.choice([
         u'Además, le ha robado',
         u'Ya que no lo va a necesitar, le ha robado',
+        u'Como no le va a hacer falta, ha cogido',
         u'Además, le ha quitado',
+        u'Además, ha saqueado',
         u'También ha saqueado su cadáver y ha encontrado'
     ])
 
@@ -176,7 +178,7 @@ def FIND_ACTION():
         u'ha conseguido',
         u'ha conseguido',
         u'ha conseguido',
-        u'tras suplicárselo al creador del bot, se ha llevado',
+        u'se ha llevado tras suplicárselo al creador del bot',
         u'tiene enchufe con el programador y se ha llevado',
         u'ha encontrado rebuscando entre la basura',
         u'se ha agachado a recoger',
@@ -354,7 +356,6 @@ def KILL_METHOD(player):
         u'con mirada de psicópata',
         u'y ha gritado SUUUUUUUUUUUUUUUUU',
         u'y ha gritado ' + get_x_or_y(player, u'ESTOY MAMADÍSIMO HIJO DE PUTA', u'ESTOY MAMADÍSIMA HIJO DE PUTA'),
-        u'en una epic prank',
         u'en un abrir y cerrar de ojos',
         u'sin pestañear',
         u'por turras',

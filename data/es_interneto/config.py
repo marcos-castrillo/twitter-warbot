@@ -9,9 +9,9 @@ DEFAULT_SLEEP_MESSAGE = u'[Visto en https://www.reddit.com/r/Yointerneto]'
 ATRACT_RANGE_LIST =  [1, 1, 1, 1, 1, 2, 2, 2]
 THRESHOLD_LIST = [20, 50, 75, 100, 150, 175, 200, 250]
 TREASONS_ENABLED_LIST =  [False, False, False, True, True, True, True, True]
-PROBAB_DESTROY = [0,  0,  0,  0,  0,  0,  0,  1]
+PROBAB_DESTROY = [0,  0,  0,  0,  0,  0,  1,  1]
 PROBAB_TRAP =    [0,  0,  1,  0,  1,  0,  1,  1]
-PROBAB_BATTLE =  [50, 50, 50, 49, 49, 50, 50, 49]
+PROBAB_BATTLE =  [50, 50, 50, 49, 49, 50, 49, 49]
 
 # Map
 WIDTH_MAP = 1496

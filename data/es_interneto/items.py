@@ -3,12 +3,12 @@
 
 # Name, defense, attack
 raw_weapon_list = [
-    [u'una pulsera con la bandera de ESPAÑA', 1, 1],
-    [u'unos pantaloncitos blancos', 1, 1],
-    [u'la camiseta de Perculaes Social Club', 1, 1],
+    [u'un vaso rojo de plástico con cerveza no identificada', 0, 1],
+    [u'la bandana de Ricardo Milos', 1, 0],
+    [u'una pulsera con la bandera de ESPAÑA', 2, 0],
+    [u'unos pantaloncitos blancos', 2, 0],
+    [u'la camiseta de Perculaes Social Club', 2, 0],
     [u'un cable RJ45', 0, 2],
-    [u'un vaso rojo de plástico con cerveza no identificada', 0, 2],
-    [u'la bandana de Ricardo Milos', 2, 0],
     [u'la escena', 0, 2],
     [u'Ana Rosa', 0, 2],
     [u'un cenicero', 0, 3],

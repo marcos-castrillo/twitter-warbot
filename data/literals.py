@@ -191,14 +191,14 @@ def somebody_powerup(tweet):
 
 def somebody_found_item(tweet):
     if tweet.item.thrown_away_by != None:
-        thrown_away_by = FROM(tweet.item.thrown_away_by.get_name())
+        thrown_away_by = FROM(tweet.item.thrown_away_by.name)
         return I_COMPOSED(tweet.player, FIND_ACTION_SIMPLE(), tweet.item.name, has_now(tweet.player, tweet.item), thrown_away_by)
     else:
         return I_COMPOSED(tweet.player, FIND_ACTION(), tweet.item.name, has_now(tweet.player, tweet.item))
 
 def somebody_replaced_item(tweet):
     if tweet.item.thrown_away_by != None:
-        thrown_away_by = FROM(tweet.item.thrown_away_by.get_name())
+        thrown_away_by = FROM(tweet.item.thrown_away_by.name)
         return I_COMPOSED(tweet.player, FIND_ACTION_SIMPLE(), tweet.item.name, REPLACED + ' ' + tweet.old_item.name + '. ' + has_now(tweet.player, tweet.item, tweet.old_item), thrown_away_by)
     else:
         return I_COMPOSED(tweet.player, FIND_ACTION(), tweet.item.name, REPLACED + ' ' + tweet.old_item.name + '. ' + has_now(tweet.player, tweet.item, tweet.old_item))
@@ -239,7 +239,10 @@ def somebody_killed(tweet):
     if killing_item != None:
         kill_method = u' '.join((WITH, killing_item.name))
     if player_1.kills > 1:
-        kills_count = u' '.join((HAS_ALREADY_KILLED(str(player_1.kills)), PRAISE(player_1)))
+        praise = PRAISE(player_1)
+        if len(praise) > 0:
+            praise = '.' + praise
+        kills_count = u' '.join((HAS_ALREADY_KILLED(str(player_1.kills)) + praise))
     if new_item != None and old_item != None:
         stole = u' '.join((ALSO_STOLE(), new_item.name, AND(), GETS_RID_OF, old_item.name))
     elif new_item != None:
@@ -247,10 +250,10 @@ def somebody_killed(tweet):
 
     if len(kill_method) > 0:
         sufix = sufix + u' ' + kill_method
-    elif len(kills_count) > 0:
+    if len(kills_count) > 0:
         sufix = sufix + u' ' + kills_count
-    elif len(stole) > 0:
-        sufix = sufix + u' ' + stole
+    if len(stole) > 0:
+        sufix = sufix + '.'  + u' ' + stole
     sufix = sufix + '.'
 
     return u' '.join((friend_message + player_1.get_name(), kill_verb, player_2.get_name() + sufix))
@@ -370,7 +373,7 @@ def infected(tweet):
             if i == 0:
                 also = also + player.get_name()
             elif i == len(tweet.player_list) - 1:
-                also = also + u' '.join((also, AND(), player.get_name()))
+                also = u' '.join((also, AND(), player.get_name()))
             else:
                 also = also + ', ' + player.get_name()
         also = also + '.'
