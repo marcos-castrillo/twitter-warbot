@@ -263,7 +263,7 @@ def destroy():
             else:
                 kill_player(p)
                 dead_list.append(p)
-    print(len(escaped_list), len(dead_list))
+                
     for i, p in enumerate(escaped_list):
         move_player(p, new_location)
 

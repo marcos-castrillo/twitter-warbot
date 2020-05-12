@@ -65,6 +65,7 @@ raw_powerup_list = [
     [u'un paquete de cereales rellenos de leche del Mercadona', 2, 0],
     [u'unas patatas bravas del Mercadona', 3, 0],
     [u'toda la puestada', 0, 3],
+    [u'POOOOOLVORAAAAAA', 0, 3],
     [u'el bocadillo de Damián', 0, 3],
     [u'un kebab', 0, 2],
     [u'el queso del kebab', 0, 3],

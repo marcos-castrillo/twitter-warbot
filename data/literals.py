@@ -241,8 +241,8 @@ def somebody_killed(tweet):
     if player_1.kills > 1:
         praise = PRAISE(player_1)
         if len(praise) > 0:
-            praise = '.' + praise
-        kills_count = u' '.join((HAS_ALREADY_KILLED(str(player_1.kills)) + praise))
+            praise = '. ' + praise
+        kills_count = HAS_ALREADY_KILLED(str(player_1.kills)) + praise
     if new_item != None and old_item != None:
         stole = u' '.join((ALSO_STOLE(), new_item.name, AND(), GETS_RID_OF, old_item.name))
     elif new_item != None:

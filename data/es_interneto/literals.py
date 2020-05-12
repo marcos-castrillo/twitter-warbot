@@ -2,7 +2,7 @@ from data.es.literals import *
 import random
 
 def START(tweet):
-    return u'¡Los chavalitos están listos! Que empiece la batalla.'
+    return u'Todos en sus puestos, ¡comienza la batalla por ser el campeón de los chavalitos!'
 
 def ATRACTION(place):
     return random.choice([
