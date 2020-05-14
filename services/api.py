@@ -11,12 +11,11 @@ from data.config import *
 from data.literals import SLEEP
 
 def tweet_line_from_file(file_path, line_number, image_path_list):
-    with open(image_path, 'rb') as image:
-        with open(file_path, 'r') as file:
-            for i, line in enumerate(file):
-                if int(i) == int(line_number):
-                    print(line)
-                    return tweet(line.decode("utf-8"), image_path, image_path_list)
+    with open(file_path, 'r') as file:
+        for i, line in enumerate(file):
+            if int(i) == int(line_number):
+                print(line)
+                return tweet(line.decode("utf-8"), image_path_list)
 
 def tweet_sleep(image_dir):
     action_number = random.randint(0, 100)
