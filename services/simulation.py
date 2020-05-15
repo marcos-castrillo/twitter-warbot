@@ -17,7 +17,7 @@ time_stamp = u'-'.join([str(date.year), str(date.month), str(date.day), str(date
 current_dir = os.path.abspath(os.path.dirname(__file__))
 output_dir = os.path.join(current_dir, '../simulations', time_stamp)
 font_path = os.path.join(current_dir, '../assets/fonts/Comic-Sans.ttf')
-font_path_2 = os.path.join(current_dir, '../assets/fonts/Comic-Sans.ttf')
+font_path_2 = os.path.join(current_dir, '../assets/fonts/Arial.ttf')
 
 filename = u'simulation'
 line_number = 0

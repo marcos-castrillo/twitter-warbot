@@ -424,7 +424,7 @@ def MOVE_ACTION_ROAD():
         u'ha viajado de',
         u'se ha movido de',
         u'ha conducido su ' + random.choice([u'Seat León', u'Fiat Multipla', u'Renault Megane', u'Seat Ibiza', u'Golf', u'Opel Corsa', u'Ford Focus', u'Opel Astra', u'BMW Serie 3']) + ' de',
-        random.choice([u'está tan en forma que ha ', u'se aburría y ha ', u'está tan cachas que ha ', u'está tan fuerte que ha ']) + random.choice([u'ido en bici', u'ido a trote', u'hecho un sprint', u'ido a la pata coja', u'ido corriendo', u'ha hecho footing']) + u' de',
+        random.choice([u'está tan en forma que ha ', u'se aburría y ha ', u'está tan cachas que ha ', u'está tan fuerte que ha ']) + random.choice([u'ido en bici', u'ido a trote', u'hecho un sprint', u'ido a la pata coja', u'ido corriendo', u'hecho footing']) + u' de',
         u'ha llamado a ' + random.choice([u'un taxi', u'un Uber', u'un Cabify']) + u' para que le lleve de',
         u'ha hecho ' + random.choice([u'autostop', u'dedo']) + u' para que le lleve de',
         u'ha ido en ' + random.choice([u'moto', u'su scooter', u'AVE', u'mochillo', u'limusina con su chófer', u'patinete eléctrico', u'tren regional', u'Alsa', u'Blablacar', u'un coche robado a lo GTA']) + u' de'

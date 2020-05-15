@@ -4,6 +4,7 @@ USE_DISTRICTS = False
 MIN_ITEMS = 1
 MAX_ITEMS = 5
 DEFAULT_SLEEP_MESSAGE = u'[Visto en https://www.reddit.com/r/Yointerneto]'
+SLEEP_ACTION_NUMBER_LIMIT = 100
 
 # Probabilities
 ATRACT_RANGE_LIST =  [1, 1, 1, 1, 1, 2, 2, 2]
