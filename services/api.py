@@ -24,11 +24,11 @@ def tweet_sleep(image_dir):
     image_dir = os.path.join(image_dir, LOCALIZATION)
 
     if action_number > SLEEP_ACTION_NUMBER_LIMIT:
-        message = SLEEP()
+        message = SLEEP().decode("utf-8")
     else:
         image_path = [os.path.join(image_dir, random.choice(os.listdir(image_dir)))]
 
-    return tweet(message.decode("utf-8"), image_path)
+    return tweet(message, image_path)
 
 def tweet(message, image_path_list):
     api = twitter.Api(consumer_key=consumer_key,

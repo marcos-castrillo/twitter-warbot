@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 # General
 MENTION_USERS = True
 USE_DISTRICTS = True
