@@ -5,10 +5,17 @@ import twitter
 import datetime
 import os
 import random
+import urllib.request
 
 from data.secrets import *
 from data.config import *
 from data.literals import SLEEP
+from store import player_list
+
+api = twitter.Api(consumer_key=consumer_key,
+                  consumer_secret=consumer_secret,
+                  access_token_key=access_token,
+                  access_token_secret=access_token_secret)
 
 def tweet_line_from_file(file_path, line_number, image_path_list):
     with open(file_path, 'r') as file:
@@ -31,19 +38,28 @@ def tweet_sleep(image_dir):
     return tweet(message, image_path)
 
 def tweet(message, image_path_list):
-    api = twitter.Api(consumer_key=consumer_key,
-                      consumer_secret=consumer_secret,
-                      access_token_key=access_token,
-                      access_token_secret=access_token_secret)
-
     image_list = []
 
     if image_path_list != None:
-        print(image_path_list)
-
         for i, path in enumerate(image_path_list):
             if path != None and os.path.exists(path):
                 image_list.append(path)
 
     tweet = api.PostUpdate(status = message, media=image_list)
     return tweet.id_str
+
+def initialize_avatars():
+    path = 'assets/img/avatars'
+    if not os.path.exists(path):
+        os.makedirs(path)
+    for i, player in enumerate(player_list):
+        if len(player.username) > 0:
+            filename = path + '/' + player.username
+        else:
+            filename = path + '/' + player.name
+
+        if not (os.path.exists(filename + '.png')):
+            print('Downloading ' + player.get_name() + '\'s avatar...')
+            profile_image_url = api.GetUser(screen_name=player.username).profile_image_url
+            urllib.request.urlretrieve(profile_image_url, filename + '.png')
+        player.avatar_dir = filename

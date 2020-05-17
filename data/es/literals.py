@@ -82,12 +82,12 @@ def DESTROYED_DISTRICT(district, tributes_str):
         ])
     else:
         return random.choice([
-            district.name + u' está en ruinas, ya que ' + tributes_str  + u' han caído en combate. Otra vez será.',
-            u'Los representantes de ' + district.name + u'(' + tributes_str  + u')' + u' no han estado a la altura y no la han conseguido salvar.',
+            district.name + u' está en ruinas, ya que ' + tributes_str  + u' han caído en combate. Otra vez será',
+            u'Los representantes de ' + district.name + u'(' + tributes_str  + u')' + u' no han estado a la altura y no la han conseguido salvar',
             tributes_str + u' no han dado la talla y ' + district.name + u' ha sido demolida. ¡Una pena!',
             u'Por desgracia, ' + district.name + u' no ha sido salvada por sus representantes (' + tributes_str  + u')',
-            tributes_str + u' han sido derrotados. El mundo echará de menos a ' + district.name + '.',
-            tributes_str + u' nos han decepcionado a todos y ' + district.name + u' ha tenido que ser derruida.'
+            tributes_str + u' han sido derrotados. El mundo echará de menos a ' + district.name,
+            tributes_str + u' nos han decepcionado a todos y ' + district.name + u' ha tenido que ser derruida'
         ])
 
 def DIED(player, multiple = False):

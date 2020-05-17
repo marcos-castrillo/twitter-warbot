@@ -22,7 +22,7 @@ MAX_VALUE_RARITY_1 = 2
 MAX_VALUE_RARITY_2 = 6
 
 # Localization
-LOCALIZATION = "es_interneto" #es_paramo, es_spain, es_interneto
+LOCALIZATION = "es_paramo" #es_paramo, es_spain, es_interneto
 if LOCALIZATION == "es_paramo":
     from data.es_paramo.config import *
 elif LOCALIZATION == "es_spain":

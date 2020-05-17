@@ -15,6 +15,7 @@ from services.items import *
 from services.battles import *
 from services.players import *
 from services.places import *
+from services.api import initialize_avatars
 
 simulation_probab = Simulation_Probab(PROBAB_SUICIDE[0], PROBAB_REVIVE[0], PROBAB_TRAP[0], PROBAB_INFECT[0], PROBAB_DESTROY[0], PROBAB_INJURE[0], PROBAB_ATRACT[0], PROBAB_MONSTER[0], PROBAB_STEAL[0], PROBAB_MOVE[0], PROBAB_ITEM[0], PROBAB_BATTLE[0])
 finished = False
