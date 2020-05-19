@@ -129,7 +129,7 @@ def draw_places(image):
                 color = 'rgb(255,0,0)'
             draw.text((p.coord_x + 25, p.coord_y + - 10 + j * 10), line, fill=color, font=font)
         if p.destroyed:
-            paste_image(image, p.coord_x, p.coord_y, 60, 'destroyed')
+            paste_image(image, p.coord_x, p.coord_y, 40, 'destroyed')
         else:
             paste_image(image, p.coord_x, p.coord_y, 38, 'place')
     return image
@@ -414,7 +414,7 @@ def get_ranking_image(image, tweet):
         coord_y = RANKING_FIRST_ROW_Y + (RANKING_SPACE_BETWEEN_ROWS * row_index)
 
         paste_image(image, coord_x + 24, coord_y + 24, 48, '', player.avatar_dir)
-        draw_wrapped_text(image, coord_x, coord_y + 50, RANKING_IMG_SIZE, player.name, font_path, 10, 'rgb(0,0,0)')
+        draw_wrapped_text(image, coord_x, coord_y + 50, RANKING_IMG_SIZE, 12, player.name, font_path, 10, 'rgb(0,0,0)')
         draw.rectangle((coord_x, coord_y, coord_x + 48, coord_y + 48), outline='rgb(0,0,0)')
 
         if player.kills > 0:
@@ -460,35 +460,50 @@ def get_ranking_image(image, tweet):
 
         if index >= RANKING_IMGS_PER_ROW:
             # multirow
-            y_0 = y_0 - (RANKING_PADDING / 2)
+            y_0 = y_0 - (RANKING_PADDING / 2) - RANKING_DISTRICT_NAME_HEIGHT
             draw.rectangle((x_0, y_0 + 1, x_1, y_1), outline='rgb(0,0,0)', fill=fill_color, width=1)
             draw.rectangle((x_0 + 1, y_0, x_1 - 1, y_0 + 1), fill=fill_color)
         else:
             draw.rectangle((x_0, y_0, x_1, y_1), outline='rgb(0,0,0)', fill=fill_color, width=1)
+            draw.rectangle((x_0, y_0 - RANKING_DISTRICT_NAME_HEIGHT, x_1, y_0), outline='rgb(0,0,0)', fill=fill_color_dark, width=1)
 
-    def draw_district_name(name, row_index, col_index, cols_width):
+    def draw_district_name(name, row_index, col_index, cols_width, current_index):
         draw = ImageDraw.Draw(image)
-        coord_x = RANKING_FIRST_COLUMN_X + (RANKING_DELTA_X * col_index) - RANKING_SPACE_BETWEEN_DISTRICTS / 2
-        coord_y = RANKING_FIRST_ROW_Y + (RANKING_SPACE_BETWEEN_ROWS * row_index) - RANKING_IMG_SIZE
+        coord_x = RANKING_FIRST_COLUMN_X + (RANKING_DELTA_X * col_index) - int(RANKING_SPACE_BETWEEN_DISTRICTS / 2)
+        coord_y = RANKING_FIRST_ROW_Y + (RANKING_SPACE_BETWEEN_ROWS * row_index) - RANKING_IMG_SIZE - RANKING_DISTRICT_NAME_HEIGHT
         font = ImageFont.truetype(font_path, size=10)
 
-        lines = get_multiline_wrapped_text(name.upper(), RANKING_DELTA_X - 4, font)
+        lines = get_multiline_wrapped_text(name, RANKING_DELTA_X, font)
         for j, line in enumerate(lines):
-            draw_wrapped_text(image, coord_x + 1, coord_y + 1 + j*10, RANKING_IMG_SIZE - 4, line, font_path, 10, 'rgb(0,0,0)')
+            y = coord_y + j*12
+            draw_wrapped_text(image, coord_x, y, RANKING_IMG_SIZE + RANKING_SPACE_BETWEEN_DISTRICTS, int((RANKING_DISTRICT_NAME_HEIGHT-2)/len(lines)), line, font_path, 10, 'rgb(0,0,0)')
+
+        if current_index > 0:
+            # dots
+            x_0 = coord_x - RANKING_PADDING/2 + 3
+            x_1 = coord_x - RANKING_PADDING/2 + 5
+            y_0 = coord_y + RANKING_DISTRICT_NAME_HEIGHT / 2 - 1
+            y_1 = coord_y + RANKING_DISTRICT_NAME_HEIGHT / 2 + 1
+            draw.ellipse((x_0, y_0, x_1, y_1), fill='rgb(0,0,0)')
 
     def draw_player_list_ranking(list, row_index, col_index, draw_rectangles = False):
+        first_line = True
         for i, player in enumerate(list):
-            if draw_rectangles and i % RANKING_IMGS_PER_ROW == 0:
-                draw_ranking_rectangle(len(list), row_index, col_index, i)
-                if i == 0:
-                    cols_width = len(list)
-                    if cols_width > RANKING_IMGS_PER_ROW:
-                        cols_width = RANKING_IMGS_PER_ROW
-                    draw_district_name(player.district.district_display_name, row_index, col_index, cols_width)
+            if draw_rectangles:
+                if i % RANKING_IMGS_PER_ROW == 0:
+                    draw_ranking_rectangle(len(list), row_index, col_index, i)
+                    if i == 0:
+                        cols_width = len(list)
+                        if cols_width > RANKING_IMGS_PER_ROW:
+                            cols_width = RANKING_IMGS_PER_ROW
+                if first_line:
+                    draw_district_name(player.district.district_display_name, row_index, col_index, cols_width, i)
+
             draw_player_ranking(player, row_index, col_index)
             col_index = col_index + 1
 
             if col_index + 1 > RANKING_IMGS_PER_ROW:
+                first_line = False
                 col_index = 0
                 row_index = row_index + 1
 
@@ -537,16 +552,16 @@ def get_ranking_image(image, tweet):
                     return d
             return district_list[0]
 
-        def get_fill_color(players_in_district):
+        def get_fill_colors(players_in_district):
             alive_count = sum(1 for y in players_in_district if y != '' and y.state == 1)
             if alive_count == 0:
-                return 'rgb(255, 196, 176)'
+                return 'rgb(255, 196, 176)', 'rgb(191, 124, 101)'
             elif alive_count == 1:
-                return 'rgb(255, 225, 176)'
+                return 'rgb(255, 225, 176)', 'rgb(219, 178, 112)'
             elif alive_count == 2:
-                return 'rgb(248, 255, 176)'
+                return 'rgb(248, 255, 176)', 'rgb(195, 204, 100)'
             else:
-                return 'rgb(206, 255, 176)'
+                return 'rgb(206, 255, 176)', 'rgb(142, 204, 104)'
 
         def cross_district_if_needed(tributes):
             count = 0
@@ -562,7 +577,7 @@ def get_ranking_image(image, tweet):
         while len(district_list) > 0:
             players_in_district = choose_fitting_district(district_list, row_index, col_index)
             players_count = len(players_in_district)
-            fill_color = get_fill_color(players_in_district)
+            fill_color, fill_color_dark = get_fill_colors(players_in_district)
 
             row_index, col_index = draw_player_list_ranking(players_in_district, row_index, col_index, True)
 
@@ -702,21 +717,20 @@ def draw_multiple_players(tweet, players, coord_x, coord_y, image, delta_x, sing
                     x = coord_x - int(delta_x/2)*4
                     y = y + int(HEIGHT_BETWEEN_PLAYERS / 2)
 
-def draw_wrapped_text(image, coord_x, coord_y, max_width, text, font_path, initial_font_size, fill):
+def draw_wrapped_text(image, coord_x, coord_y, max_width, max_height, text, font_path, initial_font_size, fill):
     draw = ImageDraw.Draw(image)
-    font_size = initial_font_size
+    font_size = initial_font_size + 1
     font = ImageFont.truetype(font_path, size=font_size)
     w, h = font.getsize(text)
 
     while w >= max_width:
+        font_size = font_size - 1
         font = ImageFont.truetype(font_path, size=font_size)
         w, h = font.getsize(text)
-        font_size = font_size - 1
-        coord_x = coord_x + 1
-        coord_y = coord_y + 1
 
-    new_font = ImageFont.truetype(font_path, size=font_size)
-    draw.text((coord_x, coord_y), text, fill=fill, font=new_font)
+    coord_x = coord_x + (max_width - w) / 2
+    coord_y = coord_y + (max_height - h) / 2
+    draw.text((coord_x, coord_y), text, fill=fill, font=font)
 
 def get_multiline_wrapped_text(text, width, font):
     text_lines = []

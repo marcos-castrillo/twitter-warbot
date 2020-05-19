@@ -13,8 +13,8 @@ def ATRACTION(place):
 
     return random.choice([
         u'Se han celebrado las fiestas de ' + place + u' y',
-        u'Como son las fiestas de ' + place + u', ',
-        u'Todo el mundo está en las fiestas de ' + place + u', ',
+        u'Como son las fiestas de ' + place + u',',
+        u'Todo el mundo está en las fiestas de ' + place + u',',
     ])
 
 def MONSTER_APPEARED(tweet):
