@@ -84,8 +84,9 @@ def draw_image(tweet):
     global line_number, current_dir
     raw_map_img = draw_places(Image.open(os.path.join(current_dir, '../assets/img/maps/' + LOCALIZATION + '.png')))
     raw_map_img_2 = draw_places(Image.open(os.path.join(current_dir, '../assets/img/maps/' + LOCALIZATION + '.png')))
-    rows = math.ceil(len(player_list) / RANKING_IMGS_PER_ROW)
-    RANKING_HEIGHT = 2*(rows * RANKING_SPACE_BETWEEN_ROWS + RANKING_PADDING * 2)
+    rows = math.ceil(len(get_alive_players()) / RANKING_IMGS_PER_ROW) + math.ceil(len(get_dead_players()) / RANKING_IMGS_PER_ROW)
+
+    RANKING_HEIGHT = rows * RANKING_SPACE_BETWEEN_ROWS + RANKING_PADDING * 2
     blank_img = Image.new('RGB', (RANKING_WIDTH, RANKING_HEIGHT), color = BG_COLOR)
 
     main_image = None
@@ -513,8 +514,14 @@ def get_ranking_image(image, tweet):
         draw = ImageDraw.Draw(image)
         col_index = 0
         row_index = 0
+        dead_area = False
 
         for i, player in enumerate(players_to_circle):
+            if not dead_area and player.state == 0:
+                col_index = 0
+                row_index = row_index + 1
+                dead_area = True
+
             if (tweet.player != None and player.get_name() == tweet.player.get_name()) or (tweet.player_2 != None and player.get_name() == tweet.player_2.get_name()):
                 coord_x = RANKING_FIRST_COLUMN_X + (RANKING_DELTA_X * col_index)
                 coord_y = RANKING_FIRST_ROW_Y + (RANKING_SPACE_BETWEEN_ROWS * row_index)
@@ -588,12 +595,13 @@ def get_ranking_image(image, tweet):
             district_list.pop(district_list.index(players_in_district))
 
         # Breakline
-        col_index = 0
-        row_index = row_index + 1
         dead_players = get_dead_players()
-        row_index, col_index = draw_player_list_ranking(dead_players, row_index, col_index)
+        if len(dead_players) > 0:
+            if col_index > 0:
+                col_index = 0
+                row_index = row_index + 1
+            row_index, col_index = draw_player_list_ranking(dead_players, row_index, col_index)
         drawn_player_list = drawn_player_list + dead_players
-
     else:
         alive_players_list = get_alive_players()
         dead_players_list = get_dead_players()
