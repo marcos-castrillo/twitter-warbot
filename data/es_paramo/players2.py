@@ -98,6 +98,9 @@ raw_player_list = [
     [u'María', u'Mariialvvarez', 1, u'Fojedo'],
     [u'Nerey', u'ivrognee', 1, u'Bercianos del Páramo'],
     [u'Josele', u'jose_martrod', 0, u'Villar del Yermo'],
+    [u'Víctor', u'Victor_SM98', 0, u'San Martín del Camino'],
+    [u'Elena', u'elenaa__125', 1, u'San Martín del Camino'],
+    [u'Iván', u'Ivan_96leon', 0, u'San Martín del Camino'],
 
     #No RT o follow
     #[u'Andrea', u'andree_228', 1, u'Laguna de Negrillos'],
