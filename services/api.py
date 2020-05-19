@@ -12,10 +12,11 @@ from data.config import *
 from data.literals import SLEEP
 from store import player_list
 
-api = twitter.Api(consumer_key=consumer_key,
-                  consumer_secret=consumer_secret,
-                  access_token_key=access_token,
-                  access_token_secret=access_token_secret)
+def get_api():
+    return twitter.Api(consumer_key=consumer_key,
+                      consumer_secret=consumer_secret,
+                      access_token_key=access_token,
+                      access_token_secret=access_token_secret)
 
 def tweet_line_from_file(file_path, line_number, image_path_list):
     with open(file_path, 'r') as file:
@@ -45,6 +46,7 @@ def tweet(message, image_path_list):
             if path != None and os.path.exists(path):
                 image_list.append(path)
 
+    api = get_api()
     tweet = api.PostUpdate(status = message, media=image_list)
     return tweet.id_str
 
@@ -59,6 +61,8 @@ def initialize_avatars():
             filename = path + '/' + player.name
 
         if not (os.path.exists(filename + '.png')):
+            api = get_api()
+
             print('Downloading ' + player.get_name() + '\'s avatar...')
             profile_image_url = api.GetUser(screen_name=player.username).profile_image_url
             urllib.request.urlretrieve(profile_image_url, filename + '.png')

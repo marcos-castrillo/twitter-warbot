@@ -57,7 +57,7 @@ raw_player_list = [
     [u'Miguel Ángel', u'MiguiDePan', 0, u'Bercianos'],
     [u'Miriam', u'miriamx02', 1, u'Villar de Mazarife'],
     [u'Nerey', u'ivrognee', 1, u'Bercianos'],
-    [u'Noelia', u'nooee_019', 1, u'Santa María'],
+    [u'Noelia', u'k3rfuffle_', 1, u'Santa María'],
     [u'Oana', u'Juummy_', 1, u'Urdiales'],
     [u'Óscar', u'Ivoryy_21', 0, u'Santa María'],
     [u'Oskarin', u'oski99_lgn', 0, u'Laguna de Negrillos'],

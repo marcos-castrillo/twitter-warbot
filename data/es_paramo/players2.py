@@ -92,6 +92,12 @@ raw_player_list = [
     [u'David', u'Dav1darme', 0, u'Armellada'],
     [u'Nayara', u'NayaraMilla1', 1, u'La Milla del Río'],
     [u'', u'_She_W0lf_', 1, u'Villibañe'],
+    [u'Ale', u'alegoncar', 1, u'Valencia de Don Juan'],
+    [u'Ángela', u'14Angeelaaa', 1, u'Fojedo'],
+    [u'Sara', u'saraarllen', 1, u'Fojedo'],
+    [u'María', u'Mariialvvarez', 1, u'Fojedo'],
+    [u'Nerey', u'ivrognee', 1, u'Bercianos del Páramo'],
+    [u'Josele', u'jose_martrod', 0, u'Villar del Yermo'],
 
     #No RT o follow
     #[u'Andrea', u'andree_228', 1, u'Laguna de Negrillos'],
