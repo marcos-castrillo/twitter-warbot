@@ -91,11 +91,11 @@ raw_player_list = [
     [u'Pablo', u'pablodpp', 0, u'Carrizo de la Ribera'],
     [u'David', u'Dav1darme', 0, u'Armellada'],
     [u'Nayara', u'NayaraMilla1', 1, u'La Milla del Río'],
+    [u'', u'_She_W0lf_', 1, u'Villibañe'],
 
     #No RT o follow
     #[u'Andrea', u'andree_228', 1, u'Laguna de Negrillos'],
     #[u'Hugo', u'huugocalleejo_', 0, u'Villagallegos'],
-    #[u'', u'_She_W0lf_', 1, u'Villibañe'],
 
     #lugar incorrecto
 
