@@ -112,7 +112,6 @@ raw_player_list = [
     [u'', u'pootyllanera', 0, u'Armellada'],
     [u'', u'Epsil0n_5', 0, u'Armellada'],
     [u'Alicia', u'_aliciarguez', 1, u'Bercianos'],
-    [u'César', u'cgcJC', 0, u'Valjunco'],
     [u'Eva', u'EvaLauraAE', 1, u'Villaestrigo'],
     [u'Lucía', u'Luciamorang', 1, u'Villaestrigo'],
     [u'Yani', u'yani_myea', 1, u'Cembranos'],
@@ -128,6 +127,17 @@ raw_player_list = [
     [u'Quique', u'quiquemeando', 0, u'Villamorico'],
     [u'Lucía', u'luciaa_rio', 1, u'Valdevimbre'],
     [u'Cristina', u'cristina_rey95', 1, u'Villamañán'],
+    [u'Rouus', u'JdBm23n16', 1, u'Santa María'],
+    [u'Andrea', u'andreacolado06', 1, u'Fojedo'],
+    [u'David', u'davidalegree7', 0, u'Villagallegos'],
+    [u'Darío', u'dariooalvareez', 0, u'Carrizo de la Ribera'],
+    [u'Marta', u'martacimadevill', 1, u'Villadangos'],
+    [u'Óscar', u'oscarinrisi', 0, u'Villadangos'],
+    [u'Oliver', u'0liversparrow', 0, u'Villadangos'],
+    [u'Katia', u'KatiaGon10', 1, u'Fojedo'],
+    [u'Miguel', u'MiguiDePan', 0, u'Bercianos'],
+    [u'Andrea', u'andreagperez99', 1, u'Villadangos'],
+    [u'Diego', u'Apache_BaMbAm', 1, u'Ardoncino'],
 
     #No RT o follow
     #[u'Andrea', u'andree_228', 1, u'Laguna de Negrillos'],
@@ -136,6 +146,7 @@ raw_player_list = [
     #[u'Darío', u'darioxx5', 0, u'Valdevimbre'],
 
     #lugar incorrecto
+    #[u'César', u'cgcJC', 0, u'Valjunco'],
 
     #Cuenta privada
 

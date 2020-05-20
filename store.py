@@ -136,6 +136,9 @@ def get_place_list():
     for i, p in enumerate(list):
         if len(p.connections) == 0:
             sys.exit('Config error: place without connections: ' + p.name)
+        for j, connection in enumerate(p.connections):
+            if not any(subconnection.name == p.name for subconnection in connection.connections):
+                sys.exit('Config error: ' + p.name + ' is not mutually connected to ' + subconnection.name)
 
     return list
 
