@@ -137,8 +137,11 @@ raw_player_list = [
     [u'Katia', u'KatiaGon10', 1, u'Fojedo'],
     [u'Miguel', u'MiguiDePan', 0, u'Bercianos del Páramo'],
     [u'Andrea', u'andreagperez99', 1, u'Villadangos del Páramo'],
-    [u'Diego', u'Apache_BaMbAm', 1, u'Ardoncino'],
-
+    [u'Diego', u'Apache_BaMbAm', 0, u'Ardoncino'],
+    [u'María', u'mariiaa_ra', 1, u'Valencia de Don Juan'],
+    [u'Anhy', u'anhy', 1, u'Grisuela del Páramo'],
+    [u'Raúl', u'heras_raul', 0, u'Villademor de la Vega']
+    
     #No RT o follow
     #[u'Andrea', u'andree_228', 1, u'Laguna de Negrillos'],
     #[u'Hugo', u'huugocalleejo_', 0, u'Villagallegos'],

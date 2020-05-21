@@ -128,7 +128,7 @@ def draw_places(image):
             color = 'rgb(0,0,0)'
             if p.destroyed:
                 color = 'rgb(255,0,0)'
-            draw.text((p.coord_x + 25, p.coord_y + - 10 + j * 10), line, fill=color, font=font)
+            draw.text((p.coord_x + 15, p.coord_y + - 10 + j * 10), line, fill=color, font=font)
         if p.destroyed:
             paste_image(image, p.coord_x, p.coord_y, 40, 'destroyed')
         else:
@@ -295,7 +295,7 @@ def get_main_image(image, tweet):
         paste_image(image, action_number, tweet.place.coord_y - 100, 72, 'arrow')
 
     w, h = image.size
-    zoom = 3
+    zoom = 2.5
 
     if tweet.place != None:
         if tweet.type == Tweet_type.winner:
@@ -414,7 +414,9 @@ def get_ranking_image(image, tweet):
         coord_x = RANKING_FIRST_COLUMN_X + (RANKING_DELTA_X * col_index)
         coord_y = RANKING_FIRST_ROW_Y + (RANKING_SPACE_BETWEEN_ROWS * row_index)
         if is_dead:
-            coord_y = coord_y - int(RANKING_SPACE_BETWEEN_ROWS/3)
+            alive_rows = math.ceil(len(get_alive_players()) / RANKING_IMGS_PER_ROW)
+            dead_rows = row_index + 1 - alive_rows
+            coord_y = coord_y - dead_rows * int(RANKING_SPACE_BETWEEN_ROWS/3)
         paste_image(image, coord_x + 24, coord_y + 24, 48, '', player.avatar_dir)
         draw_wrapped_text(image, coord_x, coord_y + 50, RANKING_IMG_SIZE, 12, player.name, font_path, 10, 'rgb(0,0,0)')
         draw.rectangle((coord_x, coord_y, coord_x + 48, coord_y + 48), outline='rgb(0,0,0)')
@@ -469,7 +471,7 @@ def get_ranking_image(image, tweet):
             draw.rectangle((x_0, y_0, x_1, y_1), outline='rgb(0,0,0)', fill=fill_color, width=1)
             draw.rectangle((x_0, y_0 - RANKING_DISTRICT_NAME_HEIGHT, x_1, y_0), outline='rgb(0,0,0)', fill=fill_color_dark, width=1)
 
-    def draw_district_name(name, row_index, col_index, cols_width, current_index):
+    def draw_place_name(name, row_index, col_index, cols_width, current_index):
         draw = ImageDraw.Draw(image)
         coord_x = RANKING_FIRST_COLUMN_X + (RANKING_DELTA_X * col_index) - int(RANKING_SPACE_BETWEEN_DISTRICTS / 2)
         coord_y = RANKING_FIRST_ROW_Y + (RANKING_SPACE_BETWEEN_ROWS * row_index) - RANKING_IMG_SIZE - RANKING_DISTRICT_NAME_HEIGHT
@@ -499,7 +501,7 @@ def get_ranking_image(image, tweet):
                         if cols_width > RANKING_IMGS_PER_ROW:
                             cols_width = RANKING_IMGS_PER_ROW
                 if first_line:
-                    draw_district_name(player.district.district_display_name, row_index, col_index, cols_width, i)
+                    draw_place_name(player.district.district_display_name, row_index, col_index, cols_width, i)
 
             draw_player_ranking(player, row_index, col_index, dead_area)
             col_index = col_index + 1
@@ -523,11 +525,13 @@ def get_ranking_image(image, tweet):
                 row_index = row_index + 1
                 dead_area = True
 
-            if (tweet.player != None and player.get_name() == tweet.player.get_name()) or (tweet.player_2 != None and player.get_name() == tweet.player_2.get_name()):
+            if (tweet.player != None and player.get_name() == tweet.player.get_name()) or (tweet.player_2 != None and player.get_name() == tweet.player_2.get_name()) or (tweet.type == Tweet_type.atraction and any(x for x in tweet.player_list if x.get_name() == player.get_name())):
                 coord_x = RANKING_FIRST_COLUMN_X + (RANKING_DELTA_X * col_index)
                 coord_y = RANKING_FIRST_ROW_Y + (RANKING_SPACE_BETWEEN_ROWS * row_index)
                 if dead_area:
-                    coord_y = coord_y - int(RANKING_SPACE_BETWEEN_ROWS/3)
+                    alive_rows = math.ceil(len(get_alive_players()) / RANKING_IMGS_PER_ROW)
+                    dead_rows = row_index + 1 - alive_rows
+                    coord_y = coord_y - dead_rows * int(RANKING_SPACE_BETWEEN_ROWS/3)
                 else:
                     coord_y = coord_y - RANKING_DISTRICT_NAME_HEIGHT
 

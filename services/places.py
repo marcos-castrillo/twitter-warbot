@@ -15,7 +15,7 @@ def atract():
     action_number = random.randint(0, 100)
 
     for i, p in enumerate(place_list):
-        if not p.destroyed and not p.atracted:
+        if not p.destroyed and not p.atracted and (MAX_ATRACTED_PLAYERS == 0 or len(p.players) <= MAX_ATRACTED_PLAYERS):
             loc_candidates.append(p)
 
     if len(loc_candidates) == 0:
