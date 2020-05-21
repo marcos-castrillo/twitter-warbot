@@ -42,6 +42,8 @@ def atract():
                           append_players_from(subsubconnection)
 
     if len(atracted_players) > 0:
+        if MAX_ATRACTED_PLAYERS > 0 and len(atracted_players) > MAX_ATRACTED_PLAYERS:
+            atracted_players = atracted_players[:MAX_ATRACTED_PLAYERS]
         alive_players = get_alive_players()
         for i, player in enumerate(alive_players):
             if player in atracted_players:
@@ -263,7 +265,7 @@ def destroy():
             else:
                 kill_player(p)
                 dead_list.append(p)
-                
+
     for i, p in enumerate(escaped_list):
         move_player(p, new_location)
 

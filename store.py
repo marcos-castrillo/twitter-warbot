@@ -115,6 +115,7 @@ def get_place_list():
             item_list_2.append(item)
         if item.get_rarity() == 3:
             item_list_3.append(item)
+        random.shuffle(raw_place_list)
     for i, p in enumerate(raw_place_list):
         if len(p) == 3:
             p.append(None)
@@ -138,7 +139,7 @@ def get_place_list():
             sys.exit('Config error: place without connections: ' + p.name)
         for j, connection in enumerate(p.connections):
             if not any(subconnection.name == p.name for subconnection in connection.connections):
-                sys.exit('Config error: ' + p.name + ' is not mutually connected to ' + subconnection.name)
+                sys.exit('Config error: ' + p.name + ' is not mutually connected to other place')
 
     return list
 
@@ -237,7 +238,10 @@ def get_player_list(place_list):
         player_list.append(player)
 
         if USE_DISTRICTS and p[3] != None and p[3] != '':
-            location = next(x for x in place_list if x.name == p[3])
+            try:
+                location = next(x for x in place_list if x.name == p[3])
+            except:
+                sys.exit('Config error: no place called ' + p[3])
             player.district = location #only to store p[3]
             location.tributes.append(player) #idem
         elif not USE_DISTRICTS:

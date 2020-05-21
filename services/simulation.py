@@ -84,9 +84,9 @@ def draw_image(tweet):
     global line_number, current_dir
     raw_map_img = draw_places(Image.open(os.path.join(current_dir, '../assets/img/maps/' + LOCALIZATION + '.png')))
     raw_map_img_2 = draw_places(Image.open(os.path.join(current_dir, '../assets/img/maps/' + LOCALIZATION + '.png')))
-    rows = math.ceil(len(get_alive_players()) / RANKING_IMGS_PER_ROW) + math.ceil(len(get_dead_players()) / RANKING_IMGS_PER_ROW)
+    rows = math.ceil(len(get_alive_players()) / RANKING_IMGS_PER_ROW) + 2*(math.ceil(len(get_dead_players()) / RANKING_IMGS_PER_ROW))/3
 
-    RANKING_HEIGHT = rows * RANKING_SPACE_BETWEEN_ROWS + RANKING_PADDING * 2
+    RANKING_HEIGHT = int(rows * RANKING_SPACE_BETWEEN_ROWS + RANKING_PADDING * 2)
     blank_img = Image.new('RGB', (RANKING_WIDTH, RANKING_HEIGHT), color = BG_COLOR)
 
     main_image = None
@@ -132,7 +132,7 @@ def draw_places(image):
         if p.destroyed:
             paste_image(image, p.coord_x, p.coord_y, 40, 'destroyed')
         else:
-            paste_image(image, p.coord_x, p.coord_y, 38, 'place')
+            paste_image(image, p.coord_x, p.coord_y, 40, 'place')
     return image
 
 def get_main_image(image, tweet):
@@ -141,7 +141,7 @@ def get_main_image(image, tweet):
 
     for i, p in enumerate(place_list):
         if p.destroyed:
-            paste_image(image, p.coord_x, p.coord_y, 60, 'destroyed')
+            paste_image(image, p.coord_x, p.coord_y, 40, 'destroyed')
         else:
             if p.trap_by != None:
                 paste_image(image, p.coord_x, p.coord_y + 24, 48, 'trap')
@@ -394,7 +394,7 @@ def get_map_image(image, tweet):
 
     for i, p in enumerate(place_list):
         if p.destroyed:
-            paste_image(image, p.coord_x, p.coord_y, 100, 'destroyed')
+            paste_image(image, p.coord_x, p.coord_y, 40, 'destroyed')
         else:
             if p.trap_by != None:
                 paste_image(image, p.coord_x, p.coord_y + 24, 48, 'trap')
@@ -408,12 +408,13 @@ def get_ranking_image(image, tweet):
     row_index = 0
     col_index = 0
 
-    def draw_player_ranking(player, row_index, col_index):
+    def draw_player_ranking(player, row_index, col_index, is_dead = False):
         draw = ImageDraw.Draw(image)
 
         coord_x = RANKING_FIRST_COLUMN_X + (RANKING_DELTA_X * col_index)
         coord_y = RANKING_FIRST_ROW_Y + (RANKING_SPACE_BETWEEN_ROWS * row_index)
-
+        if is_dead:
+            coord_y = coord_y - int(RANKING_SPACE_BETWEEN_ROWS/3)
         paste_image(image, coord_x + 24, coord_y + 24, 48, '', player.avatar_dir)
         draw_wrapped_text(image, coord_x, coord_y + 50, RANKING_IMG_SIZE, 12, player.name, font_path, 10, 'rgb(0,0,0)')
         draw.rectangle((coord_x, coord_y, coord_x + 48, coord_y + 48), outline='rgb(0,0,0)')
@@ -487,7 +488,7 @@ def get_ranking_image(image, tweet):
             y_1 = coord_y + RANKING_DISTRICT_NAME_HEIGHT / 2 + 1
             draw.ellipse((x_0, y_0, x_1, y_1), fill='rgb(0,0,0)')
 
-    def draw_player_list_ranking(list, row_index, col_index, draw_rectangles = False):
+    def draw_player_list_ranking(list, row_index, col_index, draw_rectangles = False, dead_area = False):
         first_line = True
         for i, player in enumerate(list):
             if draw_rectangles:
@@ -500,7 +501,7 @@ def get_ranking_image(image, tweet):
                 if first_line:
                     draw_district_name(player.district.district_display_name, row_index, col_index, cols_width, i)
 
-            draw_player_ranking(player, row_index, col_index)
+            draw_player_ranking(player, row_index, col_index, dead_area)
             col_index = col_index + 1
 
             if col_index + 1 > RANKING_IMGS_PER_ROW:
@@ -525,6 +526,11 @@ def get_ranking_image(image, tweet):
             if (tweet.player != None and player.get_name() == tweet.player.get_name()) or (tweet.player_2 != None and player.get_name() == tweet.player_2.get_name()):
                 coord_x = RANKING_FIRST_COLUMN_X + (RANKING_DELTA_X * col_index)
                 coord_y = RANKING_FIRST_ROW_Y + (RANKING_SPACE_BETWEEN_ROWS * row_index)
+                if dead_area:
+                    coord_y = coord_y - int(RANKING_SPACE_BETWEEN_ROWS/3)
+                else:
+                    coord_y = coord_y - RANKING_DISTRICT_NAME_HEIGHT
+
                 draw.ellipse((coord_x - 50, coord_y - 50, coord_x + 100, coord_y + 100), outline='rgb(255,0,0)', width=5)
 
             col_index = col_index + 1
@@ -600,7 +606,7 @@ def get_ranking_image(image, tweet):
             if col_index > 0:
                 col_index = 0
                 row_index = row_index + 1
-            row_index, col_index = draw_player_list_ranking(dead_players, row_index, col_index)
+            row_index, col_index = draw_player_list_ranking(dead_players, row_index, col_index, False, True)
         drawn_player_list = drawn_player_list + dead_players
     else:
         alive_players_list = get_alive_players()
