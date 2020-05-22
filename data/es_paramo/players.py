@@ -140,8 +140,18 @@ raw_player_list = [
     [u'Diego', u'Apache_BaMbAm', 0, u'Ardoncino'],
     [u'María', u'mariiaa_ra', 1, u'Valencia de Don Juan'],
     [u'Anhy', u'anhy', 1, u'Grisuela del Páramo'],
-    [u'Raúl', u'heras_raul', 0, u'Villademor de la Vega']
-    
+    [u'Raúl', u'heras_raul', 0, u'Villademor de la Vega'],
+    [u'María', u'mariaallstar18', 1, u'Veguellina de Órbigo'],
+    [u'Víctor', u'Victor_hdf_AJ', 0, u'Veguellina de Órbigo'],
+    [u'María', u'TowerHealthy', 1, u'Veguellina de Órbigo'],
+    [u'Rubén', u'iRubensio', 0, u'San Feliz de Órbigo'],
+    [u'Silvia', u'silviamati07', 0, u'San Feliz de Órbigo'],
+    [u'Abel', u'reyweasley', 0, u'San Feliz de Órbigo'],
+    [u'', u'VictCoca', 0, u'San Feliz de Órbigo'],
+    [u'Mónica', u'monica260613', 1, u'San Feliz de Órbigo'],
+    [u'Alba', u'imnotalbap', 1, u'Veguellina de Órbigo'],
+    [u'Ditd', u'DITD98', 0, u'San Martín del Camino'],
+
     #No RT o follow
     #[u'Andrea', u'andree_228', 1, u'Laguna de Negrillos'],
     #[u'Hugo', u'huugocalleejo_', 0, u'Villagallegos'],
