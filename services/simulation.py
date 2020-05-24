@@ -100,7 +100,7 @@ def draw_image(tweet):
         map_image.save(output_dir + '/' + str(line_number) + '_map.png')
         ranking_image.save(output_dir + '/' + str(line_number) + '_ranking.png')
     elif tweet.type == Tweet_type.introduce_players:
-        map_image = get_map_image(raw_map_img_2, tweet)
+        map_image = get_main_image(raw_map_img_2, tweet)
         map_image.save(output_dir + '/' + str(line_number) + '_map.png')
     elif tweet.type == Tweet_type.destroyed_district:
         main_image = get_main_image(raw_map_img, tweet)
@@ -122,27 +122,26 @@ def draw_image(tweet):
 def draw_places(image):
     for i, p in enumerate(place_list):
         draw = ImageDraw.Draw(image)
-        font = ImageFont.truetype(font_path_2, size=10)
+        font = ImageFont.truetype(font_path_2, size=13)
         lines = get_multiline_wrapped_text(p.name, 50, font)
         for j, line in enumerate(lines):
             color = 'rgb(0,0,0)'
             if p.destroyed:
                 color = 'rgb(255,0,0)'
-            draw.text((p.coord_x + 15, p.coord_y + - 10 + j * 10), line, fill=color, font=font)
+            draw.text((p.coord_x + 15, p.coord_y + - 10 + j * 16), line, fill=color, font=font)
         if p.destroyed:
-            paste_image(image, p.coord_x, p.coord_y, 40, 'destroyed')
+            paste_image(image, p.coord_x, p.coord_y, 50, 'destroyed')
         else:
-            paste_image(image, p.coord_x, p.coord_y, 40, 'place')
+            paste_image(image, p.coord_x, p.coord_y, 50, 'place')
     return image
 
 def get_main_image(image, tweet):
     draw = ImageDraw.Draw(image)
+
     image.putalpha(128)  # Half alpha; alpha argument must be an int
 
     for i, p in enumerate(place_list):
-        if p.destroyed:
-            paste_image(image, p.coord_x, p.coord_y, 40, 'destroyed')
-        else:
+        if not p.destroyed:
             if p.trap_by != None:
                 paste_image(image, p.coord_x, p.coord_y + 24, 48, 'trap')
             if p.monster:
@@ -150,7 +149,8 @@ def get_main_image(image, tweet):
             if p.infected:
                 paste_image(image, p.coord_x + 12, p.coord_y, 48, 'infection')
 
-            draw_items(len(p.items), p.coord_x, p.coord_y, image, True)
+            if tweet.type != Tweet_type.introduce_players:
+                draw_items(len(p.items), p.coord_x, p.coord_y, image, True)
 
     if USE_DISTRICTS and (tweet.type == Tweet_type.introduce_players or tweet.type == Tweet_type.destroyed_district or tweet.type == Tweet_type.winner_districts or tweet.type == Tweet_type.atraction):
         if USE_FLAGS:
@@ -174,15 +174,7 @@ def get_main_image(image, tweet):
         if tweet.place_2 != None:
             draw_multiple_players(tweet, tweet.player_list_2, tweet.place_2.coord_x, tweet.place_2.coord_y, image, 50)
     elif tweet.type == Tweet_type.introduce_players:
-        if len(tweet.player_list) == 1:
-            paste_image(image, tweet.place.coord_x, tweet.place.coord_y, 48, '', tweet.player_list[0].avatar_dir)
-        elif len(tweet.player_list) == 2:
-            paste_image(image, tweet.place.coord_x - 25, tweet.place.coord_y, 48, '', tweet.player_list[0].avatar_dir)
-            paste_image(image, tweet.place.coord_x + 25, tweet.place.coord_y, 48, '', tweet.player_list[1].avatar_dir)
-        elif len(tweet.player_list) == 3:
-                paste_image(image, tweet.place.coord_x - 50, tweet.place.coord_y, 48, '', tweet.player_list[0].avatar_dir)
-                paste_image(image, tweet.place.coord_x, tweet.place.coord_y, 48, '', tweet.player_list[1].avatar_dir)
-                paste_image(image, tweet.place.coord_x + 50, tweet.place.coord_y, 48, '', tweet.player_list[2].avatar_dir)
+        draw_multiple_players(tweet, tweet.player_list, tweet.place.coord_x, tweet.place.coord_y, image, 50)
 
         if len(tweet.player_list_2) > 0:
             draw_multiple_players(tweet, tweet.player_list_2, tweet.place.coord_x, tweet.place.coord_y + 140, image, 50)
@@ -376,6 +368,7 @@ def get_main_image(image, tweet):
 
 def get_map_image(image, tweet):
     draw = ImageDraw.Draw(image)
+    paste_image(image, 150, 150, 250, 'watermark')
 
     for i, p in enumerate(place_list):
         if not p.destroyed:
@@ -724,11 +717,11 @@ def draw_multiple_players(tweet, players, coord_x, coord_y, image, delta_x, sing
             for i, player in enumerate(players):
                 paste_image(image, x, y, 24, '', players[i].avatar_dir)
                 if players[i].state == 0:
-                    draw.text((x - 30, y - 36), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path, size=50))
+                    draw.text((x - 15, y - 18), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path, size=25))
                 elif players[i].infected:
-                    paste_image(image, x + 24, y + 12, 36, 'infection')
+                    paste_image(image, x + 12, y + 6, 18, 'infection')
                 if tweet.type == Tweet_type.winner_districts:
-                    paste_image(image, x, y - 48, 72, 'crown')
+                    paste_image(image, x, y - 24, 36, 'crown')
 
                 x = x + int(delta_x/2)
                 if (i-8)%9 == 0:

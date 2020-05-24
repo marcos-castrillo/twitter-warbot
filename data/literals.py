@@ -82,25 +82,41 @@ def get_message(tweet):
         message = MONSTER_DISAPPEARED(tweet)
     elif tweet.type == Tweet_type.monster_killed:
         message = MONSTER_KILLED(tweet)
+    elif tweet.type == Tweet_type.somebody_got_cured:
+        message = CURED(tweet)
+
     return (message + '\n').encode('utf-8')
 
 def introduce_players(tweet):
     locals_str = ''
+    limit_length = 13
     if len(tweet.player_list) > 0:
-        for i, player in enumerate(tweet.player_list):
-            if i == 0:
-                locals_str = player.get_name()
-            elif i == len(tweet.player_list) - 1:
-                locals_str = u' '.join([locals_str, AND(), player.get_name()])
+        list = tweet.player_list
+        if len(list) > limit_length:
+            list = list[:limit_length]
+        for i, player in enumerate(list):
+            if len(list) > 8:
+                name = '@' + player.username
             else:
-                locals_str = locals_str + ', ' + player.get_name()
+                name = player.get_name()
+
+            if i == 0:
+                locals_str = name
+            elif i == len(tweet.player_list) - 1:
+                locals_str = u' '.join([locals_str, AND(), name])
+            else:
+                locals_str = locals_str + ', ' + name
+        if len(tweet.player_list) == limit_length + 1:
+            locals_str = locals_str + u' y otro más'
+        elif len(tweet.player_list) > limit_length:
+            locals_str = locals_str + u' y otros ' + str(len(tweet.player_list) - limit_length)
         locals_str = u' '.join([locals_str, INTRODUCE_PLACE(tweet)])
 
     sufix = ''
-    if len(tweet.player_list) > 0:
-        sufix = ' '
 
     if len(tweet.player_list_2) > 0:
+        sufix = ' '
+
         if tweet.inverse:
             sufix = sufix + TRIBUTES_NOT_ENOUGH(tweet.place.district_display_name)
             for i, player in enumerate(tweet.player_list_2):
@@ -171,7 +187,7 @@ def winner_districts(tweet):
     for i, player in enumerate(tweet.player_list):
         kills = kills + player.kills
 
-    return WINNER_DISTRICTS_COMPOSED(tributes_str, tweet.place.district_display_name, kills)
+    return WINNER_DISTRICTS_COMPOSED(tributes_str, tweet.place, kills)
 
 def somebody_got_injured(tweet):
     return I_COMPOSED(tweet.player, INJURE_ACTION(), tweet.item.name, has_now(tweet.player, tweet.item))
@@ -274,7 +290,15 @@ def somebody_moved(tweet):
     if any(x for x in tweet.place_2.water_connections if x.name == tweet.place.name):
         action = MOVE_ACTION_WATER()
 
-    return u' '.join((tweet.player.get_name(), action, tweet.place_2.name, TO, tweet.place.name + '.'))
+    sufix = u''
+    if tweet.double:
+        if tweet.inverse:
+            sufix = u' ' + STRONGER_DEFENSE(tweet)
+        else:
+            sufix = u' ' +  STRONGER_ATTACK(tweet)
+    elif tweet.item != None:
+        sufix = u' ' + FOUND_ON_THE_WAY(tweet) + u' ' + has_now(tweet.player, tweet.item)
+    return u' '.join((tweet.player.get_name(), action, tweet.place_2.name, TO, tweet.place.name + '.' + sufix))
 
 def destroyed(tweet):
     place = tweet.place
@@ -353,7 +377,7 @@ def destroyed_district(tweet):
             escaped.append(d.get_name())
         for i, d in enumerate(escaped):
             if i == 0:
-                sufix_str = ' ' + d
+                sufix_str = d
             elif i == len(escaped) - 1:
                 sufix_str = sufix_str + ' ' +  AND() + ' ' + d
             else:

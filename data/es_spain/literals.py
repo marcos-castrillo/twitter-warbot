@@ -7,6 +7,9 @@ import random
 def START(tweet):
     return u'¡Los participantes están listos! Ya conocemos la ubicación de cada uno de ellos. Que empiece la batalla.'
 
+def WINNER_DISTRICTS_COMPOSED(winners_str, district, kills_count):
+    return u' '.join((winners_str, u'han ganado, consiguiendo un total de', str(kills_count), u'muertes. ¡' + district.district_display_name, u'es la última ciudad en pie de España!'))
+
 def ATRACTION(place):
     if place == u'A Coruña':
         return u'Se han celebrado las Fiestas de Maria Pita en A Coruña y'
@@ -114,6 +117,22 @@ def ATRACTION(place):
         return u'Se han celebrado las Fiestas del Pilar en Zaragoza y'
     else:
         return u'Se han celebrado las fiestas de ' + place + u' y'
+
+def DESTROYED_DISTRICT(district, tributes_str):
+    if district.name != district.district_display_name:
+        return random.choice([
+            u'Los representantes de ' + district.district_display_name + u'(' + tributes_str  + u')' + u' han sido derrotados, así que ' + district.name + ' ha sido reducida a escombros.',
+            u'Ninguno de los representantes de ' + district.district_display_name + u'(' + tributes_str  + u')' + u' sigue con vida, por lo que ' + district.name + ' ha sido destruida.',
+        ])
+    else:
+        return random.choice([
+            district.name + u' está en ruinas, ya que ' + tributes_str  + u' han caído en combate. Otra vez será',
+            u'Los representantes de ' + district.name + u'(' + tributes_str  + u')' + u' no han estado a la altura y no la han conseguido salvar',
+            tributes_str + u' no han dado la talla y ' + district.name + u' ha sido demolida. ¡Una pena!',
+            u'Por desgracia, ' + district.name + u' no ha sido salvada por sus representantes (' + tributes_str  + u')',
+            tributes_str + u' han sido derrotados. El mundo echará de menos a ' + district.name,
+            tributes_str + u' nos han decepcionado a todos y ' + district.name + u' ha tenido que ser derruida'
+        ])
 
 def MONSTER_APPEARED(tweet):
     place = tweet.place

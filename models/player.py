@@ -18,6 +18,8 @@ class Player(object):
     injure_immunity = False
     infection_immunity = False
     infected = False
+    attack = 0
+    defense = 0
 
     # Constructor
     def __init__(self):
@@ -28,7 +30,7 @@ class Player(object):
         return
 
     def get_attack(self):
-        attack = 0
+        attack = self.attack
         for item in self.item_list:
             attack = attack + item.attack
         for injury in self.injury_list:
@@ -38,7 +40,7 @@ class Player(object):
         return attack
 
     def get_defense(self):
-        defense = 0
+        defense = self.defense
         for item in self.item_list:
             defense = defense + item.defense
         for injury in self.injury_list:

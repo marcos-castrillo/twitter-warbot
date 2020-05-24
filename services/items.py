@@ -122,16 +122,26 @@ def infect():
         write_tweet(tweet)
     elif len(infected_players) > 0:
         player = random.choice(infected_players)
-        kill_player(player)
-        tweet = Tweet()
-        tweet.type = Tweet_type.somebody_died_of_infection
-        tweet.place = player.location
-        tweet.player = player
-        write_tweet(tweet)
-        if USE_DISTRICTS:
-            destroy_tweet = destroy_district_if_needed(player.district)
-            if destroy_tweet != None:
-                write_tweet(destroy_tweet)
+        action_number = random.randint(1, 100)
+        if action_number > 75:
+            player.infected = False
+            player.infection_immunity = True
+            tweet = Tweet()
+            tweet.type = Tweet_type.somebody_got_cured
+            tweet.place = player.location
+            tweet.player = player
+            write_tweet(tweet)
+        else:
+            kill_player(player)
+            tweet = Tweet()
+            tweet.type = Tweet_type.somebody_died_of_infection
+            tweet.place = player.location
+            tweet.player = player
+            write_tweet(tweet)
+            if USE_DISTRICTS:
+                destroy_tweet = destroy_district_if_needed(player.district)
+                if destroy_tweet != None:
+                    write_tweet(destroy_tweet)
     else:
         return False
     return True

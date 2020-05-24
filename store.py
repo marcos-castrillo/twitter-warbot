@@ -116,6 +116,7 @@ def get_place_list():
         if item.get_rarity() == 3:
             item_list_3.append(item)
         random.shuffle(raw_place_list)
+
     for i, p in enumerate(raw_place_list):
         if len(p) == 3:
             p.append(None)
@@ -131,6 +132,9 @@ def get_place_list():
         place = Place(name, road_connections, coordinates, items, district_display_name, water_connections)
         list.append(place)
 
+    spare_item_list = item_list_1 + item_list_2 + item_list_3
+    spare_powerup_list = [x for x in spare_item_list if x.type == Item_type.powerup]
+
     for i, p in enumerate(list):
         initialize_connections_list(list, p)
 
@@ -141,7 +145,7 @@ def get_place_list():
             if not any(subconnection.name == p.name for subconnection in connection.connections):
                 sys.exit('Config error: ' + p.name + ' is not mutually connected to other place')
 
-    return list
+    return list, spare_powerup_list
 
 def initialize_tributes():
     global player_list
@@ -201,7 +205,15 @@ def initialize_tributes():
             tweet.player_list_2 = imported_tributes
             tweet.inverse = True
             tweet_list.append(tweet)
-
+    else:
+        place_list_sorted = sorted(place_list, key=lambda x: len(x.tributes))
+        district_list = [x for x in place_list_sorted if len(x.tributes) > 0]
+        for i,district in enumerate(district_list):
+            tweet = Tweet()
+            tweet.type = Tweet_type.introduce_players
+            tweet.place = district
+            tweet.player_list = district.tributes
+            tweet_list.append(tweet)
     #Friends list
     for j, place in enumerate(place_list):
         for k, tribute in enumerate(place.tributes):
@@ -307,7 +319,7 @@ def get_alive_players_count():
     return len([x for x in player_list if x.state == 1])
 
 def get_alive_districts_count():
-    return len([x for x in place_list if not x.destroyed])
+    return len([x for x in place_list if not x.destroyed and len([y for y in x.tributes if y.state == 1]) > 0])
 
 def move_player(player, new_location):
     player.location.players.pop(player.location.players.index(player))
@@ -397,7 +409,7 @@ def kill_player(player):
     player.injure_immunity = False
     player.infection_immunity = False
 
-place_list = get_place_list()
+place_list, spare_powerup_list = get_place_list()
 player_list = get_player_list(place_list)
 if USE_DISTRICTS:
     introduction_tweet_list = initialize_tributes()

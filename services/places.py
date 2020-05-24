@@ -159,10 +159,24 @@ def move():
             tweet.player_2 = trapped_by
             write_tweet(tweet)
     else:
+        tweet = Tweet()
+
+        if action_number > 90 and len(spare_powerup_list) > 0:
+            powerup = random.choice(spare_powerup_list)
+            player.powerup_list.append(powerup)
+            tweet.item = powerup
+
+        elif action_number > 80:
+            player.attack = player.attack + 2
+            tweet.double = True
+        elif action_number > 70:
+            player.defense = player.defense + 2
+            tweet.double = True
+            tweet.inverse = True
+
         old_location = player.location
         move_player(player, new_location)
 
-        tweet = Tweet()
         tweet.type = Tweet_type.somebody_moved
         tweet.place = player.location
         tweet.place_2 = old_location

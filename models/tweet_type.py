@@ -33,6 +33,7 @@ class Tweet_type(object):
     somebody_died_of_infection = 32
     somebody_was_infected = 33
     atraction = 34
+    somebody_got_cured = 35
 
     def __init__(self):
         pass

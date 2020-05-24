@@ -58,6 +58,13 @@ def COULDNT_MOVE(player):
         u' '.join((player.get_name(), u'se ha terminado toda la comida de', player.location.name, u'y no ha podido acceder a otros lugares, por lo que ha muerto de hambre.'))
     ])
 
+def CURED(tweet):
+    return random.choice([
+        u' '.join((tweet.player.get_name(), u'se ha curado del COVID-19.')),
+        u' '.join((tweet.player.get_name(), u'ya no tiene COVID-19.')),
+        u' '.join((u'¡' + tweet.player.get_name(), u'ha pasado la cuarentena y ya no tiene coronavirus!')),
+    ])
+
 def DESTROYED(place):
     return random.choice([
        u'Un meteorito ha caído en ' + place + u' y lo ha destruido',
@@ -73,22 +80,6 @@ def DESTROYED(place):
        place + u' se ha ido a la puta mierda',
        u'Una terrible sequía ha asolado ' + place
       ])
-
-def DESTROYED_DISTRICT(district, tributes_str):
-    if district.name != district.district_display_name:
-        return random.choice([
-            u'Los representantes de ' + district.district_display_name + u'(' + tributes_str  + u')' + u' han sido derrotados, así que ' + district.name + ' ha sido reducida a escombros.',
-            u'Ninguno de los representantes de ' + district.district_display_name + u'(' + tributes_str  + u')' + u' sigue con vida, por lo que ' + district.name + ' ha sido destruida.',
-        ])
-    else:
-        return random.choice([
-            district.name + u' está en ruinas, ya que ' + tributes_str  + u' han caído en combate. Otra vez será',
-            u'Los representantes de ' + district.name + u'(' + tributes_str  + u')' + u' no han estado a la altura y no la han conseguido salvar',
-            tributes_str + u' no han dado la talla y ' + district.name + u' ha sido demolida. ¡Una pena!',
-            u'Por desgracia, ' + district.name + u' no ha sido salvada por sus representantes (' + tributes_str  + u')',
-            tributes_str + u' han sido derrotados. El mundo echará de menos a ' + district.name,
-            tributes_str + u' nos han decepcionado a todos y ' + district.name + u' ha tenido que ser derruida'
-        ])
 
 def DIED(player, multiple = False):
     if multiple:
@@ -210,6 +201,13 @@ def FIND_ACTION():
         u'es tan manitas que se ha construido',
         u'vio a alguien desprevenido y le robó',
         u'se ha comprado en la deep web'
+    ])
+
+def FOUND_ON_THE_WAY(tweet):
+    return random.choice([
+        u'Además, se ha encontrado por el camino ' + tweet.item.name + '.',
+        u'Se ha comprado para el viaje ' + tweet.item.name + '.',
+        u'Ha hecho una paradita para comprar ' + tweet.item.name + '.',
     ])
 
 def FRIENDS_TIED(player_1, player_2):
@@ -388,7 +386,6 @@ def WAS_INFECTED(tweet):
         u'Alguien ha infectado a ' + player.get_name() + u' con el coronavirus.',
         player.get_name() + u' no se ha lavado las manos lo suficiente y ha contraído el coronavirus.',
         player.get_name() + u' debería de haber seguido las recomendaciones para no pillar el coronavirus.',
-        player.get_name() + u' ha contraído el coronavirus por ir al Mercadona a comprar papel higiénico.',
         player.get_name() + u' se saltó la cuarentena para fumarse uno y ha pillado el coronavirus.'
     ])
 
@@ -501,6 +498,24 @@ def STOLE_AND_REPLACED(tweet):
 
 def STOLE_AND_THREW(tweet):
     return u' '.join((STOLE(tweet), u'Como tiene cosas mejores, lo ha tirado a la basura.'))
+
+def STRONGER_ATTACK(tweet):
+    return random.choice([
+        u'Ha aprovechado el viaje para hacer unas flexiones y ha conseguido +2 en ataque',
+        u'A mitad de camino se ha parado para hacer unas sentadillas, ¡+2 en ataque!',
+        u'Hacía mucho tiempo que no se levantaba del sofá, así que ha ganado 2 en ataque.',
+        u'Ha ganado 2 en ataque por irse a la aventura.',
+        u'De repente se siente más fuerte... ¡+2 en ataque!',
+    ])
+
+def STRONGER_DEFENSE(tweet):
+    return random.choice([
+        u'Además, se ha puesto ' + get_x_or_y(tweet.player, u'rocoso', u'rocosa') + ' en el camino: ¡+2 en defensa!',
+        u'¡De tanto moverse ha ganado 2 en defensa!',
+        u'Hacía mucho tiempo que no se levantaba del sofá, así que ha conseguido +2 en defensa.',
+        u'Llevaba mucho sin salir de casa, por lo que ha ganado 2 en defensa.',
+        u'De repente se siente más fuerte... ¡+2 en defensa!',
+    ])
 
 def SUICIDE():
     return random.choice([
@@ -626,8 +641,5 @@ def WINNER_MULTI_KILL(kill_count):
 
 def WINNER_COMPOSED(winner, kills, item_list, infection):
     return u' '.join((u'¡' + winner.get_name(), u'ha ganado en ' + winner.location.name + '! ' + kills + item_list, 'El ataque de', winner.get_name(), u'llegó a ser de', str(winner.get_attack()), u'y su defensa de', str(winner.get_defense()) + '.', infection))
-
-def WINNER_DISTRICTS_COMPOSED(winners_str, district, kills_count):
-    return u' '.join((winners_str, u'han ganado, consiguiendo un total de', str(kills_count), u'muertes. ¡' + district, u'es la última ciudad en pie de España!'))
 
 WITH = u'con'
