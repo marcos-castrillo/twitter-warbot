@@ -368,7 +368,7 @@ def get_main_image(image, tweet):
 
 def get_map_image(image, tweet):
     draw = ImageDraw.Draw(image)
-    paste_image(image, 150, 150, 250, 'watermark')
+    paste_image(image, 150, 1250, 250, 'watermark')
 
     for i, p in enumerate(place_list):
         if not p.destroyed:
