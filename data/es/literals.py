@@ -60,9 +60,9 @@ def COULDNT_MOVE(player):
 
 def CURED(tweet):
     return random.choice([
-        u' '.join((tweet.player.get_name(), u'se ha curado del COVID-19.')),
-        u' '.join((tweet.player.get_name(), u'ya no tiene COVID-19.')),
-        u' '.join((u'¡' + tweet.player.get_name(), u'ha pasado la cuarentena y ya no tiene coronavirus!')),
+        u' '.join((tweet.player.get_name(), u'se ha curado del COVID-19. A partir de ahora es inmune al virus.')),
+        u' '.join((tweet.player.get_name(), u'ya no tiene COVID-19. A partir de ahora es inmune al virus.')),
+        u' '.join((u'¡' + tweet.player.get_name(), u'ha pasado la cuarentena y ya no tiene coronavirus! Además, a partir de ahora es inmune.')),
     ])
 
 def DESTROYED(place):

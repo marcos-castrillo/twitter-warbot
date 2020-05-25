@@ -153,7 +153,7 @@ raw_player_list = [
     [u'Ditd', u'DITD98', 0, u'San Martín del Camino'],
     [u'Jaume', u'Jaumep99', 0, u'San Martín del Camino'],
     [u'Pablo', u'Pablo_Converse', 0, u'Veguellina de Órbigo'],
-    [u'Goda', u'godametr', 0, u'Veguellina de Órbigo'],
+    [u'Goda', u'godagodametro', 0, u'Veguellina de Órbigo'],
     [u'Lucía', u'LuciaArancio', 1, u'Fojedo'],
     [u'Alejandro', u'akex_gonzalez', 0, u'Bustillo del Páramo'],
     [u'Ana', u'Anagonzaalezz_', 1, u'Bustillo del Páramo'],
@@ -178,11 +178,20 @@ raw_player_list = [
     [u'Rosana', u'rosanaalcaz_', 1, u'San Martín del Camino'],
     [u'Patri', u'patpl29_', 1, u'San Martín del Camino'],
     [u'Eva', u'evaleluya', 1, u'Regueras de Abajo'],
+    [u'Andrea', u'andree_228', 1, u'Laguna de Negrillos'],
+    [u'Henar', u'henarizquierdo', 1, u'San Martín del Camino'],
+    [u'Marc', u'Marckiuss', 0, u'Celadilla del Páramo'],
+    [u'Nuria', u'nuriamontesco', 1, u'Valdevimbre'],
+    [u'Silvia', u'silviiaafdez', 1, u'La Mata del Páramo'],
+    [u'Ana', u'anamglezz', 1, u'La Mata del Páramo'],
+    [u'Paula', u'paulaa_garcia', 1, u'Astorga'],
+    [u'Bea', u'BeaMtnezSutil', 1, u'Veguellina de Órbigo'],
+    [u'Hugo', u'2Hugo21', 0, u'Bercianos del Páramo'],
+    [u'Alex', u'alexdelrio33', 0, u'Regueras de Abajo'],
+    [u'Miguel', u'miguelgp_lgn', 0, u'Laguna de Negrillos'],
 
     #No RT o follow
-    #[u'Andrea', u'andree_228', 1, u'Laguna de Negrillos'],
     #[u'Hugo', u'huugocalleejo_', 0, u'Villagallegos'],
-    #[u'Henar', u'henarizquierdo', 1, u'San Martín del Camino'],
 
     #lugar incorrecto
     #[u'César', u'cgcJC', 0, u'Valjunco'],
