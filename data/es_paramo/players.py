@@ -98,7 +98,7 @@ raw_player_list = [
     [u'María', u'Mariialvvarez', 1, u'Fojedo'],
     [u'Nerey', u'ivrognee', 1, u'Bercianos del Páramo'],
     [u'Josele', u'jose_martrod', 0, u'Villar del Yermo'],
-    [u'Víctor', u'Victor_SM98', 0, u'San Martín del Camino'],
+    [u'Mielgo', u'Victor_SM98', 0, u'San Martín del Camino'],
     [u'Elena', u'elenaa__125', 1, u'San Martín del Camino'],
     [u'Iván', u'Ivan_96leon', 0, u'San Martín del Camino'],
     [u'Mirian', u'Mirian_grisu', 1, u'Grisuela del Páramo'],
@@ -189,6 +189,7 @@ raw_player_list = [
     [u'Hugo', u'2Hugo21', 0, u'Bercianos del Páramo'],
     [u'Alex', u'alexdelrio33', 0, u'Regueras de Abajo'],
     [u'Miguel', u'miguelgp_lgn', 0, u'Laguna de Negrillos'],
+    [u'Sergio', u'sergio_12sg', 0, u'La Bañeza'],
 
     #No RT o follow
     #[u'Hugo', u'huugocalleejo_', 0, u'Villagallegos'],
