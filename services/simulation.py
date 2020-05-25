@@ -368,7 +368,7 @@ def get_main_image(image, tweet):
 
 def get_map_image(image, tweet):
     draw = ImageDraw.Draw(image)
-    paste_image(image, 150, 1250, 250, 'watermark')
+    paste_image(image, 150, 1450, 250, 'watermark')
 
     for i, p in enumerate(place_list):
         if not p.destroyed:
@@ -670,7 +670,7 @@ def draw_multiple_players(tweet, players, coord_x, coord_y, image, delta_x, sing
                 draw.text((coord_x - 30 - int(delta_x/2), coord_y - 36), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path, size=50))
             elif players[0].infected:
                 paste_image(image, coord_x - int(delta_x/2) + 24, coord_y + 12, 36, 'infection')
-            if tweet.type == Tweet_type.winner_districts:
+            if tweet.type == Tweet_type.winner_districts and players[0].state == 1:
                 paste_image(image, coord_x - int(delta_x/2), coord_y - 48, 72, 'crown')
 
             paste_image(image, coord_x + int(delta_x/2), coord_y, 48, '', players[1].avatar_dir)
@@ -678,7 +678,7 @@ def draw_multiple_players(tweet, players, coord_x, coord_y, image, delta_x, sing
                 draw.text((coord_x - 30 + int(delta_x/2), coord_y - 36), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path, size=50))
             elif players[1].infected:
                 paste_image(image, coord_x + int(delta_x/2) + 24, coord_y + 12, 36, 'infection')
-            if tweet.type == Tweet_type.winner_districts:
+            if tweet.type == Tweet_type.winner_districts and players[1].state == 1:
                 paste_image(image, coord_x + int(delta_x/2), coord_y - 48, 72, 'crown')
 
         elif single_line:
@@ -690,7 +690,7 @@ def draw_multiple_players(tweet, players, coord_x, coord_y, image, delta_x, sing
                     draw.text((x - 30, y - 36), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path, size=50))
                 elif players[i].infected:
                     paste_image(image, x + 24, y + 12, 36, 'infection')
-                if tweet.type == Tweet_type.winner_districts:
+                if tweet.type == Tweet_type.winner_districts and players[i].state == 1:
                     paste_image(image, x, y - 48, 72, 'crown')
 
                 x = x + delta_x
@@ -704,7 +704,7 @@ def draw_multiple_players(tweet, players, coord_x, coord_y, image, delta_x, sing
                     draw.text((x - 30, y - 36), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path, size=50))
                 elif players[i].infected:
                     paste_image(image, x + 24, y + 12, 36, 'infection')
-                if tweet.type == Tweet_type.winner_districts:
+                if tweet.type == Tweet_type.winner_districts and players[i].state == 1:
                     paste_image(image, x, y - 48, 72, 'crown')
 
                 x = x + delta_x
@@ -720,7 +720,7 @@ def draw_multiple_players(tweet, players, coord_x, coord_y, image, delta_x, sing
                     draw.text((x - 15, y - 18), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path, size=25))
                 elif players[i].infected:
                     paste_image(image, x + 12, y + 6, 18, 'infection')
-                if tweet.type == Tweet_type.winner_districts:
+                if tweet.type == Tweet_type.winner_districts and players[i].state == 1:
                     paste_image(image, x, y - 24, 36, 'crown')
 
                 x = x + int(delta_x/2)

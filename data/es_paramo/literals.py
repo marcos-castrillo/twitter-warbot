@@ -90,9 +90,9 @@ def WINNER_DISTRICTS_COMPOSED(winners_str, district, kills_count):
         if tribute.kills > max_kills.kills:
             max_kills = tribute
     if len(winners_str) > 130:
-        return u' '.join((u'¡' + district.district_display_name, u'es el ganador de la Páramo War! Sus representantes han conseguido un total de', str(kills_count), u'muertes, siendo ' + max_kills.get_name() + u'quien más ha conseguido con ' + str(max_kills.kills) + u'.'))
+        return u' '.join((u'¡' + district.district_display_name, u'es el ganador de la Páramo War! Sus representantes han conseguido un total de', str(kills_count), u'muertes, siendo ' + max_kills.get_name() + u' quien más ha conseguido con ' + str(max_kills.kills) + u'.'))
     else:
-        return u' '.join((winners_str, u'han ganado, consiguiendo un total de', str(kills_count), u'muertes, siendo ' + max_kills.get_name() + u'quien más ha conseguido con ' + str(max_kills.kills) + u'. ¡' + district.district_display_name, u'es el ganador de la Páramo War!'))
+        return u' '.join((winners_str, u'han ganado, consiguiendo un total de', str(kills_count), u'muertes, siendo ' + max_kills.get_name() + u' quien más ha conseguido con ' + str(max_kills.kills) + u'. ¡' + district.district_display_name, u'es el ganador de la Páramo War!'))
 
 def MONSTER_APPEARED(tweet):
     place = tweet.place
