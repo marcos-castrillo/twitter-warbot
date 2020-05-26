@@ -88,14 +88,18 @@ raw_powerup_list = [
     [u'un cacharro de kalimotxo', 2, 1],
     [u'un rebujito', 2, 1],
     [u'un licor café', 2, 1],
-    [u'una horchata', 3, 3],
-    [u'un Knebep limón', 3, 3],
-    [u'un Larios limón', 3, 3],
-    [u'un Almirante cola', 3, 3],
-    [u'un Cacique cola', 3, 3],
-    [u'un Brugal cola', 3, 3],
-    [u'una botella de sidra', 3, 3],
-    [u'un JB cola', 3, 3]
+    [u'una botella de sidra', 2, 2],
+    [u'una horchata', 2, 2],
+    [u'un Knebep limón', 2, 2],
+    [u'un Seagrams tónica', 2, 1],
+    [u'un Beefeater limón', 2, 2],
+    [u'un Larios limón', 2, 2],
+    [u'un Almirante cola', 2, 2],
+    [u'un Ballantines cola', 2, 2],
+    [u'un Barceló cola', 1, 2],
+    [u'un Cacique cola', 2, 2],
+    [u'un Brugal cola', 2, 2],
+    [u'un JB cola', 2, 2]
 ]
 
 raw_special_list = [

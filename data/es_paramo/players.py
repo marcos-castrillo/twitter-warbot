@@ -190,6 +190,8 @@ raw_player_list = [
     [u'Alex', u'alexdelrio33', 0, u'Regueras de Abajo'],
     [u'Miguel', u'miguelgp_lgn', 0, u'Laguna de Negrillos'],
     [u'Sergio', u'sergio_12sg', 0, u'La Bañeza'],
+    [u'Ramón', u'lecunes', 0, u'Bercianos del Páramo'],
+    [u'Adrián', u'AdriGarcu23', 0, u'La Bañeza'],
 
     #No RT o follow
     #[u'Hugo', u'huugocalleejo_', 0, u'Villagallegos'],

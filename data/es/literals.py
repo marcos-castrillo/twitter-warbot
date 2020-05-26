@@ -36,12 +36,14 @@ def ALSO_STOLE():
         u'Como no le va a hacer falta, ha cogido',
         u'Además, le ha quitado',
         u'Además, ha saqueado',
-        u'También ha saqueado su cadáver y ha encontrado'
+        u'Le ha quitado',
+        u'Ha saqueado su cadáver y ha encontrado'
     ])
 
 def ALSO_INFECTING():
     return random.choice([
-        u'infectando también a'
+        u'infectando también a',
+        u'contagiando a',
     ])
 
 def AND():
@@ -103,7 +105,6 @@ def DIED(player, multiple = False):
 
 def DISTRICT_REBUILD(tweet):
     return random.choice([
-        u'Además, ¡su provincia (' + tweet.player.district.district_display_name + u') ha sido reconstruida!',
         u'¡' + tweet.player.district.district_display_name + u' ha sido reconstruida!',
         u'¡' + tweet.player.district.district_display_name + u' vuelve a estar en pie!',
         u'¡' + tweet.player.district.district_display_name + u' vuelve a la vida!'
@@ -115,6 +116,7 @@ def ESCAPED(player_1, player_2):
         player_1.get_name() + u' y ' + player_2.get_name() + u' se han encontrado, pero ' + player_2.name + u' ha huido cual cobarde a ' + player_2.location.name + u'.',
         player_1.get_name() + u' y ' + player_2.get_name() + u' han empezado a pelear, pero ' + player_2.name + u' sabía que tenía las de perder. Cogió un puñado de arena, se lo echó a ' + player_1.name + u' en los ojos y huyó a ' + player_2.location.name + u'.',
         player_2.get_name() + u' iba a pillar a ' + player_1.get_name() + u' por la espalda, pero ' + get_x_or_y(player_1, 'éste', 'ésta') + ' se dio cuenta en el último momento. ' + player_2.name + u' ha huido a ' + player_2.location.name + u'.',
+        player_2.get_name() + u' ha visto a ' + player_1.get_name() + u' y ha huido a ' + player_2.location.name + u'.',
         u'A ' + player_2.get_name() + u' le da miedo ' + player_1.get_name() + u' y ha huido a ' + player_2.location.name + u'.',
         u'A ' + player_2.get_name() + u' le da asco ' + player_1.get_name() + u' y se ha ido a ' + player_2.location.name + u'.',
         player_1.get_name() + u' se ha encarado con ' + player_2.get_name() + u', pero ' + player_2.name + u' se ha achantado y escapado a ' + player_2.location.name + u'.'
@@ -179,10 +181,8 @@ def FIND_ACTION():
         u'ha intercambiado ' + random.choice([u'dos cigarros', u'un porro', u'una chusta', 'una calada']) + ' por',
         u'ha ganado en una apuesta',
         u'se ha comprado en un estanco',
-        u'se ha comprado en un todo a cien',
-        u'se ha comprado clandestinamente',
         u'se ha comprado en un kiosko',
-        u'ha comprado en el ' + random.choice([u'Lidl', u'Corte Inglés', u'Alcampo', u'Carrefour', u'Mercadona', u'Día%', u'Masymas']),
+        #u'ha comprado en el ' + random.choice([u'Lidl', u'Corte Inglés', u'Alcampo', u'Carrefour', u'Mercadona', u'Día%', u'Masymas']),
         u'ha recibido un paquete de ' + random.choice([u'Ebay', u'Amazon', u'MediaMarkt']) + u' con',
         u'ha comprado por ' + random.choice([u'Wallapop']),
         u'ha ido al mercadillo y ha comprado',
@@ -193,11 +193,9 @@ def FIND_ACTION():
         u'se ha llevado por la puta cara',
         u'se ha llevado por su cara bonita',
         u'se ha llevado como premio en ' + random.choice([u'un concurso de talentos', u'una batalla de gallos', u'una concurso de baile', u'un show de belleza']),
-        u'se ha llevado en un sorteo de ' + random.choice([u'@HTCMania', u'@PcComponentes', u'la ONCE', u'Forocoches']),
+        #u'se ha llevado en un sorteo de ' + random.choice([u'HTCMania', u'PcComponentes', u'la ONCE', u'Forocoches']),
         u'llevaba mucho tiempo ahorrando para comprarse',
         u'iba por la calle cuando alguien le regaló',
-        u'llevaba meses coleccionando tapas de yogurt para conseguir',
-        u'ha ido coleccionando fascículos para montar',
         u'es tan manitas que se ha construido',
         u'vio a alguien desprevenido y le robó',
         u'se ha comprado en la deep web'
@@ -205,9 +203,10 @@ def FIND_ACTION():
 
 def FOUND_ON_THE_WAY(tweet):
     return random.choice([
-        u'Además, se ha encontrado por el camino ' + tweet.item.name + '.',
+        u'Por el camino se ha encontrado ' + tweet.item.name + '.',
         u'Se ha comprado para el viaje ' + tweet.item.name + '.',
         u'Ha hecho una paradita para comprar ' + tweet.item.name + '.',
+        u'En el trayecto se encontró ' + tweet.item.name + '.',
     ])
 
 def FRIENDS_TIED(player_1, player_2):
@@ -223,7 +222,12 @@ def FRIENDS_TIED(player_1, player_2):
 GETS_RID_OF = u'se ha deshecho de'
 
 def HAS_ALREADY_KILLED(kills_count):
-    return u' '.join((u'y ya lleva', kills_count, u'muertes'))
+    return random.choice([
+        u' '.join((u'y ya lleva', kills_count, u'muertes')),
+        u' '.join((u'y ya se ha cargado a', kills_count)),
+        u' '.join((u'y ya se ha despachado a', kills_count)),
+        u' '.join((u'y con éste ya van', kills_count)),
+    ])
 
 def HAS_NOW(attack, defense):
     if attack != None and defense != None:
@@ -250,6 +254,11 @@ def HAS_NOW(attack, defense):
 def I_COMPOSED(player, action, event, has_now, thrown_away_by = ''):
     return u' '.join((u'¡' + player.get_name(), action, event + thrown_away_by + '!', has_now))
 
+def INFECTED_EVERYBODY(tweet):
+    return random.choice([
+        u'Además, ha infectado a todos.',
+        u'Además, ha contagiado a todos.'
+    ])
 
 def INFECTION_IMMUNITY():
     return random.choice([

@@ -122,8 +122,8 @@ def draw_image(tweet):
 def draw_places(image):
     for i, p in enumerate(place_list):
         draw = ImageDraw.Draw(image)
-        font = ImageFont.truetype(font_path_2, size=13)
-        lines = get_multiline_wrapped_text(p.name, 50, font)
+        font = ImageFont.truetype(font_path_2, size=15)
+        lines = get_multiline_wrapped_text(p.name, 70, font)
         for j, line in enumerate(lines):
             color = 'rgb(0,0,0)'
             if p.destroyed:
@@ -368,7 +368,7 @@ def get_main_image(image, tweet):
 
 def get_map_image(image, tweet):
     draw = ImageDraw.Draw(image)
-    paste_image(image, 150, 1450, 250, 'watermark')
+    paste_image(image, 125, 1275, 150, 'watermark')
 
     for i, p in enumerate(place_list):
         if not p.destroyed:
@@ -696,7 +696,7 @@ def draw_multiple_players(tweet, players, coord_x, coord_y, image, delta_x, sing
                 x = x + delta_x
 
         elif len(players) <= 12:
-            x = coord_x - delta_x
+            x = coord_x - delta_x * 2
             y = coord_y
             for i, player in enumerate(players):
                 paste_image(image, x, y, 48, '', players[i].avatar_dir)
@@ -709,7 +709,7 @@ def draw_multiple_players(tweet, players, coord_x, coord_y, image, delta_x, sing
 
                 x = x + delta_x
                 if (i-4)%5 == 0:
-                    x = coord_x - delta_x
+                    x = coord_x - delta_x * 2
                     y = y + HEIGHT_BETWEEN_PLAYERS
         else:
             x = coord_x - int(delta_x/2)*4

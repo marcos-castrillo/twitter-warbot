@@ -89,7 +89,7 @@ def get_message(tweet):
 
 def introduce_players(tweet):
     locals_str = ''
-    limit_length = 13
+    limit_length = 12
     if len(tweet.player_list) > 0:
         list = tweet.player_list
         if len(list) > limit_length:
@@ -266,9 +266,9 @@ def somebody_killed(tweet):
 
     if len(kill_method) > 0:
         sufix = sufix + u' ' + kill_method
-    if len(kills_count) > 0:
+    if len(stole) == 0 and len(kills_count) > 0:
         sufix = sufix + u' ' + kills_count
-    if len(stole) > 0:
+    elif len(stole) > 0:
         sufix = sufix + '.'  + u' ' + stole
     sufix = sufix + '.'
 
@@ -287,18 +287,23 @@ def somebody_suicided(tweet):
 def somebody_moved(tweet):
     action = MOVE_ACTION_ROAD()
 
-    if any(x for x in tweet.place_2.water_connections if x.name == tweet.place.name):
+    if any(x for x in tweet.place_2.water_connections if x.name == tweet.place.name) or any(x for x in tweet.place.water_connections if x.name == tweet.place_2.name):
         action = MOVE_ACTION_WATER()
 
-    sufix = u''
+    improved = u''
     if tweet.double:
         if tweet.inverse:
-            sufix = u' ' + STRONGER_DEFENSE(tweet)
+            improved = u' ' + STRONGER_DEFENSE(tweet)
         else:
-            sufix = u' ' +  STRONGER_ATTACK(tweet)
+            improved = u' ' +  STRONGER_ATTACK(tweet)
     elif tweet.item != None:
-        sufix = u' ' + FOUND_ON_THE_WAY(tweet) + u' ' + has_now(tweet.player, tweet.item)
-    return u' '.join((tweet.player.get_name(), action, tweet.place_2.name, TO, tweet.place.name + '.' + sufix))
+        improved = u' ' + FOUND_ON_THE_WAY(tweet) + u' ' + has_now(tweet.player, tweet.item)
+
+    infection = u''
+    if tweet.player.infected and len(tweet.place.players) > 1:
+        infection = u' ' + INFECTED_EVERYBODY(tweet)
+
+    return u' '.join((tweet.player.get_name(), action, tweet.place_2.name, TO, tweet.place.name + '.' + improved + infection))
 
 def destroyed(tweet):
     place = tweet.place
@@ -394,6 +399,9 @@ def infected(tweet):
     if len(tweet.player_list) > 0:
         also = ' ' + ALSO_INFECTING() + ' '
         for i, player in enumerate(tweet.player_list):
+            if len(tweet.player_list) > 2 and i == 1:
+                also = u' '.join((also, AND(), OTHERS(len(tweet.player_list) - 1 - i)))
+                break
             if i == 0:
                 also = also + player.get_name()
             elif i == len(tweet.player_list) - 1:

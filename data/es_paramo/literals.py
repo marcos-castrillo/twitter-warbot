@@ -12,6 +12,8 @@ def ATRACTION(place):
         return u'Como son las grandes fiestas de Ardoncino (San Miguel),'
     elif place == u'Armellada':
         return u'Son las fiestas de Nuestra Señora de la Asunción en Armellada y'
+    elif place == u'Astorga':
+        return u'Son las fiestas de Santa Marta en Astorga y'
     elif place == u'Bustillo':
         return u'Son las fiestas de Bustillo (San Pedro) y'
     elif place == u'Bercianos del Páramo':
@@ -20,6 +22,8 @@ def ATRACTION(place):
         return u'Son las fiestas de Cabreros (San Miguel) y'
     elif place == u'Carrizo de la Ribera':
         return u'Son las Fiestas de la Virgen del Villar en Carrizo de la Ribera y'
+    elif place == u'La Bañeza':
+        return u'Se han celebrado las fiestas patronales de La Bañeza y'
     elif place == u'Laguna de Negrillos':
         return u'Se ha celebrado la Alubia y'
     elif place == u'Celadilla del Páramo':
@@ -63,7 +67,7 @@ def ATRACTION(place):
     elif place == u'Villar del Yermo':
         return u'Se han celebrado las fiestas de Santiago en Villar del Yermo y'
     elif place == u'Zambroncinos':
-        return u'Como es el X ZambronRock,'
+        return u'Como es el ZambronRock,'
     elif place == u'Zotes del Páramo':
         return u'Se ha celebrado el XXIII Zotes Rock y'
 
