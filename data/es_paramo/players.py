@@ -192,6 +192,10 @@ raw_player_list = [
     [u'Sergio', u'sergio_12sg', 0, u'La Bañeza'],
     [u'Ramón', u'lecunes', 0, u'Bercianos del Páramo'],
     [u'Adrián', u'AdriGarcu23', 0, u'La Bañeza'],
+    [u'Anita', u'anitagonzaleez_', 1, u'Valencia de Don Juan'],
+    [u'Adriana', u'adrianaa_llf', 1, u'Valencia de Don Juan'],
+    [u'Andrés', u'andresbarri12', 0, u'Valencia de Don Juan'],
+    [u'Carmen', u'Carmenferrom7', 1, u'Valencia de Don Juan'],
 
     #No RT o follow
     #[u'Hugo', u'huugocalleejo_', 0, u'Villagallegos'],

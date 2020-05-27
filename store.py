@@ -401,6 +401,8 @@ def kill_player(player):
     place.items = place.items + player.item_list
     place.players.pop(place.players.index(player))
     player.state = 0
+    player.attack = 0
+    player.defense = 0
     player.item_list = []
     player.injury_list = []
     player.powerup_list = []

@@ -14,7 +14,7 @@ def battle():
 
     kill_number = random.randint(0, 100)
     treasons_enabled = TREASONS_ENABLED_LIST[hour_count]
-    if are_friends(player_1, player_2) and (not treasons_enabled or (kill_number > 5 and kill_number < 95)):
+    if are_friends(player_1, player_2) and (not treasons_enabled or (kill_number > 15 and kill_number < 85)):
         return False
 
     factor = 50 + 2*(player_1.get_defense() + player_1.get_attack()) - 2*(player_2.get_attack() + player_2.get_defense())

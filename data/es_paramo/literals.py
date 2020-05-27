@@ -128,7 +128,7 @@ def MONSTER_KILLED(tweet):
     place = tweet.place
     return random.choice([
         player.get_name() + u' ha sido ' + get_x_or_y(player, 'arrestado', 'arrestada') + u' por la guardia de ' + place.name + u'. Aquí acaba su aventura.',
-         player.get_name() + ' tiene una pinta sospechosa y la guardia se lo ha llevado de ' + place.name + u' sólo por si acaso.',
+         player.get_name() + ' tiene una pinta sospechosa y la guardia se ' + get_x_or_y(player, 'lo', 'la') + ' ha llevado de ' + place.name + u' sólo por si acaso.',
         u'¡La guardia le ha pillado una bolsita a ' + player.get_name() + ' en ' + place.name + u' y se ' + get_x_or_y(player, 'lo', 'la') + u' han llevado a comisaría, hay que esconderla mejor!',
         u'La guardia ha desahuciado a palos a ' + player.get_name() + u' de ' + place.name + u'. ¡Game over!',
         u'La guardia ha detenido a ' + player.get_name() + u' por salir a correr en mitad de la cuarentena.',
@@ -176,7 +176,11 @@ def MOVED_ATRACTION_SING():
         u'se ha acercado a ver qué se cuece',
         u'ha llamado a un taxi para ir',
         u'ha ido en coche',
-        u'ha ido a bailar'
+        u'ha ido a bailar',
+        u'ha ido a mover el esqueleto',
+        u'ha ido a partir la pana',
+        u'ha ido a liarla',
+        u'ha ido a perrear',
     ])
 
 def MOVED_ATRACTION_PL():
@@ -184,7 +188,11 @@ def MOVED_ATRACTION_PL():
         u'se han acercado a ver qué se cuece',
         u'han llamado a un taxi para ir',
         u'han ido en coche',
-        u'han ido a bailar'
+        u'han ido a bailar',
+        u'han ido a mover el esqueleto',
+        u'han ido a partir la pana',
+        u'han ido a liarla',
+        u'han ido a perrear',
     ])
 
 def PRAISE(player):
