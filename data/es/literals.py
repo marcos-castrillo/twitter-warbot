@@ -271,6 +271,15 @@ def INFECTION_IMMUNITY():
 def INJURE_ACTION():
     return random.choice([u'ha recibido', u'ha padecido'])
 
+def INJURE_ON_THE_WAY(tweet):
+    action = INJURE_ACTION()
+    return random.choice([
+        u' '.join([u'¡Pero por el camino', action, tweet.item.name + '!']),
+        u' '.join([u'¡Aunque durante el viaje', tweet.item.name + '!']),
+        u' '.join([u'Por desgracia, ha tenido que parar un rato porque', tweet.item.name + '.']),
+        u' '.join([u'¡En el trayecto', tweet.item.name + '!']),
+    ])
+
 def INJURE_IMMUNITY():
     return random.choice([
         u'¡A partir de ahora no sufrirá heridas ni lesiones!',

@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from data.config import LOCALIZATION
 from models.tweet_type import Tweet_type
+from models.item_type import Item_type
 from store import are_friends
 
 if LOCALIZATION == 'es_paramo' or LOCALIZATION == 'es_spain' or LOCALIZATION == 'es_interneto':
@@ -26,8 +27,6 @@ def get_message(tweet):
         message = winner_districts(tweet)
     elif tweet.type == Tweet_type.nobody_won:
         message = NOBODY_WON(tweet)
-    elif tweet.type == Tweet_type.somebody_got_injured:
-        message = somebody_got_injured(tweet)
     elif tweet.type == Tweet_type.somebody_got_special:
         message = somebody_got_special(tweet)
     elif tweet.type == Tweet_type.somebody_found_item:
@@ -78,8 +77,6 @@ def get_message(tweet):
         message = infected(tweet)
     elif tweet.type == Tweet_type.atraction:
         message = atraction(tweet)
-    elif tweet.type == Tweet_type.monster_disappeared:
-        message = MONSTER_DISAPPEARED(tweet)
     elif tweet.type == Tweet_type.monster_killed:
         message = MONSTER_KILLED(tweet)
     elif tweet.type == Tweet_type.somebody_got_cured:
@@ -95,7 +92,7 @@ def introduce_players(tweet):
         if len(list) > limit_length:
             list = list[:limit_length]
         for i, player in enumerate(list):
-            if len(list) > 8:
+            if len(list) > 7:
                 name = '@' + player.username
             else:
                 name = player.get_name()
@@ -188,9 +185,6 @@ def winner_districts(tweet):
         kills = kills + player.kills
 
     return WINNER_DISTRICTS_COMPOSED(tributes_str, tweet.place, kills)
-
-def somebody_got_injured(tweet):
-    return I_COMPOSED(tweet.player, INJURE_ACTION(), tweet.item.name, has_now(tweet.player, tweet.item))
 
 def somebody_got_special(tweet):
     immunity = ''
@@ -285,25 +279,29 @@ def somebody_suicided(tweet):
     return u' '.join((tweet.player.get_name(), SUICIDE()))
 
 def somebody_moved(tweet):
-    action = MOVE_ACTION_ROAD()
-
-    if any(x for x in tweet.place_2.water_connections if x.name == tweet.place.name) or any(x for x in tweet.place.water_connections if x.name == tweet.place_2.name):
+    if any(x for x in tweet.place_2.water_connections if x.name == tweet.place.name) or len(tweet.place.road_connections) == 0 or len(tweet.place_2.road_connections) == 0:
         action = MOVE_ACTION_WATER()
+    else:
+        action = MOVE_ACTION_ROAD()
 
-    improved = u''
+    item = u''
     if tweet.double:
         if tweet.inverse:
-            improved = u' ' + STRONGER_DEFENSE(tweet)
+            item = u' ' + STRONGER_DEFENSE(tweet)
         else:
-            improved = u' ' +  STRONGER_ATTACK(tweet)
+            item = u' ' +  STRONGER_ATTACK(tweet)
     elif tweet.item != None:
-        improved = u' ' + FOUND_ON_THE_WAY(tweet) + u' ' + has_now(tweet.player, tweet.item)
+        print(tweet.type == Item_type.injury)
+        if tweet.item.type == Item_type.powerup:
+            item = u' ' + FOUND_ON_THE_WAY(tweet) + u' ' + has_now(tweet.player, tweet.item)
+        elif tweet.item.type == Item_type.injury:
+            item = u' ' + INJURE_ON_THE_WAY(tweet) + u' ' + has_now(tweet.player, tweet.item)
 
     infection = u''
     if tweet.player.infected and len(tweet.place.players) > 1:
         infection = u' ' + INFECTED_EVERYBODY(tweet)
 
-    return u' '.join((tweet.player.get_name(), action, tweet.place_2.name, TO, tweet.place.name + '.' + improved + infection))
+    return u' '.join((tweet.player.get_name(), action, tweet.place_2.name, TO, tweet.place.name + '.' + item + infection))
 
 def destroyed(tweet):
     place = tweet.place

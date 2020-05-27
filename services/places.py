@@ -160,12 +160,11 @@ def move():
             write_tweet(tweet)
     else:
         tweet = Tweet()
-
+        print(action_number)
         if action_number > 90 and len(spare_powerup_list) > 0:
             powerup = random.choice(spare_powerup_list)
             player.powerup_list.append(powerup)
             tweet.item = powerup
-
         elif action_number > 80:
             player.attack = player.attack + 2
             tweet.double = True
@@ -173,6 +172,11 @@ def move():
             player.defense = player.defense + 2
             tweet.double = True
             tweet.inverse = True
+        elif action_number > 50 and not player.injure_immunity:
+            injury = random.choice(injury_list)
+            player.injury_list.append(injury)
+            tweet.item = injury
+            print(injury.name)
 
         old_location = player.location
         move_player(player, new_location)
@@ -217,10 +221,7 @@ def monster():
                 tweet.place_2 = place
                 write_tweet(tweet)
             else:
-                tweet = Tweet()
-                tweet.type = Tweet_type.monster_disappeared
-                tweet.place = place
-                write_tweet(tweet)
+                return False
     else:
         loc_candidates = [x for x in place_list if not x.destroyed]
 

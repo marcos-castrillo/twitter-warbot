@@ -165,7 +165,7 @@ def get_main_image(image, tweet):
     if tweet.type == Tweet_type.somebody_suicided or tweet.type == Tweet_type.monster_killed or tweet.type == Tweet_type.trapped or tweet.type == Tweet_type.somebody_died_of_infection:
         paste_image(image, tweet.place.coord_x, tweet.place.coord_y, 48, '', tweet.player.avatar_dir)
         draw.text((tweet.place.coord_x - 30, tweet.place.coord_y - 36), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path, size=50))
-    elif tweet.type == Tweet_type.winner or tweet.type == Tweet_type.somebody_got_injured or tweet.type == Tweet_type.somebody_got_special or tweet.type == Tweet_type.somebody_found_item or tweet.type == Tweet_type.somebody_replaced_item or tweet.type == Tweet_type.somebody_revived or tweet.type == Tweet_type.somebody_moved or tweet.type == Tweet_type.trap or tweet.type == Tweet_type.trap_dodged or tweet.type == Tweet_type.somebody_powerup or tweet.type == Tweet_type.somebody_was_infected:
+    elif tweet.type == Tweet_type.winner or tweet.type == Tweet_type.somebody_got_special or tweet.type == Tweet_type.somebody_found_item or tweet.type == Tweet_type.somebody_replaced_item or tweet.type == Tweet_type.somebody_revived or tweet.type == Tweet_type.somebody_moved or tweet.type == Tweet_type.trap or tweet.type == Tweet_type.trap_dodged or tweet.type == Tweet_type.somebody_powerup or tweet.type == Tweet_type.somebody_was_infected:
         paste_image(image, tweet.place.coord_x, tweet.place.coord_y, 48, '', tweet.player.avatar_dir)
         if tweet.player.infected:
             paste_image(image, tweet.place.coord_x + 24, tweet.place.coord_y + 12, 36, 'infection')
@@ -293,9 +293,6 @@ def get_main_image(image, tweet):
         if tweet.type == Tweet_type.winner:
             paste_image(image, tweet.place.coord_x, tweet.place.coord_y - 48, 72, 'crown')
 
-        if tweet.type == Tweet_type.winner or tweet.type == Tweet_type.winner_districts:
-            paste_image(image, 80, 80, 248, 'winner')
-
         x = tweet.place.coord_x
         y = tweet.place.coord_y
         zoom2 = zoom * 2
@@ -325,8 +322,6 @@ def get_main_image(image, tweet):
             paste_image(image, 80, 80, 256, 'weapon_2')
         elif tweet.item.get_rarity() == 3:
             paste_image(image, 80, 80, 256, 'weapon_3')
-    elif tweet.type == Tweet_type.somebody_got_injured:
-        paste_image(image, 80, 80, 256, 'injure')
     elif tweet.type == Tweet_type.somebody_got_special:
         if tweet.item.get_rarity() == 1:
             paste_image(image, 80, 80, 256, 'special_1')
@@ -343,7 +338,7 @@ def get_main_image(image, tweet):
             paste_image(image, 80, 80, 256, 'powerup_3')
     elif tweet.type == Tweet_type.somebody_tied_and_became_friend or tweet.type == Tweet_type.somebody_tied_and_was_friend:
         paste_image(image, 80, 80, 256, 'heart')
-    elif tweet.type == Tweet_type.monster_moved or tweet.type == Tweet_type.monster_killed or tweet.type == Tweet_type.monster_appeared or tweet.type == Tweet_type.monster_disappeared:
+    elif tweet.type == Tweet_type.monster_moved or tweet.type == Tweet_type.monster_killed or tweet.type == Tweet_type.monster_appeared:
         paste_image(image, 80, 80, 256, 'monster')
     elif tweet.type == Tweet_type.trap_dodged or tweet.type == Tweet_type.trapped or tweet.type == Tweet_type.trap:
         paste_image(image, 80, 80, 256, 'trap')
@@ -363,7 +358,10 @@ def get_main_image(image, tweet):
         paste_image(image, 80, 80, 256, 'infection')
     elif tweet.type == Tweet_type.atraction:
         paste_image(image, 80, 80, 256, 'atraction')
-
+    elif tweet.type == Tweet_type.somebody_got_cured:
+        paste_image(image, 80, 80, 256, 'cure')
+    elif tweet.type == Tweet_type.winner or tweet.type == Tweet_type.winner_districts:
+        paste_image(image, 80, 80, 248, 'winner')
     return image
 
 def get_map_image(image, tweet):
@@ -430,9 +428,9 @@ def get_ranking_image(image, tweet):
             draw.text((coord_x - 7, coord_y - 35), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path, size=70))
         else:
             if player.infected:
-                paste_image(image, coord_x + 24 + 24, coord_y + 24 + 12, 36, 'infection')
+                paste_image(image, coord_x + 48, coord_y + 24 + 12, 36, 'infection')
             if len(player.item_list) == 2:
-                paste_image(image, coord_x + 5, coord_y + 5, 32, get_item_rarity(player.item_list[1]))
+                paste_image(image, coord_x + 44, coord_y + 5, 32, get_item_rarity(player.item_list[1]))
             if len(player.item_list) > 0:
                 paste_image(image, coord_x + 5, coord_y + 5, 32, get_item_rarity(player.item_list[0]))
             if player.injure_immunity:

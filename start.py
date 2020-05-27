@@ -17,7 +17,7 @@ from services.players import *
 from services.places import *
 from services.api import initialize_avatars
 
-simulation_probab = Simulation_Probab(PROBAB_SUICIDE[0], PROBAB_REVIVE[0], PROBAB_TRAP[0], PROBAB_INFECT[0], PROBAB_DESTROY[0], PROBAB_INJURE[0], PROBAB_ATRACT[0], PROBAB_MONSTER[0], PROBAB_STEAL[0], PROBAB_MOVE[0], PROBAB_ITEM[0], PROBAB_BATTLE[0])
+simulation_probab = Simulation_Probab(PROBAB_SUICIDE[0], PROBAB_REVIVE[0], PROBAB_TRAP[0], PROBAB_INFECT[0], PROBAB_DESTROY[0], PROBAB_ATRACT[0], PROBAB_MONSTER[0], PROBAB_STEAL[0], PROBAB_MOVE[0], PROBAB_ITEM[0], PROBAB_BATTLE[0])
 finished = False
 
 def initialize():
@@ -43,7 +43,7 @@ def simulate_day():
     hour_count = hour_count + 1
     for i, th in enumerate(THRESHOLD_LIST):
         if hour_count == th:
-            simulation_probab = Simulation_Probab(PROBAB_SUICIDE[i], PROBAB_REVIVE[i], PROBAB_TRAP[i], PROBAB_INFECT[i], PROBAB_DESTROY[i], PROBAB_INJURE[i], PROBAB_ATRACT[i], PROBAB_MONSTER[i], PROBAB_STEAL[i], PROBAB_MOVE[i], PROBAB_ITEM[i], PROBAB_BATTLE[i])
+            simulation_probab = Simulation_Probab(PROBAB_SUICIDE[i], PROBAB_REVIVE[i], PROBAB_TRAP[i], PROBAB_INFECT[i], PROBAB_DESTROY[i], PROBAB_ATRACT[i], PROBAB_MONSTER[i], PROBAB_STEAL[i], PROBAB_MOVE[i], PROBAB_ITEM[i], PROBAB_BATTLE[i])
     do_something()
 
     if USE_DISTRICTS and get_alive_districts_count() <= 1:
@@ -65,8 +65,6 @@ def do_something():
         completed = infect()
     elif action_number < simulation_probab.destroy_action_number:
         completed = destroy()
-    elif action_number < simulation_probab.injure_action_number:
-        completed = injure()
     elif action_number < simulation_probab.atract_action_number:
         completed = atract()
     elif action_number < simulation_probab.monster_action_number:

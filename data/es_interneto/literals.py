@@ -22,15 +22,6 @@ def MONSTER_APPEARED(tweet):
         u'Se ha producido una serie de altercados en ' + place.name + u', por lo que la policía se ha visto obligada a desplazarse allí.',
     ])
 
-def MONSTER_DISAPPEARED(tweet):
-    place = tweet.place
-
-    return random.choice([
-        u'¡La policía se ha esfumado de ' + place.name + u'!',
-        u'La policía ya no está en ' + place.name + '.',
-        u'Se acabó el turno de la policía, por lo que se han ido de ' + place.name + u'.'
-    ])
-
 def MONSTER_IMMUNITY():
     return random.choice([
         u'¡A partir de ahora la policía no le hará nada!',

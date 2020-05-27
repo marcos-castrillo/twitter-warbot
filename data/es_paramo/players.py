@@ -51,7 +51,7 @@ raw_player_list = [
     [u'Ivo', u'ivopd_01', 0, u'Bercianos del Páramo'],
     [u'Carla', u'__carlag', 1, u'Laguna de Negrillos'],
     [u'Lorena', u'lore_macu16', 1, u'Cebrones del Río'],
-    [u'Sokram', u'Sokram', 0, u'Bercianos del Páramo'],
+    [u'Sokram', u'Sokram', 0, u'Bercianos del Páramo', [u'un Barceló cola']],
     [u'Sergio', u'SergioRenton', 0, u'Tabuyuelo de Jamuz'],
     [u'Noe', u'k3rfuffle_', 1, u'Roperuelos del Páramo'],
     [u'Lagandi', u'Lagandi', 0, u'Laguna de Negrillos'],

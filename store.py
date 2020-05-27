@@ -15,7 +15,7 @@ from models.item_type import Item_type
 from models.tweet_type import Tweet_type
 
 def get_item_list():
-    list = []
+    item_list = []
 
     for i, p in enumerate(raw_weapon_list):
         item = Item()
@@ -23,7 +23,7 @@ def get_item_list():
         item.name = p[0]
         item.defense = p[1]
         item.attack = p[2]
-        list.append(item)
+        item_list.append(item)
 
     for i, p in enumerate(raw_powerup_list):
         item = Item()
@@ -31,7 +31,7 @@ def get_item_list():
         item.name = p[0]
         item.defense = p[1]
         item.attack = p[2]
-        list.append(item)
+        item_list.append(item)
 
     for i, p in enumerate(raw_special_list):
         item = Item()
@@ -40,12 +40,12 @@ def get_item_list():
         item.monster_immunity = p[1]
         item.injure_immunity = p[2]
         item.infection_immunity = p[3]
-        list.append(item)
+        item_list.append(item)
 
-    return list
+    return item_list
 
 def get_place_list():
-    list = []
+    place_list = []
     item_list_1 = []
     item_list_2 = []
     item_list_3 = []
@@ -108,12 +108,24 @@ def get_place_list():
         place.road_connections = road_connections_list
         place.water_connections = water_connections_list
 
+    reserved_items = []
+    for i, p in enumerate(raw_player_list):
+        if len(p) > 4 and p[4] != None:
+            if (not isinstance(p[4], list) or len(p[4]) > 2):
+                sys.exit('Config error: Item list for player ' + p[0] + ' is not an array or contains more than 2 items.')
+            for j, item_name in enumerate(p[4]):
+                reserved_item = [x for x in item_list if x.name == item_name]
+                if len(reserved_item) == 0:
+                    sys.exit('Config error: Reserved item doesnt exist: ' + item_name)
+                reserved_items.append(reserved_item[0])
+                item_list.pop(item_list.index(reserved_item[0]))
+
     for i, item in enumerate(item_list):
         if item.get_rarity() == 1:
             item_list_1.append(item)
-        if item.get_rarity() == 2:
+        elif item.get_rarity() == 2:
             item_list_2.append(item)
-        if item.get_rarity() == 3:
+        elif item.get_rarity() == 3:
             item_list_3.append(item)
         random.shuffle(raw_place_list)
 
@@ -130,22 +142,22 @@ def get_place_list():
         water_connections = p[4]
 
         place = Place(name, road_connections, coordinates, items, district_display_name, water_connections)
-        list.append(place)
+        place_list.append(place)
 
     spare_item_list = item_list_1 + item_list_2 + item_list_3
     spare_powerup_list = [x for x in spare_item_list if x.type == Item_type.powerup]
 
-    for i, p in enumerate(list):
-        initialize_connections_list(list, p)
+    for i, p in enumerate(place_list):
+        initialize_connections_list(place_list, p)
 
-    for i, p in enumerate(list):
+    for i, p in enumerate(place_list):
         if len(p.connections) == 0:
             sys.exit('Config error: place without connections: ' + p.name)
         for j, connection in enumerate(p.connections):
             if not any(subconnection.name == p.name for subconnection in connection.connections):
                 sys.exit('Config error: ' + p.name + ' is not mutually connected to other place')
 
-    return list, spare_powerup_list
+    return place_list, spare_powerup_list, reserved_items
 
 def initialize_tributes():
     global player_list
@@ -223,7 +235,7 @@ def initialize_tributes():
             tribute.friend_list = tribute.friend_list + [x for x in place.tributes if x.name != tribute.name]
     return tweet_list
 
-def get_player_list(place_list):
+def get_player_list(place_list, reserved_items):
     player_list = []
 
     if MAX_TRIBUTES_PER_DISTRICT > 0 and USE_DISTRICTS and len(raw_player_list) > len(place_list) * MAX_TRIBUTES_PER_DISTRICT:
@@ -239,12 +251,13 @@ def get_player_list(place_list):
         #initial items
         initial_items = []
         if len(p) > 4:
-            if initial_items != None and (not isinstance(initial_items, player_list) or len(initial_items) > 2):
-                sys.exit('Config error: Item list for player ' + self.name + ' is not an array or contains more than 2 items.')
-            for item in p[4]:
-                reserved_item = [x for x in item_list if not x.name == item.name]
-                initial_items.append(reserved_item)
-                item_list.pop(item_list.index(reserved_item))
+            for item_name in p[4]:
+                reserved_item = [x for x in reserved_items if x.name == item_name]
+                if len(reserved_item) == 0:
+                    sys.exit('Config error: Reserved item doesnt exist: ' + item_name)
+
+                initial_items.append(reserved_item[0])
+                reserved_items.pop(reserved_items.index(reserved_item[0]))
         player.item_list = initial_items
 
         player_list.append(player)
@@ -264,24 +277,24 @@ def get_player_list(place_list):
     return player_list
 
 def get_injury_list():
-    list = []
+    injury_list = []
     for i, p in enumerate(raw_injury_list):
         item = Item()
         item.type = Item_type.injury
         item.name = p[0]
         item.defense = p[1]
         item.attack = p[2]
-        list.append(item)
-    return list
+        injury_list.append(item)
+    return injury_list
 
 def get_player_by_name(name):
     return next(p for p in player_list if p.name == name)
 
 def get_two_players_in_random_place():
-    list = [x for x in place_list if len(x.players) > 1]
+    candidates_list = [x for x in place_list if len(x.players) > 1]
 
-    while len(list) > 0:
-        place = random.choice(list)
+    while len(candidates_list) > 0:
+        place = random.choice(candidates_list)
         player_1 = None
         player_2 = None
 
@@ -295,7 +308,7 @@ def get_two_players_in_random_place():
             alive.pop(alive.index(player_1))
             player_2 = random.choice(alive)
         else:
-            list.pop(list.index(place))
+            candidates_list.pop(candidates_list.index(place))
 
         if player_1 != None and player_2 != None:
             if are_friends(player_1, player_2):
@@ -411,8 +424,8 @@ def kill_player(player):
     player.injure_immunity = False
     player.infection_immunity = False
 
-place_list, spare_powerup_list = get_place_list()
-player_list = get_player_list(place_list)
+place_list, spare_powerup_list, reserved_items = get_place_list()
+player_list = get_player_list(place_list, reserved_items)
 if USE_DISTRICTS:
     introduction_tweet_list = initialize_tributes()
 injury_list = get_injury_list()

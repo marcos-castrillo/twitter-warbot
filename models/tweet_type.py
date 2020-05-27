@@ -9,7 +9,6 @@ class Tweet_type(object):
     somebody_stole_and_replaced = 8
     somebody_stole_and_threw = 9
     somebody_got_special = 10
-    somebody_got_injured = 11
     somebody_found_item = 12
     somebody_replaced_item = 13
     introduce_players = 14
@@ -27,7 +26,6 @@ class Tweet_type(object):
     trap_dodged = 26
     destroyed_district = 27
     monster_appeared = 28
-    monster_disappeared = 29
     monster_moved = 30
     monster_killed = 31
     somebody_died_of_infection = 32

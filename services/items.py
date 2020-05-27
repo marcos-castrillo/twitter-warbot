@@ -145,15 +145,3 @@ def infect():
     else:
         return False
     return True
-
-def injure():
-    alive_players = [x for x in get_alive_players() if not x.injure_immunity]
-    player = random.choice(alive_players)
-    injury = random.choice(injury_list)
-    player.injury_list.append(injury)
-    tweet = Tweet()
-    tweet.type = Tweet_type.somebody_got_injured
-    tweet.place = player.location
-    tweet.item = injury
-    tweet.player = player
-    write_tweet(tweet)
