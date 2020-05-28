@@ -196,6 +196,20 @@ raw_player_list = [
     [u'Adriana', u'adrianaa_llf', 1, u'Valencia de Don Juan'],
     [u'Andrés', u'andresbarri12', 0, u'Valencia de Don Juan'],
     [u'Carmen', u'Carmenferrom7', 1, u'Valencia de Don Juan'],
+    [u'Álex', u'alexdegeaaaa', 0, u'Carral de la Vega'],
+    [u'Gemma', u'Gemma_Hidalgo99', 1, u'Carral de la Vega'],
+    [u'Laura', u'natallauu', 1, u'Grisuela del Páramo'],
+    [u'Elena', u'elenagrisuu', 1, u'Grisuela del Páramo'],
+    [u'Andrea', u'andreagrisuela', 1, u'Grisuela del Páramo'],
+    [u'Nicolás', u'nicolasalba99', 0, u'Urdiales del Páramo'],
+    [u'Sandra', u'Sandri_Carrera', 1, u'Trobajo del Camino'],
+    [u'Lucía', u'lucia_pequee', 1, u'Trobajo del Camino'],
+    [u'Neretva', u'neretvaM', 1, u'Trobajo del Camino'],
+    [u'Carlotita', u'carlotitaalvarz', 1, u'Trobajo del Camino'],
+    [u'Mónica', u'Moonicaperez1', 1, u'Trobajo del Camino'],
+    [u'Cynthia', u'cyncrispac', 1, u'Trobajo del Camino'],
+    [u'Alba', u'_albalonso', 1, u'La Milla del Río'],
+
 
     #No RT o follow
     #[u'Hugo', u'huugocalleejo_', 0, u'Villagallegos'],

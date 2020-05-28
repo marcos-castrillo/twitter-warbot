@@ -3,12 +3,13 @@
 
 # Name, connections, coordinates
 raw_place_list = [
-    [u'Valderrey', [u'Riego de la Vega',u'Astorga'], [192, 708]],
-    [u'Astorga', [u'Villamejil', u'San Román de la Vega', u'Riego de la Vega', u'Valderrey', u'Hospital de Órbigo', u'San Feliz de Órbigo', u'Armellada', u'Celadilla del Páramo'], [129, 540]],
+    [u'Valderrey', [u'Riego de la Vega',u'Astorga',u'Carral de la Vega'], [192, 708]],
+    [u'Astorga', [u'Villamejil', u'San Román de la Vega', u'Riego de la Vega', u'Valderrey', u'Carral de la Vega',u'Hospital de Órbigo', u'San Feliz de Órbigo', u'Armellada', u'Celadilla del Páramo'], [129, 540]],
     [u'San Román de la Vega', [u'Astorga', u'Villamejil', u'Hospital de Órbigo', u'San Feliz de Órbigo', u'Armellada', u'Celadilla del Páramo'], [170, 465]],
     [u'Villamejil', [u'Astorga',u'San Román de la Vega', u'San Feliz de Órbigo', u'Armellada', u'Celadilla del Páramo'], [188, 249]],
-    [u'Riego de la Vega', [u'Valderrey',u'Veguellina de Órbigo',u'La Bañeza',u'Astorga'], [293, 754]],
-    [u'Veguellina de Órbigo', [u'Riego de la Vega',u'Hospital de Órbigo',u'Villoria de Órbigo'], [480, 599]],
+    [u'Riego de la Vega', [u'Valderrey',u'Veguellina de Órbigo',u'La Bañeza',u'Astorga',u'Carral de la Vega'], [293, 754]],
+    [u'Carral de la Vega', [u'Valderrey',u'Veguellina de Órbigo',u'Riego de la Vega',u'Astorga'], [310, 659]],
+    [u'Veguellina de Órbigo', [u'Riego de la Vega',u'Hospital de Órbigo',u'Villoria de Órbigo',u'Carral de la Vega'], [480, 599]],
     [u'Villoria de Órbigo', [u'Veguellina de Órbigo',u'La Bañeza'], [479, 713]],
     [u'Hospital de Órbigo', [u'Veguellina de Órbigo',u'San Feliz de Órbigo',u'San Martín del Camino',u'San Román de la Vega',u'Astorga',u'Urdiales del Páramo',u'Grisuela del Páramo'], [506, 517]],
     [u'San Feliz de Órbigo', [u'Hospital de Órbigo',u'Armellada',u'Celadilla del Páramo',u'Villamejil',u'Astorga',u'San Román de la Vega'], [458, 435]],

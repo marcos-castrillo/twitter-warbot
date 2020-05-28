@@ -160,7 +160,6 @@ def move():
             write_tweet(tweet)
     else:
         tweet = Tweet()
-        print(action_number)
         if action_number > 90 and len(spare_powerup_list) > 0:
             powerup = random.choice(spare_powerup_list)
             player.powerup_list.append(powerup)
@@ -176,7 +175,6 @@ def move():
             injury = random.choice(injury_list)
             player.injury_list.append(injury)
             tweet.item = injury
-            print(injury.name)
 
         old_location = player.location
         move_player(player, new_location)

@@ -291,7 +291,6 @@ def somebody_moved(tweet):
         else:
             item = u' ' +  STRONGER_ATTACK(tweet)
     elif tweet.item != None:
-        print(tweet.type == Item_type.injury)
         if tweet.item.type == Item_type.powerup:
             item = u' ' + FOUND_ON_THE_WAY(tweet) + u' ' + has_now(tweet.player, tweet.item)
         elif tweet.item.type == Item_type.injury:
