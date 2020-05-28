@@ -4,7 +4,7 @@
 import random
 
 from data.config import *
-from store import player_list, place_list, get_alive_players_count
+from store import player_list, get_alive_players_count
 
 from models.tweet import Tweet
 from models.tweet_type import Tweet_type

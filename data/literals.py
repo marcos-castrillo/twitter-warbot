@@ -65,8 +65,6 @@ def get_message(tweet):
         message = STOLE_AND_REPLACED(tweet)
     elif tweet.type == Tweet_type.somebody_stole_and_threw:
         message = STOLE_AND_THREW(tweet)
-    elif tweet.type == Tweet_type.somebody_powerup:
-        message = somebody_powerup(tweet)
     elif tweet.type == Tweet_type.monster_appeared:
         message = MONSTER_APPEARED(tweet)
     elif tweet.type == Tweet_type.monster_moved:
@@ -196,9 +194,6 @@ def somebody_got_special(tweet):
         immunity = INFECTION_IMMUNITY()
     return I_COMPOSED(tweet.player, SPECIAL_ACTION(), tweet.item.name, immunity)
 
-def somebody_powerup(tweet):
-    return I_COMPOSED(tweet.player, POWERUP_ACTION(), tweet.item.name, has_now(tweet.player, tweet.item))
-
 def somebody_found_item(tweet):
     if tweet.item.thrown_away_by != None:
         thrown_away_by = FROM(tweet.item.thrown_away_by.name)
@@ -298,7 +293,10 @@ def somebody_moved(tweet):
 
     infection = u''
     if tweet.player.infected and len(tweet.place.players) > 1:
-        infection = u' ' + INFECTED_EVERYBODY(tweet)
+        if tweet.unfriend:
+            infection = u' ' + INFECTED_EVERYBODY(tweet)
+        else:
+            infection = u' ' + SOMEBODY_INFECTED(tweet)
 
     return u' '.join((tweet.player.get_name(), action, tweet.place_2.name, TO, tweet.place.name + '.' + item + infection))
 

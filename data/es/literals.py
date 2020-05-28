@@ -203,10 +203,19 @@ def FIND_ACTION():
 
 def FOUND_ON_THE_WAY(tweet):
     return random.choice([
-        u'Por el camino se ha encontrado ' + tweet.item.name + '.',
-        u'Se ha comprado para el viaje ' + tweet.item.name + '.',
-        u'Ha hecho una paradita para comprar ' + tweet.item.name + '.',
-        u'En el trayecto se encontró ' + tweet.item.name + '.',
+        u' '.join([u'Por el camino se ha encontrado', tweet.item.name + '.']),
+        u' '.join([u'Se ha comprado para el viaje', tweet.item.name + '.']),
+        u' '.join([u'Ha hecho una paradita para comprar', tweet.item.name + '.']),
+        u' '.join([u'En el trayecto se encontró', tweet.item.name + '.']),
+        u' '.join([u'Estaba a punto de llegar cuando encontró', tweet.item.name + '.']),
+        u' '.join([u'Cuando estaba a punto de llegar, encontró', tweet.item.name + '.']),
+        u' '.join([u'Acababa de salir cuando cogió', tweet.item.name + '.']),
+        u' '.join([u'A mitad de camino se encontró', tweet.item.name + '.']),
+        u' '.join([u'Por el camino recogió', tweet.item.name + '.']),
+        u' '.join([u'¡Durante el viaje se encontró', tweet.item.name + '!']),
+        u' '.join([u'Durante el viaje encontró', tweet.item.name + '.']),
+        u' '.join([u'Ha tenido que parar para recoger', tweet.item.name + '.']),
+        u' '.join([u'¡En el trayecto se ha llevado', tweet.item.name + '!']),
     ])
 
 def FRIENDS_TIED(player_1, player_2):
@@ -274,10 +283,17 @@ def INJURE_ACTION():
 def INJURE_ON_THE_WAY(tweet):
     action = INJURE_ACTION()
     return random.choice([
+        u' '.join([u'Estaba a punto de llegar cuando', action, tweet.item.name + '.']),
+        u' '.join([u'Cuando estaba a punto de llegar,', action, tweet.item.name + '.']),
+        u' '.join([u'Acababa de salir cuando', action, tweet.item.name + '.']),
+        u' '.join([u'A mitad de camino', action, tweet.item.name + '.']),
+        u' '.join([u'Por el camino', action, tweet.item.name + '.']),
         u' '.join([u'¡Pero por el camino', action, tweet.item.name + '!']),
-        u' '.join([u'¡Aunque durante el viaje', tweet.item.name + '!']),
-        u' '.join([u'Por desgracia, ha tenido que parar un rato porque', tweet.item.name + '.']),
-        u' '.join([u'¡En el trayecto', tweet.item.name + '!']),
+        u' '.join([u'¡Aunque durante el viaje', action, tweet.item.name + '!']),
+        u' '.join([u'Durante el viaje', action, tweet.item.name + '.']),
+        u' '.join([u'Ha tenido que parar porque', action, tweet.item.name + '.']),
+        u' '.join([u'Por desgracia, ha tenido que parar un rato porque', action,  tweet.item.name + '.']),
+        u' '.join([u'¡En el trayecto', action, tweet.item.name + '!']),
     ])
 
 def INJURE_IMMUNITY():
@@ -475,12 +491,6 @@ def MOVED_PL():
         u'han ido a'
     ])
 
-def POWERUP_ACTION():
-    return random.choice([
-        u'ha cogido',
-        u'ha encontrado'
-    ])
-
 def SLEEP():
     return random.choice([
         u'Los participantes se han ido a dormir tras un largo día.',
@@ -505,6 +515,9 @@ def SLEEP():
         u'Hello darkness, my old friend. I´ve come to talk with you again.',
     ])
 
+def SOMEBODY_INFECTED(tweet):
+    return random.choice([u'Por desgracia, alguien le ha infectado.'])
+
 def SPECIAL_ACTION():
     return random.choice([u'ha encontrado', u'ha cogido'])
 
@@ -519,7 +532,7 @@ def STOLE_AND_THREW(tweet):
 
 def STRONGER_ATTACK(tweet):
     return random.choice([
-        u'Ha aprovechado el viaje para hacer unas flexiones y ha conseguido +2 en ataque',
+        u'Ha aprovechado el viaje para hacer unas flexiones y ha conseguido +2 en ataque.',
         u'A mitad de camino se ha parado para hacer unas sentadillas, ¡+2 en ataque!',
         u'Hacía mucho tiempo que no se levantaba del sofá, así que ha ganado 2 en ataque.',
         u'Ha ganado 2 en ataque por irse a la aventura.',

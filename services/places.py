@@ -131,13 +131,16 @@ def move():
 
     action_number = random.randint(1, 100)
 
+    tweet = Tweet()
+
     if new_location.trap_by != None and new_location.trap_by != player:
         if action_number < 50:
             trapped_by = new_location.trap_by
             new_location.trap_by.kills = new_location.trap_by.kills + 1
+            if player.infected:
+                tweet.unfriend = True
             move_player(player, new_location)
             kill_player(player)
-            tweet = Tweet()
             tweet.type = Tweet_type.trapped
             tweet.place = player.location
             tweet.player = player
@@ -150,7 +153,8 @@ def move():
         else:
             trapped_by = new_location.trap_by
             new_location.trap_by = None
-
+            if player.infected:
+                tweet.unfriend = True
             move_player(player, new_location)
             tweet = Tweet()
             tweet.type = Tweet_type.trap_dodged
@@ -160,8 +164,8 @@ def move():
             write_tweet(tweet)
     else:
         tweet = Tweet()
-        if action_number > 90 and len(spare_powerup_list) > 0:
-            powerup = random.choice(spare_powerup_list)
+        if action_number > 90 and len(powerup_list) > 0:
+            powerup = random.choice(powerup_list)
             player.powerup_list.append(powerup)
             tweet.item = powerup
         elif action_number > 80:
@@ -171,12 +175,14 @@ def move():
             player.defense = player.defense + 2
             tweet.double = True
             tweet.inverse = True
-        elif action_number > 50 and not player.injure_immunity:
+        elif action_number > 60 and not player.injure_immunity:
             injury = random.choice(injury_list)
             player.injury_list.append(injury)
             tweet.item = injury
 
         old_location = player.location
+        if player.infected:
+            tweet.unfriend = True
         move_player(player, new_location)
 
         tweet.type = Tweet_type.somebody_moved

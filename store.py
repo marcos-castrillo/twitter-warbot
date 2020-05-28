@@ -25,14 +25,6 @@ def get_item_list():
         item.attack = p[2]
         item_list.append(item)
 
-    for i, p in enumerate(raw_powerup_list):
-        item = Item()
-        item.type = Item_type.powerup
-        item.name = p[0]
-        item.defense = p[1]
-        item.attack = p[2]
-        item_list.append(item)
-
     for i, p in enumerate(raw_special_list):
         item = Item()
         item.type = Item_type.special
@@ -43,6 +35,17 @@ def get_item_list():
         item_list.append(item)
 
     return item_list
+
+def get_powerup_list():
+    powerup_list = []
+    for i, p in enumerate(raw_powerup_list):
+        item = Item()
+        item.type = Item_type.powerup
+        item.name = p[0]
+        item.defense = p[1]
+        item.attack = p[2]
+        powerup_list.append(item)
+    return powerup_list
 
 def get_place_list():
     place_list = []
@@ -108,18 +111,6 @@ def get_place_list():
         place.road_connections = road_connections_list
         place.water_connections = water_connections_list
 
-    reserved_items = []
-    for i, p in enumerate(raw_player_list):
-        if len(p) > 4 and p[4] != None:
-            if (not isinstance(p[4], list) or len(p[4]) > 2):
-                sys.exit('Config error: Item list for player ' + p[0] + ' is not an array or contains more than 2 items.')
-            for j, item_name in enumerate(p[4]):
-                reserved_item = [x for x in item_list if x.name == item_name]
-                if len(reserved_item) == 0:
-                    sys.exit('Config error: Reserved item doesnt exist: ' + item_name)
-                reserved_items.append(reserved_item[0])
-                item_list.pop(item_list.index(reserved_item[0]))
-
     for i, item in enumerate(item_list):
         if item.get_rarity() == 1:
             item_list_1.append(item)
@@ -145,7 +136,6 @@ def get_place_list():
         place_list.append(place)
 
     spare_item_list = item_list_1 + item_list_2 + item_list_3
-    spare_powerup_list = [x for x in spare_item_list if x.type == Item_type.powerup]
 
     for i, p in enumerate(place_list):
         initialize_connections_list(place_list, p)
@@ -157,7 +147,7 @@ def get_place_list():
             if not any(subconnection.name == p.name for subconnection in connection.connections):
                 sys.exit('Config error: ' + p.name + ' is not mutually connected to other place')
 
-    return place_list, spare_powerup_list, reserved_items
+    return place_list
 
 def initialize_tributes():
     global player_list
@@ -235,7 +225,7 @@ def initialize_tributes():
             tribute.friend_list = tribute.friend_list + [x for x in place.tributes if x.name != tribute.name]
     return tweet_list
 
-def get_player_list(place_list, reserved_items):
+def get_player_list(place_list):
     player_list = []
 
     if MAX_TRIBUTES_PER_DISTRICT > 0 and USE_DISTRICTS and len(raw_player_list) > len(place_list) * MAX_TRIBUTES_PER_DISTRICT:
@@ -252,13 +242,13 @@ def get_player_list(place_list, reserved_items):
         initial_items = []
         if len(p) > 4:
             for item_name in p[4]:
-                reserved_item = [x for x in reserved_items if x.name == item_name]
+                reserved_item = [x for x in powerup_list if x.name == item_name]
                 if len(reserved_item) == 0:
                     sys.exit('Config error: Reserved item doesnt exist: ' + item_name)
 
                 initial_items.append(reserved_item[0])
-                reserved_items.pop(reserved_items.index(reserved_item[0]))
-        player.item_list = initial_items
+                powerup_list.pop(powerup_list.index(reserved_item[0]))
+        player.powerup_list = initial_items
 
         player_list.append(player)
 
@@ -424,8 +414,9 @@ def kill_player(player):
     player.injure_immunity = False
     player.infection_immunity = False
 
-place_list, spare_powerup_list, reserved_items = get_place_list()
-player_list = get_player_list(place_list, reserved_items)
+place_list = get_place_list()
+powerup_list = get_powerup_list()
+player_list = get_player_list(place_list)
 if USE_DISTRICTS:
     introduction_tweet_list = initialize_tributes()
 injury_list = get_injury_list()

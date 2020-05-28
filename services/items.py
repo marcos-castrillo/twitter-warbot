@@ -24,8 +24,6 @@ def pick_item():
 
     if item.type == Item_type.weapon:
         success = pick_weapon(player, item)
-    elif item.type == Item_type.powerup:
-        success = pick_powerup(player, item)
     elif item.type == Item_type.special:
         success = pick_special(player, item)
 
@@ -61,18 +59,6 @@ def pick_weapon(player, weapon):
             write_tweet(tweet)
         else:
             return False
-    return True
-
-def pick_powerup(player, powerup):
-    player.powerup_list.append(powerup)
-    player.location.items.pop(player.location.items.index(powerup))
-    tweet = Tweet()
-    tweet.type = Tweet_type.somebody_powerup
-    tweet.place = player.location
-    tweet.item = powerup
-    tweet.player = player
-
-    write_tweet(tweet)
     return True
 
 def pick_special(player, special):
