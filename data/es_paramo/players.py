@@ -122,7 +122,7 @@ raw_player_list = [
     [u'Lucilda', u'luciferceive', 1, u'Celadilla del Páramo'],
     [u'Mata', u'dani1229mata', 0, u'Santa María del Páramo'],
     [u'Pérez', u'javierperezJP', 0, u'Villamorico'],
-    [u'Inés', u'InesSutil', 0, u'Grisuela del Páramo'],
+    [u'Inés', u'InesSutil', 1, u'Grisuela del Páramo'],
     [u'Adrio', u'Adrio_aac', 0, u'Villamorico'],
     [u'Quique', u'quiquemeando', 0, u'Villamorico'],
     [u'Lucía', u'luciaa_rio', 1, u'Valdevimbre'],
@@ -145,7 +145,7 @@ raw_player_list = [
     [u'Víctor', u'Victor_hdf_AJ', 0, u'Veguellina de Órbigo'],
     [u'María', u'TowerHealthy', 1, u'Veguellina de Órbigo'],
     [u'Rubensio', u'iRubensio', 0, u'San Feliz de Órbigo'],
-    [u'Silvia', u'silviamati07', 0, u'San Feliz de Órbigo'],
+    [u'Silvia', u'silviamati07', 1, u'San Feliz de Órbigo'],
     [u'Abel', u'reyweasley', 0, u'San Feliz de Órbigo'],
     [u'Víctor', u'VictCoca', 0, u'San Feliz de Órbigo'],
     [u'Monicus', u'monica260613', 1, u'San Feliz de Órbigo'],
@@ -209,14 +209,4 @@ raw_player_list = [
     [u'Mónica', u'Moonicaperez1', 1, u'Trobajo del Camino'],
     [u'Cynthia', u'cyncrispac', 1, u'Trobajo del Camino'],
     [u'Alba', u'_albalonso', 1, u'La Milla del Río'],
-
-
-    #No RT o follow
-    #[u'Hugo', u'huugocalleejo_', 0, u'Villagallegos'],
-
-    #lugar incorrecto
-    #[u'César', u'cgcJC', 0, u'Valjunco'],
-
-    #Cuenta privada
-
 ]

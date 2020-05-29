@@ -84,9 +84,6 @@ def kill(player_1, player_2, place, factor, action_number, inverse):
     place.players.pop(place.players.index(killed))
     killed.state = 0
 
-    for i, item in enumerate(killed.item_list):
-        item.thrown_away_by = killed
-
     write_tweet(tweet)
     kill_player(killed)
 
@@ -227,7 +224,8 @@ def kill_player(player):
         item.thrown_away_by = player
 
     place.items = place.items + player.item_list
-    place.players.pop(place.players.index(player))
+    #place.players.pop(place.players.index(player))
+    #player.state = 0
     player.state = 0
     player.attack = 0
     player.defense = 0

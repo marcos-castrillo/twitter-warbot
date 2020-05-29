@@ -234,7 +234,8 @@ def HAS_ALREADY_KILLED(kills_count):
     return random.choice([
         u' '.join((u'y ya lleva', kills_count, u'muertes')),
         u' '.join((u'y ya se ha cargado a', kills_count)),
-        u' '.join((u'y ya se ha despachado a', kills_count)),
+        u' '.join((u'y ya ha despachado a', kills_count)),
+        u' '.join((u'y ya van', kills_count)),
         u' '.join((u'y con éste ya van', kills_count)),
     ])
 
@@ -278,7 +279,7 @@ def INFECTION_IMMUNITY():
     ])
 
 def INJURE_ACTION():
-    return random.choice([u'ha recibido', u'ha padecido'])
+    return random.choice([u'recibió', u'padeció'])
 
 def INJURE_ON_THE_WAY(tweet):
     action = INJURE_ACTION()

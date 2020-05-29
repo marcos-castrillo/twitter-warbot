@@ -7,6 +7,7 @@ raw_weapon_list = raw_weapon_list + [
     [u'una gorra de Fernando Alonso', 1, 0],
     [u'un saco de patatas', 1, 0],
     [u'una camiseta de The Skalzos', 1, 1],
+    [u'una camiseta del Paramés', 1, 1],
     [u'un escudo con forma de Q', 2, 0],
     [u'un azadón', 0, 2],
     [u'unas botas de regar', 2, 0],
