@@ -203,18 +203,18 @@ def FIND_ACTION():
 
 def FOUND_ON_THE_WAY(tweet):
     return random.choice([
-        u' '.join([u'Por el camino se ha encontrado', tweet.item.name + '.']),
-        u' '.join([u'Se ha comprado para el viaje', tweet.item.name + '.']),
-        u' '.join([u'Ha hecho una paradita para comprar', tweet.item.name + '.']),
-        u' '.join([u'En el trayecto se encontró', tweet.item.name + '.']),
-        u' '.join([u'Estaba a punto de llegar cuando encontró', tweet.item.name + '.']),
-        u' '.join([u'Cuando estaba a punto de llegar, encontró', tweet.item.name + '.']),
-        u' '.join([u'Acababa de salir cuando cogió', tweet.item.name + '.']),
-        u' '.join([u'A mitad de camino se encontró', tweet.item.name + '.']),
-        u' '.join([u'Por el camino recogió', tweet.item.name + '.']),
+        u' '.join([u'¡Por el camino se ha encontrado', tweet.item.name + u'!']),
+        u' '.join([u'¡Se ha comprado para el viaje', tweet.item.name + u'!']),
+        u' '.join([u'¡Ha hecho una paradita para comprar', tweet.item.name + u'!']),
+        u' '.join([u'¡En el trayecto se encontró', tweet.item.name + u'!']),
+        u' '.join([u'¡Estaba a punto de llegar cuando encontró', tweet.item.name + u'!']),
+        u' '.join([u'¡Cuando estaba a punto de llegar, encontró', tweet.item.name + u'!']),
+        u' '.join([u'¡Acababa de salir cuando cogió', tweet.item.name + u'!']),
+        u' '.join([u'¡A mitad de camino se encontró', tweet.item.name + u'!']),
+        u' '.join([u'¡Por el camino recogió', tweet.item.name + u'!']),
         u' '.join([u'¡Durante el viaje se encontró', tweet.item.name + '!']),
-        u' '.join([u'Durante el viaje encontró', tweet.item.name + '.']),
-        u' '.join([u'Ha tenido que parar para recoger', tweet.item.name + '.']),
+        u' '.join([u'¡Durante el viaje encontró', tweet.item.name + u'!']),
+        u' '.join([u'¡Ha tenido que parar para recoger', tweet.item.name + u'!']),
         u' '.join([u'¡En el trayecto se ha llevado', tweet.item.name + '!']),
     ])
 
@@ -283,16 +283,16 @@ def INJURE_ACTION():
 def INJURE_ON_THE_WAY(tweet):
     action = INJURE_ACTION()
     return random.choice([
-        u' '.join([u'Estaba a punto de llegar cuando', action, tweet.item.name + '.']),
-        u' '.join([u'Cuando estaba a punto de llegar,', action, tweet.item.name + '.']),
-        u' '.join([u'Acababa de salir cuando', action, tweet.item.name + '.']),
-        u' '.join([u'A mitad de camino', action, tweet.item.name + '.']),
-        u' '.join([u'Por el camino', action, tweet.item.name + '.']),
+        u' '.join([u'¡Estaba a punto de llegar cuando', action, tweet.item.name + '!']),
+        u' '.join([u'¡Cuando estaba a punto de llegar,', action, tweet.item.name + '!']),
+        u' '.join([u'¡Acababa de salir cuando', action, tweet.item.name + '!']),
+        u' '.join([u'¡A mitad de camino', action, tweet.item.name + '!']),
+        u' '.join([u'¡Por el camino', action, tweet.item.name + '!']),
         u' '.join([u'¡Pero por el camino', action, tweet.item.name + '!']),
         u' '.join([u'¡Aunque durante el viaje', action, tweet.item.name + '!']),
-        u' '.join([u'Durante el viaje', action, tweet.item.name + '.']),
-        u' '.join([u'Ha tenido que parar porque', action, tweet.item.name + '.']),
-        u' '.join([u'Por desgracia, ha tenido que parar un rato porque', action,  tweet.item.name + '.']),
+        u' '.join([u'¡Durante el viaje', action, tweet.item.name + '!']),
+        u' '.join([u'¡Ha tenido que parar porque', action, tweet.item.name + '!']),
+        u' '.join([u'Por desgracia, ha tenido que parar un rato porque', action,  tweet.item.name + '...']),
         u' '.join([u'¡En el trayecto', action, tweet.item.name + '!']),
     ])
 
@@ -519,7 +519,13 @@ def SLEEP():
     ])
 
 def SOMEBODY_INFECTED(tweet):
-    return random.choice([u'Por desgracia, alguien le ha infectado.'])
+    return random.choice([
+        u'Por desgracia, alguien le ha infectado con el COVID-19...',
+        u'Ha tenido la mala suerte de infectarse con el COVID-19...',
+        u'¡Qué mala suerte! Alguien le ha contagiado el COVID-19...',
+        u'Aunque alguien le ha contagiado el coronavirus...',
+        u'Vaya, alguien le ha infectado con el coronavirus...',
+    ])
 
 def SPECIAL_ACTION():
     return random.choice([u'ha encontrado', u'ha cogido'])

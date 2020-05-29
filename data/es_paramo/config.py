@@ -17,8 +17,8 @@ MAX_TRIBUTES_PER_DISTRICT = 0
 
 # Probabilities
 ATRACT_RANGE_LIST =  [1, 1, 1, 1, 2, 2, 2, 3]
-PROBAB_MOVE =    [25,  8,  9,  10,  12, 15, 16, 16]
-PROBAB_ITEM =    [24, 38, 32, 30, 23, 18, 15, 15]
+PROBAB_MOVE =    [25,  8,  9,  10,  12, 14, 15, 16]
+PROBAB_ITEM =    [24, 38, 32, 29, 23, 18, 15, 15]
 THRESHOLD_LIST = [50, 100, 150, 200, 250, 300, 400, 500]
 TREASONS_ENABLED_LIST =  [False, False, False, True, True, True, True, True]
 

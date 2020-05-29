@@ -148,7 +148,7 @@ raw_player_list = [
     [u'Silvia', u'silviamati07', 0, u'San Feliz de Órbigo'],
     [u'Abel', u'reyweasley', 0, u'San Feliz de Órbigo'],
     [u'Víctor', u'VictCoca', 0, u'San Feliz de Órbigo'],
-    [u'Mónica', u'monica260613', 1, u'San Feliz de Órbigo'],
+    [u'Monicus', u'monica260613', 1, u'San Feliz de Órbigo'],
     [u'Alba', u'imnotalbap', 1, u'Veguellina de Órbigo'],
     [u'Ditd', u'DITD98', 0, u'San Martín del Camino'],
     [u'Jaume', u'Jaumep99', 0, u'San Martín del Camino'],

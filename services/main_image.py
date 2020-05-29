@@ -39,7 +39,7 @@ def get_main_image(main_image, main_tweet):
             draw_battle()
 
         draw_player(image, tweet, tweet.player, tweet.player.location.coord_x - 28, tweet.player.location.coord_y)
-        draw_player(image, tweet, tweet.player_2, tweet.player_2.location.coord_x + 28, tweet.player.location.coord_y)
+        draw_player(image, tweet, tweet.player_2, tweet.player_2.location.coord_x + 28, tweet.player_2.location.coord_y)
     elif tweet.type == Tweet_type.destroyed or tweet.type == Tweet_type.destroyed_district or tweet.type == Tweet_type.winner_districts or tweet.type == Tweet_type.atraction or tweet.type == Tweet_type.introduce_players:
         # Multi actions
         draw_multiple_players(tweet, tweet.player_list, tweet.place.coord_x, tweet.place.coord_y, image, 50)

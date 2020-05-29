@@ -105,11 +105,8 @@ def MONSTER_APPEARED(tweet):
         return u'Ratonera sucia.'
 
     return random.choice([
-        u'Una patrulla de la guardia ha aparecido en ' + place.name + '.',
-        u'Una patrulla de la guardia ha sido avistada en ' + place.name + '.',
-        u'Control en ' + place.name + '.',
         u'¡Ojo! Alguien ha avistado una patrulla de la guardia en ' + place.name + '.',
-        u'Se ha producido una serie de altercados en ' + place.name + u', por lo que la policía se ha visto obligada a desplazarse allí.',
+        u'Una patrulla de la guardia ha aparecido en ' + place.name + '.',
     ])
 
 def MONSTER_IMMUNITY():
@@ -141,11 +138,13 @@ def MONSTER_MOVED(tweet):
         return u'Ratonera sucia.'
 
     return random.choice([
-        u'¡La policía se ha movido de ' + place.name + ' a ' + new_place.name + u'! Habrá que ir con cuidado.',
-        u'Ha habido movida en ' + new_place.name + u', por lo que la policía ha tenido que irse de ' + place.name + '.',
-        u'Alguien se ha chivado de que hay una manifestación en ' + new_place.name + u', así que la policía se ha ido de ' + place.name + '.',
-        u'La policía se ha movido de ' + place.name + u' a ' + new_place.name + '.',
-        u'¡La policía se ha ido a un desahucio a ' + new_place.name + '!',
+        u'¡La guardia se ha movido de ' + place.name + ' a ' + new_place.name + u'! Habrá que ir con cuidado.',
+        u'Ha habido movida en ' + new_place.name + u', por lo que la guardia ha tenido que irse de ' + place.name + '.',
+        u'La guardia se ha movido de ' + place.name + u' a ' + new_place.name + '.',
+        u'Una patrulla de la guardia ha sido avistada en ' + new_place.name + '.',
+        u'Control en ' + new_place.name + '.',
+        u'Hay movida en ' + new_place.name + ' y la guardia ha intervenido.',
+        u'Se ha producido una serie de altercados en ' + new_place.name + u', por lo que la guardia se ha visto obligada a desplazarse allí.',
     ])
 
 def MOVE_ACTION_ROAD():

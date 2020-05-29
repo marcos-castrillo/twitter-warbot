@@ -88,15 +88,7 @@ def kill(player_1, player_2, place, factor, action_number, inverse):
         item.thrown_away_by = killed
 
     write_tweet(tweet)
-
-    place.items = place.items + killed.item_list
-    killed.item_list = []
-    killed.injury_list = []
-    killed.powerup_list = []
-    killed.infected = False
-    killed.monster_immunity = False
-    killed.injure_immunity = False
-    killed.infection_immunity = False
+    kill_player(killed)
 
     if USE_DISTRICTS:
         destroy_tweet = destroy_district_if_needed(killed.district)
@@ -227,3 +219,22 @@ def unfriend(player_1, player_2):
         player_1.friend_list.remove(player_2)
     if player_1 in player_2.friend_list:
         player_2.friend_list.remove(player_1)
+
+def kill_player(player):
+    place = player.location
+
+    for i, item in enumerate(player.item_list):
+        item.thrown_away_by = player
+
+    place.items = place.items + player.item_list
+    place.players.pop(place.players.index(player))
+    player.state = 0
+    player.attack = 0
+    player.defense = 0
+    player.item_list = []
+    player.injury_list = []
+    player.powerup_list = []
+    player.infected = False
+    player.monster_immunity = False
+    player.injure_immunity = False
+    player.infection_immunity = False
