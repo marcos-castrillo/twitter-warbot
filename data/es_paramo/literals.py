@@ -5,7 +5,7 @@ from data.es.literals import *
 import random
 
 def START(tweet):
-    return u'¡Los participantes están listos! Ya conocemos la ubicación de cada uno de ellos. Que empiece la batalla.'
+    return u'¡Los participantes están listos! Da comienzo la III edición de la Páramo war.'
 
 def ATRACTION(place):
     if place == u'Ardoncino':
@@ -94,12 +94,16 @@ def WINNER_DISTRICTS_COMPOSED(winners_str, district, kills_count):
         if tribute.kills > max_kills.kills:
             max_kills = tribute
     if len(winners_str) > 130:
-        return u' '.join((u'¡' + district.district_display_name, u'es el ganador de la Páramo War! Sus representantes han conseguido un total de', str(kills_count), u'muertes, siendo ' + max_kills.get_name() + u' quien más ha conseguido con ' + str(max_kills.kills) + u'.'))
+        return u' '.join((u'¡' + district.district_display_name, u'es el ganador de la Páramo War!' + LINEBREAK() + u'Sus representantes han conseguido un total de', str(kills_count), u'muertes, siendo ' + max_kills.get_name() + u' quien más ha conseguido con ' + str(max_kills.kills) + u'.'))
     else:
-        return u' '.join((winners_str, u'han ganado, consiguiendo un total de', str(kills_count), u'muertes, siendo ' + max_kills.get_name() + u' quien más ha conseguido con ' + str(max_kills.kills) + u'. ¡' + district.district_display_name, u'es el ganador de la Páramo War!'))
+        return u' '.join((winners_str, u'han ganado, consiguiendo un total de', str(kills_count), u'muertes, siendo ' + max_kills.get_name() + u' quien más ha conseguido con ' + str(max_kills.kills) + u'.' + LINEBREAK() + u'¡' + district.district_display_name, u'es el ganador de la Páramo War!'))
 
 def MONSTER_APPEARED(tweet):
     place = tweet.place
+
+    if place.name == u'Santa María del Páramo':
+        return u'Ratonera sucia.'
+
     return random.choice([
         u'Una patrulla de la guardia ha aparecido en ' + place.name + '.',
         u'Una patrulla de la guardia ha sido avistada en ' + place.name + '.',
@@ -132,6 +136,10 @@ def MONSTER_KILLED(tweet):
 def MONSTER_MOVED(tweet):
     new_place = tweet.place
     place = tweet.place_2
+
+    if new_place.name == u'Santa María del Páramo':
+        return u'Ratonera sucia.'
+
     return random.choice([
         u'¡La policía se ha movido de ' + place.name + ' a ' + new_place.name + u'! Habrá que ir con cuidado.',
         u'Ha habido movida en ' + new_place.name + u', por lo que la policía ha tenido que irse de ' + place.name + '.',
@@ -142,25 +150,16 @@ def MONSTER_MOVED(tweet):
 
 def MOVE_ACTION_ROAD():
     return random.choice([
-        u'ha ido desde',
-        u'ha ido desde',
-        u'ha ido desde',
         u'ha ido de',
-        u'ha ido de',
-        u'ha caminado desde',
+        u'ha ido desde',
         u'ha caminado desde',
         u'ha conducido de',
-        u'ha hecho dedo desde',
-        u'está tan en forma que ha hecho un sprint de',
-        u'se aburría y ha ido a la pata coja desde',
+        u'se ha movido de',
         u'ha llamado al taxi de ' + random.choice([u'Rebollo', u'Santi', u'Aquilino', u'Germán']) + u' para que le lleve de',
-        u'ha llamado al taxi de ' + random.choice([u'Rebollo', u'Santi', u'Aquilino', u'Germán']) + u' para que le lleve de',
-        u'ha ido en ' + random.choice([u'tractor', u'patinete', u'motorrabo', u'bici']) + u' de',
-        u'ha ido en ' + random.choice([u'tractor', u'patinete', u'motorrabo', u'bici']) + u' de',
-        u'ha ido en skate haciendo backflips de',
-        u'ha cogido el coche y ha hecho un derrape de',
-        u'ha ido patinando de',
-        u'ha cogido un Blabacar de'
+        u'ha conducido su ' + random.choice([u'Seat León', u'Fiat Multipla', u'Renault Megane', u'Seat Ibiza', u'Golf', u'Opel Corsa', u'Ford Focus', u'Opel Astra', u'BMW Serie 3']) + ' de',
+        random.choice([u'está tan en forma que ha ', u'se aburría y ha ', u'está tan cachas que ha ', u'está tan fuerte que ha ']) + random.choice([u'ido en bici', u'ido a trote', u'hecho un sprint', u'ido a la pata coja', u'ido corriendo', u'hecho footing']) + u' de',
+        u'ha hecho ' + random.choice([u'autostop', u'dedo']) + u' para que le lleve de',
+        u'ha ido en ' + random.choice([u'moto', u'su scooter', u'vespa', u'mochillo', u'triciclo', u'limusina con su chófer', u'patinete', u'triciclo', u'patinete eléctrico', u'bus', u'un coche robado a lo GTA']) + u' de'
     ])
 
 def MOVED_ATRACTION_SING():

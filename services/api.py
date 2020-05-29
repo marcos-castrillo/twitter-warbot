@@ -19,11 +19,14 @@ def get_api():
                       access_token_secret=access_token_secret)
 
 def tweet_line_from_file(file_path, line_number, image_path_list):
-    with open(file_path, 'r') as file:
+    with open(file_path, 'r', encoding='utf-8') as file:
         for i, line in enumerate(file):
             if int(i) == int(line_number):
+                linebreaks = line.count('//n')
+                if linebreaks > 0:
+                    line = line.replace('//n', '\n')
                 print(line)
-                return tweet(line.decode("utf-8"), image_path_list)
+                return tweet(line, image_path_list)
 
 def tweet_sleep(image_dir):
     action_number = random.randint(0, 100)

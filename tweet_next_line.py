@@ -9,14 +9,14 @@ from subprocess import call
 current_dir = os.path.abspath(os.path.dirname(__file__))
 
 unsorted_dir_files = os.listdir(os.path.join(current_dir, 'simulations'))
-dir_files = sorted(unsorted_dir_files, key=lambda d: map(int, d.split('-')))
+dir_files = sorted(unsorted_dir_files, key=lambda d: list(map(int, d.split('-'))))
 
 next_line_path = os.path.join(current_dir, 'simulations', dir_files[-1], '-1_line.txt')
 next_image_path = os.path.join(current_dir, 'simulations', dir_files[-1], '-1_image.txt')
 simulation_path = os.path.join(current_dir, 'simulations', dir_files[-1], 'simulation.txt')
 
 total_lines = 0
-with open(simulation_path) as f:
+with open(simulation_path, encoding='utf-8') as f:
     for i, l in enumerate(f):
         total_lines = total_lines + 1
         pass

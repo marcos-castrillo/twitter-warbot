@@ -114,8 +114,8 @@ def ESCAPED(player_1, player_2):
     return random.choice([
         player_1.get_name() + u' y ' + player_2.get_name() + u' se han encontrado, pero ' + player_2.name + u' ha salido por patas a ' + player_2.location.name + u'.',
         player_1.get_name() + u' y ' + player_2.get_name() + u' se han encontrado, pero ' + player_2.name + u' ha huido cual cobarde a ' + player_2.location.name + u'.',
-        player_1.get_name() + u' y ' + player_2.get_name() + u' han empezado a pelear, pero ' + player_2.name + u' sabía que tenía las de perder. Cogió un puñado de arena, se lo echó a ' + player_1.name + u' en los ojos y huyó a ' + player_2.location.name + u'.',
-        player_2.get_name() + u' iba a pillar a ' + player_1.get_name() + u' por la espalda, pero ' + get_x_or_y(player_1, 'éste', 'ésta') + ' se dio cuenta en el último momento. ' + player_2.name + u' ha huido a ' + player_2.location.name + u'.',
+        player_1.get_name() + u' y ' + player_2.get_name() + u' han empezado a pelear, pero ' + player_2.name + u' sabía que tenía las de perder.' + LINEBREAK() + u'Cogió un puñado de arena, se lo echó a ' + player_1.name + u' en los ojos y huyó a ' + player_2.location.name + u'.',
+        player_2.get_name() + u' iba a pillar a ' + player_1.get_name() + u' por la espalda, pero ' + get_x_or_y(player_1, 'éste', 'ésta') + ' se dio cuenta en el último momento.' + LINEBREAK() + player_2.name + u' ha huido a ' + player_2.location.name + u'.',
         player_2.get_name() + u' ha visto a ' + player_1.get_name() + u' y ha huido a ' + player_2.location.name + u'.',
         u'A ' + player_2.get_name() + u' le da miedo ' + player_1.get_name() + u' y ha huido a ' + player_2.location.name + u'.',
         u'A ' + player_2.get_name() + u' le da asco ' + player_1.get_name() + u' y se ha ido a ' + player_2.location.name + u'.',
@@ -261,7 +261,7 @@ def HAS_NOW(attack, defense):
         ])
 
 def I_COMPOSED(player, action, event, has_now, thrown_away_by = ''):
-    return u' '.join((u'¡' + player.get_name(), action, event + thrown_away_by + '!', has_now))
+    return u' '.join((u'¡' + player.get_name(), action, event + thrown_away_by + '!' + LINEBREAK() + has_now))
 
 def INFECTED_EVERYBODY(tweet):
     return random.choice([
@@ -396,6 +396,9 @@ def KILL_METHOD(player):
         u'y se ha tirado un eructo',
         u'sin mucho esfuerzo'
     ])
+
+def LINEBREAK():
+    return u'//n'
 
 def NOBODY_WON(tweet):
     return u'Por algún motivo, todos los jugadores están muertos. Nadie ha ganado... ¡otra vez será!'

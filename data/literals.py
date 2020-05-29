@@ -134,11 +134,11 @@ def winner(tweet):
     infection = ''
 
     if tweet.player.kills == 0:
-        kills = WINNER_NO_KILLS
+        kills = LINEBREAK() + WINNER_NO_KILLS()
     elif tweet.player.kills == 1:
-        kills = WINNER_ONE_KILL
+        kills = LINEBREAK() + WINNER_ONE_KILL()
     else:
-        kills = WINNER_MULTI_KILL(str(tweet.player.kills))
+        kills = LINEBREAK() + WINNER_MULTI_KILL(str(tweet.player.kills))
 
     if len(tweet.player.item_list) > 0:
         list = ''
@@ -150,7 +150,7 @@ def winner(tweet):
             else:
                 list = list + ', ' + item.name
 
-        item_list = u' ' + u' '.join([WINNER_ITEM_LIST, list + '.'])
+        item_list = u' ' + u' '.join([LINEBREAK() + WINNER_ITEM_LIST(), list + '.'])
 
     if len(tweet.player.injury_list) > 0:
         list = ''
@@ -161,10 +161,10 @@ def winner(tweet):
                 list = u' '.join([list, AND(), injury.name])
             else:
                 list = list + ', ' + injury.name
-        injury_list = u' ' + u' '.join([WINNER_INJURY_LIST, list + '.'])
+        injury_list = u' ' + u' '.join([LINEBREAK() + WINNER_INJURY_LIST(), list + '.'])
 
     if tweet.player.infected:
-        infection = WINNER_INFECTION
+        infection = WINNER_INFECTION()
 
     return WINNER_COMPOSED(tweet.player, kills, item_list, infection)
 
@@ -246,7 +246,7 @@ def somebody_killed(tweet):
     if player_1.kills > 1:
         praise = PRAISE(player_1)
         if len(praise) > 0:
-            praise = '. ' + praise
+            praise = LINEBREAK() + praise
         kills_count = HAS_ALREADY_KILLED(str(player_1.kills)) + praise
     if new_item != None and old_item != None:
         stole = u' '.join((ALSO_STOLE(), new_item.name, AND(), GETS_RID_OF, old_item.name))
@@ -258,7 +258,7 @@ def somebody_killed(tweet):
     if len(stole) == 0 and len(kills_count) > 0:
         sufix = sufix + u' ' + kills_count
     elif len(stole) > 0:
-        sufix = sufix + '.'  + u' ' + stole
+        sufix = sufix + '.'  + LINEBREAK() + stole
     sufix = sufix + '.'
 
     return u' '.join((friend_message + player_1.get_name(), kill_verb, player_2.get_name() + sufix))
@@ -282,21 +282,21 @@ def somebody_moved(tweet):
     item = u''
     if tweet.double:
         if tweet.inverse:
-            item = u' ' + STRONGER_DEFENSE(tweet)
+            item = LINEBREAK() + STRONGER_DEFENSE(tweet)
         else:
-            item = u' ' +  STRONGER_ATTACK(tweet)
+            item = LINEBREAK() +  STRONGER_ATTACK(tweet)
     elif tweet.item != None:
         if tweet.item.type == Item_type.powerup:
-            item = u' ' + FOUND_ON_THE_WAY(tweet) + u' ' + has_now(tweet.player, tweet.item)
+            item = LINEBREAK() + FOUND_ON_THE_WAY(tweet) + u' ' + has_now(tweet.player, tweet.item)
         elif tweet.item.type == Item_type.injury:
-            item = u' ' + INJURE_ON_THE_WAY(tweet) + u' ' + has_now(tweet.player, tweet.item)
+            item = LINEBREAK() + INJURE_ON_THE_WAY(tweet) + u' ' + has_now(tweet.player, tweet.item)
 
     infection = u''
     if tweet.player.infected and len(tweet.place.players) > 1:
         if tweet.unfriend:
-            infection = u' ' + INFECTED_EVERYBODY(tweet)
+            infection = LINEBREAK() + INFECTED_EVERYBODY(tweet)
         else:
-            infection = u' ' + SOMEBODY_INFECTED(tweet)
+            infection = LINEBREAK() + SOMEBODY_INFECTED(tweet)
 
     return u' '.join((tweet.player.get_name(), action, tweet.place_2.name, TO, tweet.place.name + '.' + item + infection))
 
@@ -334,7 +334,7 @@ def destroyed(tweet):
             escaped.append(d.get_name())
         for i, d in enumerate(escaped):
             if i == 0:
-                susufix_str = d
+                susufix_str = LINEBREAK() + d
             elif i == len(escaped) - 1:
                 susufix_str = susufix_str + AND() + d
             else:
@@ -377,7 +377,7 @@ def destroyed_district(tweet):
             escaped.append(d.get_name())
         for i, d in enumerate(escaped):
             if i == 0:
-                sufix_str = d
+                sufix_str = LINEBREAK() + d
             elif i == len(escaped) - 1:
                 sufix_str = sufix_str + ' ' +  AND() + ' ' + d
             else:
@@ -404,7 +404,7 @@ def infected(tweet):
             else:
                 also = also + ', ' + player.get_name()
         also = also + '.'
-    return u' '.join((WAS_INFECTED(tweet), PLACE_INFECTED(tweet) + also))
+    return WAS_INFECTED(tweet) + LINEBREAK() + PLACE_INFECTED(tweet) + also
 
 def atraction(tweet):
     place = tweet.place

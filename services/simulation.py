@@ -6,32 +6,39 @@ from services.map_image import get_map_image
 from services.ranking_image import get_ranking_image
 from services.images import *
 
-date = datetime.datetime.now()
-time_stamp = u'-'.join([str(date.year), str(date.month), str(date.day), str(date.hour), str(date.minute)])
-output_dir = os.path.join(current_dir, '../simulations', time_stamp)
-
-filename = u'simulation'
+output_dir = None
+path = None
 line_number = 0
 
-i = 1
-temp_output_dir = output_dir
-while os.path.exists(temp_output_dir):
-    i = i + 1
-    temp_output_dir = os.path.join(output_dir + '-' + str(i))
+def initialize():
+    global output_dir, path
+    date = datetime.datetime.now()
+    time_stamp = u'-'.join([str(date.year), str(date.month), str(date.day), str(date.hour), str(date.minute)])
+    output_dir = os.path.join(current_dir, '../simulations', time_stamp)
 
-output_dir = temp_output_dir
+    filename = u'simulation'
 
-os.makedirs(output_dir)
+    i = 1
+    temp_output_dir = output_dir
+    while os.path.exists(temp_output_dir):
+        i = i + 1
+        temp_output_dir = os.path.join(output_dir + '-' + str(i))
 
-path = os.path.join(output_dir, filename + '.txt')
+    output_dir = temp_output_dir
 
-i = 1
-while os.path.exists(path):
-    i = i + 1
-    path = os.path.join(output_dir, filename + '-' + str(i) + ".txt")
+    os.makedirs(output_dir)
+
+    path = os.path.join(output_dir, filename + '.txt')
+
+    i = 1
+    while os.path.exists(path):
+        i = i + 1
+        path = os.path.join(output_dir, filename + '-' + str(i) + ".txt")
 
 def write_tweet(tweet):
     global line_number
+    if output_dir == None:
+        initialize()
 
     if tweet.type == Tweet_type.destroyed_district:
         line_number = line_number - 1
@@ -41,10 +48,7 @@ def write_tweet(tweet):
 
     line_number = line_number + 1
     if tweet.type == Tweet_type.winner or tweet.type == Tweet_type.winner_districts:
-        with open(os.path.join(output_dir, '-1_image.txt'), "w") as file:
-            file.write('todo ok')
-        with open(os.path.join(output_dir, '-1_line.txt'), "w") as file:
-            file.write('todo ok')
+        write_last_line()
 
 def write_line(message):
     print(str(line_number) + u': ' + message.decode('utf-8'))
@@ -52,14 +56,13 @@ def write_line(message):
     with open(os.path.join(path), "a+", encoding="utf-8") as file:
         file.write(message.decode('utf-8'))
 
-def file_len():
-    with open(os.path.join(path)) as f:
-        for i, l in enumerate(f):
-            pass
-    return i + 1
+def write_last_line():
+    with open(os.path.join(output_dir, '-1_image.txt'), "w") as file:
+        file.write('ok')
+    with open(os.path.join(output_dir, '-1_line.txt'), "w") as file:
+        file.write('ok')
 
 def draw_image(tweet):
-    global line_number, current_dir
     raw_map_img = draw_places(Image.open(os.path.join(current_dir, '../assets/img/maps/' + LOCALIZATION + '.png')))
     raw_map_img_2 = draw_places(Image.open(os.path.join(current_dir, '../assets/img/maps/' + LOCALIZATION + '.png')))
     rows = math.ceil(len(get_alive_players()) / RANKING_IMGS_PER_ROW) + 2*(math.ceil(len(get_dead_players()) / RANKING_IMGS_PER_ROW))/3
