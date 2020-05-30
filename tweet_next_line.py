@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
-from sys import exit
+import sys
 from services.api import tweet_line_from_file
 from subprocess import call
 
@@ -14,6 +14,10 @@ dir_files = sorted(unsorted_dir_files, key=lambda d: list(map(int, d.split('-'))
 next_line_path = os.path.join(current_dir, 'simulations', dir_files[-1], '-1_line.txt')
 next_image_path = os.path.join(current_dir, 'simulations', dir_files[-1], '-1_image.txt')
 simulation_path = os.path.join(current_dir, 'simulations', dir_files[-1], 'simulation.txt')
+
+longest_line = max(open(simulation_path, 'r', encoding='utf-8'), key=len)
+if len(longest_line) > 240:
+    sys.exit('File error: line its too long: (' + str(len(longest_line)) +  ' characters)\n' +  longest_line)
 
 total_lines = 0
 with open(simulation_path, encoding='utf-8') as f:

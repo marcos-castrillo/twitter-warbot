@@ -114,7 +114,8 @@ def ESCAPED(player_1, player_2):
     return random.choice([
         player_1.get_name() + u' y ' + player_2.get_name() + u' se han encontrado, pero ' + player_2.name + u' ha salido por patas a ' + player_2.location.name + u'.',
         player_1.get_name() + u' y ' + player_2.get_name() + u' se han encontrado, pero ' + player_2.name + u' ha huido cual cobarde a ' + player_2.location.name + u'.',
-        player_1.get_name() + u' y ' + player_2.get_name() + u' han empezado a pelear, pero ' + player_2.name + u' sabía que tenía las de perder.' + LINEBREAK() + u'Cogió un puñado de arena, se lo echó a ' + player_1.name + u' en los ojos y huyó a ' + player_2.location.name + u'.',
+        player_1.get_name() + u' y ' + player_2.get_name() + u' han empezado a pelear, pero ' + player_2.name + u' sabía que tenía las de perder así que huyó a ' + player_2.location.name + u'.',
+        player_2.get_name() + u' cogió un puñado de arena, se lo echó a ' + player_1.name + u' en los ojos y huyó a ' + player_2.location.name + u'.',
         player_2.get_name() + u' iba a pillar a ' + player_1.get_name() + u' por la espalda, pero ' + get_x_or_y(player_1, 'éste', 'ésta') + ' se dio cuenta en el último momento.' + LINEBREAK() + player_2.name + u' ha huido a ' + player_2.location.name + u'.',
         player_2.get_name() + u' ha visto a ' + player_1.get_name() + u' y ha huido a ' + player_2.location.name + u'.',
         u'A ' + player_2.get_name() + u' le da miedo ' + player_1.get_name() + u' y ha huido a ' + player_2.location.name + u'.',
@@ -239,44 +240,99 @@ def HAS_ALREADY_KILLED(kills_count):
         u' '.join((u'y con éste ya van', kills_count)),
     ])
 
-def HAS_NOW(attack, defense):
+def HAS_NOW(attack, defense, short = False):
     if attack != None and defense != None:
-        return random.choice([
-            u' '.join([u'Ahora tiene', attack, u'en ataque y', defense, u'en defensa.']),
-            u' '.join([u'Ataque', attack, u'y defensa', defense + '.']),
-            u' '.join([u'Su ataque es ahora de', attack, u'y su defensa de', defense + '.']),
-        ])
+        if short:
+            return u' '.join([u'Ataque', attack, u'y defensa', defense + '.'])
+        else:
+            return random.choice([
+                u' '.join([u'Ahora tiene', attack, u'en ataque y', defense, u'en defensa.']),
+                u' '.join([u'Ataque', attack, u'y defensa', defense + '.']),
+                u' '.join([u'Su ataque es ahora de', attack, u'y su defensa de', defense + '.']),
+            ])
     elif attack != None:
-        return random.choice([
-            u' '.join([u'Ahora tiene', attack, u'en ataque.']),
-            u' '.join([u'Ataque', attack + u'.']),
-            u' '.join([u'Su ataque es ahora de', attack + u'.']),
-            u' '.join([u'Su nuevo ataque es', attack + u'.'])
-        ])
+        if short:
+            return u' '.join([u'Ataque', attack + u'.'])
+        else:
+            return random.choice([
+                u' '.join([u'Ahora tiene', attack, u'en ataque.']),
+                u' '.join([u'Ataque', attack + u'.']),
+                u' '.join([u'Su ataque es ahora de', attack + u'.']),
+                u' '.join([u'Su nuevo ataque es', attack + u'.'])
+            ])
     elif defense != None:
-        return random.choice([
-            u' '.join([u'Ahora tiene', defense, u'en defensa.']),
-            u' '.join([u'Defensa', defense + u'.']),
-            u' '.join([u'Su defensa es ahora de', defense + u'.']),
-            u' '.join([u'Su nueva defensa es', defense + u'.'])
-        ])
+        if short:
+            return u' '.join([u'Defensa', defense + u'.'])
+        else:
+            return random.choice([
+                u' '.join([u'Ahora tiene', defense, u'en defensa.']),
+                u' '.join([u'Defensa', defense + u'.']),
+                u' '.join([u'Su defensa es ahora de', defense + u'.']),
+                u' '.join([u'Su nueva defensa es', defense + u'.'])
+            ])
 
 def I_COMPOSED(player, action, event, has_now, thrown_away_by = ''):
     return u' '.join((u'¡' + player.get_name(), action, event + thrown_away_by + '!' + LINEBREAK() + has_now))
 
-def INFECTED_EVERYBODY(tweet):
+def INFECTED_EVERYBODY():
     return random.choice([
-        u'Además, ha infectado a todos.',
-        u'Además, ha contagiado a todos.'
+        u'Todos se han infectado con el coronavirus.',
+        u'Alguien tenía el COVID-19 y todos se han infectado.',
     ])
 
-def INFECTION_IMMUNITY():
-    return random.choice([
-        u'¡A partir de ahora es inmune al COVID-19!',
-        u'¡A partir de ahora tiene inmunidad contra el COVID-19!',
-        u'¡A partir de ahora el COVID-19 no le afecta!',
-        u'¡A partir de ahora no puede ser infectado con el COVID-19!'
-    ])
+def INFECTED_OTHERS(tweet, other_players):
+    if len(other_players) == 1:
+        player = other_players[0]
+        return random.choice([
+            u'Ha infectado a ' + player.get_name() + u' con el coronavirus.',
+            u'Ha contagiado a ' + player.get_name() + u' con el coronavirus.',
+            player.get_name() + u' ha sido ' + get_x_or_y(player ,u'contagiado', u'contagiada') + u' con el COVID-19.',
+            player.get_name() + u' ha sido ' + get_x_or_y(player ,u'contagiado', u'contagiada') + u' con el coronavirus.',
+            player.get_name() + u' ha sido ' + get_x_or_y(player ,u'infectado', u'infectada') + u' con el COVID-19.',
+        ])
+    else:
+        return random.choice([
+            u'Ha infectado con el COVID-19 a todos los que estaban allí.',
+            u'Ha contagiado con el COVID-19 a todos los que estaban allí.',
+            u'Todos los que estaban allí han sido infectados con el COVID-19.',
+            u'Quienes estaban allí han sido infectados con el COVID-19.',
+        ])
+
+def SOMEBODY_INFECTED(tweet, other_players):
+    if len(other_players) == 1:
+        player = other_players[0]
+        return random.choice([
+            player.get_name() + u' le ha infectado con el coronavirus.',
+            player.get_name() + u' le ha contagiado el coronavirus.',
+            player.get_name() + u' le ha contagiado el COVID-19.',
+            u'Ha sido ' + get_x_or_y(tweet.player ,u'contagiado', u'contagiada') + u' con el COVID-19 por ' + player.get_name(),
+            u'Ha sido ' + get_x_or_y(tweet.player ,u'contagiado', u'contagiada') + u' con el coronavirus por ' + player.get_name(),
+            u'Ha sido ' + get_x_or_y(tweet.player ,u'infectado', u'infectada') + u' con el COVID-19 por ' + player.get_name(),
+        ])
+    else:
+        return random.choice([
+            u'Por desgracia, alguien le ha infectado con el COVID-19...',
+            u'Ha tenido la mala suerte de infectarse con el COVID-19...',
+            u'¡Qué mala suerte! Alguien le ha contagiado el COVID-19...',
+            u'Aunque alguien le ha contagiado el coronavirus...',
+            u'Vaya, parece que alguien le ha infectado con el coronavirus...',
+        ])
+
+def INFECTION_IMMUNITY(player, shared = False):
+    if shared:
+        return random.choice([
+            u'¡A partir de ahora ' + get_x_or_y(player, u'él', u'ella') + u' y el resto de su equipo son inmunes al COVID-19!',
+            u'¡A partir de ahora ' + get_x_or_y(player, u'él', u'ella') + u' y el resto de su equipo tienen inmunidad contra el COVID-19!',
+            u'¡A partir de ahora el COVID-19 no afecta a su equipo!',
+            u'¡A partir de ahora su equipo no puede ser infectado con el COVID-19!'
+        ])
+    else:
+        return random.choice([
+            u'¡A partir de ahora es inmune al COVID-19!',
+            u'¡A partir de ahora tiene inmunidad contra el COVID-19!',
+            u'¡A partir de ahora el COVID-19 no le afecta!',
+            u'¡A partir de ahora no puede ser infectado con el COVID-19!'
+        ])
 
 def INJURE_ACTION():
     return random.choice([u'recibió', u'padeció'])
@@ -297,12 +353,19 @@ def INJURE_ON_THE_WAY(tweet):
         u' '.join([u'¡En el trayecto', action, tweet.item.name + '!']),
     ])
 
-def INJURE_IMMUNITY():
-    return random.choice([
-        u'¡A partir de ahora no sufrirá heridas ni lesiones!',
-        u'¡A partir de ahora es inmune a heridas y lesiones!',
-        u'¡A partir de ahora tiene inmunidad contra lesiones y heridas!',
-    ])
+def INJURE_IMMUNITY(player, shared = False):
+    if shared:
+        return random.choice([
+            u'¡A partir de ahora ' + get_x_or_y(player, u'él', u'ella')+ ' y el resto de su equipo no sufrirán heridas ni lesiones!',
+            u'¡A partir de ahora su equipo es inmune a heridas y lesiones!',
+            u'¡A partir de ahora su equipo tiene inmunidad contra lesiones y heridas!',
+        ])
+    else:
+        return random.choice([
+            u'¡A partir de ahora no sufrirá heridas ni lesiones!',
+            u'¡A partir de ahora es inmune a heridas y lesiones!',
+            u'¡A partir de ahora tiene inmunidad contra lesiones y heridas!',
+        ])
 
 def INTRODUCE_PLACE(tweet):
     place_name = tweet.place.district_display_name
@@ -420,11 +483,9 @@ def REVIVED(tweet):
 def WAS_INFECTED(tweet):
     player = tweet.player
     return random.choice([
-        player.get_name() + u' ha pillado el coronavirus.',
-        u'Alguien ha infectado a ' + player.get_name() + u' con el coronavirus.',
         player.get_name() + u' no se ha lavado las manos lo suficiente y ha contraído el coronavirus.',
         player.get_name() + u' debería de haber seguido las recomendaciones para no pillar el coronavirus.',
-        player.get_name() + u' se saltó la cuarentena para fumarse uno y ha pillado el coronavirus.'
+        player.get_name() + u' se saltó la cuarentena y ha pillado el coronavirus.'
     ])
 
 def PLACE_INFECTED(tweet):
@@ -461,7 +522,7 @@ def MOVE_ACTION_ROAD():
         u'ha conducido su ' + random.choice([u'Seat León', u'Fiat Multipla', u'Renault Megane', u'Seat Ibiza', u'Golf', u'Opel Corsa', u'Ford Focus', u'Opel Astra', u'BMW Serie 3']) + ' de',
         random.choice([u'está tan en forma que ha ', u'se aburría y ha ', u'está tan cachas que ha ', u'está tan fuerte que ha ']) + random.choice([u'ido en bici', u'ido a trote', u'hecho un sprint', u'ido a la pata coja', u'ido corriendo', u'hecho footing']) + u' de',
         u'ha llamado a ' + random.choice([u'un taxi', u'un Uber', u'un Cabify']) + u' para que le lleve de',
-        u'ha hecho ' + random.choice([u'autostop', u'dedo']) + u' para que le lleve de',
+        u'ha hecho ' + random.choice([u'autostop', u'dedo']) + u' para que le lleven de',
         u'ha ido en ' + random.choice([u'moto', u'su scooter', u'AVE', u'mochillo', u'limusina con su chófer', u'patinete eléctrico', u'tren regional', u'Alsa', u'Blablacar', u'un coche robado a lo GTA']) + u' de'
     ])
 
@@ -510,22 +571,13 @@ def SLEEP():
         u'Te deseo que tengas dulces sueños y que en cada uno de ellos, me veas para que puedas dormir bien.',
         u'Duerme bien y aseguráte de cerrar el armario, no sea que el coco vaya a venir por ti.',
         u'Hasta los tontos como tú deben descansar, ¡así que a la cama! Mañana habrá tiempo de que hagas más tonterías.',
-        u'Hello darkness, my old friend. I´ve come to talk with you again.',
         u'Me voy a dormir, cualquier emergencia me avisan que yo al medio día les respondo.',
         u'Buenas noches, que pasen una linda y bendecida noche. Dulces sueños hasta mañana amigos ya amigas.',
         u'Se me acabaron las pilas. Buenas noches. Chistes cortos buenos, graciosos y divertidos para pasar un momento genial para compartir con las amistades y familiares.',
-        u'Hello darkness, my old friend. I´ve come to talk with you again.',
-        u'Hello darkness, my old friend. I´ve come to talk with you again.',
-        u'Hello darkness, my old friend. I´ve come to talk with you again.',
-    ])
-
-def SOMEBODY_INFECTED(tweet):
-    return random.choice([
-        u'Por desgracia, alguien le ha infectado con el COVID-19...',
-        u'Ha tenido la mala suerte de infectarse con el COVID-19...',
-        u'¡Qué mala suerte! Alguien le ha contagiado el COVID-19...',
-        u'Aunque alguien le ha contagiado el coronavirus...',
-        u'Vaya, alguien le ha infectado con el coronavirus...',
+        u"Hello darkness, my old friend. I've come to talk with you again.",
+        u'Soñar es barato, así que me voy a dormir un rato.',
+        u'Me voy a dormir con la ventana abierta (a 19 mosquitos les gusta esto).',
+        u'A dormir ya porque mañana hay que madrugar para pasear de la cama al sofá.'
     ])
 
 def SPECIAL_ACTION():

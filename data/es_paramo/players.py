@@ -38,7 +38,7 @@ raw_player_list = [
     [u'David', u'CentenoDavid5', 0, u'Cebrones del Río'],
     [u'Andrea', u'andreadrewww', 1, u'Cembranos'],
     [u'Cristina', u'crisssmaart', 1, u'Cebrones del Río'],
-    [u'Abel', u'santamariastar1', 0, u'Santa María del Páramo'],
+    [u'Abel', u'abelcalopez', 0, u'Santa María del Páramo'],
     [u'Víctor', u'Victoriano_15', 0, u'Villamorico'],
     [u'Rosa', u'larosaliaaa', 1, u'Bercianos del Páramo'],
     [u'Óscar', u'oski99_lgn', 0, u'Laguna de Negrillos'],

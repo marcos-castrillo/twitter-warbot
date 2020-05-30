@@ -79,11 +79,11 @@ raw_powerup_list = [
     [u'un chupito de vodka', 1, 1],
     [u'un café con leche', 1, 1],
     [u'un bocata de calamares', 2, 0],
-    [u'un gazpacho', 0, 2],
-    [u'una sangría', 0, 2],
+    [u'una botella de gazpacho', 0, 2],
+    [u'una botella de sangría', 0, 2],
     [u'un tinto de verano', 2, 0],
-    [u'un salmorejo', 2, 0],
-    [u'un cava', 2, 0],
+    [u'una botella de salmorejo', 2, 0],
+    [u'una botella de cava', 2, 0],
     [u'una copa de orujo', 2, 0],
     [u'un Monster', 0, 2],
     [u'un Red Bull', 0, 2],
@@ -125,10 +125,10 @@ raw_special_list = [
     [u'una placa de policía', True, False, False],
     [u'un uniforme de policía', True, False, False],
     [u'la corona de España', True, False, False],
-    [u'un ibuprofeno', False, True, False],
+    [u'una caja de ibuprofenos', False, True, False],
     [u'un botiquín', False, True, False],
     [u'la vacuna del coronavirus', False, False, True],
-    [u'una mascarilla', False, False, True]
+    [u'unas mascarillas FFP2', False, False, True]
 ]
 
 raw_injury_list = [

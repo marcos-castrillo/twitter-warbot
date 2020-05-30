@@ -1,14 +1,11 @@
 import random
 from data.items import *
-from store import get_two_players_in_random_place, get_alive_players, injury_list, kill_player, destroy_district_if_needed
+from store import *
 from data.config import USE_DISTRICTS
 from models.tweet import Tweet
 from models.tweet_type import Tweet_type
 from models.item_type import Item_type
 from services.simulation import write_tweet
-
-first_infection = False
-
 
 def pick_item():
     alive_players = get_alive_players()
@@ -69,17 +66,30 @@ def pick_special(player, special):
     if special.infection_immunity:
         player.infection_immunity = True
 
+    if USE_DISTRICTS:
+        others_in_district = [x for x in get_alive_players() if x.district.name == player.district.name and x.get_name() != player.get_name()]
+        if len(others_in_district) > 0:
+            for i,pl in enumerate(others_in_district):
+                if special.injure_immunity:
+                    pl.injure_immunity = True
+                if special.monster_immunity:
+                    pl.monster_immunity = True
+                if special.infection_immunity:
+                    pl.infection_immunity = True
+
     player.location.items.pop(player.location.items.index(special))
     tweet = Tweet()
     tweet.type = Tweet_type.somebody_got_special
     tweet.place = player.location
     tweet.item = special
     tweet.player = player
+    if USE_DISTRICTS and len(others_in_district) > 0:
+        tweet.player_list = others_in_district
     write_tweet(tweet)
     return True
 
 def infect():
-    global first_infection
+    any_infection = any(x for x in player_list if x.infected)
     alive_players = get_alive_players()
     infected_players = []
     healthy_players = []
@@ -89,16 +99,14 @@ def infect():
         elif not p.infection_immunity:
             healthy_players.append(p)
 
-    if not first_infection:
+    if not any_infection:
         player = random.choice(healthy_players)
-        player.location.infected = True
         if not player.infection_immunity:
             player.infected = True
         affected = [x for x in player.location.players if x.name != player.name]
         for i,p in enumerate(affected):
             if not p.infection_immunity:
                 p.infected = True
-        first_infection = True
 
         tweet = Tweet()
         tweet.type = Tweet_type.somebody_was_infected
@@ -109,7 +117,7 @@ def infect():
     elif len(infected_players) > 0:
         player = random.choice(infected_players)
         action_number = random.randint(1, 100)
-        if action_number > 75:
+        if action_number > 60:
             player.infected = False
             player.infection_immunity = True
             tweet = Tweet()

@@ -22,12 +22,21 @@ def MONSTER_APPEARED(tweet):
         u'Se ha producido una serie de altercados en ' + place.name + u', por lo que la policía se ha visto obligada a desplazarse allí.',
     ])
 
-def MONSTER_IMMUNITY():
-    return random.choice([
-        u'¡A partir de ahora la policía no le hará nada!',
-        u'¡A partir de ahora es inmune ante la justicia!',
-        u'¡A partir de ahora es inmune ante la policía!',
-    ])
+def MONSTER_IMMUNITY(player, shared = False):
+    if shared:
+        return random.choice([
+            u'¡A partir de ahora la policía no le hará nada a su equipo.',
+            u'¡A partir de ahora su equipo es inmune ante la justicia!',
+            u'¡A partir de ahora su equipo es inmune ante la ley!',
+            u'¡A partir de ahora ' + get_x_or_y(player, u'él', u'ella') + u' y el resto de su equipo son inmunes ante la policía!',
+        ])
+    else:
+        return random.choice([
+            u'¡A partir de ahora la policía no le hará nada.',
+            u'¡A partir de ahora es inmune ante la justicia!',
+            u'¡A partir de ahora es inmune ante la policía!',
+            u'¡A partir de ahora es inmune ante la ley!',
+        ])
 
 def MONSTER_KILLED(tweet):
     place = tweet.place

@@ -23,7 +23,7 @@ def ATRACTION(place):
     elif place == u'Carrizo de la Ribera':
         return u'Son las Fiestas de la Virgen del Villar en Carrizo de la Ribera y'
     elif place == u'La Bañeza':
-        return u'Se han celebrado las fiestas patronales de La Bañeza y'
+        return u'Se han celebrado las fiestas de La Bañeza y'
     elif place == u'Laguna de Negrillos':
         return u'Se ha celebrado la Alubia y'
     elif place == u'Celadilla del Páramo':
@@ -74,18 +74,18 @@ def ATRACTION(place):
     return random.choice([
         u'Se han celebrado las grandes fiestas de ' + place + u' y',
         u'Se han celebrado las fiestas de ' + place + u' y',
-        u'Se han celebrado las fiestas patronales de ' + place + u' y',
+        u'Se han celebrado las fiestas de ' + place + u' y',
         u'Como son las fiestas de ' + place + u','
     ])
 
 def DESTROYED_DISTRICT(district, tributes_str):
     return random.choice([
-        district.name + u' está en ruinas, ya que sus representantes han caído en combate. Otra vez será',
-        u'Los representantes de ' + district.name + u' no han estado a la altura y no la han conseguido salvar',
-        u'Sus participantes no han dado la talla y ' + district.name + u' ha sido demolida. ¡Una pena!',
-        u'Por desgracia, ' + district.name + u' no ha sido salvada por sus representantes',
-        u'Sus representantes han sido derrotados. El mundo echará de menos a ' + district.name,
-        u'Sus participantes nos han decepcionado a todos y ' + district.name + u' ha tenido que ser derruida'
+        district.name + u' está en ruinas, ya que ' + tributes_str  + u' han caído en combate',
+        u'Los representantes de ' + district.name + u'(' + tributes_str  + u')' + u' no la han salvado',
+        tributes_str + u' no han dado la talla y ' + district.name + u' ha sido demolida.',
+        district.name + u' no ha sido salvada por sus representantes (' + tributes_str  + u')',
+        tributes_str + u' han sido derrotados. Echaremos de menos a ' + district.name,
+        tributes_str + u' nos han decepcionado y ' + district.name + u' ha sido derruida'
     ])
 
 def WINNER_DISTRICTS_COMPOSED(winners_str, district, kills_count):
@@ -93,10 +93,7 @@ def WINNER_DISTRICTS_COMPOSED(winners_str, district, kills_count):
     for i, tribute in enumerate(district.tributes):
         if tribute.kills > max_kills.kills:
             max_kills = tribute
-    if len(winners_str) > 130:
-        return u' '.join((u'¡' + district.district_display_name, u'es el ganador de la Páramo War!' + LINEBREAK() + u'Sus representantes han conseguido un total de', str(kills_count), u'muertes, siendo ' + max_kills.get_name() + u' quien más ha conseguido con ' + str(max_kills.kills) + u'.'))
-    else:
-        return u' '.join((winners_str, u'han ganado, consiguiendo un total de', str(kills_count), u'muertes, siendo ' + max_kills.get_name() + u' quien más ha conseguido con ' + str(max_kills.kills) + u'.' + LINEBREAK() + u'¡' + district.district_display_name, u'es el ganador de la Páramo War!'))
+    return u' '.join((winners_str, u'han ganado, consiguiendo un total de', str(kills_count), u'muertes, siendo ' + max_kills.get_name() + u' quien más ha conseguido con ' + str(max_kills.kills) + u'.' + LINEBREAK() + u'¡' + district.district_display_name, u'es el ganador de la Páramo War!'))
 
 def MONSTER_APPEARED(tweet):
     place = tweet.place
@@ -109,12 +106,21 @@ def MONSTER_APPEARED(tweet):
         u'Una patrulla de la guardia ha aparecido en ' + place.name + '.',
     ])
 
-def MONSTER_IMMUNITY():
-    return random.choice([
-        u'¡A partir de ahora la guardia no le hará nada.',
-        u'¡A partir de ahora es inmune ante la justicia!',
-        u'¡A partir de ahora es inmune ante la guardia!',
-    ])
+def MONSTER_IMMUNITY(player, shared = False):
+    if shared:
+        return random.choice([
+            u'¡A partir de ahora la guardia no le hará nada a su equipo.',
+            u'¡A partir de ahora su equipo es inmune ante la justicia!',
+            u'¡A partir de ahora su equipo es inmune ante la ley!',
+            u'¡A partir de ahora ' + get_x_or_y(player, u'él', u'ella') + u' y el resto de su equipo son inmunes ante la guardia!',
+        ])
+    else:
+        return random.choice([
+            u'¡A partir de ahora la guardia no le hará nada.',
+            u'¡A partir de ahora es inmune ante la justicia!',
+            u'¡A partir de ahora es inmune ante la guardia!',
+            u'¡A partir de ahora es inmune ante la ley!',
+        ])
 
 def MONSTER_KILLED(tweet):
     player = tweet.player
@@ -157,7 +163,7 @@ def MOVE_ACTION_ROAD():
         u'ha llamado al taxi de ' + random.choice([u'Rebollo', u'Santi', u'Aquilino', u'Germán']) + u' para que le lleve de',
         u'ha conducido su ' + random.choice([u'Seat León', u'Fiat Multipla', u'Renault Megane', u'Seat Ibiza', u'Golf', u'Opel Corsa', u'Ford Focus', u'Opel Astra', u'BMW Serie 3']) + ' de',
         random.choice([u'está tan en forma que ha ', u'se aburría y ha ', u'está tan cachas que ha ', u'está tan fuerte que ha ']) + random.choice([u'ido en bici', u'ido a trote', u'hecho un sprint', u'ido a la pata coja', u'ido corriendo', u'hecho footing']) + u' de',
-        u'ha hecho ' + random.choice([u'autostop', u'dedo']) + u' para que le lleve de',
+        u'ha hecho ' + random.choice([u'autostop', u'dedo']) + u' para que le lleven de',
         u'ha ido en ' + random.choice([u'moto', u'su scooter', u'vespa', u'mochillo', u'triciclo', u'limusina con su chófer', u'patinete', u'triciclo', u'patinete eléctrico', u'bus', u'un coche robado a lo GTA']) + u' de'
     ])
 

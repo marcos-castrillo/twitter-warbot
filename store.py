@@ -329,13 +329,12 @@ def move_player(player, new_location):
     player.location = new_location
     new_location.players.append(player)
 
+    players_in_place = [x for x in new_location.players if x.state == 1]
     if player.infected:
-        new_location.infected = True
-        for j, p in enumerate(new_location.players):
+        for j, p in enumerate(players_in_place):
             if not p.infection_immunity:
                 p.infected = True
-
-    if new_location.infected and not player.infection_immunity:
+    elif any(x for x in players_in_place if x.infected) and not player.infection_immunity:
         player.infected = True
 
 def destroy_district_if_needed(district):
@@ -384,7 +383,14 @@ def destroy_district_if_needed(district):
         if p.state == 1:
             escaped_list.append(p)
 
-    for i, p in enumerate(escaped_list):
+    any_infected = False
+    any_healthy = False
+
+    for i, p in enumerate(escaped_list + new_location.players):
+        if p.infected:
+            any_infected = True
+        else:
+            any_healthy = True
         move_player(p, new_location)
 
     tweet = Tweet()
@@ -393,6 +399,8 @@ def destroy_district_if_needed(district):
     tweet.place_2 = new_location
     tweet.player_list = tributes_list
     tweet.player_list_2 = escaped_list
+    if any_infected and any_healthy:
+        tweet.there_was_infection = True
     return tweet
 
 def kill_player(player):
@@ -413,6 +421,25 @@ def kill_player(player):
     player.monster_immunity = False
     player.injure_immunity = False
     player.infection_immunity = False
+
+def who_infected_who(player, list_of_players):
+    any_infected = False
+    any_healthy = False
+    was_infected = False
+    for i, p in enumerate(list_of_players):
+        if p.infected:
+            any_infected = True
+        else:
+            any_healthy = True
+    if player.infected:
+        was_infected = True
+        any_infected = True
+    else:
+        any_healthy = True
+
+    there_was_infection = any_infected and any_healthy
+    infected_or_was_infected_by = there_was_infection and was_infected
+    return there_was_infection, infected_or_was_infected_by
 
 place_list = get_place_list()
 powerup_list = get_powerup_list()

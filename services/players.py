@@ -41,13 +41,19 @@ def revive():
             place = player.location
             while place.destroyed:
                 place = random.choice(place_list)
-        player.location = place
-        place.players.append(player)
+
         tweet = Tweet()
+        player.location = place
+        for i, pl in enumerate(place.players):
+            if pl.infected:
+                player.infected = True
+                tweet.there_was_infection = True
+        place.players.append(player)
         tweet.type = Tweet_type.somebody_revived
         tweet.place = player.location
         tweet.player = player
         tweet.double = rebuild_district
+
         write_tweet(tweet)
 
         return True

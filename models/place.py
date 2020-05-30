@@ -11,7 +11,6 @@ class Place(object):
     players = []
     tributes = []
     destroyed = False
-    infected = False
     atracted = False
 
     # Constructor
@@ -30,7 +29,6 @@ class Place(object):
         self.players = []
         self.tributes = []
         self.trap_by = None
-        self.infected = False
         self.district_display_name = self.name
         if district_display_name != None:
             self.district_display_name = district_display_name

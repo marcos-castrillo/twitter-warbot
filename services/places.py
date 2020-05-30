@@ -15,7 +15,7 @@ def atract():
     action_number = random.randint(0, 100)
 
     for i, p in enumerate(place_list):
-        if not p.destroyed and not p.atracted and (MAX_ATRACTED_PLAYERS == 0 or len(p.players) <= MAX_ATRACTED_PLAYERS):
+        if not p.destroyed and not p.atracted and (MAX_ATRACTED_PLAYERS == 0 or len(p.players) < MAX_ATRACTED_PLAYERS):
             loc_candidates.append(p)
 
     if len(loc_candidates) == 0:
@@ -41,17 +41,27 @@ def atract():
                      for k, subsubconnection in enumerate(subconnection.connections):
                           append_players_from(subsubconnection)
 
-    if len(atracted_players) > 0:
+
+    if len(atracted_players) > sum(player.state == 1 for player in place.players):
         if MAX_ATRACTED_PLAYERS > 0 and len(atracted_players) > MAX_ATRACTED_PLAYERS:
             atracted_players = atracted_players[:MAX_ATRACTED_PLAYERS]
         alive_players = get_alive_players()
+
+        any_infected = False
+        any_healthy = False
         for i, player in enumerate(alive_players):
             if player in atracted_players:
+                if player.infected:
+                    any_infected = True
+                else:
+                    any_healthy = True
                 move_player(player, place)
 
         tweet = Tweet()
         tweet.type = Tweet_type.atraction
         tweet.place = place
+        if any_infected and any_healthy:
+            tweet.there_was_infection = True
         tweet.player_list = atracted_players
         write_tweet(tweet)
         return True
@@ -133,12 +143,12 @@ def move():
 
     tweet = Tweet()
 
+    there_was_infection, infected_or_was_infected_by = who_infected_who(player, new_location.players)
+
     if new_location.trap_by != None and new_location.trap_by != player:
         if action_number < 50:
             trapped_by = new_location.trap_by
             new_location.trap_by.kills = new_location.trap_by.kills + 1
-            if player.infected:
-                tweet.unfriend = True
             move_player(player, new_location)
             kill_player(player)
             tweet.type = Tweet_type.trapped
@@ -153,8 +163,8 @@ def move():
         else:
             trapped_by = new_location.trap_by
             new_location.trap_by = None
-            if player.infected:
-                tweet.unfriend = True
+            tweet.there_was_infection = there_was_infection
+            tweet.infected_or_was_infected_by = infected_or_was_infected_by
             move_player(player, new_location)
             tweet = Tweet()
             tweet.type = Tweet_type.trap_dodged
@@ -181,8 +191,8 @@ def move():
             tweet.item = injury
 
         old_location = player.location
-        if player.infected:
-            tweet.unfriend = True
+        tweet.there_was_infection = there_was_infection
+        tweet.infected_or_was_infected_by = infected_or_was_infected_by
         move_player(player, new_location)
 
         tweet.type = Tweet_type.somebody_moved
@@ -248,7 +258,6 @@ def destroy():
     place.destroyed = True
     place.monster = False
     place.trap_by = None
-    place.infected = False
     dead_list = []
     escaped_list = []
     route_list = []
@@ -285,7 +294,14 @@ def destroy():
                 kill_player(p)
                 dead_list.append(p)
 
+    any_infected = False
+    any_healthy = False
+
     for i, p in enumerate(escaped_list):
+        if p.infected:
+            any_infected = True
+        else:
+            any_healthy = True
         move_player(p, new_location)
 
     tweet = Tweet()
@@ -294,5 +310,7 @@ def destroy():
     tweet.place_2 = new_location
     tweet.player_list = dead_list
     tweet.player_list_2 = escaped_list
+    if any_infected and any_healthy:
+        tweet.there_was_infection = True
     write_tweet(tweet)
     return True

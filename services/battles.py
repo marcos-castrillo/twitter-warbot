@@ -126,10 +126,12 @@ def run_away(player_1, player_2, factor, action_number, inverse):
     new_location = random.choice(candidates)
 
     if inverse:
+        there_was_infection, infected_or_was_infected_by = who_infected_who(player_1, new_location.players)
         move_player(player_1, new_location)
         tweet.place = player_2.location
         tweet.place_2 = player_1.location
     else:
+        there_was_infection, infected_or_was_infected_by = who_infected_who(player_1, new_location.players)
         move_player(player_2, new_location)
         tweet.place = player_1.location
         tweet.place_2 = player_2.location
@@ -140,6 +142,9 @@ def run_away(player_1, player_2, factor, action_number, inverse):
     tweet.factor = factor
     tweet.action_number = action_number
     tweet.inverse = inverse
+    if there_was_infection:
+        tweet.there_was_infection = True
+    tweet.infected_or_was_infected_by = infected_or_was_infected_by
 
     if are_friends(player_1, player_2):
         unfriend(player_1, player_2)
@@ -226,7 +231,6 @@ def kill_player(player):
     place.items = place.items + player.item_list
     #place.players.pop(place.players.index(player))
     #player.state = 0
-    player.state = 0
     player.attack = 0
     player.defense = 0
     player.item_list = []
