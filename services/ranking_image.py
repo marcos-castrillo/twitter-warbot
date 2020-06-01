@@ -60,27 +60,27 @@ def draw_player_ranking(player, row_index, col_index, is_dead = False):
         dead_rows = row_index + 1 - alive_rows
         coord_y = coord_y - dead_rows * int(RANKING_SPACE_BETWEEN_ROWS/3)
 
-    y = coord_y + 50
+    y = coord_y + RANKING_IMG_SIZE
     font = ImageFont.truetype(font_path, size=10)
     lines = get_multiline_wrapped_text(player.name, RANKING_IMG_SIZE, font)
     for j, line in enumerate(lines):
         y = y + j*12
         draw_wrapped_text(image, coord_x, y, RANKING_IMG_SIZE, 12, line, font_path, 10, 'rgb(0,0,0)')
 
-    draw.rectangle((coord_x, coord_y, coord_x + 48, coord_y + 48), outline='rgb(0,0,0)')
-    draw_player(image, tweet, player, coord_x + 24, coord_y + 24)
+    draw.rectangle((coord_x, coord_y, coord_x + AVATAR_SIZE, coord_y + AVATAR_SIZE), outline='rgb(0,0,0)')
+    draw_player(image, tweet, player, coord_x + int(AVATAR_SIZE / 2), coord_y + int(AVATAR_SIZE / 2))
 
     if player.kills > 0:
-        paste_image(image, coord_x + 20, coord_y - 10, 32, 'skull')
-        draw.text((coord_x + 27, coord_y - 17), str(player.kills), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=10))
+        paste_image(image, coord_x + int(AVATAR_SIZE / 2) - 4, coord_y - 10, 32, 'skull')
+        draw.text((coord_x + int(AVATAR_SIZE / 2) + 4, coord_y - 17), str(player.kills), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=10))
 
     if player.get_attack() != 0:
-        paste_image(image, coord_x + 8, coord_y - 30, 32, 'attack')
-        draw.text((coord_x + 14, coord_y - 35), str(player.get_attack()), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=10))
+        paste_image(image, coord_x + int(AVATAR_SIZE / 5), coord_y - 30, 32, 'attack')
+        draw.text((coord_x + int(AVATAR_SIZE / 5) + 6, coord_y - 35), str(player.get_attack()), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=10))
 
     if player.get_defense() != 0:
-        paste_image(image, coord_x + 34, coord_y - 30, 32, 'defense')
-        draw.text((coord_x + 42, coord_y - 35), str(player.get_defense()), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=10))
+        paste_image(image, coord_x + 2 * int(AVATAR_SIZE / 3), coord_y - 30, 32, 'defense')
+        draw.text((coord_x + 2 * int(AVATAR_SIZE / 3) + 10, coord_y - 35), str(player.get_defense()), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=10))
 
 def draw_ranking_rectangle(fill_color, fill_color_dark, players_count, row_index, col_index, index):
     draw = ImageDraw.Draw(image)

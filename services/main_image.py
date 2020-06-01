@@ -18,9 +18,9 @@ def get_main_image(main_image, main_tweet):
     for i, p in enumerate(place_list):
         if not p.destroyed:
             if p.trap_by != None:
-                paste_image(image, p.coord_x, p.coord_y + 24, 48, 'trap')
+                paste_image(image, p.coord_x, p.coord_y + int(AVATAR_SIZE / 2), 48, 'trap')
             if p.monster:
-                paste_image(image, p.coord_x, p.coord_y - 12, 48, 'monster')
+                paste_image(image, p.coord_x, p.coord_y - int(AVATAR_SIZE / 4), 48, 'monster')
 
             if tweet.type != Tweet_type.introduce_players:
                 draw_items(len(p.items), p.coord_x, p.coord_y, image, True)
@@ -38,8 +38,8 @@ def get_main_image(main_image, main_tweet):
         if tweet.type == Tweet_type.somebody_tied_and_became_friend or tweet.type == Tweet_type.somebody_tied_and_was_friend or tweet.type == Tweet_type.somebody_escaped or tweet.type == Tweet_type.somebody_killed:
             draw_battle()
 
-        draw_player(image, tweet, tweet.player, tweet.player.location.coord_x - 28, tweet.player.location.coord_y)
-        draw_player(image, tweet, tweet.player_2, tweet.player_2.location.coord_x + 28, tweet.player_2.location.coord_y)
+        draw_player(image, tweet, tweet.player, tweet.player.location.coord_x - int(AVATAR_SIZE / 2) - 4, tweet.player.location.coord_y)
+        draw_player(image, tweet, tweet.player_2, tweet.player_2.location.coord_x + int(AVATAR_SIZE / 2) + 4, tweet.player_2.location.coord_y)
     elif tweet.type == Tweet_type.destroyed or tweet.type == Tweet_type.destroyed_district or tweet.type == Tweet_type.winner_districts or tweet.type == Tweet_type.atraction or tweet.type == Tweet_type.introduce_players:
         # Multi actions
         draw_multiple_players(tweet, tweet.player_list, tweet.place.coord_x, tweet.place.coord_y, image, 50)
@@ -152,11 +152,11 @@ def draw_battle():
         def_player_2 = tweet.player_2.get_defense()
 
     #avatar player_1
-    draw.rectangle((tweet.player.location.coord_x - 55, tweet.player.location.coord_y - 28, tweet.player.location.coord_x - 1, tweet.player.location.coord_y + 27), outline=color_1, width=4)
+    draw.rectangle((tweet.player.location.coord_x - AVATAR_SIZE - 8, tweet.player.location.coord_y - int(AVATAR_SIZE / 2) - 4, tweet.player.location.coord_x, tweet.player.location.coord_y + int(AVATAR_SIZE / 2) + 4), outline=color_1, width=4)
     #avatar player_2
-    draw.rectangle((tweet.player_2.location.coord_x, tweet.player_2.location.coord_y - 28, tweet.player_2.location.coord_x + 55, tweet.player_2.location.coord_y + 27), outline=color_2, width=4)
+    draw.rectangle((tweet.player_2.location.coord_x, tweet.player.location.coord_y - int(AVATAR_SIZE / 2) - 4, tweet.player.location.coord_x + AVATAR_SIZE + 8, tweet.player.location.coord_y + int(AVATAR_SIZE / 2) + 4), outline=color_2, width=4)
     #stats player_1
-    draw.rectangle((tweet.player.location.coord_x - 110, tweet.player.location.coord_y - 25, tweet.player.location.coord_x - 60, tweet.player.location.coord_y + 25), fill='rgb(255,255,255)')
+    draw.rectangle((tweet.player.location.coord_x - AVATAR_SIZE * 2, tweet.player.location.coord_y - 25, tweet.player.location.coord_x - AVATAR_SIZE, tweet.player.location.coord_y + 25), fill='rgb(255,255,255)')
     paste_image(image, tweet.player.location.coord_x - 98, tweet.player.location.coord_y - 10, 32, 'attack')
     paste_image(image, tweet.player.location.coord_x - 98, tweet.player.location.coord_y + 12, 32, 'defense')
     draw.text((tweet.player.location.coord_x - 85, tweet.player.location.coord_y - 22), str(att_player_1), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path_2, size=15))

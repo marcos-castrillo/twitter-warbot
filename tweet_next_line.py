@@ -15,15 +15,41 @@ next_line_path = os.path.join(current_dir, 'simulations', dir_files[-1], '-1_lin
 next_image_path = os.path.join(current_dir, 'simulations', dir_files[-1], '-1_image.txt')
 simulation_path = os.path.join(current_dir, 'simulations', dir_files[-1], 'simulation.txt')
 
-longest_line = max(open(simulation_path, 'r', encoding='utf-8'), key=len)
-if len(longest_line) > 240:
-    sys.exit('File error: line its too long: (' + str(len(longest_line)) +  ' characters)\n' +  longest_line)
+def sanitize_lines(simulation_path):
+    # Lines no longer than 240 chars
+    longest_line = max(open(simulation_path, 'r', encoding='utf-8'), key=len)
+    if len(longest_line) > 240:
+        sys.exit('File error: line its too long: (' + str(len(longest_line)) +  ' characters)\n' +  longest_line)
+
+    # Add . at the beginning of the lines if there's an @
+    lines = {}
+    with open(simulation_path, encoding='utf-8') as f:
+        lines = f.readlines()
+
+    for i, l in enumerate(lines):
+        if l[0] == '@':
+            temp_str = ''
+            for j in l:
+                temp_str += j
+            temp_str = '.' + temp_str
+            lines[i] = temp_str
+
+    with open(simulation_path, 'w', encoding='utf-8') as file:
+        file.writelines(lines)
+
+    with open(simulation_path, encoding='utf-8') as f:
+        for i, l in enumerate(f):
+            if l[0] == '@':
+                sys.exit('File error: theres an @ as the first character of the line: ' + str(i))
+
+sanitize_lines(simulation_path)
 
 total_lines = 0
 with open(simulation_path, encoding='utf-8') as f:
     for i, l in enumerate(f):
         total_lines = total_lines + 1
         pass
+
 
 next_line = 0
 next_image = 0

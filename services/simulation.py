@@ -113,9 +113,9 @@ def draw_places(image):
             color = 'rgb(0,0,0)'
             if p.destroyed:
                 color = 'rgb(255,0,0)'
-            draw.text((p.coord_x + 15, p.coord_y + - 10 + j * 16), line, fill=color, font=font)
+            draw.text((p.coord_x + int(AVATAR_SIZE / 4) + 4, p.coord_y + - 10 + j * 16), line, fill=color, font=font)
         if p.destroyed:
-            paste_image(image, p.coord_x, p.coord_y, 50, 'destroyed')
+            paste_image(image, p.coord_x, p.coord_y, AVATAR_SIZE, 'destroyed')
         else:
-            paste_image(image, p.coord_x, p.coord_y, 50, 'place')
+            paste_image(image, p.coord_x, p.coord_y, AVATAR_SIZE, 'place')
     return image

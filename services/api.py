@@ -68,5 +68,6 @@ def initialize_avatars():
 
             print('Downloading ' + player.get_name() + '\'s avatar...')
             profile_image_url = api.GetUser(screen_name=player.username).profile_image_url
+            profile_image_url = profile_image_url.replace('_normal', '_bigger')
             urllib.request.urlretrieve(profile_image_url, filename + '.png')
         player.avatar_dir = filename

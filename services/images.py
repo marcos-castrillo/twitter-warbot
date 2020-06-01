@@ -18,80 +18,80 @@ font_path_2 = os.path.join(current_dir, '../assets/fonts/Arial.ttf')
 
 def draw_player(image, tweet, player, coord_x, coord_y, simple = False):
     draw = ImageDraw.Draw(image)
-    paste_image(image, coord_x, coord_y, 48, '', player.avatar_dir)
+    paste_image(image, coord_x, coord_y, AVATAR_SIZE, '', player.avatar_dir)
 
     if player.state == 0:
         draw.text((coord_x - 28, coord_y - 50), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path, size=70))
     else:
         if player.infected:
-            paste_image(image, coord_x + 24, coord_y + 12, 36, 'infection')
+            paste_image(image, coord_x + int(AVATAR_SIZE / 2), coord_y + 12, 36, 'infection')
         if not simple:
             if len(player.item_list) == 2:
-                paste_image(image, coord_x + 22, coord_y - 19, 32, get_item_rarity(player.item_list[1]))
+                paste_image(image, coord_x + int(AVATAR_SIZE / 2), coord_y - int(AVATAR_SIZE / 2), 32, get_item_rarity(player.item_list[1]))
             if len(player.item_list) > 0:
-                paste_image(image, coord_x - 22, coord_y - 19, 32, get_item_rarity(player.item_list[0]))
-            if player.injure_immunity:
-                paste_image(image, coord_x - 24, coord_y + 24, 32, 'special')
+                paste_image(image, coord_x - int(AVATAR_SIZE / 2), coord_y - int(AVATAR_SIZE / 2), 32, get_item_rarity(player.item_list[0]))
             if player.monster_immunity:
-                paste_image(image, coord_x - 24, coord_y + 12, 32, 'special')
+                paste_image(image, coord_x - int(AVATAR_SIZE / 2), coord_y + int(AVATAR_SIZE / 4), 32, 'special')
+            if player.injure_immunity:
+                paste_image(image, coord_x - int(AVATAR_SIZE / 2), coord_y + 2*int(AVATAR_SIZE / 4), 32, 'special')
             if player.infection_immunity:
-                paste_image(image, coord_x - 24, coord_y, 32, 'special')
+                paste_image(image, coord_x - int(AVATAR_SIZE / 2), coord_y + 3*int(AVATAR_SIZE / 4), 32, 'special')
         if tweet.type == Tweet_type.winner or tweet.type == Tweet_type.winner_districts:
-            paste_image(image, coord_x, coord_y - 48, 72, 'crown')
+            paste_image(image, coord_x, coord_y - AVATAR_SIZE, 72, 'crown')
 
 def draw_items(items_count, coord_x, coord_y, image, transparent = False):
+    delta_y = int(AVATAR_SIZE / 2)
     if transparent:
         item_img = 'item_transparent'
     else:
         item_img = 'item'
 
     if items_count == 1:
-        paste_image(image, coord_x, coord_y - 26, 48, item_img)
+        paste_image(image, coord_x, coord_y - int(AVATAR_SIZE / 2), 48, item_img)
     elif items_count == 2:
-        paste_image(image, coord_x - 12, coord_y - 26, 48, item_img)
-        paste_image(image, coord_x + 12, coord_y - 26, 48, item_img)
+        paste_image(image, coord_x - 12, coord_y - delta_y, 48, item_img)
+        paste_image(image, coord_x + 12, coord_y - delta_y, 48, item_img)
     else:
         while items_count > 0:
             if items_count <= 3:
-                y = coord_y - 26
+                y = coord_y - delta_y
                 paste_image(image, coord_x - 48 + items_count * 24, y, 48, item_img)
             else:
-                y = coord_y - 26 - 10
+                y = coord_y - delta_y - 10
                 paste_image(image, coord_x - 48 + (items_count - 3) * 24, y, 48, item_img)
             items_count = items_count - 1
 
 def draw_multiple_players(tweet, players, coord_x, coord_y, image, delta_x, single_line = False):
     draw = ImageDraw.Draw(image)
+    delta_y = HEIGHT_BETWEEN_PLAYERS
+
+    if len(players) > 12:
+        delta_y = int(delta_y / 2)
+        delta_x = int(delta_x / 2)
+    players_length = len(players)
+    if MAX_PLAYERS_IN_LINE > 0 and not single_line and len(players) > MAX_PLAYERS_IN_LINE:
+        players_length = MAX_PLAYERS_IN_LINE
+    if players_length % 2 == 0:
+        x_0 = coord_x - int(players_length / 2) * int(delta_x/2)
+    else:
+        x_0 = coord_x - int((players_length - 1) / 2) * delta_x
+
     if len(players) > 0:
-        if len(players) == 1:
-            draw_player(image, tweet, players[0], coord_x, coord_y, True)
-        elif len(players) == 2:
-            draw_player(image, tweet, players[0], coord_x - int(delta_x/2), coord_y, True)
-            draw_player(image, tweet, players[1], coord_x + int(delta_x/2), coord_y, True)
-        elif single_line:
-            x = coord_x - int(len(players)/2)*delta_x
+        if single_line:
+            x = x_0
             y = coord_y
             for i, player in enumerate(players):
                 draw_player(image, tweet, players[i], x, y, True)
                 x = x + delta_x
-        elif len(players) <= 12:
-            x = coord_x - delta_x * 2
-            y = coord_y
-            for i, player in enumerate(players):
-                draw_player(image, tweet, players[i], x, y, True)
-                x = x + delta_x
-                if (i-4)%5 == 0:
-                    x = coord_x - delta_x * 2
-                    y = y + HEIGHT_BETWEEN_PLAYERS
         else:
-            x = coord_x - int(delta_x/2)*4
+            x = x_0
             y = coord_y
             for i, player in enumerate(players):
                 draw_player(image, tweet, players[i], x, y, True)
-                x = x + int(delta_x/2)
-                if (i-8)%9 == 0:
-                    x = coord_x - int(delta_x/2)*4
-                    y = y + int(HEIGHT_BETWEEN_PLAYERS / 2)
+                x = x + delta_x
+                if (i - MAX_PLAYERS_IN_LINE + 1) % MAX_PLAYERS_IN_LINE == 0:
+                    x = x_0
+                    y = y + delta_y
 
 def draw_wrapped_text(image, coord_x, coord_y, max_width, max_height, text, font_path, initial_font_size, fill):
     draw = ImageDraw.Draw(image)
@@ -151,5 +151,4 @@ def paste_image(image, x, y, dimension, image_name, image_dir = None):
     image_to_paste = Image.open(os.path.join(current_dir, image_dir + '.png'))
     image_to_paste.thumbnail([dimension, dimension])
     side = int(dimension / 2)
-
     image.paste(image_to_paste, (x - side, y - side, x + side, y + side), image_to_paste.convert('RGBA'))
