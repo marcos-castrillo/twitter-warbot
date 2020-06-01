@@ -63,8 +63,8 @@ def write_last_line():
         file.write('ok')
 
 def draw_image(tweet):
-    raw_map_img = draw_places(Image.open(os.path.join(current_dir, '../assets/img/maps/' + LOCALIZATION + '.png')))
-    raw_map_img_2 = draw_places(Image.open(os.path.join(current_dir, '../assets/img/maps/' + LOCALIZATION + '.png')))
+    raw_map_img = draw_places(Image.open(os.path.join(current_dir, '../assets/maps/' + LOCALIZATION + '.png')))
+    raw_map_img_2 = draw_places(Image.open(os.path.join(current_dir, '../assets/maps/' + LOCALIZATION + '.png')))
     rows = math.ceil(len(get_alive_players()) / RANKING_IMGS_PER_ROW) + 2*(math.ceil(len(get_dead_players()) / RANKING_IMGS_PER_ROW))/3
 
     RANKING_HEIGHT = int(rows * RANKING_SPACE_BETWEEN_ROWS + RANKING_PADDING * 2)

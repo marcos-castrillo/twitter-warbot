@@ -202,7 +202,7 @@ def draw_battle():
 def draw_flag():
     dimension_1 = 424
     dimension_2 = 286
-    image_to_paste = Image.open(os.path.join(current_dir, '../assets/img/flags/' + LOCALIZATION + '/' + tweet.place.district_display_name + '.jpg'))
+    image_to_paste = Image.open(os.path.join(current_dir, '../assets/flags/' + LOCALIZATION + '/' + tweet.place.district_display_name + '.jpg'))
     image_to_paste.thumbnail([dimension_1/2, dimension_2/2])
     image.paste(image_to_paste, (tweet.place.coord_x - 100, tweet.place.coord_y - 130), image_to_paste.convert('RGBA'))
 

@@ -5,6 +5,6 @@ from services.api import tweet_sleep
 import os
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
-image_path = os.path.join(current_dir, 'assets/img/sleep')
+image_path = os.path.join(current_dir, 'assets/sleep')
 
 tweet_sleep(image_path)

@@ -99,7 +99,7 @@ def infect():
         elif not p.infection_immunity:
             healthy_players.append(p)
 
-    if not any_infection:
+    if not any_infection and len(healthy_players) > 0:
         player = random.choice(healthy_players)
         if not player.infection_immunity:
             player.infected = True

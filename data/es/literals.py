@@ -723,11 +723,20 @@ def UNFRIEND():
         'Su amistad se ha roto.'
     ])
 
-WINNER_INFECTION = u'¡Incluso ha sobrevivido al coronavirus!'
-WINNER_INJURY_LIST = u'Todo ello a pesar de padecer'
-WINNER_ITEM_LIST = u'Además, ha acabado teniendo'
-WINNER_NO_KILLS = u'Lo ha conseguido sin llevarse por delante a nadie.'
-WINNER_ONE_KILL = u'Lo ha conseguido llevándose por delante a un sólo participante.'
+def WINNER_INFECTION():
+    return u'¡Incluso ha sobrevivido al coronavirus!'
+
+def WINNER_INJURY_LIST():
+    return u'Todo ello a pesar de padecer'
+
+def WINNER_ITEM_LIST():
+    return u'Además, ha acabado teniendo'
+
+def WINNER_NO_KILLS():
+    return u'Lo ha conseguido sin llevarse por delante a nadie.'
+
+def WINNER_ONE_KILL():
+    return u'Lo ha conseguido llevándose por delante a un sólo participante.'
 
 def WINNER_MULTI_KILL(kill_count):
     return u' '.join([u'Lo ha conseguido llevándose por delante a', kill_count, 'participantes.'])

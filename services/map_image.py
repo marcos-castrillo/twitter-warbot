@@ -16,7 +16,7 @@ def get_map_image(image_map, tweet_map):
     draw_map_places()
     if tweet.place != None:
         draw_ellipse()
-    paste_image(image, 125, 1275, 150, 'watermark')
+    paste_image(image, WATERMARK_COORDINATES[0], WATERMARK_COORDINATES[1], 150, 'watermark')
 
     return image
 

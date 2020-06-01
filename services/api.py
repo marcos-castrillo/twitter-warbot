@@ -54,7 +54,7 @@ def tweet(message, image_path_list):
     return tweet.id_str
 
 def initialize_avatars():
-    path = 'assets/img/avatars'
+    path = 'assets/avatars'
     if not os.path.exists(path):
         os.makedirs(path)
     for i, player in enumerate(player_list):

@@ -141,10 +141,10 @@ def get_item_rarity(item):
         return 'item_3'
 
 def paste_image(image, x, y, dimension, image_name, image_dir = None):
-    if image_dir == None and os.path.exists(os.path.join(current_dir, '../assets/img/' + LOCALIZATION + '/' + image_name + '.png')):
-        image_dir = '../assets/img/' + LOCALIZATION + '/' + image_name
+    if image_dir == None and os.path.exists(os.path.join(current_dir, '../assets/icons/' + LOCALIZATION + '/' + image_name + '.png')):
+        image_dir = '../assets/icons/' + LOCALIZATION + '/' + image_name
     elif image_dir == None:
-        image_dir = '../assets/img/' + image_name
+        image_dir = '../assets/icons/' + image_name
     else:
         image_dir = '../' + image_dir
 
