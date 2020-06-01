@@ -65,7 +65,11 @@ def write_last_line():
 def draw_image(tweet):
     raw_map_img = draw_places(Image.open(os.path.join(current_dir, '../assets/maps/' + LOCALIZATION + '.png')))
     raw_map_img_2 = draw_places(Image.open(os.path.join(current_dir, '../assets/maps/' + LOCALIZATION + '.png')))
-    rows = math.ceil(len(get_alive_players()) / RANKING_IMGS_PER_ROW) + 2*(math.ceil(len(get_dead_players()) / RANKING_IMGS_PER_ROW))/3
+
+    if USE_DISTRICTS and MAX_TRIBUTES_PER_DISTRICT > 0:
+        rows = math.ceil(len(get_alive_players()) / RANKING_IMGS_PER_ROW) + 2*(math.ceil(len(get_dead_players()) / RANKING_IMGS_PER_ROW))/3
+    else:
+        rows = math.ceil(len(player_list) / RANKING_IMGS_PER_ROW)
 
     RANKING_HEIGHT = int(rows * RANKING_SPACE_BETWEEN_ROWS + RANKING_PADDING * 2)
     blank_img = Image.new('RGB', (RANKING_WIDTH, RANKING_HEIGHT), color = BG_COLOR)

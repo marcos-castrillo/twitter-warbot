@@ -60,7 +60,13 @@ def draw_player_ranking(player, row_index, col_index, is_dead = False):
         dead_rows = row_index + 1 - alive_rows
         coord_y = coord_y - dead_rows * int(RANKING_SPACE_BETWEEN_ROWS/3)
 
-    draw_wrapped_text(image, coord_x, coord_y + 50, RANKING_IMG_SIZE, 12, player.name, font_path, 10, 'rgb(0,0,0)')
+    y = coord_y + 50
+    font = ImageFont.truetype(font_path, size=10)
+    lines = get_multiline_wrapped_text(player.name, RANKING_IMG_SIZE, font)
+    for j, line in enumerate(lines):
+        y = y + j*12
+        draw_wrapped_text(image, coord_x, y, RANKING_IMG_SIZE, 12, line, font_path, 10, 'rgb(0,0,0)')
+
     draw.rectangle((coord_x, coord_y, coord_x + 48, coord_y + 48), outline='rgb(0,0,0)')
     draw_player(image, tweet, player, coord_x + 24, coord_y + 24)
 
@@ -149,7 +155,7 @@ def circle_players(players_to_circle):
     dead_area = False
 
     for i, player in enumerate(players_to_circle):
-        if not dead_area and player.state == 0:
+        if USE_DISTRICTS and MAX_TRIBUTES_PER_DISTRICT > 0 and not dead_area and player.state == 0:
             col_index = 0
             row_index = row_index + 1
             dead_area = True
