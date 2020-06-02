@@ -24,20 +24,21 @@ def draw_player(image, tweet, player, coord_x, coord_y, simple = False):
         draw.text((coord_x - 28, coord_y - 50), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path, size=70))
     else:
         if player.infected:
-            paste_image(image, coord_x + int(AVATAR_SIZE / 2), coord_y + 12, 36, 'infection')
+            paste_image(image, coord_x + int(AVATAR_SIZE / 2) - 4, coord_y + 12, 36, 'infection')
         if not simple:
+            icon_size = 3 * int((AVATAR_SIZE + 2) / 4)
             if len(player.item_list) == 2:
-                paste_image(image, coord_x + int(AVATAR_SIZE / 2), coord_y - int(AVATAR_SIZE / 2), 32, get_item_rarity(player.item_list[1]))
+                paste_image(image, coord_x + int(AVATAR_SIZE / 2) - 4, coord_y - int(AVATAR_SIZE / 2), icon_size, get_item_rarity(player.item_list[1]))
             if len(player.item_list) > 0:
-                paste_image(image, coord_x - int(AVATAR_SIZE / 2), coord_y - int(AVATAR_SIZE / 2), 32, get_item_rarity(player.item_list[0]))
+                paste_image(image, coord_x - int(AVATAR_SIZE / 2) + 4, coord_y - int(AVATAR_SIZE / 2), icon_size, get_item_rarity(player.item_list[0]))
             if player.monster_immunity:
-                paste_image(image, coord_x - int(AVATAR_SIZE / 2), coord_y + int(AVATAR_SIZE / 4), 32, 'special')
+                paste_image(image, coord_x - int(AVATAR_SIZE / 2) + 4, coord_y + int(AVATAR_SIZE / 4), icon_size, 'special')
             if player.injure_immunity:
-                paste_image(image, coord_x - int(AVATAR_SIZE / 2), coord_y + 2*int(AVATAR_SIZE / 4), 32, 'special')
+                paste_image(image, coord_x - int(AVATAR_SIZE / 2) + 4, coord_y + 2*int(AVATAR_SIZE / 4), icon_size, 'special')
             if player.infection_immunity:
-                paste_image(image, coord_x - int(AVATAR_SIZE / 2), coord_y + 3*int(AVATAR_SIZE / 4), 32, 'special')
+                paste_image(image, coord_x - int(AVATAR_SIZE / 2) + 4, coord_y + 3*int(AVATAR_SIZE / 4), icon_size, 'special')
         if tweet.type == Tweet_type.winner or tweet.type == Tweet_type.winner_districts:
-            paste_image(image, coord_x, coord_y - AVATAR_SIZE, 72, 'crown')
+            paste_image(image, coord_x, coord_y - 3 * int(AVATAR_SIZE / 4), 72, 'crown')
 
 def draw_items(items_count, coord_x, coord_y, image, transparent = False):
     delta_y = int(AVATAR_SIZE / 2)

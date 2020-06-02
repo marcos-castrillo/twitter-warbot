@@ -170,7 +170,7 @@ def circle_players(players_to_circle):
             else:
                 coord_y = coord_y - RANKING_DISTRICT_NAME_HEIGHT
 
-            draw.ellipse((coord_x - 50, coord_y - 50, coord_x + 100, coord_y + 100), outline='rgb(255,0,0)', width=5)
+            draw.ellipse((coord_x - RANKING_IMG_SIZE, coord_y - RANKING_IMG_SIZE, coord_x + RANKING_IMG_SIZE * 2, coord_y + RANKING_IMG_SIZE * 2), outline='rgb(255,0,0)', width=5)
 
         col_index = col_index + 1
 

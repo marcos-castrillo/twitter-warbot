@@ -115,7 +115,7 @@ def ESCAPED(player_1, player_2):
         player_1.get_name() + u' y ' + player_2.get_name() + u' se han encontrado, pero ' + player_2.name + u' ha salido por patas a ' + player_2.location.name + u'.',
         player_1.get_name() + u' y ' + player_2.get_name() + u' se han encontrado, pero ' + player_2.name + u' ha huido cual cobarde a ' + player_2.location.name + u'.',
         player_1.get_name() + u' y ' + player_2.get_name() + u' han empezado a pelear, pero ' + player_2.name + u' sabía que tenía las de perder así que huyó a ' + player_2.location.name + u'.',
-        player_2.get_name() + u' cogió un puñado de arena, se lo echó a ' + player_1.name + u' en los ojos y huyó a ' + player_2.location.name + u'.',
+        player_2.get_name() + u' cogió un puñado de arena, se lo echó a ' + player_1.get_name() + u' en los ojos y huyó a ' + player_2.location.name + u'.',
         player_2.get_name() + u' iba a pillar a ' + player_1.get_name() + u' por la espalda, pero ' + get_x_or_y(player_1, 'éste', 'ésta') + ' se dio cuenta en el último momento.' + LINEBREAK() + player_2.name + u' ha huido a ' + player_2.location.name + u'.',
         player_2.get_name() + u' ha visto a ' + player_1.get_name() + u' y ha huido a ' + player_2.location.name + u'.',
         u'A ' + player_2.get_name() + u' le da miedo ' + player_1.get_name() + u' y ha huido a ' + player_2.location.name + u'.',

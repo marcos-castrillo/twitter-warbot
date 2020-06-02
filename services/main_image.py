@@ -38,8 +38,9 @@ def get_main_image(main_image, main_tweet):
         if tweet.type == Tweet_type.somebody_tied_and_became_friend or tweet.type == Tweet_type.somebody_tied_and_was_friend or tweet.type == Tweet_type.somebody_escaped or tweet.type == Tweet_type.somebody_killed:
             draw_battle()
 
-        draw_player(image, tweet, tweet.player, tweet.player.location.coord_x - int(AVATAR_SIZE / 2) - 4, tweet.player.location.coord_y)
-        draw_player(image, tweet, tweet.player_2, tweet.player_2.location.coord_x + int(AVATAR_SIZE / 2) + 4, tweet.player_2.location.coord_y)
+        frame_width = 4
+        draw_player(image, tweet, tweet.player, tweet.player.location.coord_x - int(AVATAR_SIZE / 2) - frame_width - 10, tweet.player.location.coord_y)
+        draw_player(image, tweet, tweet.player_2, tweet.player_2.location.coord_x + int(AVATAR_SIZE / 2) + frame_width + 10 + 1, tweet.player_2.location.coord_y)
     elif tweet.type == Tweet_type.destroyed or tweet.type == Tweet_type.destroyed_district or tweet.type == Tweet_type.winner_districts or tweet.type == Tweet_type.atraction or tweet.type == Tweet_type.introduce_players:
         # Multi actions
         draw_multiple_players(tweet, tweet.player_list, tweet.place.coord_x, tweet.place.coord_y, image, 50)
@@ -151,22 +152,31 @@ def draw_battle():
         att_player_2 = tweet.player_2.get_attack()
         def_player_2 = tweet.player_2.get_defense()
 
-    #avatar player_1
-    draw.rectangle((tweet.player.location.coord_x - AVATAR_SIZE - 8, tweet.player.location.coord_y - int(AVATAR_SIZE / 2) - 4, tweet.player.location.coord_x, tweet.player.location.coord_y + int(AVATAR_SIZE / 2) + 4), outline=color_1, width=4)
-    #avatar player_2
-    draw.rectangle((tweet.player_2.location.coord_x, tweet.player.location.coord_y - int(AVATAR_SIZE / 2) - 4, tweet.player.location.coord_x + AVATAR_SIZE + 8, tweet.player.location.coord_y + int(AVATAR_SIZE / 2) + 4), outline=color_2, width=4)
+    frame_width = 4
+    #frame player_1
+    draw.rectangle((tweet.player.location.coord_x - AVATAR_SIZE - frame_width * 2 - 10, tweet.player.location.coord_y - int(AVATAR_SIZE / 2) - frame_width, tweet.player.location.coord_x - 10 - 1, tweet.player.location.coord_y + int(AVATAR_SIZE / 2) + frame_width - 1), outline=color_1, width=4)
+    #frame player_2
+    draw.rectangle((tweet.player_2.location.coord_x + 10 + 1, tweet.player_2.location.coord_y - int(AVATAR_SIZE / 2) - frame_width, tweet.player_2.location.coord_x + AVATAR_SIZE + frame_width * 2 + 10, tweet.player_2.location.coord_y + int(AVATAR_SIZE / 2) + frame_width - 1), outline=color_2, width=4)
+    #stats
+    delta_x = AVATAR_SIZE + 10
+    square_size = 50
+    unit = int(square_size / 10)
     #stats player_1
-    draw.rectangle((tweet.player.location.coord_x - AVATAR_SIZE * 2, tweet.player.location.coord_y - 25, tweet.player.location.coord_x - AVATAR_SIZE, tweet.player.location.coord_y + 25), fill='rgb(255,255,255)')
-    paste_image(image, tweet.player.location.coord_x - 98, tweet.player.location.coord_y - 10, 32, 'attack')
-    paste_image(image, tweet.player.location.coord_x - 98, tweet.player.location.coord_y + 12, 32, 'defense')
-    draw.text((tweet.player.location.coord_x - 85, tweet.player.location.coord_y - 22), str(att_player_1), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path_2, size=15))
-    draw.text((tweet.player.location.coord_x - 85, tweet.player.location.coord_y), str(def_player_1), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path_2, size=15))
+    x_0 = tweet.player.location.coord_x - AVATAR_SIZE - 10
+    draw.ellipse((x_0 - square_size - unit * 2, tweet.player.location.coord_y - unit * 5, x_0 - unit * 2, tweet.player.location.coord_y + 25), fill='rgb(255,255,255)')
+    draw.ellipse((x_0 - square_size - unit * 2, tweet.player.location.coord_y - unit * 5, x_0 - unit * 2, tweet.player.location.coord_y + 25), outline=color_1, width=2)
+    paste_image(image, x_0 - unit * 9, tweet.player.location.coord_y - unit * 2, 32, 'attack')
+    paste_image(image, x_0 - unit * 9, tweet.player.location.coord_y + unit * 2, 32, 'defense')
+    draw.text((x_0 - unit * 6 - 4, tweet.player.location.coord_y - unit * 4 + 2), str(att_player_1), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path_2, size=15))
+    draw.text((x_0 - unit * 6 - 4, tweet.player.location.coord_y + unit - 2), str(def_player_1), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path_2, size=15))
     #stats player_2
-    draw.rectangle((tweet.player_2.location.coord_x + 110, tweet.player_2.location.coord_y - 25, tweet.player_2.location.coord_x + 60, tweet.player_2.location.coord_y + 25), fill='rgb(255,255,255)')
-    paste_image(image, tweet.player_2.location.coord_x + 72, tweet.player_2.location.coord_y - 10, 32, 'attack')
-    paste_image(image, tweet.player_2.location.coord_x + 72, tweet.player_2.location.coord_y + 12, 32, 'defense')
-    draw.text((tweet.player_2.location.coord_x + 85, tweet.player_2.location.coord_y - 22), str(att_player_2), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path_2, size=15))
-    draw.text((tweet.player_2.location.coord_x + 85, tweet.player_2.location.coord_y), str(def_player_2), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path_2, size=15))
+    x_0 = tweet.player_2.location.coord_x + AVATAR_SIZE + 10
+    draw.ellipse((x_0 + unit * 2, tweet.player_2.location.coord_y - unit * 5, x_0 + square_size + unit * 2, tweet.player_2.location.coord_y + 25), fill='rgb(255,255,255)')
+    draw.ellipse((x_0 + unit * 2, tweet.player_2.location.coord_y - unit * 5, x_0 + square_size + unit * 2, tweet.player_2.location.coord_y + 25), outline=color_2, width=2)
+    paste_image(image, x_0 + unit * 5, tweet.player_2.location.coord_y - unit * 2, 32, 'attack')
+    paste_image(image, x_0 + unit * 5, tweet.player_2.location.coord_y + unit * 2, 32, 'defense')
+    draw.text((x_0 + unit * 8 - 4, tweet.player_2.location.coord_y - unit * 4 + 2), str(att_player_2), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path_2, size=15))
+    draw.text((x_0 + unit * 8 - 4, tweet.player_2.location.coord_y + unit - 2), str(def_player_2), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path_2, size=15))
 
     # Config progress bar
     min = tweet.place.coord_x - 100
@@ -225,9 +235,9 @@ def resize_image():
     if y_1 < 0:
         y_2 = y_2 - y_1
         y_1 = 0
-    if x_2 > WIDTH_MAP:
-        x_1 = x_1 - x_2 + WIDTH_MAP
-        x_2 = WIDTH_MAP
+    if x_2 > w:
+        x_1 = x_1 - x_2 + w
+        x_2 = w
 
     image = image.crop((x_1, y_1, x_2, y_2))
     image.resize((w, h), Image.LANCZOS)

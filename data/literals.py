@@ -190,7 +190,7 @@ def winner_districts(tweet):
 
 def somebody_got_special(tweet):
     shared = False
-    if tweet.player_list != None:
+    if len(tweet.player_list) > 0:
         shared = True
 
     immunity = ''
