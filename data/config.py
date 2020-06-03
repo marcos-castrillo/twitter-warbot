@@ -21,13 +21,15 @@ MAX_VALUE_RARITY_1 = 2
 MAX_VALUE_RARITY_2 = 6
 
 # Localization
-LOCALIZATION = "es_spain" #es_paramo, es_spain, es_interneto
+LOCALIZATION = "es_wwe" #es_paramo, es_spain, es_interneto, es_wwe
 if LOCALIZATION == "es_paramo":
     from data.es_paramo.config import *
 elif LOCALIZATION == "es_spain":
     from data.es_spain.config import *
 elif LOCALIZATION == "es_interneto":
     from data.es_interneto.config import *
+elif LOCALIZATION == "es_wwe":
+    from data.es_wwe.config import *
 
 # Calculations
 RANKING_IMG_SIZE = AVATAR_SIZE + 2

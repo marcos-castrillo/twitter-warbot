@@ -5,7 +5,7 @@ from models.tweet_type import Tweet_type
 from models.item_type import Item_type
 from store import are_friends
 
-if LOCALIZATION == 'es_paramo' or LOCALIZATION == 'es_spain' or LOCALIZATION == 'es_interneto':
+if LOCALIZATION[:2] == 'es':
     from data.es.literals import *
     if LOCALIZATION == 'es_paramo':
         from data.es_paramo.literals import *
@@ -13,6 +13,8 @@ if LOCALIZATION == 'es_paramo' or LOCALIZATION == 'es_spain' or LOCALIZATION == 
         from data.es_spain.literals import *
     elif LOCALIZATION == 'es_interneto':
         from data.es_interneto.literals import *
+    elif LOCALIZATION == 'es_wwe':
+        from data.es_wwe.literals import *
 
 def get_message(tweet):
     message = ''

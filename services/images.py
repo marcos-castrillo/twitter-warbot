@@ -64,14 +64,14 @@ def draw_items(items_count, coord_x, coord_y, image, transparent = False):
 
 def draw_multiple_players(tweet, players, coord_x, coord_y, image, delta_x, single_line = False):
     draw = ImageDraw.Draw(image)
-    delta_y = HEIGHT_BETWEEN_PLAYERS
+    delta_y = MAP_HEIGHT_BETWEEN_PLAYERS
 
-    if len(players) > 12:
+    if MAP_LIMIT_SMALL_AVATARS > 0 and len(players) > MAP_LIMIT_SMALL_AVATARS:
         delta_y = int(delta_y / 2)
         delta_x = int(delta_x / 2)
     players_length = len(players)
-    if MAX_PLAYERS_IN_LINE > 0 and not single_line and len(players) > MAX_PLAYERS_IN_LINE:
-        players_length = MAX_PLAYERS_IN_LINE
+    if MAP_MAX_PLAYERS_IN_LINE > 0 and not single_line and len(players) > MAP_MAX_PLAYERS_IN_LINE:
+        players_length = MAP_MAX_PLAYERS_IN_LINE
     if players_length % 2 == 0:
         x_0 = coord_x - int(players_length / 2) * int(delta_x/2)
     else:
@@ -90,7 +90,7 @@ def draw_multiple_players(tweet, players, coord_x, coord_y, image, delta_x, sing
             for i, player in enumerate(players):
                 draw_player(image, tweet, players[i], x, y, True)
                 x = x + delta_x
-                if (i - MAX_PLAYERS_IN_LINE + 1) % MAX_PLAYERS_IN_LINE == 0:
+                if (i - MAP_MAX_PLAYERS_IN_LINE + 1) % MAP_MAX_PLAYERS_IN_LINE == 0:
                     x = x_0
                     y = y + delta_y
 
