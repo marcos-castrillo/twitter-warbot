@@ -7,12 +7,14 @@ from data.items import raw_weapon_list, raw_special_list, raw_injury_list, raw_p
 from data.places import raw_place_list
 from data.players import raw_player_list
 from data.config import *
+
 from models.item import Item
 from models.place import Place
 from models.tweet import Tweet
 from models.player import Player
 from models.item_type import Item_type
 from models.tweet_type import Tweet_type
+from models.match_type import Match_type
 
 def get_item_list():
     item_list = []
@@ -141,7 +143,7 @@ def get_place_list():
         initialize_connections_list(place_list, p)
 
     for i, p in enumerate(place_list):
-        if len(p.connections) == 0:
+        if len(place_list) > 1 and len(p.connections) == 0:
             sys.exit('Config error: place without connections: ' + p.name)
         for j, connection in enumerate(p.connections):
             if not any(subconnection.name == p.name for subconnection in connection.connections):
@@ -228,7 +230,7 @@ def initialize_tributes():
 def get_player_list(place_list):
     player_list = []
 
-    if MAX_TRIBUTES_PER_DISTRICT > 0 and USE_DISTRICTS and len(raw_player_list) > len(place_list) * MAX_TRIBUTES_PER_DISTRICT:
+    if MAX_TRIBUTES_PER_DISTRICT > 0 and MATCH_TYPE == Match_type.districts and len(raw_player_list) > len(place_list) * MAX_TRIBUTES_PER_DISTRICT:
         sys.exit(u'Config error: player limit exceeded: Players: ' + str(len(raw_player_list)) + u', Locations: ' + str(len(place_list)) + u', Tributes/location: ' + str(MAX_TRIBUTES_PER_DISTRICT))
 
     for i, p in enumerate(raw_player_list):
@@ -252,14 +254,14 @@ def get_player_list(place_list):
 
         player_list.append(player)
 
-        if USE_DISTRICTS and p[3] != None and p[3] != '':
+        if MATCH_TYPE == Match_type.districts and p[3] != None and p[3] != '':
             try:
                 location = next(x for x in place_list if x.name == p[3])
             except:
                 sys.exit('Config error: no place called ' + p[3])
             player.district = location #only to store p[3]
             location.tributes.append(player) #idem
-        elif not USE_DISTRICTS:
+        elif MATCH_TYPE == Match_type.standard:
             location = random.choice(place_list)
             player.location = location
             location.players.append(player)
@@ -325,7 +327,8 @@ def get_alive_districts_count():
     return len([x for x in place_list if not x.destroyed and len([y for y in x.tributes if y.state == 1]) > 0])
 
 def move_player(player, new_location):
-    player.location.players.pop(player.location.players.index(player))
+    if player.location != None:
+        player.location.players.pop(player.location.players.index(player))
     player.location = new_location
     new_location.players.append(player)
 
@@ -441,10 +444,15 @@ def who_infected_who(player, list_of_players):
     infected_or_was_infected_by = there_was_infection and was_infected
     return there_was_infection, infected_or_was_infected_by
 
+def get_players_in_place(place):
+    alive_players = get_alive_players()
+    players_in_place = [x for x in alive_players if x.location != None and x.location.name == place.name]
+    return players_in_place
+
 place_list = get_place_list()
 powerup_list = get_powerup_list()
 player_list = get_player_list(place_list)
-if USE_DISTRICTS:
+if MATCH_TYPE == Match_type.districts:
     introduction_tweet_list = initialize_tributes()
 injury_list = get_injury_list()
 hour_count = 0

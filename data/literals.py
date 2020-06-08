@@ -81,7 +81,8 @@ def get_message(tweet):
         message = MONSTER_KILLED(tweet)
     elif tweet.type == Tweet_type.somebody_got_cured:
         message = CURED(tweet)
-
+    elif tweet.type == Tweet_type.next_entrance:
+        message = NEXT_ENTRANCE(tweet)
     return (message + '\n').encode('utf-8')
 
 def introduce_players(tweet):

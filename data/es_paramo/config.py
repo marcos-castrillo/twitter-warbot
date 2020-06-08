@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from models.match_type import Match_type
+
 # General
 MENTION_USERS = True
-USE_DISTRICTS = True
+MATCH_TYPE = Match_type.districts
 USE_FLAGS = False
 MIN_ITEMS = 0
 MAX_ITEMS = 2
@@ -11,9 +13,6 @@ MAX_ATRACTED_PLAYERS = 5
 DEFAULT_SLEEP_MESSAGE = u''
 SLEEP_ACTION_NUMBER_LIMIT = 90
 REDISTRIBUTE_TRIBUTES = False
-
-# If USE_DISTRICTS
-MAX_TRIBUTES_PER_DISTRICT = 0
 
 # Probabilities
 ATRACT_RANGE_LIST =  [1, 1, 1, 1, 2, 2, 2, 3]
@@ -24,11 +23,13 @@ TREASONS_ENABLED_LIST =  [False, False, False, True, True, True, True, True]
 
 # Map
 MAP_PLAYERS_IN_SINGLE_LINE = False
-AVATAR_SIZE = 48
+MAP_AVATAR_SIZE = 48
 MAP_WIDTH_BETWEEN_PLAYERS = 24
 MAP_HEIGHT_BETWEEN_PLAYERS = 36
 MAP_WATERMARK_COORDINATES = [125, 1275]
+
 # Ranking
+RANKING_AVATAR_SIZE = 48
 BG_COLOR = '#eceae4'
 RANKING_IMGS_PER_ROW = 16
 RANKING_PADDING = 20

@@ -8,6 +8,7 @@ from store import player_list, get_alive_players_count
 
 from models.tweet import Tweet
 from models.tweet_type import Tweet_type
+from models.match_type import Match_type
 from models.simulation_probab import Simulation_Probab
 
 from services.simulation import *
@@ -19,10 +20,11 @@ from services.api import initialize_avatars
 
 simulation_probab = Simulation_Probab(PROBAB_SUICIDE[0], PROBAB_REVIVE[0], PROBAB_TRAP[0], PROBAB_INFECT[0], PROBAB_DESTROY[0], PROBAB_ATRACT[0], PROBAB_MONSTER[0], PROBAB_STEAL[0], PROBAB_MOVE[0], PROBAB_ITEM[0], PROBAB_BATTLE[0])
 finished = False
+entrance_countdown = LIMIT_TIME_RUMBLE
 
 def initialize():
     initialize_avatars()
-    if USE_DISTRICTS:
+    if MATCH_TYPE == Match_type.districts:
         for i, tweet in enumerate(introduction_tweet_list):
             write_tweet(tweet)
     start_battle()
@@ -39,14 +41,22 @@ def start_battle():
         simulate_day()
 
 def simulate_day():
-    global hour_count, simulation_probab
+    global hour_count, simulation_probab, entrance_countdown
     hour_count = hour_count + 1
     for i, th in enumerate(THRESHOLD_LIST):
-        if hour_count == th:
+        if hour_count == th and MATCH_TYPE != Match_type.rumble:
             simulation_probab = Simulation_Probab(PROBAB_SUICIDE[i], PROBAB_REVIVE[i], PROBAB_TRAP[i], PROBAB_INFECT[i], PROBAB_DESTROY[i], PROBAB_ATRACT[i], PROBAB_MONSTER[i], PROBAB_STEAL[i], PROBAB_MOVE[i], PROBAB_ITEM[i], PROBAB_BATTLE[i])
+    if MATCH_TYPE == Match_type.rumble:
+        if len(get_players_in_place(place_list[0])) < 2 or entrance_countdown == 0:
+            entrance_countdown = LIMIT_TIME_RUMBLE
+            next_entrance()
+            return
+        else:
+            entrance_countdown = entrance_countdown - 1
+
     do_something()
 
-    if USE_DISTRICTS and get_alive_districts_count() <= 1:
+    if MATCH_TYPE == Match_type.districts and get_alive_districts_count() <= 1:
         end_districts()
     elif get_alive_players_count() <= 1:
         end()

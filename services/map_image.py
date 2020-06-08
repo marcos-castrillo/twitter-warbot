@@ -28,9 +28,9 @@ def draw_map_places():
         else:
             draw_items(len(p.items), p.coord_x, p.coord_y, image)
             if p.trap_by != None:
-                paste_image(image, p.coord_x, p.coord_y + int(AVATAR_SIZE / 2), 48, 'trap')
+                paste_image(image, p.coord_x, p.coord_y + int(MAP_AVATAR_SIZE / 2), 48, 'trap')
             if p.monster:
-                paste_image(image, p.coord_x, p.coord_y - int(AVATAR_SIZE / 4), 48, 'monster')
+                paste_image(image, p.coord_x, p.coord_y - int(MAP_AVATAR_SIZE / 4), 48, 'monster')
         draw_multiple_players(tweet, p.players, p.coord_x, p.coord_y, image, MAP_WIDTH_BETWEEN_PLAYERS, MAP_PLAYERS_IN_SINGLE_LINE)
 
 def draw_ellipse():

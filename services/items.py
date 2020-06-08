@@ -1,15 +1,16 @@
 import random
 from data.items import *
 from store import *
-from data.config import USE_DISTRICTS
+from data.config import MATCH_TYPE
 from models.tweet import Tweet
+from models.match_type import Match_type
 from models.tweet_type import Tweet_type
 from models.item_type import Item_type
 from services.simulation import write_tweet
 
 def pick_item():
     alive_players = get_alive_players()
-    players_with_items = [x for x in alive_players if len(x.location.items) > 0]
+    players_with_items = [x for x in alive_players if x.location != None and len(x.location.items) > 0]
 
     if len(players_with_items) == 0:
         return False
@@ -66,7 +67,7 @@ def pick_special(player, special):
     if special.infection_immunity:
         player.infection_immunity = True
 
-    if USE_DISTRICTS:
+    if MATCH_TYPE == Match_type.districts:
         others_in_district = [x for x in get_alive_players() if x.district.name == player.district.name and x.get_name() != player.get_name()]
         if len(others_in_district) > 0:
             for i,pl in enumerate(others_in_district):
@@ -83,7 +84,7 @@ def pick_special(player, special):
     tweet.place = player.location
     tweet.item = special
     tweet.player = player
-    if USE_DISTRICTS and len(others_in_district) > 0:
+    if MATCH_TYPE == Match_type.districts and len(others_in_district) > 0:
         tweet.player_list = others_in_district
     write_tweet(tweet)
     return True
@@ -132,7 +133,7 @@ def infect():
             tweet.place = player.location
             tweet.player = player
             write_tweet(tweet)
-            if USE_DISTRICTS:
+            if MATCH_TYPE == Match_type.districts:
                 destroy_tweet = destroy_district_if_needed(player.district)
                 if destroy_tweet != None:
                     write_tweet(destroy_tweet)

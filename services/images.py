@@ -11,44 +11,50 @@ from data.config import *
 from store import place_list, player_list, get_alive_players, get_dead_players
 from models.tweet_type import Tweet_type
 from models.item_type import Item_type
+from models.match_type import Match_type
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 font_path = os.path.join(current_dir, '../assets/fonts/Comic-Sans.ttf')
 font_path_2 = os.path.join(current_dir, '../assets/fonts/Arial.ttf')
 
-def draw_player(image, tweet, player, coord_x, coord_y, simple = False):
+def draw_player(image, tweet, player, coord_x, coord_y, simple = False, ranking_size = False):
     draw = ImageDraw.Draw(image)
-    paste_image(image, coord_x, coord_y, AVATAR_SIZE, '', player.avatar_dir)
+    avatar_size = MAP_AVATAR_SIZE
+    if ranking_size:
+        avatar_size = RANKING_AVATAR_SIZE
+    paste_image(image, coord_x, coord_y, avatar_size, '', player.avatar_dir)
 
     if player.state == 0:
         draw.text((coord_x - 28, coord_y - 50), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path, size=70))
     else:
         if player.infected:
-            paste_image(image, coord_x + int(AVATAR_SIZE / 2) - 4, coord_y + 12, 36, 'infection')
+            paste_image(image, coord_x + int(avatar_size / 2) - 4, coord_y + 12, 36, 'infection')
         if not simple:
-            icon_size = 3 * int((AVATAR_SIZE + 2) / 4)
+            icon_size = 3 * int((avatar_size + 2) / 4)
+            if icon_size % 2 != 0:
+                icon_size = icon_size + 1
             if len(player.item_list) == 2:
-                paste_image(image, coord_x + int(AVATAR_SIZE / 2) - 4, coord_y - int(AVATAR_SIZE / 2), icon_size, get_item_rarity(player.item_list[1]))
+                paste_image(image, coord_x + int(avatar_size / 2) - 4, coord_y - int(avatar_size / 2), icon_size, get_item_rarity(player.item_list[1]))
             if len(player.item_list) > 0:
-                paste_image(image, coord_x - int(AVATAR_SIZE / 2) + 4, coord_y - int(AVATAR_SIZE / 2), icon_size, get_item_rarity(player.item_list[0]))
+                paste_image(image, coord_x - int(avatar_size / 2) + 4, coord_y - int(avatar_size / 2), icon_size, get_item_rarity(player.item_list[0]))
             if player.monster_immunity:
-                paste_image(image, coord_x - int(AVATAR_SIZE / 2) + 4, coord_y + int(AVATAR_SIZE / 4), icon_size, 'special')
+                paste_image(image, coord_x - int(avatar_size / 2) + 4, coord_y + int(avatar_size / 4), icon_size, 'special')
             if player.injure_immunity:
-                paste_image(image, coord_x - int(AVATAR_SIZE / 2) + 4, coord_y + 2*int(AVATAR_SIZE / 4), icon_size, 'special')
+                paste_image(image, coord_x - int(avatar_size / 2) + 4, coord_y + 2*int(avatar_size / 4), icon_size, 'special')
             if player.infection_immunity:
-                paste_image(image, coord_x - int(AVATAR_SIZE / 2) + 4, coord_y + 3*int(AVATAR_SIZE / 4), icon_size, 'special')
+                paste_image(image, coord_x - int(avatar_size / 2) + 4, coord_y + 3*int(avatar_size / 4), icon_size, 'special')
         if tweet.type == Tweet_type.winner or tweet.type == Tweet_type.winner_districts:
-            paste_image(image, coord_x, coord_y - 3 * int(AVATAR_SIZE / 4), 72, 'crown')
+            paste_image(image, coord_x, coord_y - 3 * int(avatar_size / 4), 72, 'crown')
 
 def draw_items(items_count, coord_x, coord_y, image, transparent = False):
-    delta_y = int(AVATAR_SIZE / 2)
+    delta_y = int(MAP_AVATAR_SIZE / 2)
     if transparent:
         item_img = 'item_transparent'
     else:
         item_img = 'item'
 
     if items_count == 1:
-        paste_image(image, coord_x, coord_y - int(AVATAR_SIZE / 2), 48, item_img)
+        paste_image(image, coord_x, coord_y - int(MAP_AVATAR_SIZE / 2), 48, item_img)
     elif items_count == 2:
         paste_image(image, coord_x - 12, coord_y - delta_y, 48, item_img)
         paste_image(image, coord_x + 12, coord_y - delta_y, 48, item_img)

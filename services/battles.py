@@ -1,8 +1,9 @@
 from data.literals import *
-from data.config import PROBAB_TIE, USE_DISTRICTS, TREASONS_ENABLED_LIST
+from data.config import PROBAB_TIE, MATCH_TYPE, TREASONS_ENABLED_LIST
 from store import *
 from models.tweet import Tweet
 from models.tweet_type import Tweet_type
+from models.match_type import Match_type
 from services.simulation import write_tweet
 
 def battle():
@@ -14,8 +15,11 @@ def battle():
 
     kill_number = random.randint(0, 100)
     treasons_enabled = TREASONS_ENABLED_LIST[hour_count]
-    if are_friends(player_1, player_2) and (not treasons_enabled or (kill_number > 15 and kill_number < 85)):
-        return False
+    if are_friends(player_1, player_2):
+        if not treasons_enabled:
+            return False
+        elif MATCH_TYPE != Match_type.rumble and kill_number > 15 and kill_number < 85:
+            return False
 
     factor = 50 + 2*(player_1.get_defense() + player_1.get_attack()) - 2*(player_2.get_attack() + player_2.get_defense())
     if factor > 100:
@@ -87,7 +91,7 @@ def kill(player_1, player_2, place, factor, action_number, inverse):
     write_tweet(tweet)
     kill_player(killed)
 
-    if USE_DISTRICTS:
+    if MATCH_TYPE == Match_type.districts:
         destroy_tweet = destroy_district_if_needed(killed.district)
         if destroy_tweet != None:
             write_tweet(destroy_tweet)

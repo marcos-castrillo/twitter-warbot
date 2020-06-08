@@ -5,6 +5,7 @@ from services.main_image import get_main_image
 from services.map_image import get_map_image
 from services.ranking_image import get_ranking_image
 from services.images import *
+from store import get_players_in_place
 
 output_dir = None
 path = None
@@ -66,7 +67,7 @@ def draw_image(tweet):
     raw_map_img = draw_places(Image.open(os.path.join(current_dir, '../assets/maps/' + LOCALIZATION + '.png')))
     raw_map_img_2 = draw_places(Image.open(os.path.join(current_dir, '../assets/maps/' + LOCALIZATION + '.png')))
 
-    if USE_DISTRICTS and MAX_TRIBUTES_PER_DISTRICT > 0:
+    if MATCH_TYPE == Match_type.districts and MAX_TRIBUTES_PER_DISTRICT > 0:
         rows = math.ceil(len(get_alive_players()) / RANKING_IMGS_PER_ROW) + 2*(math.ceil(len(get_dead_players()) / RANKING_IMGS_PER_ROW))/3
     else:
         rows = math.ceil(len(player_list) / RANKING_IMGS_PER_ROW)
@@ -95,6 +96,18 @@ def draw_image(tweet):
         main_image.save(output_dir + '/' + str(line_number) + '_bis.png')
         map_image.save(output_dir + '/' + str(line_number) + '_map_bis.png')
         ranking_image.save(output_dir + '/' + str(line_number) + '_ranking_bis.png')
+    elif MATCH_TYPE == Match_type.rumble:
+        if tweet.type == Tweet_type.next_entrance:
+            main_image = Image.open(tweet.player.avatar_dir + '.png')
+            map_image = get_map_image(raw_map_img_2, tweet)
+        else:
+            main_image = get_main_image(raw_map_img, tweet)
+            if len(get_players_in_place(place_list[0])) > 2:
+                map_image = get_map_image(raw_map_img_2, tweet)
+
+        main_image.save(output_dir + '/' + str(line_number) + '.png')
+        if map_image != None:
+            map_image.save(output_dir + '/' + str(line_number) + '_map.png')
     else:
         main_image = get_main_image(raw_map_img, tweet)
         map_image = get_map_image(raw_map_img_2, tweet)
@@ -105,17 +118,18 @@ def draw_image(tweet):
         ranking_image.save(output_dir + '/' + str(line_number) + '_ranking.png')
 
 def draw_places(image):
-    for i, p in enumerate(place_list):
-        draw = ImageDraw.Draw(image)
-        font = ImageFont.truetype(font_path_2, size=15)
-        lines = get_multiline_wrapped_text(p.name, 70, font)
-        for j, line in enumerate(lines):
-            color = 'rgb(0,0,0)'
+    if len(place_list) > 1:
+        for i, p in enumerate(place_list):
+            draw = ImageDraw.Draw(image)
+            font = ImageFont.truetype(font_path_2, size=15)
+            lines = get_multiline_wrapped_text(p.name, 70, font)
+            for j, line in enumerate(lines):
+                color = 'rgb(0,0,0)'
+                if p.destroyed:
+                    color = 'rgb(255,0,0)'
+                draw.text((p.coord_x + int(MAP_AVATAR_SIZE / 4) + 4, p.coord_y + - 10 + j * 16), line, fill=color, font=font)
             if p.destroyed:
-                color = 'rgb(255,0,0)'
-            draw.text((p.coord_x + int(AVATAR_SIZE / 4) + 4, p.coord_y + - 10 + j * 16), line, fill=color, font=font)
-        if p.destroyed:
-            paste_image(image, p.coord_x, p.coord_y, AVATAR_SIZE, 'destroyed')
-        else:
-            paste_image(image, p.coord_x, p.coord_y, AVATAR_SIZE, 'place')
+                paste_image(image, p.coord_x, p.coord_y, MAP_AVATAR_SIZE, 'destroyed')
+            else:
+                paste_image(image, p.coord_x, p.coord_y, MAP_AVATAR_SIZE, 'place')
     return image

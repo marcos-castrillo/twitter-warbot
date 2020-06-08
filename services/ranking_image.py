@@ -14,7 +14,7 @@ def get_ranking_image(ranking_image, ranking_tweet):
     row_index = 0
     col_index = 0
 
-    if USE_DISTRICTS:
+    if MATCH_TYPE == Match_type.districts:
         district_list = get_district_list()
         drawn_player_list = []
 
@@ -67,20 +67,20 @@ def draw_player_ranking(player, row_index, col_index, is_dead = False):
         y = y + j*12
         draw_wrapped_text(image, coord_x, y, RANKING_IMG_SIZE, 12, line, font_path, 10, 'rgb(0,0,0)')
 
-    draw.rectangle((coord_x, coord_y, coord_x + AVATAR_SIZE, coord_y + AVATAR_SIZE), outline='rgb(0,0,0)')
-    draw_player(image, tweet, player, coord_x + int(AVATAR_SIZE / 2), coord_y + int(AVATAR_SIZE / 2))
+    draw.rectangle((coord_x, coord_y, coord_x + RANKING_AVATAR_SIZE, coord_y + RANKING_AVATAR_SIZE), outline='rgb(0,0,0)')
+    draw_player(image, tweet, player, coord_x + int(RANKING_AVATAR_SIZE / 2), coord_y + int(RANKING_AVATAR_SIZE / 2), False, True)
 
     if player.kills > 0:
-        paste_image(image, coord_x + int(AVATAR_SIZE / 2) - 4, coord_y - 10, 32, 'skull')
-        draw.text((coord_x + int(AVATAR_SIZE / 2) + 4, coord_y - 17), str(player.kills), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=10))
+        paste_image(image, coord_x + int(RANKING_AVATAR_SIZE / 2) - 4, coord_y - 10, 32, 'skull')
+        draw.text((coord_x + int(RANKING_AVATAR_SIZE / 2) + 4, coord_y - 17), str(player.kills), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=10))
 
     if player.get_attack() != 0:
-        paste_image(image, coord_x + int(AVATAR_SIZE / 5), coord_y - 30, 32, 'attack')
-        draw.text((coord_x + int(AVATAR_SIZE / 5) + 6, coord_y - 35), str(player.get_attack()), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=10))
+        paste_image(image, coord_x + int(RANKING_AVATAR_SIZE / 5), coord_y - 30, 32, 'attack')
+        draw.text((coord_x + int(RANKING_AVATAR_SIZE / 5) + 6, coord_y - 35), str(player.get_attack()), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=10))
 
     if player.get_defense() != 0:
-        paste_image(image, coord_x + 2 * int(AVATAR_SIZE / 3), coord_y - 30, 32, 'defense')
-        draw.text((coord_x + 2 * int(AVATAR_SIZE / 3) + 10, coord_y - 35), str(player.get_defense()), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=10))
+        paste_image(image, coord_x + 2 * int(RANKING_AVATAR_SIZE / 3), coord_y - 30, 32, 'defense')
+        draw.text((coord_x + 2 * int(RANKING_AVATAR_SIZE / 3) + 10, coord_y - 35), str(player.get_defense()), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=10))
 
 def draw_ranking_rectangle(fill_color, fill_color_dark, players_count, row_index, col_index, index):
     draw = ImageDraw.Draw(image)
@@ -155,7 +155,7 @@ def circle_players(players_to_circle):
     dead_area = False
 
     for i, player in enumerate(players_to_circle):
-        if USE_DISTRICTS and MAX_TRIBUTES_PER_DISTRICT > 0 and not dead_area and player.state == 0:
+        if MATCH_TYPE == Match_type.districts and MAX_TRIBUTES_PER_DISTRICT > 0 and not dead_area and player.state == 0:
             col_index = 0
             row_index = row_index + 1
             dead_area = True

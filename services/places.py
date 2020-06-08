@@ -5,6 +5,7 @@ import random
 import sys
 from models.tweet import Tweet
 from models.tweet_type import Tweet_type
+from models.match_type import Match_type
 from services.simulation import write_tweet
 
 from store import *
@@ -156,7 +157,7 @@ def move():
             tweet.player = player
             tweet.player_2 = trapped_by
             write_tweet(tweet)
-            if USE_DISTRICTS:
+            if MATCH_TYPE == Match_type.districts:
                 destroy_tweet = destroy_district_if_needed(player.district)
                 if destroy_tweet != None:
                     write_tweet(destroy_tweet)
@@ -218,7 +219,7 @@ def monster():
             tweet.place = player.location
             tweet.player = player
             write_tweet(tweet)
-            if USE_DISTRICTS:
+            if MATCH_TYPE == Match_type.districts:
                 destroy_tweet = destroy_district_if_needed(player.district)
                 if destroy_tweet != None:
                     write_tweet(destroy_tweet)
@@ -248,7 +249,7 @@ def monster():
     return True
 
 def destroy():
-    if USE_DISTRICTS:
+    if MATCH_TYPE == Match_type.districts:
         return False
     list = [x for x in place_list if not x.destroyed]
     if len(list) == 0:

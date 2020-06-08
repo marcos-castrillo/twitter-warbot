@@ -18,14 +18,14 @@ def get_main_image(main_image, main_tweet):
     for i, p in enumerate(place_list):
         if not p.destroyed:
             if p.trap_by != None:
-                paste_image(image, p.coord_x, p.coord_y + int(AVATAR_SIZE / 2), 48, 'trap')
+                paste_image(image, p.coord_x, p.coord_y + int(MAP_AVATAR_SIZE / 2), 48, 'trap')
             if p.monster:
-                paste_image(image, p.coord_x, p.coord_y - int(AVATAR_SIZE / 4), 48, 'monster')
+                paste_image(image, p.coord_x, p.coord_y - int(MAP_AVATAR_SIZE / 4), 48, 'monster')
 
-            if tweet.type != Tweet_type.introduce_players:
+            if tweet.type != Tweet_type.introduce_players and len(place_list) > 1:
                 draw_items(len(p.items), p.coord_x, p.coord_y, image, True)
 
-    if USE_DISTRICTS and (tweet.type == Tweet_type.introduce_players or tweet.type == Tweet_type.destroyed_district or tweet.type == Tweet_type.winner_districts or tweet.type == Tweet_type.atraction):
+    if MATCH_TYPE == Match_type.districts and (tweet.type == Tweet_type.introduce_players or tweet.type == Tweet_type.destroyed_district or tweet.type == Tweet_type.winner_districts or tweet.type == Tweet_type.atraction):
         if USE_FLAGS:
             draw_flag()
         draw_items(len(tweet.place.items), tweet.place.coord_x, tweet.place.coord_y, image)
@@ -39,8 +39,8 @@ def get_main_image(main_image, main_tweet):
             draw_battle()
 
         frame_width = 4
-        draw_player(image, tweet, tweet.player, tweet.player.location.coord_x - int(AVATAR_SIZE / 2) - frame_width - 10, tweet.player.location.coord_y)
-        draw_player(image, tweet, tweet.player_2, tweet.player_2.location.coord_x + int(AVATAR_SIZE / 2) + frame_width + 10 + 1, tweet.player_2.location.coord_y)
+        draw_player(image, tweet, tweet.player, tweet.player.location.coord_x - int(MAP_AVATAR_SIZE / 2) - frame_width - 10, tweet.player.location.coord_y)
+        draw_player(image, tweet, tweet.player_2, tweet.player_2.location.coord_x + int(MAP_AVATAR_SIZE / 2) + frame_width + 10 + 1, tweet.player_2.location.coord_y)
     elif tweet.type == Tweet_type.destroyed or tweet.type == Tweet_type.destroyed_district or tweet.type == Tweet_type.winner_districts or tweet.type == Tweet_type.atraction or tweet.type == Tweet_type.introduce_players:
         # Multi actions
         draw_multiple_players(tweet, tweet.player_list, tweet.place.coord_x, tweet.place.coord_y, image, 50)
@@ -154,15 +154,15 @@ def draw_battle():
 
     frame_width = 4
     #frame player_1
-    draw.rectangle((tweet.player.location.coord_x - AVATAR_SIZE - frame_width * 2 - 10, tweet.player.location.coord_y - int(AVATAR_SIZE / 2) - frame_width, tweet.player.location.coord_x - 10 - 1, tweet.player.location.coord_y + int(AVATAR_SIZE / 2) + frame_width - 1), outline=color_1, width=4)
+    draw.rectangle((tweet.player.location.coord_x - MAP_AVATAR_SIZE - frame_width * 2 - 10, tweet.player.location.coord_y - int(MAP_AVATAR_SIZE / 2) - frame_width, tweet.player.location.coord_x - 10 - 1, tweet.player.location.coord_y + int(MAP_AVATAR_SIZE / 2) + frame_width - 1), outline=color_1, width=4)
     #frame player_2
-    draw.rectangle((tweet.player_2.location.coord_x + 10 + 1, tweet.player_2.location.coord_y - int(AVATAR_SIZE / 2) - frame_width, tweet.player_2.location.coord_x + AVATAR_SIZE + frame_width * 2 + 10, tweet.player_2.location.coord_y + int(AVATAR_SIZE / 2) + frame_width - 1), outline=color_2, width=4)
+    draw.rectangle((tweet.player_2.location.coord_x + 10 + 1, tweet.player_2.location.coord_y - int(MAP_AVATAR_SIZE / 2) - frame_width, tweet.player_2.location.coord_x + MAP_AVATAR_SIZE + frame_width * 2 + 10, tweet.player_2.location.coord_y + int(MAP_AVATAR_SIZE / 2) + frame_width - 1), outline=color_2, width=4)
     #stats
-    delta_x = AVATAR_SIZE + 10
+    delta_x = MAP_AVATAR_SIZE + 10
     square_size = 50
     unit = int(square_size / 10)
     #stats player_1
-    x_0 = tweet.player.location.coord_x - AVATAR_SIZE - 10
+    x_0 = tweet.player.location.coord_x - MAP_AVATAR_SIZE - 10
     draw.ellipse((x_0 - square_size - unit * 2, tweet.player.location.coord_y - unit * 5, x_0 - unit * 2, tweet.player.location.coord_y + 25), fill='rgb(255,255,255)')
     draw.ellipse((x_0 - square_size - unit * 2, tweet.player.location.coord_y - unit * 5, x_0 - unit * 2, tweet.player.location.coord_y + 25), outline=color_1, width=2)
     paste_image(image, x_0 - unit * 9, tweet.player.location.coord_y - unit * 2, 32, 'attack')
@@ -170,7 +170,7 @@ def draw_battle():
     draw.text((x_0 - unit * 6 - 4, tweet.player.location.coord_y - unit * 4 + 2), str(att_player_1), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path_2, size=15))
     draw.text((x_0 - unit * 6 - 4, tweet.player.location.coord_y + unit - 2), str(def_player_1), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path_2, size=15))
     #stats player_2
-    x_0 = tweet.player_2.location.coord_x + AVATAR_SIZE + 10
+    x_0 = tweet.player_2.location.coord_x + MAP_AVATAR_SIZE + 10
     draw.ellipse((x_0 + unit * 2, tweet.player_2.location.coord_y - unit * 5, x_0 + square_size + unit * 2, tweet.player_2.location.coord_y + 25), fill='rgb(255,255,255)')
     draw.ellipse((x_0 + unit * 2, tweet.player_2.location.coord_y - unit * 5, x_0 + square_size + unit * 2, tweet.player_2.location.coord_y + 25), outline=color_2, width=2)
     paste_image(image, x_0 + unit * 5, tweet.player_2.location.coord_y - unit * 2, 32, 'attack')

@@ -2,6 +2,7 @@ class Tweet_type(object):
     start = 1
     winner_districts = 2
     hour_threshold = 3
+    next_entrance = 4
     winner = 5
     nobody_won = 6
     somebody_stole = 7
