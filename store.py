@@ -254,13 +254,17 @@ def get_player_list(place_list):
 
         player_list.append(player)
 
-        if MATCH_TYPE == Match_type.districts and p[3] != None and p[3] != '':
-            try:
-                location = next(x for x in place_list if x.name == p[3])
-            except:
-                sys.exit('Config error: no place called ' + p[3])
-            player.district = location #only to store p[3]
-            location.tributes.append(player) #idem
+        if MATCH_TYPE == Match_type.districts:
+            if p[3] != None and p[3] != '':
+                try:
+                    location = next(x for x in place_list if x.name == p[3])
+                except:
+                    sys.exit('Config error: no place called ' + p[3])
+                player.district = location #only to store p[3]
+                location.tributes.append(player) #idem
+        elif MATCH_TYPE == Match_type.rumble:
+            if p[3] != None and len(p[3]) > 0:
+                player.skill_list = p[3]
         elif MATCH_TYPE == Match_type.standard:
             location = random.choice(place_list)
             player.location = location

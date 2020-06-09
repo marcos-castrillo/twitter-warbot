@@ -88,7 +88,7 @@ def do_something():
     elif action_number < simulation_probab.battle_action_number:
         completed = battle()
 
-    if not completed:
+    if not completed and MATCH_TYPE != Match_type.rumble:
          do_something()
 
 def end():

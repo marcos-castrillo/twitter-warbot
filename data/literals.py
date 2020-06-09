@@ -83,6 +83,8 @@ def get_message(tweet):
         message = CURED(tweet)
     elif tweet.type == Tweet_type.next_entrance:
         message = NEXT_ENTRANCE(tweet)
+    elif tweet.type == Tweet_type.skill_attack:
+        message = skill_attack(tweet)
     return (message + '\n').encode('utf-8')
 
 def introduce_players(tweet):
@@ -205,6 +207,23 @@ def somebody_got_special(tweet):
         immunity = INFECTION_IMMUNITY(tweet.player, shared)
 
     return I_COMPOSED(tweet.player, SPECIAL_ACTION(), tweet.item.name, immunity)
+
+def skill_attack(tweet):
+    if tweet.inverse:
+        attacked = tweet.player
+        attacker = tweet.player_2
+    else:
+        attacked = tweet.player_2
+        attacker = tweet.player
+
+    skill = SKILL_ATTACK(attacker, attacked)
+
+    has_now = has_now(tweet.attacked, tweet.item)
+
+    sufix = ''
+    if tweet.unfriend:
+        sufix = LINEBREAK() + UNFRIEND()
+    return skill + has_now + sufix
 
 def somebody_found_item(tweet):
     if tweet.item.thrown_away_by != None:

@@ -33,9 +33,15 @@ def battle():
             return
         success = tie(player_1, player_2, factor, kill_number)
     elif kill_number > factor - PROBAB_TIE and kill_number < factor:
-        success = run_away(player_1, player_2, factor, kill_number, False)
+        if MATCH_TYPE == Match_type.rumble:
+            success = skill_attack(player_1, player_2, factor, kill_number, False)
+        else:
+            success = run_away(player_1, player_2, factor, kill_number, False)
     elif kill_number > factor and kill_number < factor + PROBAB_TIE:
-        success = run_away(player_1, player_2, factor, kill_number, True)
+        if MATCH_TYPE == Match_type.rumble:
+            success = skill_attack(player_1, player_2, factor, kill_number, True)
+        else:
+            success = run_away(player_1, player_2, factor, kill_number, True)
     elif kill_number < factor - PROBAB_TIE:
         success = kill(player_1, player_2, place, factor, kill_number, False)
     elif kill_number > factor + PROBAB_TIE:
@@ -149,6 +155,37 @@ def run_away(player_1, player_2, factor, action_number, inverse):
     if there_was_infection:
         tweet.there_was_infection = True
     tweet.infected_or_was_infected_by = infected_or_was_infected_by
+
+    if are_friends(player_1, player_2):
+        unfriend(player_1, player_2)
+        tweet.unfriend = True
+
+    write_tweet(tweet)
+    return True
+
+def skill_attack(player_1, player_2, factor, action_number, inverse):
+    tweet = Tweet()
+    tweet.item = Item()
+
+    if inverse:
+        tweet.player = player_1
+        tweet.player_2 = player_2
+    else:
+        tweet.player = player_2
+        tweet.player_2 = player_1
+
+    attack_loss = 0
+    defense_loss = 0
+    while attack_loss == 0 and defense_loss == 0:
+        attack_loss = random.randint(-5, 0)
+        defense_loss = random.randint(-5, 0)
+        
+    tweet.item.attack = attack_loss
+    tweet.item.defense = defense_loss
+    tweet.type = Tweet_type.skill_attack
+    tweet.factor = factor
+    tweet.action_number = action_number
+    tweet.inverse = inverse
 
     if are_friends(player_1, player_2):
         unfriend(player_1, player_2)

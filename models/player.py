@@ -14,6 +14,7 @@ class Player(object):
     friend_list = []
     injury_list = []
     powerup_list = []
+    skill_list = []
     monster_immunity = False
     injure_immunity = False
     infection_immunity = False
@@ -27,6 +28,7 @@ class Player(object):
         self.injury_list = []
         self.friend_list = []
         self.powerup_list = []
+        self.skill_list = []
         return
 
     def get_attack(self):
