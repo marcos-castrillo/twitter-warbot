@@ -22,7 +22,7 @@ def get_main_image(main_image, main_tweet):
             if p.monster:
                 paste_image(image, p.coord_x, p.coord_y - int(MAP_AVATAR_SIZE / 4), 48, 'monster')
 
-            if tweet.type != Tweet_type.introduce_players and len(place_list) > 1:
+            if tweet.type != Tweet_type.introduce_players and MATCH_TYPE != Match_type.rumble:
                 draw_items(len(p.items), p.coord_x, p.coord_y, image, True)
 
     if MATCH_TYPE == Match_type.districts and (tweet.type == Tweet_type.introduce_players or tweet.type == Tweet_type.destroyed_district or tweet.type == Tweet_type.winner_districts or tweet.type == Tweet_type.atraction):
@@ -75,7 +75,7 @@ def draw_big_image():
         elif tweet.item.get_rarity() == 3:
             paste_image(image, 80, 80, 256, 'special_3')
     elif tweet.type == Tweet_type.somebody_tied_and_became_friend or tweet.type == Tweet_type.somebody_tied_and_was_friend:
-        paste_image(image, 80, 80, 256, 'heart')
+        paste_image(image, 80, 80, 256, 'tie')
     elif tweet.type == Tweet_type.monster_moved or tweet.type == Tweet_type.monster_killed or tweet.type == Tweet_type.monster_appeared:
         paste_image(image, 80, 80, 256, 'monster')
     elif tweet.type == Tweet_type.trap_dodged or tweet.type == Tweet_type.trapped or tweet.type == Tweet_type.trap:
@@ -97,6 +97,8 @@ def draw_big_image():
             paste_image(image, 80, 80, 256, 'move')
     elif tweet.type == Tweet_type.monster_killed or tweet.type == Tweet_type.somebody_killed or tweet.type == Tweet_type.somebody_suicided:
         paste_image(image, 80, 80, 256, 'skull')
+    elif tweet.type == Tweet_type.skill_attack:
+        paste_image(image, 80, 80, 256, 'skill_attack')
     elif tweet.type == Tweet_type.somebody_revived:
         paste_image(image, 80, 80, 256, 'revive')
     elif tweet.type == Tweet_type.somebody_stole or tweet.type == Tweet_type.somebody_stole_and_threw or tweet.type == Tweet_type.somebody_stole_and_replaced:
@@ -185,29 +187,31 @@ def draw_battle():
 
     tie = min + 2*(tweet.factor)
 
-    min_tie = min + 2*(tweet.factor - PROBAB_TIE)
+    min_tie = min + 2*(tweet.factor - PROBAB_NEUTRAL)
     if min_tie < min:
         min_tie = min
     elif min_tie > max:
         min_tie = max
 
-    max_tie = min_tie + 4*PROBAB_TIE
+    max_tie = min_tie + 4*PROBAB_NEUTRAL
     if max_tie < min:
         max_tie = min
     elif max_tie > max:
         max_tie = max
 
     # progress bar
-    draw.rectangle((min - 2, tweet.place.coord_y - 77, max + 2, tweet.place.coord_y - 48), outline='rgb(255,255,255)', width=4)
-    draw.rectangle((min, tweet.place.coord_y - 75, min_tie, tweet.place.coord_y - 50), fill=color_1)
-    draw.rectangle((max_tie, tweet.place.coord_y - 75, max, tweet.place.coord_y - 50), fill=color_2)
-    draw.rectangle((min_tie, tweet.place.coord_y - 75, tie, tweet.place.coord_y - 50), fill=color_tie_1)
-    draw.rectangle((tie, tweet.place.coord_y - 75, max_tie, tweet.place.coord_y - 50), fill=color_tie_2)
-    draw.rectangle((tie - 1, tweet.place.coord_y - 75, tie + 1, tweet.place.coord_y - 50), fill=color_tie)
+    y_0 = tweet.place.coord_y - MAP_AVATAR_SIZE
+    y_1 = y_0 + 25
+    draw.rectangle((min - 2, y_0 - 2, max + 2, y_1 + 2), outline='rgb(255,255,255)', width=4)
+    draw.rectangle((min, y_0, min_tie, y_1), fill=color_1)
+    draw.rectangle((max_tie, y_0, max, y_1), fill=color_2)
+    draw.rectangle((min_tie, y_0, tie, y_1), fill=color_tie_1)
+    draw.rectangle((tie, y_0, max_tie, y_1), fill=color_tie_2)
+    draw.rectangle((tie - 2*int((PROBAB_TIE - 1) / 2), y_0, tie + 2*int((PROBAB_TIE - 1) / 2), y_1), fill=color_tie)
 
     # action_number
-    draw.rectangle((action_number - 1, tweet.place.coord_y - 75, action_number + 1, tweet.place.coord_y - 50), fill=color_arrow)
-    paste_image(image, action_number, tweet.place.coord_y - 100, 72, 'arrow')
+    draw.rectangle((action_number - 1, y_0, action_number + 1, y_1), fill=color_arrow)
+    paste_image(image, action_number, y_0 - 25, 72, 'arrow')
 
 def draw_flag():
     dimension_1 = 424

@@ -1,5 +1,5 @@
 from data.literals import *
-from data.config import PROBAB_TIE, MATCH_TYPE, TREASONS_ENABLED_LIST
+from data.config import PROBAB_NEUTRAL, MATCH_TYPE, TREASONS_ENABLED_LIST
 from store import *
 from models.tweet import Tweet
 from models.tweet_type import Tweet_type
@@ -28,23 +28,23 @@ def battle():
         factor = 0
 
     success = False
-    if kill_number == factor:
+    if kill_number >= factor - int((PROBAB_TIE - 1) / 2) and kill_number <= factor + int((PROBAB_TIE - 1) / 2):
         if get_alive_players_count() == 2:
             return
         success = tie(player_1, player_2, factor, kill_number)
-    elif kill_number > factor - PROBAB_TIE and kill_number < factor:
+    elif kill_number > factor - PROBAB_NEUTRAL and kill_number < factor:
         if MATCH_TYPE == Match_type.rumble:
             success = skill_attack(player_1, player_2, factor, kill_number, False)
         else:
             success = run_away(player_1, player_2, factor, kill_number, False)
-    elif kill_number > factor and kill_number < factor + PROBAB_TIE:
+    elif kill_number > factor and kill_number < factor + PROBAB_NEUTRAL:
         if MATCH_TYPE == Match_type.rumble:
             success = skill_attack(player_1, player_2, factor, kill_number, True)
         else:
             success = run_away(player_1, player_2, factor, kill_number, True)
-    elif kill_number < factor - PROBAB_TIE:
+    elif kill_number < factor - PROBAB_NEUTRAL:
         success = kill(player_1, player_2, place, factor, kill_number, False)
-    elif kill_number > factor + PROBAB_TIE:
+    elif kill_number > factor + PROBAB_NEUTRAL:
         success = kill(player_1, player_2, place, factor, kill_number, True)
     return success
 
@@ -56,8 +56,12 @@ def kill(player_1, player_2, place, factor, action_number, inverse):
         killed = player_1
 
     killer.kills = killer.kills + 1
-    best_killer_item = killer.get_best_item()
-    best_killed_item = killed.get_best_item()
+    if MATCH_TYPE == Match_type.rumble:
+        best_killer_item = None
+        best_killed_item = None
+    else:
+        best_killer_item = killer.get_best_item()
+        best_killed_item = killed.get_best_item()
     friendship = are_friends(killer, killed)
 
     tweet = Tweet()
@@ -179,9 +183,12 @@ def skill_attack(player_1, player_2, factor, action_number, inverse):
     while attack_loss == 0 and defense_loss == 0:
         attack_loss = random.randint(-5, 0)
         defense_loss = random.randint(-5, 0)
-        
+
+    tweet.player_2.attack = tweet.player_2.attack + attack_loss
+    tweet.player_2.defense = tweet.player_2.defense + defense_loss
     tweet.item.attack = attack_loss
     tweet.item.defense = defense_loss
+    tweet.place = player_1.location
     tweet.type = Tweet_type.skill_attack
     tweet.factor = factor
     tweet.action_number = action_number

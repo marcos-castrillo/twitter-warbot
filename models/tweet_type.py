@@ -9,6 +9,7 @@ class Tweet_type(object):
     somebody_stole_and_replaced = 8
     somebody_stole_and_threw = 9
     somebody_got_special = 10
+    skill_attack = 11
     somebody_found_item = 12
     somebody_replaced_item = 13
     introduce_players = 14

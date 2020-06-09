@@ -25,7 +25,7 @@ def draw_player(image, tweet, player, coord_x, coord_y, simple = False, ranking_
     paste_image(image, coord_x, coord_y, avatar_size, '', player.avatar_dir)
 
     if player.state == 0:
-        draw.text((coord_x - 28, coord_y - 50), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path, size=70))
+        draw.text((coord_x - int(avatar_size / 3), coord_y - int(avatar_size / 3) * 2), 'X', fill='rgb(255,0,0)', font=ImageFont.truetype(font_path, size=avatar_size))
     else:
         if player.infected:
             paste_image(image, coord_x + int(avatar_size / 2) - 4, coord_y + 12, 36, 'infection')

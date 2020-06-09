@@ -43,17 +43,32 @@ def PRAISE(player):
         get_x_or_y(player, u'Está mamadísimo', u'Está mamadísima')
     ])
 
-def SKILL_ATTACK(attacker, attacked, now_has):
+def SKILL_ATTACK(attacker, attacked):
     if len(attacker.skill_list) > 0:
         skill = random.choice(attacker.skill_list)
     else:
         skill = SKILL()
 
     return random.choice([
-        tweet.attacker.get_name() + skill + u' a ' + tweet.attacked.get_name() + u'. '
+        u' '.join((attacker.get_name(), skill, attacked.get_name() + u'.'))
     ])
 
 def SKILL():
     return random.choice([
         u'se ha tirado desde la tercera cuerda encima de'
-    )]
+    ])
+
+def KILL_ACTION():
+    return random.choice([
+        u'ha tirado fuera del ring a',
+    ])
+
+def KILL_METHOD(player):
+    return random.choice([
+        u'',
+    ])
+
+def FIND_ACTION():
+    return random.choice([
+        u'ha cogido',
+    ])

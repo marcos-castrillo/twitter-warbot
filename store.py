@@ -263,7 +263,7 @@ def get_player_list(place_list):
                 player.district = location #only to store p[3]
                 location.tributes.append(player) #idem
         elif MATCH_TYPE == Match_type.rumble:
-            if p[3] != None and len(p[3]) > 0:
+            if len(p) > 3 and p[3] != None and len(p[3]) > 0:
                 player.skill_list = p[3]
         elif MATCH_TYPE == Match_type.standard:
             location = random.choice(place_list)

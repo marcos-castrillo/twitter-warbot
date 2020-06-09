@@ -1,5 +1,5 @@
 # Probabilities
-PROBAB_TIE = 10
+PROBAB_NEUTRAL = 10
 PROBAB_SUICIDE = [0,  0,  1,  1,  1,  1,  1,  0]
 PROBAB_REVIVE =  [0,  0,  1,  1,  1,  1,  1,  0]
 PROBAB_TRAP =    [0,  1,  1,  1,  1,  1,  2,  2]

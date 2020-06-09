@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from data.config import LOCALIZATION
+from data.config import LOCALIZATION, MATCH_TYPE
 from models.tweet_type import Tweet_type
 from models.item_type import Item_type
+from models.match_type import Match_type
 from store import are_friends
 
 if LOCALIZATION[:2] == 'es':
@@ -218,12 +219,12 @@ def skill_attack(tweet):
 
     skill = SKILL_ATTACK(attacker, attacked)
 
-    has_now = has_now(tweet.attacked, tweet.item)
+    change = LINEBREAK() + has_now(tweet.player_2, tweet.item)
 
     sufix = ''
     if tweet.unfriend:
         sufix = LINEBREAK() + UNFRIEND()
-    return skill + has_now + sufix
+    return skill + change + sufix
 
 def somebody_found_item(tweet):
     if tweet.item.thrown_away_by != None:
@@ -281,7 +282,7 @@ def somebody_killed(tweet):
 
     if were_friends:
         friend_message = TREASON(tweet)
-    if killing_item != None:
+    if killing_item != None and MATCH_TYPE != Match_type.rumble:
         kill_method = u' '.join((WITH, killing_item.name))
     if player_1.kills > 1:
         praise = PRAISE(player_1)
