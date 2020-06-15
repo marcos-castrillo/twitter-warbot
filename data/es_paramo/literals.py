@@ -190,36 +190,3 @@ def MOVED_ATRACTION_PL():
         u'han ido a liarla',
         u'han ido a perrear',
     ])
-
-def PRAISE(player):
-    return random.choice([
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        u'Qué ' + get_x_or_y(player, u'tío', u'tía'),
-        u'Vaya fiera',
-        u'Impresionante',
-        u'Es ' + get_x_or_y(player, u'un', u'una') + u' máquina',
-        u'Menudo monstruo',
-        u'Está ' + get_x_or_y(player, u'rocoso', u'rocosa'),
-        u'Qué crack',
-        u'JO-DER',
-        u'Redios',
-        u'Es un tifón',
-        u'No hay quién ' + get_x_or_y(player, u'lo', u'la') + ' pare',
-        u'A por la MOAB',
-        u'Tra tra',
-        u'WOW',
-        u'BIMBA',
-        u'Menudo hostiazo',
-        u'Está on fire',
-        u'Está a tope',
-        u'Campear tanto da sus frutos',
-        u'No lo vio venir',
-        u'Y ya estaría',
-        get_x_or_y(player, u'Está mamadísimo', u'Está mamadísima')
-    ])

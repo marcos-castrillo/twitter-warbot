@@ -34,12 +34,12 @@ def battle():
         success = tie(player_1, player_2, factor, kill_number)
     elif kill_number > factor - PROBAB_NEUTRAL and kill_number < factor:
         if MATCH_TYPE == Match_type.rumble:
-            success = skill_attack(player_1, player_2, factor, kill_number, False)
+            success = soft_attack(player_1, player_2, factor, kill_number, False)
         else:
             success = run_away(player_1, player_2, factor, kill_number, False)
     elif kill_number > factor and kill_number < factor + PROBAB_NEUTRAL:
         if MATCH_TYPE == Match_type.rumble:
-            success = skill_attack(player_1, player_2, factor, kill_number, True)
+            success = soft_attack(player_1, player_2, factor, kill_number, True)
         else:
             success = run_away(player_1, player_2, factor, kill_number, True)
     elif kill_number < factor - PROBAB_NEUTRAL:
@@ -167,7 +167,7 @@ def run_away(player_1, player_2, factor, action_number, inverse):
     write_tweet(tweet)
     return True
 
-def skill_attack(player_1, player_2, factor, action_number, inverse):
+def soft_attack(player_1, player_2, factor, action_number, inverse):
     tweet = Tweet()
     tweet.item = Item()
 
@@ -181,15 +181,15 @@ def skill_attack(player_1, player_2, factor, action_number, inverse):
     attack_loss = 0
     defense_loss = 0
     while attack_loss == 0 and defense_loss == 0:
-        attack_loss = random.randint(-5, 0)
-        defense_loss = random.randint(-5, 0)
+        attack_loss = random.randint(-3, 0)
+        defense_loss = random.randint(-3, 0)
 
     tweet.player_2.attack = tweet.player_2.attack + attack_loss
     tweet.player_2.defense = tweet.player_2.defense + defense_loss
     tweet.item.attack = attack_loss
     tweet.item.defense = defense_loss
     tweet.place = player_1.location
-    tweet.type = Tweet_type.skill_attack
+    tweet.type = Tweet_type.soft_attack
     tweet.factor = factor
     tweet.action_number = action_number
     tweet.inverse = inverse

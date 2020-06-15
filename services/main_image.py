@@ -33,9 +33,9 @@ def get_main_image(main_image, main_tweet):
     if tweet.type == Tweet_type.winner or tweet.type == Tweet_type.somebody_got_special or tweet.type == Tweet_type.somebody_found_item or tweet.type == Tweet_type.somebody_replaced_item or tweet.type == Tweet_type.somebody_revived or tweet.type == Tweet_type.somebody_moved or tweet.type == Tweet_type.trap or tweet.type == Tweet_type.trap_dodged or tweet.type == Tweet_type.somebody_was_infected or tweet.type == Tweet_type.somebody_suicided or tweet.type == Tweet_type.monster_killed or tweet.type == Tweet_type.trapped or tweet.type == Tweet_type.somebody_died_of_infection or tweet.type == Tweet_type.somebody_got_cured:
         # Individual actions
         draw_player(image, tweet, tweet.player, tweet.place.coord_x, tweet.place.coord_y)
-    elif tweet.type == Tweet_type.somebody_tied_and_became_friend or tweet.type == Tweet_type.somebody_tied_and_was_friend or tweet.type == Tweet_type.somebody_escaped or tweet.type == Tweet_type.somebody_killed or tweet.type == Tweet_type.somebody_stole or tweet.type == Tweet_type.somebody_stole_and_threw or tweet.type == Tweet_type.somebody_stole_and_replaced or tweet.type == Tweet_type.skill_attack:
+    elif tweet.type == Tweet_type.somebody_tied_and_became_friend or tweet.type == Tweet_type.somebody_tied_and_was_friend or tweet.type == Tweet_type.somebody_escaped or tweet.type == Tweet_type.somebody_killed or tweet.type == Tweet_type.somebody_stole or tweet.type == Tweet_type.somebody_stole_and_threw or tweet.type == Tweet_type.somebody_stole_and_replaced or tweet.type == Tweet_type.soft_attack:
         # Pair actions
-        if tweet.type == Tweet_type.somebody_tied_and_became_friend or tweet.type == Tweet_type.somebody_tied_and_was_friend or tweet.type == Tweet_type.somebody_escaped or tweet.type == Tweet_type.somebody_killed or tweet.type == Tweet_type.skill_attack:
+        if tweet.type == Tweet_type.somebody_tied_and_became_friend or tweet.type == Tweet_type.somebody_tied_and_was_friend or tweet.type == Tweet_type.somebody_escaped or tweet.type == Tweet_type.somebody_killed or tweet.type == Tweet_type.soft_attack:
             draw_battle()
 
         frame_width = 4
@@ -97,8 +97,8 @@ def draw_big_image():
             paste_image(image, 80, 80, 256, 'move')
     elif tweet.type == Tweet_type.monster_killed or tweet.type == Tweet_type.somebody_killed or tweet.type == Tweet_type.somebody_suicided:
         paste_image(image, 80, 80, 256, 'skull')
-    elif tweet.type == Tweet_type.skill_attack:
-        paste_image(image, 80, 80, 256, 'skill_attack')
+    elif tweet.type == Tweet_type.soft_attack:
+        paste_image(image, 80, 80, 256, 'soft_attack')
     elif tweet.type == Tweet_type.somebody_revived:
         paste_image(image, 80, 80, 256, 'revive')
     elif tweet.type == Tweet_type.somebody_stole or tweet.type == Tweet_type.somebody_stole_and_threw or tweet.type == Tweet_type.somebody_stole_and_replaced:

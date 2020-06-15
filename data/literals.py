@@ -84,8 +84,8 @@ def get_message(tweet):
         message = CURED(tweet)
     elif tweet.type == Tweet_type.next_entrance:
         message = NEXT_ENTRANCE(tweet)
-    elif tweet.type == Tweet_type.skill_attack:
-        message = skill_attack(tweet)
+    elif tweet.type == Tweet_type.soft_attack:
+        message = soft_attack(tweet)
     return (message + '\n').encode('utf-8')
 
 def introduce_players(tweet):
@@ -209,7 +209,7 @@ def somebody_got_special(tweet):
 
     return I_COMPOSED(tweet.player, SPECIAL_ACTION(), tweet.item.name, immunity)
 
-def skill_attack(tweet):
+def soft_attack(tweet):
     if tweet.inverse:
         attacked = tweet.player
         attacker = tweet.player_2
@@ -217,24 +217,24 @@ def skill_attack(tweet):
         attacked = tweet.player_2
         attacker = tweet.player
 
-    skill = SKILL_ATTACK(attacker, attacked)
+    soft = SOFT_ATTACK(attacker, attacked)
 
     change = LINEBREAK() + has_now(tweet.player_2, tweet.item)
 
     sufix = ''
     if tweet.unfriend:
         sufix = LINEBREAK() + UNFRIEND()
-    return skill + change + sufix
+    return soft + change + sufix
 
 def somebody_found_item(tweet):
-    if tweet.item.thrown_away_by != None:
+    if tweet.item.thrown_away_by != None and MATCH_TYPE != Match_type.rumble:
         thrown_away_by = FROM(tweet.item.thrown_away_by.name)
         return I_COMPOSED(tweet.player, FIND_ACTION_SIMPLE(), tweet.item.name, has_now(tweet.player, tweet.item), thrown_away_by)
     else:
         return I_COMPOSED(tweet.player, FIND_ACTION(), tweet.item.name, has_now(tweet.player, tweet.item))
 
 def somebody_replaced_item(tweet):
-    if tweet.item.thrown_away_by != None:
+    if tweet.item.thrown_away_by != None and MATCH_TYPE != Match_type.rumble:
         thrown_away_by = FROM(tweet.item.thrown_away_by.name)
         return I_COMPOSED(tweet.player, FIND_ACTION_SIMPLE(), tweet.item.name, REPLACED + ' ' + tweet.old_item.name + '. ' + has_now(tweet.player, tweet.item, tweet.old_item), thrown_away_by)
     else:
@@ -262,47 +262,38 @@ def somebody_escaped(tweet):
     return escaped + sufix
 
 def somebody_killed(tweet):
-    player_1 = tweet.player
-    player_2 = tweet.player_2
+    attacker = tweet.player
+    attacked = tweet.player_2
     if tweet.inverse:
-        player_1 = tweet.player_2
-        player_2 = tweet.player
+        attacker = tweet.player_2
+        attacked = tweet.player
     killing_item = tweet.item
     new_item = tweet.new_item
     old_item = tweet.old_item
 
-    kill_verb = KILL_ACTION()
-    kill_method = KILL_METHOD(player_1)
-    were_friends = are_friends(player_1, player_2)
+    kill_action = KILL_ACTION(attacker, attacked)
+
     friend_message = ''
-    kills_count = ''
-    stole = ''
-    fav = ''
-    sufix = ''
-
-    if were_friends:
+    if are_friends(attacker, attacked):
         friend_message = TREASON(tweet)
+
+    kill_method = KILL_METHOD(attacker)
+    if len(kill_method) > 1:
+        kill_method = u' ' + kill_method
     if killing_item != None and MATCH_TYPE != Match_type.rumble:
-        kill_method = u' '.join((WITH, killing_item.name))
-    if player_1.kills > 1:
-        praise = PRAISE(player_1)
-        if len(praise) > 0:
-            praise = LINEBREAK() + praise
-        kills_count = HAS_ALREADY_KILLED(str(player_1.kills)) + praise
+        kill_method = u' ' + u' '.join((WITH, killing_item.name))
+
+    kills_count = ''
+    if attacker.kills > 1:
+        kills_count = u' ' + HAS_ALREADY_KILLED(str(attacker.kills))
+
+    stole = ''
     if new_item != None and old_item != None:
-        stole = u' '.join((ALSO_STOLE(), new_item.name, AND(), GETS_RID_OF, old_item.name))
+        stole = '.'  + LINEBREAK() + u' '.join((ALSO_STOLE(), new_item.name, AND(), GETS_RID_OF, old_item.name))
     elif new_item != None:
-        stole = u' '.join((ALSO_STOLE(), new_item.name))
+        stole = '.'  + LINEBREAK() + u' '.join((ALSO_STOLE(), new_item.name))
 
-    if len(kill_method) > 0:
-        sufix = sufix + u' ' + kill_method
-    if len(stole) == 0 and len(kills_count) > 0:
-        sufix = sufix + u' ' + kills_count
-    elif len(stole) > 0:
-        sufix = sufix + '.'  + LINEBREAK() + stole
-    sufix = sufix + '.'
-
-    return u' '.join((friend_message + player_1.get_name(), kill_verb, player_2.get_name() + sufix))
+    return friend_message + kill_action + kill_method + kills_count + stole + '.'
 
 def somebody_revived(tweet):
     revived = REVIVED(tweet)
@@ -449,7 +440,7 @@ def infected(tweet):
     player = tweet.player
     sufix = u''
     if len(tweet.player_list) > 0:
-        sufix = LINEBREAK() + PLACE_INFECTED(tweet) + ALSO_INFECTING() + ' '
+        sufix = LINEBREAK() + PLACE_INFECTED(tweet) + ' ' + ALSO_INFECTING() + ' '
         for i, player in enumerate(tweet.player_list):
             if len(tweet.player_list) > 2 and i == 1:
                 sufix = u' '.join((sufix, AND(), OTHERS(len(tweet.player_list) - i)))

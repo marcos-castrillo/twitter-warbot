@@ -146,7 +146,7 @@ def move():
 
     there_was_infection, infected_or_was_infected_by = who_infected_who(player, new_location.players)
 
-    if new_location.trap_by != None and new_location.trap_by != player:
+    if new_location.trap_by != None and new_location.trap_by.get_name() != player.get_name() and not are_friends(new_location.trap_by, player):
         if action_number < 50:
             trapped_by = new_location.trap_by
             new_location.trap_by.kills = new_location.trap_by.kills + 1

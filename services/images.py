@@ -29,8 +29,8 @@ def draw_player(image, tweet, player, coord_x, coord_y, simple = False, ranking_
     else:
         if player.infected:
             paste_image(image, coord_x + int(avatar_size / 2) - 4, coord_y + 12, 36, 'infection')
-        if not simple:
-            icon_size = 3 * int((avatar_size + 2) / 4)
+        if not simple and MATCH_TYPE != Match_type.rumble:
+            icon_size = 2 * int((avatar_size + 2) / 4)
             if icon_size % 2 != 0:
                 icon_size = icon_size + 1
             if len(player.item_list) == 2:

@@ -33,9 +33,10 @@ def start_battle():
     if len(player_list) == 0:
         sys.exit('Config error: no players configured.')
 
-    tweet = Tweet()
-    tweet.type = Tweet_type.start
-    write_tweet(tweet)
+    if MATCH_TYPE != Match_type.rumble:
+        tweet = Tweet()
+        tweet.type = Tweet_type.start
+        write_tweet(tweet)
 
     while not finished:
         simulate_day()
