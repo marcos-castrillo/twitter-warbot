@@ -27,6 +27,7 @@ def KILL_ACTION(attacker, attacked):
             u' '.join((attacker.get_name(), u'le ha hecho el DDT a', attacked.get_name())),
             u' '.join((attacker.get_name(), u'le ha hecho un finisher a', attacked.get_name())),
             u' '.join((attacker.get_name(), u'le ha hecho una sumisión a', attacked.get_name())),
+            Chokeslam
         ])
 
 def HAS_ALREADY_KILLED(kills_count):
