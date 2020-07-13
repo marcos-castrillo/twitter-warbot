@@ -171,12 +171,8 @@ def soft_attack(player_1, player_2, factor, action_number, inverse):
     tweet = Tweet()
     tweet.item = Item()
 
-    if inverse:
-        tweet.player = player_1
-        tweet.player_2 = player_2
-    else:
-        tweet.player = player_2
-        tweet.player_2 = player_1
+    tweet.player = player_1
+    tweet.player_2 = player_2
 
     attack_loss = 0
     defense_loss = 0
@@ -184,8 +180,12 @@ def soft_attack(player_1, player_2, factor, action_number, inverse):
         attack_loss = random.randint(-3, 0)
         defense_loss = random.randint(-3, 0)
 
-    tweet.player_2.attack = tweet.player_2.attack + attack_loss
-    tweet.player_2.defense = tweet.player_2.defense + defense_loss
+    if inverse:
+        tweet.player.attack = tweet.player.attack + attack_loss
+        tweet.player.defense = tweet.player.defense + defense_loss
+    else:
+        tweet.player_2.attack = tweet.player_2.attack + attack_loss
+        tweet.player_2.defense = tweet.player_2.defense + defense_loss
     tweet.item.attack = attack_loss
     tweet.item.defense = defense_loss
     tweet.place = player_1.location

@@ -210,16 +210,14 @@ def somebody_got_special(tweet):
     return I_COMPOSED(tweet.player, SPECIAL_ACTION(), tweet.item.name, immunity)
 
 def soft_attack(tweet):
+    attacker = tweet.player
+    attacked = tweet.player_2
     if tweet.inverse:
-        attacked = tweet.player
         attacker = tweet.player_2
-    else:
-        attacked = tweet.player_2
-        attacker = tweet.player
+        attacked = tweet.player
 
     soft = SOFT_ATTACK(attacker, attacked)
-
-    change = LINEBREAK() + has_now(tweet.player_2, tweet.item)
+    change = LINEBREAK() + has_now(attacked, tweet.item)
 
     sufix = ''
     if tweet.unfriend:

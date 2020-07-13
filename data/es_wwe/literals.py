@@ -6,7 +6,10 @@ import random
 
 def NEXT_ENTRANCE(tweet):
     return random.choice([
+        tweet.player.get_name() + u' va a entrar al cuadrilátero.',
+        tweet.player.get_name() + u' va a entrar al ring.',
         tweet.player.get_name() + u' entra al ring.',
+        tweet.player.get_name() + u' entra al cuadrilátero.',
         tweet.player.get_name() + get_x_or_y(tweet.player, u' es el siguiente contendiente.', u' es la siguiente contendiente.'),
         tweet.player.get_name() + get_x_or_y(tweet.player, u' ya está preparado para entrar al ring.', u' ya está preparada para entrar al ring.'),
     ])
@@ -14,6 +17,12 @@ def NEXT_ENTRANCE(tweet):
 def SOFT_ATTACK(attacker, attacked):
     return random.choice([
         u' '.join((attacker.get_name(), u'le ha dado una patada voladora a', attacked.get_name() + u'.')),
+        u' '.join((attacker.get_name(), u'se ha tirado desde la tercera cuerda encima de', attacked.get_name())),
+        u' '.join((attacker.get_name(), u'le ha hecho un suplex a', attacked.get_name())),
+        u' '.join((attacker.get_name(), u'le ha hecho una llave a', attacked.get_name())),
+        u' '.join((attacker.get_name(), u'le ha hecho una lanza a', attacked.get_name())),
+        u' '.join((attacker.get_name(), u'le ha dado un patadón a', attacked.get_name())),
+        u' '.join((attacker.get_name(), u'le ha dado un codazo a', attacked.get_name())),
     ])
 
 def KILL_ACTION(attacker, attacked):
@@ -23,16 +32,19 @@ def KILL_ACTION(attacker, attacked):
     else:
         return random.choice([
             u' '.join((attacker.get_name(), u'se ha tirado desde la tercera cuerda encima de', attacked.get_name())),
-            u' '.join((attacker.get_name(), u'le ha hecho el suplex a', attacked.get_name())),
-            u' '.join((attacker.get_name(), u'le ha hecho el DDT a', attacked.get_name())),
-            u' '.join((attacker.get_name(), u'le ha hecho un finisher a', attacked.get_name())),
-            u' '.join((attacker.get_name(), u'le ha hecho una sumisión a', attacked.get_name())),
-            Chokeslam
+            u' '.join((attacker.get_name(), u'le ha hecho un DDT a', attacked.get_name())),
+            u' '.join((attacker.get_name(), u'ha echado del ring a', attacked.get_name())),
+            u' '.join((attacker.get_name(), u'ha echado del cuadrilátero a', attacked.get_name())),
+            u' '.join((attacker.get_name(), u'ha mandado fuera del ring a', attacked.get_name())),
+            u' '.join((attacker.get_name(), u'ha mandado fuera del cuadrilátero a', attacked.get_name())),
+            u' '.join((attacker.get_name(), u'le ha hecho una sumisión a', attacked.get_name(), u'y', get_x_or_y(attacked, u'éste', u'ésta'), u'no se ha podido levantar')),
+            u' '.join((attacker.get_name(), u'le ha hecho una sumisión a', attacked.get_name(), u'y', get_x_or_y(attacked, u'éste', u'ésta'), u'no se ha podido zafar')),
+            u' '.join((attacker.get_name(), u'le ha hecho una sumisión a', attacked.get_name(), u'y', get_x_or_y(attacked, u'éste', u'ésta'), u'no ha podido liberarse')),
+            u' '.join((attacker.get_name(), u'ha tumbado a', attacked.get_name(), u'y', get_x_or_y(attacked, u'éste', u'ésta'), u'no se ha podido levantar')),
         ])
 
 def HAS_ALREADY_KILLED(kills_count):
     return random.choice([
-        u' '.join((u'y ya se ha cargado a', kills_count)),
         u' '.join((u'y ya ha despachado a', kills_count)),
         u' '.join((u'y ya van', kills_count)),
         u' '.join((u'y con éste ya van', kills_count)),
