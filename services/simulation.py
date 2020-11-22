@@ -1,15 +1,20 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import datetime
+import sys
 
 from services.main_image import get_main_image
 from services.map_image import get_map_image
-from services.ranking_image import get_ranking_image
+from services.ranking_image import get_ranking_image, get_ranking_height, RANKING_WIDTH
 from services.images import *
-from store import get_players_in_place
+from services.store import get_players_in_place, place_list
+from data.literals import get_message
+from models.enums import MatchType, TweetType
 
 output_dir = None
 path = None
 line_number = 0
+
 
 def initialize():
     global output_dir, path
@@ -36,68 +41,67 @@ def initialize():
         i = i + 1
         path = os.path.join(output_dir, filename + '-' + str(i) + ".txt")
 
+    with open(os.path.join(output_dir, 'events.txt'), "w") as file:
+        file.write('')
+
+
 def write_tweet(tweet):
     global line_number
-    if output_dir == None:
+    if output_dir is None:
         initialize()
 
-    if tweet.type == Tweet_type.destroyed_district:
+    if tweet.type == TweetType.destroyed_district or tweet.is_event:
         line_number = line_number - 1
-
+        with open(os.path.join(output_dir, 'events.txt'), "a+") as file:
+            file.write(str(line_number) + '\n')
     write_line(get_message(tweet))
-    draw_image(tweet)
+
+    if not tweet.is_event:
+        draw_image(tweet)
 
     line_number = line_number + 1
-    if tweet.type == Tweet_type.winner or tweet.type == Tweet_type.winner_districts:
+    if tweet.type == TweetType.winner or tweet.type == TweetType.winner_districts:
         write_last_line()
 
+
 def write_line(message):
-    print(str(line_number) + u': ' + message.decode('utf-8'))
+    print(str(line_number) + u': ' + message.decode("utf-8"))
 
     with open(os.path.join(path), "a+", encoding="utf-8") as file:
         file.write(message.decode('utf-8'))
+
 
 def write_last_line():
     with open(os.path.join(output_dir, '-1_image.txt'), "w") as file:
         file.write('ok')
     with open(os.path.join(output_dir, '-1_line.txt'), "w") as file:
         file.write('ok')
+    sanitize_lines(os.path.join(output_dir, 'simulation.txt'))
+
 
 def draw_image(tweet):
-    raw_map_img = draw_places(Image.open(os.path.join(current_dir, '../assets/maps/' + LOCALIZATION + '.png')))
-    raw_map_img_2 = draw_places(Image.open(os.path.join(current_dir, '../assets/maps/' + LOCALIZATION + '.png')))
-
-    if MATCH_TYPE == Match_type.districts and MAX_TRIBUTES_PER_DISTRICT > 0:
-        rows = math.ceil(len(get_alive_players()) / RANKING_IMGS_PER_ROW) + 2*(math.ceil(len(get_dead_players()) / RANKING_IMGS_PER_ROW))/3
-    else:
-        rows = math.ceil(len(player_list) / RANKING_IMGS_PER_ROW)
-
-    RANKING_HEIGHT = int(rows * RANKING_SPACE_BETWEEN_ROWS + RANKING_PADDING * 2)
-    blank_img = Image.new('RGB', (RANKING_WIDTH, RANKING_HEIGHT), color = BG_COLOR)
+    raw_map_img = Image.open(os.path.join(current_dir, config.file_paths.map))
+    raw_map_img_2 = Image.open(os.path.join(current_dir, config.file_paths.map))
+    blank_img = Image.new('RGB', (RANKING_WIDTH, get_ranking_height()), color=config.ranking.colors.background)
 
     main_image = None
     map_image = None
     ranking_image = None
 
-    if tweet.type == Tweet_type.start:
+    if tweet.type == TweetType.start:
         map_image = get_map_image(raw_map_img_2, tweet)
         ranking_image = get_ranking_image(blank_img, tweet)
 
         map_image.save(output_dir + '/' + str(line_number) + '_map.png')
         ranking_image.save(output_dir + '/' + str(line_number) + '_ranking.png')
-    elif tweet.type == Tweet_type.introduce_players:
+    elif tweet.type == TweetType.introduce_players:
         map_image = get_main_image(raw_map_img_2, tweet)
         map_image.save(output_dir + '/' + str(line_number) + '_map.png')
-    elif tweet.type == Tweet_type.destroyed_district:
-        main_image = get_main_image(raw_map_img, tweet)
+    elif tweet.type == TweetType.destroyed_district:
         map_image = get_map_image(raw_map_img_2, tweet)
-        ranking_image = get_ranking_image(blank_img, tweet)
-
-        main_image.save(output_dir + '/' + str(line_number) + '_bis.png')
-        map_image.save(output_dir + '/' + str(line_number) + '_map_bis.png')
-        ranking_image.save(output_dir + '/' + str(line_number) + '_ranking_bis.png')
-    elif MATCH_TYPE == Match_type.rumble:
-        if tweet.type == Tweet_type.next_entrance:
+        map_image.save(output_dir + '/' + str(line_number) + '_bis.png')
+    elif config.general.match_type == MatchType.rumble:
+        if tweet.type == TweetType.next_entrance:
             main_image = Image.open(tweet.player.avatar_dir + '.png')
             map_image = get_map_image(raw_map_img_2, tweet)
         else:
@@ -106,30 +110,45 @@ def draw_image(tweet):
                 map_image = get_map_image(raw_map_img_2, tweet)
 
         main_image.save(output_dir + '/' + str(line_number) + '.png')
-        if map_image != None:
+        if map_image is not None:
             map_image.save(output_dir + '/' + str(line_number) + '_map.png')
     else:
         main_image = get_main_image(raw_map_img, tweet)
         map_image = get_map_image(raw_map_img_2, tweet)
-        ranking_image = get_ranking_image(blank_img, tweet)
 
         main_image.save(output_dir + '/' + str(line_number) + '.png')
         map_image.save(output_dir + '/' + str(line_number) + '_map.png')
-        ranking_image.save(output_dir + '/' + str(line_number) + '_ranking.png')
 
-def draw_places(image):
-    if len(place_list) > 1:
-        for i, p in enumerate(place_list):
-            draw = ImageDraw.Draw(image)
-            font = ImageFont.truetype(font_path_2, size=15)
-            lines = get_multiline_wrapped_text(p.name, 70, font)
-            for j, line in enumerate(lines):
-                color = 'rgb(0,0,0)'
-                if p.destroyed:
-                    color = 'rgb(255,0,0)'
-                draw.text((p.coord_x + int(MAP_AVATAR_SIZE / 4) + 4, p.coord_y + - 10 + j * 16), line, fill=color, font=font)
-            if p.destroyed:
-                paste_image(image, p.coord_x, p.coord_y, MAP_AVATAR_SIZE, 'destroyed')
-            else:
-                paste_image(image, p.coord_x, p.coord_y, MAP_AVATAR_SIZE, 'place')
-    return image
+        if tweet.type in [TweetType.monster_killed, TweetType.trapped, TweetType.somebody_died_of_infection,
+                          TweetType.somebody_killed, TweetType.somebody_revived, TweetType.somebody_suicided,
+                          TweetType.somebody_was_infected, TweetType.winner, TweetType.winner_districts]:
+            ranking_image = get_ranking_image(blank_img, tweet)
+            ranking_image.save(output_dir + '/' + str(line_number) + '_ranking.png')
+
+
+def sanitize_lines(path):
+    # Lines no longer than 240 chars
+    longest_line = max(open(path, 'r', encoding='utf-8'), key=len)
+    if len(longest_line) > 240:
+        sys.exit('File error: line its too long: (' + str(len(longest_line)) + ' characters)\n' + longest_line)
+
+    # Add . at the beginning of the lines if there's an @
+    lines = {}
+    with open(path, encoding='utf-8') as f:
+        lines = f.readlines()
+
+    for i, l in enumerate(lines):
+        if l[0] == '@':
+            temp_str = ''
+            for j in l:
+                temp_str += j
+            temp_str = '.' + temp_str
+            lines[i] = temp_str
+
+    with open(path, 'w', encoding='utf-8') as file:
+        file.writelines(lines)
+
+    with open(path, encoding='utf-8') as f:
+        for i, l in enumerate(f):
+            if l[0] == '@':
+                sys.exit('File error: theres an @ as the first character of the line: ' + str(i))

@@ -1,32 +1,27 @@
-from data.config import MAX_VALUE_RARITY_1, MAX_VALUE_RARITY_2
-from models.item_type import Item_type
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+from services.config import config
+from models.enums import ItemType
+
 
 class Item(object):
     type = None
     name = ""
-    defense = 0
-    attack = 0
-    monster_immunity = False
-    injure_immunity = False
-    infection_immunity = False
+    power = 0
+    special = None
     thrown_away_by = None
 
-    # Constructor
     def __init__(self):
         return
 
-    def get_value(self):
-        return self.defense + self.attack
-
     def get_rarity(self):
-        value = self.get_value()
-
-        if self.type == Item_type.special:
+        if self.type == ItemType.special:
             return 3
 
-        if value <= MAX_VALUE_RARITY_1:
+        if self.power <= config.items.max_value_rarity_1:
             return 1
-        elif value <= MAX_VALUE_RARITY_2:
+        elif self.power <= config.items.max_value_rarity_2:
             return 2
         else:
             return 3

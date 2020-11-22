@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 class Tweet(object):
     type = None
     place = None
@@ -17,7 +20,7 @@ class Tweet(object):
     new_item = None
     old_item = None
     unfriend = False
+    is_event = False
 
-    # Constructor
     def __init__(self):
         return

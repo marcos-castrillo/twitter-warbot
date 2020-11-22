@@ -1,12 +1,4 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-from data.config import LOCALIZATION
-
-if LOCALIZATION == "es_paramo":
-    from data.es_paramo.secrets import *
-elif LOCALIZATION == "es_spain":
-    from data.es_spain.secrets import *
-elif LOCALIZATION == "es_interneto":
-    from data.es_interneto.secrets import *
-elif LOCALIZATION == "es_wwe":
-    from data.es_wwe.secrets import *
+consumer_key = 'gxozoxC1iEl6wfwwEJw1Xaxoe'
+consumer_secret = 'AgeZfeR4n9YwqjZkEMNWGf5rN3Bt8cA94R6Cq2xQI7P4J1qoIu'
+access_token = '1156457588265033728-xPioo8pOuLmgZ48VclN4Mbx4lj5YYP'
+access_token_secret = 'CCrUIo1YdMPtYdwskFbD9usldiQkxsSOixklhBvgzXBlI'

@@ -1,0 +1,7 @@
+0 9-23 * * * ~/Documents/tournament/tweet_next_line.py >> ~/Documents/tournament/log.txt 2>&1
+0 0 * * * ~/Documents/tournament/tweet_next_line.py >> ~/Documents/tournament/log.txt 2>&1
+
+30 9-23 * * * ~/Documents/tournament/tweet_next_event.py >> ~/Documents/tournament/log.txt 2>&1
+30 0 * * * ~/Documents/tournament/tweet_next_event.py >> ~/Documents/tournament/log.txt 2>&1
+
+#*/5 * * * * ~/Documents/tournament/tweet_next_line.py >> ~/Documents/tournament/log.txt 2>&1

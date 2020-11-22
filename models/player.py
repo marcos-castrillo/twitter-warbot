@@ -1,12 +1,15 @@
-import sys
-from data.config import MENTION_USERS
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+from services.config import config
+
 
 class Player(object):
     avatar_dir = None
     name = ""
     username = ""
     kills = 0
-    state = 1
+    is_alive = True
     location = None
     gender = None
     district = None
@@ -19,8 +22,7 @@ class Player(object):
     injure_immunity = False
     infection_immunity = False
     infected = False
-    attack = 0
-    defense = 0
+    power = 0
 
     # Constructor
     def __init__(self):
@@ -31,25 +33,15 @@ class Player(object):
         self.skill_list = []
         return
 
-    def get_attack(self):
-        attack = self.attack
+    def get_power(self):
+        power = self.power
         for item in self.item_list:
-            attack = attack + item.attack
+            power = power + item.power
         for injury in self.injury_list:
-            attack = attack + injury.attack
+            power = power + injury.power
         for powerup in self.powerup_list:
-            attack = attack + powerup.attack
-        return attack
-
-    def get_defense(self):
-        defense = self.defense
-        for item in self.item_list:
-            defense = defense + item.defense
-        for injury in self.injury_list:
-            defense = defense + injury.defense
-        for powerup in self.powerup_list:
-            defense = defense + powerup.defense
-        return defense
+            power = power + powerup.power
+        return power
 
     def get_best_item(self):
         if len(self.item_list) == 0:
@@ -57,21 +49,10 @@ class Player(object):
         elif len(self.item_list) == 1:
             return self.item_list[0]
         else:
-            if self.item_list[0].get_value() >= self.item_list[1].get_value():
+            if self.item_list[0].power >= self.item_list[1].power:
                 return self.item_list[0]
             else:
                 return self.item_list[1]
-
-    def get_best_attack_item(self):
-        if len(self.item_list) == 1:
-            if self.item_list[0].attack > 0:
-                return self.item_list[0]
-        elif len(self.item_list) == 2:
-            if self.item_list[0].attack >= self.item_list[1].attack and self.item_list[0].attack > 0:
-                return self.item_list[0]
-            elif self.item_list[1].attack > 0:
-                return self.item_list[1]
-        return None
 
     def get_worst_item(self):
         if len(self.item_list) == 0:
@@ -79,13 +60,13 @@ class Player(object):
         elif len(self.item_list) == 1:
             return self.item_list[0]
         else:
-            if self.item_list[0].get_value() < self.item_list[1].get_value():
+            if self.item_list[0].power < self.item_list[1].power:
                 return self.item_list[0]
             else:
                 return self.item_list[1]
 
     def get_name(self):
-        if self.username != "" and MENTION_USERS:
+        if self.username != "" and config.general.mention_users:
             return self.name + u'(@' + self.username + u')'
         else:
             return self.name

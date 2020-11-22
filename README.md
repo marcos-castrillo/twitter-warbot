@@ -9,6 +9,22 @@ TTB is a bot that simulates a fictional tournament where players can 'fight' to 
 5. Run start.py
 
 ## To Do
+
 Readme
+Events:
+- Better objects
+- Suicide
+- Massive revives
+- Infect
+- Trap
+- Steal
+- Monster
+- No battles
+- More battles
+- Treasons
+- More alliances
+- Move
+- Swap players
+Write them as a story
 
 ## Bugs

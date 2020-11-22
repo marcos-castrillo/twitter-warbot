@@ -4,4 +4,4 @@
 simulations/
 assets/avatars
 assets/sleep
-data/*/secrets.py
+*/secrets.py

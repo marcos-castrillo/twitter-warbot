@@ -4,9 +4,9 @@
 from models.match_type import Match_type
 
 # General
-MENTION_USERS = True
-MATCH_TYPE = Match_type.rumble
-USE_FLAGS = False
+config.general.mention_users = True
+config.general.match_type = Match_type.rumble
+config.general.use_flags = False
 MIN_ITEMS = 0
 MAX_ITEMS = 50
 MAX_ATRACTED_PLAYERS = 0
@@ -27,26 +27,26 @@ PROBAB_MOVE = [0]
 PROBAB_REVIVE = [1]
 PROBAB_STEAL = [5]
 PROBAB_ITEM = [5]
-PROBAB_TIE = 3
-PROBAB_NEUTRAL = 25
+config.battle.probabilities.tie = 3
+config.battle.probabilities.neutral = 25
 
 THRESHOLD_LIST = []
-TREASONS_ENABLED_LIST =  [True]
+TREASONS_ENABLED_LIST = [True]
 
 # Map
-MAP_AVATAR_SIZE = 150
-MAP_PLAYERS_IN_SINGLE_LINE = False
-MAP_MAX_PLAYERS_IN_LINE = 5
-MAP_WIDTH_BETWEEN_PLAYERS = 155
-MAP_HEIGHT_BETWEEN_PLAYERS = 155
-MAP_WATERMARK_COORDINATES = None
-MAP_LIMIT_SMALL_AVATARS = 0
-MAP_CIRCLE_SIZE = 1000
-MAP_SHOW_CIRCLE = False
+config.map.avatar_size = 150
+config.map.players_in_single_line = False
+config.map.max_players_in_line = 5
+config.map.width_between_players = 155
+config.map.height_between_players = 155
+config.map.watermark_coordinates = None
+config.map.limit_small_avatars = 0
+config.map.circle_size = 1000
+config.map.show_circle = False
 
 # Ranking
-RANKING_AVATAR_SIZE = 70
-BG_COLOR = '#dcdeff'
-RANKING_IMGS_PER_ROW = 8
-RANKING_PADDING = 20
-RANKING_DISTRICT_NAME_HEIGHT = 0
+config.ranking.avatar_size = 70
+config.ranking.bg_color = '#dcdeff'
+config.ranking.images_per_row = 8
+config.ranking.padding = 20
+config.ranking.district_name_height = 0

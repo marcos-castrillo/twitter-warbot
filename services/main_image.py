@@ -2,10 +2,14 @@
 # -*- coding: utf-8 -*-
 
 from services.images import *
+from services.store import place_list
+from models.enums import TweetType
+from models.drawing import DrawingMultiplePlayer, DrawingItems
 
 draw = None
 image = None
 tweet = None
+
 
 def get_main_image(main_image, main_tweet):
     global draw, image, tweet
@@ -13,212 +17,178 @@ def get_main_image(main_image, main_tweet):
     tweet = main_tweet
     draw = ImageDraw.Draw(image)
 
-    image.putalpha(128)  # Half alpha; alpha argument must be an int
+    offset_horizontal = config.map.zoomed_avatar_size + config.map.frame_width * 2 + config.map.width_between_players_battle
+    offset_vertical = int(config.map.zoomed_avatar_size / 2) + \
+                      int(config.map.zoomed_avatar_size / 3) + int(config.map.zoomed_icon_size * 3 / 2)
+
+    place_x, place_y = adjust_coordinates(tweet.place.coord_x, tweet.place.coord_y, offset_horizontal, offset_vertical)
 
     for i, p in enumerate(place_list):
-        if not p.destroyed:
-            if p.trap_by != None:
-                paste_image(image, p.coord_x, p.coord_y + int(MAP_AVATAR_SIZE / 2), 48, 'trap')
+        if p.destroyed:
+            paste_image(image, p.coord_x, p.coord_y, config.map.small_icon_size, 'destroyed')
+        else:
+            if p.trap_by is not None:
+                paste_image(image, p.coord_x, p.coord_y + int(config.map.icon_size / 2),
+                            config.map.small_icon_size, 'trap')
             if p.monster:
-                paste_image(image, p.coord_x, p.coord_y - int(MAP_AVATAR_SIZE / 4), 48, 'monster')
+                paste_image(image, p.coord_x, p.coord_y - int(config.map.icon_size / 4),
+                            config.map.small_icon_size, 'monster')
 
-            if tweet.type != Tweet_type.introduce_players and MATCH_TYPE != Match_type.rumble:
-                draw_items(len(p.items), p.coord_x, p.coord_y, image, True)
+            if tweet.type != TweetType.introduce_players and config.general.match_type != MatchType.rumble:
+                drawing_items = DrawingItems(image, p.coord_x, p.coord_y)
+                drawing_items.item_count = len(p.items)
+                drawing_items.transparent = True
+                draw_items(drawing_items)
 
-    if MATCH_TYPE == Match_type.districts and (tweet.type == Tweet_type.introduce_players or tweet.type == Tweet_type.destroyed_district or tweet.type == Tweet_type.winner_districts or tweet.type == Tweet_type.atraction):
-        if USE_FLAGS:
+    if config.general.match_type == MatchType.districts and tweet.type in \
+            [TweetType.introduce_players, TweetType.destroyed_district, TweetType.winner_districts,
+             TweetType.attraction]:
+        if config.general.use_flags:
             draw_flag()
-        draw_items(len(tweet.place.items), tweet.place.coord_x, tweet.place.coord_y, image)
+        drawing_items = DrawingItems(image, tweet.place.coord_x, tweet.place.coord_y)
+        drawing_items.item_count = len(tweet.place.items)
+        draw_items(drawing_items)
 
-    if tweet.type == Tweet_type.winner or tweet.type == Tweet_type.somebody_got_special or tweet.type == Tweet_type.somebody_found_item or tweet.type == Tweet_type.somebody_replaced_item or tweet.type == Tweet_type.somebody_revived or tweet.type == Tweet_type.somebody_moved or tweet.type == Tweet_type.trap or tweet.type == Tweet_type.trap_dodged or tweet.type == Tweet_type.somebody_was_infected or tweet.type == Tweet_type.somebody_suicided or tweet.type == Tweet_type.monster_killed or tweet.type == Tweet_type.trapped or tweet.type == Tweet_type.somebody_died_of_infection or tweet.type == Tweet_type.somebody_got_cured:
+    if tweet.type in [TweetType.winner, TweetType.somebody_got_special, TweetType.somebody_found_item,
+                      TweetType.somebody_replaced_item, TweetType.somebody_revived, TweetType.somebody_moved,
+                      TweetType.trap, TweetType.trap_dodged, TweetType.somebody_was_infected,
+                      TweetType.somebody_suicided, TweetType.monster_killed, TweetType.trapped,
+                      TweetType.somebody_died_of_infection, TweetType.somebody_got_cured]:
         # Individual actions
-        draw_player(image, tweet, tweet.player, tweet.place.coord_x, tweet.place.coord_y)
-    elif tweet.type == Tweet_type.somebody_tied_and_became_friend or tweet.type == Tweet_type.somebody_tied_and_was_friend or tweet.type == Tweet_type.somebody_escaped or tweet.type == Tweet_type.somebody_killed or tweet.type == Tweet_type.somebody_stole or tweet.type == Tweet_type.somebody_stole_and_threw or tweet.type == Tweet_type.somebody_stole_and_replaced or tweet.type == Tweet_type.soft_attack:
+        drawing_player = DrawingPlayer(image, place_x, place_y)
+        drawing_player.player = tweet.player
+        drawing_player.avatar_size = config.map.zoomed_avatar_size
+        drawing_player.icon_size = config.map.zoomed_icon_size
+        drawing_player.font_size = config.map.font_size_icons
+        draw_player(drawing_player)
+    elif tweet.type in [TweetType.somebody_tied_and_became_friend, TweetType.somebody_tied_and_was_friend,
+                        TweetType.somebody_escaped, TweetType.somebody_killed, TweetType.somebody_stole,
+                        TweetType.somebody_stole_and_threw, TweetType.somebody_stole_and_replaced,
+                        TweetType.soft_attack]:
         # Pair actions
-        if tweet.type == Tweet_type.somebody_tied_and_became_friend or tweet.type == Tweet_type.somebody_tied_and_was_friend or tweet.type == Tweet_type.somebody_escaped or tweet.type == Tweet_type.somebody_killed or tweet.type == Tweet_type.soft_attack:
-            draw_battle()
+        if tweet.type in [TweetType.somebody_tied_and_became_friend, TweetType.somebody_tied_and_was_friend,
+                          TweetType.somebody_escaped, TweetType.somebody_killed, TweetType.soft_attack]:
+            draw_battle(place_x, place_y)
 
-        frame_width = 4
-        draw_player(image, tweet, tweet.player, tweet.player.location.coord_x - int(MAP_AVATAR_SIZE / 2) - frame_width - 10, tweet.player.location.coord_y)
-        draw_player(image, tweet, tweet.player_2, tweet.player_2.location.coord_x + int(MAP_AVATAR_SIZE / 2) + frame_width + 10 + 1, tweet.player_2.location.coord_y)
-    elif tweet.type == Tweet_type.destroyed or tweet.type == Tweet_type.destroyed_district or tweet.type == Tweet_type.winner_districts or tweet.type == Tweet_type.atraction or tweet.type == Tweet_type.introduce_players:
+        # player_1
+        drawing_player = DrawingPlayer(image, place_x - int(offset_horizontal / 2), place_y)
+        drawing_player.player = tweet.player
+        drawing_player.avatar_size = config.map.zoomed_avatar_size
+        drawing_player.icon_size = config.map.zoomed_icon_size
+        drawing_player.font_size = config.map.font_size_icons
+        drawing_player.frame_color = config.battle.colors.player_1
+        drawing_player.big_frame = True
+        draw_player(drawing_player)
+
+        # player_2
+        drawing_player_2 = DrawingPlayer(image, place_x + int(offset_horizontal / 2), place_y)
+        drawing_player_2.player = tweet.player_2
+        drawing_player_2.avatar_size = config.map.zoomed_avatar_size
+        drawing_player_2.icon_size = config.map.zoomed_icon_size
+        drawing_player_2.font_size = config.map.font_size_icons
+        drawing_player_2.frame_color = config.battle.colors.player_2
+        drawing_player_2.big_frame = True
+        draw_player(drawing_player_2)
+
+    elif tweet.type in [TweetType.destroyed, TweetType.destroyed_district, TweetType.winner_districts,
+                        TweetType.attraction, TweetType.introduce_players]:
         # Multi actions
-        draw_multiple_players(tweet, tweet.player_list, tweet.place.coord_x, tweet.place.coord_y, image, 50)
-        if tweet.type == Tweet_type.introduce_players:
+        drawing_players = DrawingMultiplePlayer(image, place_x, place_y)
+        drawing_players.player_list = tweet.player_list
+        drawing_players.delta_x = config.map.avatar_size + 2
+        drawing_players.font_size = config.map.font_size_icons
+        draw_multiple_players(drawing_players)
+
+        if tweet.type == TweetType.introduce_players:
             if len(tweet.player_list_2) > 0:
-                draw_multiple_players(tweet, tweet.player_list_2, tweet.place.coord_x, tweet.place.coord_y + 140, image, 50)
+                drawing_players = DrawingMultiplePlayer(image, place_x, place_y + config.map.circle_size)
+                drawing_players.player_list = tweet.player_list_2
+                drawing_players.delta_x = config.map.avatar_size + 2
+                drawing_players.font_size = config.map.font_size_icons
+                draw_multiple_players(drawing_players)
 
                 if tweet.inverse:
-                    paste_image(image, tweet.place.coord_x, tweet.place.coord_y + 70, 128, 'merge')
+                    paste_image(image, place_x, place_y + 70, 128, 'merge')
                 else:
-                    paste_image(image, tweet.place.coord_x, tweet.place.coord_y + 70, 128, 'split')
-        elif tweet.place_2 != None:
-            draw_multiple_players(tweet, tweet.player_list_2, tweet.place_2.coord_x, tweet.place_2.coord_y, image, 50)
+                    paste_image(image, place_x, place_y + 70, 128, 'split')
+        elif tweet.place_2 is not None:
+            drawing_players = DrawingMultiplePlayer(image, tweet.place_2.coord_x,
+                                                    tweet.place_2.coord_y)
+            drawing_players.player_list = tweet.player_list_2
+            drawing_players.delta_x = config.map.avatar_size + 2
+            drawing_players.font_size = config.map.font_size_icons
+            draw_multiple_players(drawing_players)
 
     resize_image()
-    draw_big_image()
     return image
 
-def draw_big_image():
-    if tweet.type == Tweet_type.somebody_found_item or tweet.type == Tweet_type.somebody_replaced_item:
-        if tweet.item.get_rarity() == 1:
-            paste_image(image, 80, 80, 256, 'weapon_1')
-        elif tweet.item.get_rarity() == 2:
-            paste_image(image, 80, 80, 256, 'weapon_2')
-        elif tweet.item.get_rarity() == 3:
-            paste_image(image, 80, 80, 256, 'weapon_3')
-    elif tweet.type == Tweet_type.somebody_got_special:
-        if tweet.item.get_rarity() == 1:
-            paste_image(image, 80, 80, 256, 'special_1')
-        elif tweet.item.get_rarity() == 2:
-            paste_image(image, 80, 80, 256, 'special_2')
-        elif tweet.item.get_rarity() == 3:
-            paste_image(image, 80, 80, 256, 'special_3')
-    elif tweet.type == Tweet_type.somebody_tied_and_became_friend or tweet.type == Tweet_type.somebody_tied_and_was_friend:
-        paste_image(image, 80, 80, 256, 'tie')
-    elif tweet.type == Tweet_type.monster_moved or tweet.type == Tweet_type.monster_killed or tweet.type == Tweet_type.monster_appeared:
-        paste_image(image, 80, 80, 256, 'monster')
-    elif tweet.type == Tweet_type.trap_dodged or tweet.type == Tweet_type.trapped or tweet.type == Tweet_type.trap:
-        paste_image(image, 80, 80, 256, 'trap')
-    elif tweet.type == Tweet_type.somebody_moved:
-        if tweet.double:
-            paste_image(image, 80, 80, 256, 'strong')
-        elif tweet.item != None:
-            if tweet.item.type == Item_type.powerup:
-                if tweet.item.get_rarity() == 1:
-                    paste_image(image, 80, 80, 256, 'powerup_1')
-                elif tweet.item.get_rarity() == 2:
-                    paste_image(image, 80, 80, 256, 'powerup_2')
-                elif tweet.item.get_rarity() == 3:
-                    paste_image(image, 80, 80, 256, 'powerup_3')
-            elif tweet.item.type == Item_type.injury:
-                paste_image(image, 80, 80, 256, 'injure')
-        else:
-            paste_image(image, 80, 80, 256, 'move')
-    elif tweet.type == Tweet_type.monster_killed or tweet.type == Tweet_type.somebody_killed or tweet.type == Tweet_type.somebody_suicided:
-        paste_image(image, 80, 80, 256, 'skull')
-    elif tweet.type == Tweet_type.soft_attack:
-        paste_image(image, 80, 80, 256, 'soft_attack')
-    elif tweet.type == Tweet_type.somebody_revived:
-        paste_image(image, 80, 80, 256, 'revive')
-    elif tweet.type == Tweet_type.somebody_stole or tweet.type == Tweet_type.somebody_stole_and_threw or tweet.type == Tweet_type.somebody_stole_and_replaced:
-        paste_image(image, 80, 80, 256, 'steal')
-    elif tweet.type == Tweet_type.somebody_escaped:
-        paste_image(image, 80, 80, 256, 'runaway')
-    elif tweet.type == Tweet_type.destroyed or tweet.type == Tweet_type.destroyed_district:
-        paste_image(image, 80, 80, 256, 'destroyed')
-    elif tweet.type == Tweet_type.somebody_was_infected or tweet.type == Tweet_type.somebody_died_of_infection:
-        paste_image(image, 80, 80, 256, 'infection')
-    elif tweet.type == Tweet_type.atraction:
-        paste_image(image, 80, 80, 256, 'atraction')
-    elif tweet.type == Tweet_type.somebody_got_cured:
-        paste_image(image, 80, 80, 256, 'cure')
-    elif tweet.type == Tweet_type.winner or tweet.type == Tweet_type.winner_districts:
-        paste_image(image, 80, 100, 248, 'winner')
 
-def draw_battle():
-    color_1 = 'rgb(255,0,0)'
-    color_2 = 'rgb(0,0,255)'
-    color_tie = 'rgb(127,0,127)'
-    color_tie_1 = 'rgb(192,0,64)'
-    color_tie_2 = 'rgb(64,0,192)'
-    color_arrow = 'rgb(59,249,0)'
+def adjust_coordinates(coord_x, coord_y, offset_horizontal, offset_vertical):
+    if coord_x - offset_horizontal < 0:
+        coord_x = offset_horizontal + config.map.width_between_players_battle
+    elif coord_x + offset_horizontal > image.width:
+        coord_x = image.width - offset_horizontal - config.map.width_between_players_battle
 
-    if not tweet.type == Tweet_type.somebody_escaped:
+    if coord_y - offset_vertical < 0:
+        coord_y = offset_vertical + config.map.width_between_players_battle
+    # elif coord_y + offset_vertical > image.height:
+        # coord_y = image.height - offset_vertical - config.map.width_between_players_battle
+
+    return coord_x, coord_y
+
+
+def draw_battle(coord_x, coord_y):
+    if not tweet.type == TweetType.somebody_escaped:
         tweet.place_2 = tweet.place
 
-    if tweet.new_item != None:
-        # Stole
-        if tweet.inverse:
-            att_player_1 = tweet.player.get_attack() + tweet.new_item.attack
-            def_player_1 = tweet.player.get_defense() + tweet.new_item.defense
-            att_player_2 = tweet.player_2.get_attack() - tweet.new_item.attack
-            def_player_2 = tweet.player_2.get_defense() - tweet.new_item.defense
-        else:
-            att_player_1 = tweet.player.get_attack() - tweet.new_item.attack
-            def_player_1 = tweet.player.get_defense() - tweet.new_item.defense
-            att_player_2 = tweet.player_2.get_attack() + tweet.new_item.attack
-            def_player_2 = tweet.player_2.get_defense() + tweet.new_item.defense
+    min_x = coord_x - config.map.zoomed_avatar_size
+    max_x = coord_x + config.map.zoomed_avatar_size
 
-        if tweet.old_item != None:
-            # Throw away
-            if tweet.inverse:
-                att_player_2 = att_player_2 + tweet.old_item.attack
-                def_player_2 = def_player_2 + tweet.old_item.defense
-            else:
-                att_player_1 = att_player_1 + tweet.old_item.attack
-                def_player_1 = def_player_1 + tweet.old_item.defense
-    else:
-        att_player_1 = tweet.player.get_attack()
-        def_player_1 = tweet.player.get_defense()
-        att_player_2 = tweet.player_2.get_attack()
-        def_player_2 = tweet.player_2.get_defense()
+    action_number_x = min_x + tweet.action_number * 4
+    tie = min_x + 4 * tweet.factor
+    min_tie = min_x + 4 * (tweet.factor - config.battle.probabilities.neutral)
+    max_tie = min_tie + 8 * config.battle.probabilities.neutral
 
-    frame_width = 4
-    #frame player_1
-    draw.rectangle((tweet.player.location.coord_x - MAP_AVATAR_SIZE - frame_width * 2 - 10, tweet.player.location.coord_y - int(MAP_AVATAR_SIZE / 2) - frame_width, tweet.player.location.coord_x - 10 - 1, tweet.player.location.coord_y + int(MAP_AVATAR_SIZE / 2) + frame_width - 1), outline=color_1, width=4)
-    #frame player_2
-    draw.rectangle((tweet.player_2.location.coord_x + 10 + 1, tweet.player_2.location.coord_y - int(MAP_AVATAR_SIZE / 2) - frame_width, tweet.player_2.location.coord_x + MAP_AVATAR_SIZE + frame_width * 2 + 10, tweet.player_2.location.coord_y + int(MAP_AVATAR_SIZE / 2) + frame_width - 1), outline=color_2, width=4)
-    #stats
-    delta_x = MAP_AVATAR_SIZE + 10
-    square_size = 50
-    unit = int(square_size / 10)
-    #stats player_1
-    x_0 = tweet.player.location.coord_x - MAP_AVATAR_SIZE - 10
-    draw.ellipse((x_0 - square_size - unit * 2, tweet.player.location.coord_y - unit * 5, x_0 - unit * 2, tweet.player.location.coord_y + 25), fill='rgb(255,255,255)')
-    draw.ellipse((x_0 - square_size - unit * 2, tweet.player.location.coord_y - unit * 5, x_0 - unit * 2, tweet.player.location.coord_y + 25), outline=color_1, width=2)
-    paste_image(image, x_0 - unit * 9, tweet.player.location.coord_y - unit * 2, 32, 'attack')
-    paste_image(image, x_0 - unit * 9, tweet.player.location.coord_y + unit * 2, 32, 'defense')
-    draw.text((x_0 - unit * 6 - 4, tweet.player.location.coord_y - unit * 4 + 2), str(att_player_1), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path_2, size=15))
-    draw.text((x_0 - unit * 6 - 4, tweet.player.location.coord_y + unit - 2), str(def_player_1), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path_2, size=15))
-    #stats player_2
-    x_0 = tweet.player_2.location.coord_x + MAP_AVATAR_SIZE + 10
-    draw.ellipse((x_0 + unit * 2, tweet.player_2.location.coord_y - unit * 5, x_0 + square_size + unit * 2, tweet.player_2.location.coord_y + 25), fill='rgb(255,255,255)')
-    draw.ellipse((x_0 + unit * 2, tweet.player_2.location.coord_y - unit * 5, x_0 + square_size + unit * 2, tweet.player_2.location.coord_y + 25), outline=color_2, width=2)
-    paste_image(image, x_0 + unit * 5, tweet.player_2.location.coord_y - unit * 2, 32, 'attack')
-    paste_image(image, x_0 + unit * 5, tweet.player_2.location.coord_y + unit * 2, 32, 'defense')
-    draw.text((x_0 + unit * 8 - 4, tweet.player_2.location.coord_y - unit * 4 + 2), str(att_player_2), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path_2, size=15))
-    draw.text((x_0 + unit * 8 - 4, tweet.player_2.location.coord_y + unit - 2), str(def_player_2), fill='rgb(0,0,0)', font=ImageFont.truetype(font_path_2, size=15))
+    if min_tie < min_x:
+        min_tie = min_x
+    elif min_tie > max_x:
+        min_tie = max_x
 
-    # Config progress bar
-    min = tweet.place.coord_x - 100
-    max = tweet.place.coord_x + 100
-    action_number = min + tweet.action_number * 2
-
-    tie = min + 2*(tweet.factor)
-
-    min_tie = min + 2*(tweet.factor - PROBAB_NEUTRAL)
-    if min_tie < min:
-        min_tie = min
-    elif min_tie > max:
-        min_tie = max
-
-    max_tie = min_tie + 4*PROBAB_NEUTRAL
-    if max_tie < min:
-        max_tie = min
-    elif max_tie > max:
-        max_tie = max
+    if max_tie < min_x:
+        max_tie = min_x
+    elif max_tie > max_x:
+        max_tie = max_x
 
     # progress bar
-    y_0 = tweet.place.coord_y - MAP_AVATAR_SIZE
-    y_1 = y_0 + 25
-    draw.rectangle((min - 2, y_0 - 2, max + 2, y_1 + 2), outline='rgb(255,255,255)', width=4)
-    draw.rectangle((min, y_0, min_tie, y_1), fill=color_1)
-    draw.rectangle((max_tie, y_0, max, y_1), fill=color_2)
-    draw.rectangle((min_tie, y_0, tie, y_1), fill=color_tie_1)
-    draw.rectangle((tie, y_0, max_tie, y_1), fill=color_tie_2)
-    draw.rectangle((tie - 2*int((PROBAB_TIE - 1) / 2), y_0, tie + 2*int((PROBAB_TIE - 1) / 2), y_1), fill=color_tie)
+    y_0 = coord_y + int(3 * config.map.zoomed_avatar_size / 4)
+    y_1 = y_0 + 30
+
+    draw.rectangle((min_x - 2, y_0 - 2, max_x + 2, y_1 + 2), outline='rgb(255,255,255)', width=4)
+    draw.rectangle((min_x, y_0, min_tie, y_1), fill=config.battle.colors.player_1)
+    draw.rectangle((max_tie, y_0, max_x, y_1), fill=config.battle.colors.player_2)
+    draw.rectangle((min_tie, y_0, tie, y_1), fill=config.battle.colors.tie_player_1)
+    draw.rectangle((tie, y_0, max_tie, y_1), fill=config.battle.colors.tie_player_2)
+    draw.rectangle((tie - 2 * int((config.battle.probabilities.tie - 1) / 2), y_0,
+                    tie + 2 * int((config.battle.probabilities.tie - 1) / 2), y_1), fill=config.battle.colors.tie)
+
+    draw.text((min_x - 15, y_0 - 27), "0%", fill='rgb(255,255,255)', font=ImageFont.truetype(font_path, size=20))
+    draw.text((max_x - 23, y_0 - 27), "100%", fill='rgb(255,255,255)', font=ImageFont.truetype(font_path, size=20))
 
     # action_number
-    draw.rectangle((action_number - 1, y_0, action_number + 1, y_1), fill=color_arrow)
-    paste_image(image, action_number, y_0 - 25, 72, 'arrow')
+    draw.rectangle((action_number_x - 1, y_0, action_number_x + 1, y_1), fill=config.battle.colors.arrow)
+    paste_image(image, action_number_x, y_0 + 60, 72, 'arrow')
+    draw.text((action_number_x + 10, y_0 + 60), str(tweet.action_number) + "%", fill=config.battle.colors.arrow,
+              font=ImageFont.truetype(font_path, size=20))
+
 
 def draw_flag():
     dimension_1 = 424
     dimension_2 = 286
-    image_to_paste = Image.open(os.path.join(current_dir, '../assets/flags/' + LOCALIZATION + '/' + tweet.place.district_display_name + '.jpg'))
-    image_to_paste.thumbnail([dimension_1/2, dimension_2/2])
+    image_to_paste = Image.open(
+        os.path.join(current_dir, '../assets/flags/' + tweet.place.district_display_name + '.jpg'))
+    image_to_paste.thumbnail([dimension_1 / 2, dimension_2 / 2])
     image.paste(image_to_paste, (tweet.place.coord_x - 100, tweet.place.coord_y - 130), image_to_paste.convert('RGBA'))
+
 
 def resize_image():
     global image
@@ -245,3 +215,9 @@ def resize_image():
 
     image = image.crop((x_1, y_1, x_2, y_2))
     image.resize((w, h), Image.LANCZOS)
+
+    if y_2 > h:
+        # make image square
+        new_im = Image.new(mode="RGB", size=image.size, color=config.map.colors.background)
+        new_im.paste(image)
+        image = new_im

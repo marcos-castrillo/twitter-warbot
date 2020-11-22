@@ -4,9 +4,9 @@
 from models.match_type import Match_type
 
 # General
-MENTION_USERS = True
-MATCH_TYPE = Match_type.standard
-USE_FLAGS = True
+config.general.mention_users = True
+config.general.match_type = Match_type.standard
+config.general.use_flags = True
 MIN_ITEMS = 0
 MAX_ITEMS = 1
 MAX_ATRACTED_PLAYERS = 5
@@ -15,25 +15,27 @@ SLEEP_ACTION_NUMBER_LIMIT = 60
 REDISTRIBUTE_TRIBUTES = True
 
 # Probabilities
-ATRACT_RANGE_LIST =  [1, 1, 2, 2, 2, 3, 3, 3]
-PROBAB_DESTROY = [0,  1,  1,  1,  1,  2,  2,  3]
-PROBAB_ITEM =    [42, 37, 32, 29, 23, 17, 14, 14]
+ATRACT_RANGE_LIST = [1, 1, 2, 2, 2, 3, 3, 3]
+PROBAB_DESTROY = [0, 1, 1, 1, 1, 2, 2, 3]
+PROBAB_ITEM = [42, 37, 32, 29, 23, 17, 14, 14]
 
 THRESHOLD_LIST = [25, 50, 75, 100, 125, 150, 175, 200]
-TREASONS_ENABLED_LIST =  [False, False, False, True, True, True, True, True]
+TREASONS_ENABLED_LIST = [False, False, False, True, True, True, True, True]
 
 # Map
-MAP_AVATAR_SIZE = 70
-MAP_PLAYERS_IN_SINGLE_LINE = False
-MAP_MAX_PLAYERS_IN_LINE = 3
-MAP_WIDTH_BETWEEN_PLAYERS = 44
-MAP_HEIGHT_BETWEEN_PLAYERS = 48
-MAP_WATERMARK_COORDINATES = [1549, 1462]
-MAP_CIRCLE_SIZE = 150
+config.map.avatar_size = 70
+config.map.players_in_single_line = False
+config.map.max_players_in_line = 3
+config.map.width_between_players = 44
+config.map.height_between_players = 48
+config.map.watermark_coordinates = [1549, 1462]
+config.map.limit_small_avatars = 0
+config.map.circle_size = 150
+config.map.show_circle = True
 
 # Ranking
-RANKING_AVATAR_SIZE = 70
-BG_COLOR = '#dcdeff'
-RANKING_IMGS_PER_ROW = 8
-RANKING_PADDING = 20
-RANKING_DISTRICT_NAME_HEIGHT = 0
+config.ranking.avatar_size = 70
+config.ranking.bg_color = '#dcdeff'
+config.ranking.images_per_row = 8
+config.ranking.padding = 20
+config.ranking.district_name_height = 0

@@ -3,13 +3,8 @@
 
 import random
 
-from data.config import *
-from store import player_list, get_alive_players_count
-
-from models.tweet import Tweet
-from models.tweet_type import Tweet_type
-from models.match_type import Match_type
-from models.simulation_probab import Simulation_Probab
+from services.store import player_list, get_alive_players_count, update_action_event_list, event_list
+import services.store
 
 from services.simulation import *
 from services.items import *
@@ -18,79 +13,115 @@ from services.players import *
 from services.places import *
 from services.api import initialize_avatars
 
-simulation_probab = Simulation_Probab(PROBAB_SUICIDE[0], PROBAB_REVIVE[0], PROBAB_TRAP[0], PROBAB_INFECT[0], PROBAB_DESTROY[0], PROBAB_ATRACT[0], PROBAB_MONSTER[0], PROBAB_STEAL[0], PROBAB_MOVE[0], PROBAB_ITEM[0], PROBAB_BATTLE[0])
 finished = False
-entrance_countdown = LIMIT_TIME_RUMBLE
+previous_enabled_action_list = []
+
 
 def initialize():
     initialize_avatars()
-    if MATCH_TYPE == Match_type.districts:
+    if config.general.match_type == MatchType.districts and False:
         for i, tweet in enumerate(introduction_tweet_list):
             write_tweet(tweet)
     start_battle()
 
 def start_battle():
-    if len(player_list) == 0:
-        sys.exit('Config error: no players configured.')
-
-    if MATCH_TYPE != Match_type.rumble:
+    if config.general.match_type != MatchType.rumble:
         tweet = Tweet()
-        tweet.type = Tweet_type.start
+        tweet.type = TweetType.start
         write_tweet(tweet)
 
     while not finished:
         simulate_day()
 
+
 def simulate_day():
-    global hour_count, simulation_probab, entrance_countdown
-    hour_count = hour_count + 1
-    for i, th in enumerate(THRESHOLD_LIST):
-        if hour_count == th and MATCH_TYPE != Match_type.rumble:
-            simulation_probab = Simulation_Probab(PROBAB_SUICIDE[i], PROBAB_REVIVE[i], PROBAB_TRAP[i], PROBAB_INFECT[i], PROBAB_DESTROY[i], PROBAB_ATRACT[i], PROBAB_MONSTER[i], PROBAB_STEAL[i], PROBAB_MOVE[i], PROBAB_ITEM[i], PROBAB_BATTLE[i])
-    if MATCH_TYPE == Match_type.rumble:
-        if len(get_players_in_place(place_list[0])) < 2 or entrance_countdown == 0:
-            entrance_countdown = LIMIT_TIME_RUMBLE
+    if services.store.hour_count == 1:
+        first_day()
+    services.store.hour_count = services.store.hour_count + 1
+    if config.general.match_type == MatchType.rumble:
+        if len(get_players_in_place(place_list[0])) < 2 or config.general.entrance_countdown == 0:
+            config.general.entrance_countdown = 3
             next_entrance()
             return
         else:
-            entrance_countdown = entrance_countdown - 1
+            config.general.entrance_countdown = config.general.entrance_countdown - 1
 
     do_something()
 
-    if MATCH_TYPE == Match_type.districts and get_alive_districts_count() <= 1:
+    if config.general.match_type == MatchType.districts and get_alive_districts_count() <= 1:
         end_districts()
     elif get_alive_players_count() <= 1:
         end()
 
+
+def first_day():
+    global previous_enabled_action_list
+    previous_enabled_action_list = services.store.enabled_action_list
+
+
 def do_something():
+    global previous_enabled_action_list
     completed = False
-    action_number = random.randint(1, 100)
+    update_action_event_list()
 
-    if action_number < simulation_probab.suicide_action_number:
+    if services.store.hour_count > 2 and len(services.store.enabled_action_list) > len(previous_enabled_action_list):
+        new_action = next(x for x in services.store.enabled_action_list if x not in previous_enabled_action_list)
+        tweet = Tweet()
+        tweet.is_event = True
+        tweet.type = new_action.name
+        write_tweet(tweet)
+        previous_enabled_action_list = services.store.enabled_action_list
+
+    total_enabled_action_list_probab = sum(a.probability for a in services.store.enabled_action_list)
+    action_number = random.randint(1, total_enabled_action_list_probab)
+
+    chosen_action = None
+    i = 0
+    accumulated_probab = 0
+    while chosen_action is None:
+        if action_number > (total_enabled_action_list_probab - accumulated_probab - services.store.enabled_action_list[
+            i].probability):
+            chosen_action = services.store.enabled_action_list[i].name
+        else:
+            accumulated_probab = accumulated_probab + services.store.enabled_action_list[i].probability
+            i = i + 1
+
+    if chosen_action == "suicide":
         completed = suicide()
-    elif action_number < simulation_probab.revive_action_number:
+    elif chosen_action == "revive":
         completed = revive()
-    elif action_number < simulation_probab.trap_action_number:
+    elif chosen_action == "trap":
         completed = trap()
-    elif action_number < simulation_probab.infect_action_number:
+    elif chosen_action == "infect":
         completed = infect()
-    elif action_number < simulation_probab.destroy_action_number:
+    elif chosen_action == "destroy":
         completed = destroy()
-    elif action_number < simulation_probab.atract_action_number:
-        completed = atract()
-    elif action_number < simulation_probab.monster_action_number:
+    elif chosen_action == "attract":
+        completed = attract()
+    elif chosen_action == "monster":
         completed = monster()
-    elif action_number < simulation_probab.steal_action_number:
+    elif chosen_action == "steal":
         completed = steal()
-    elif action_number < simulation_probab.move_action_number:
+    elif chosen_action == "move":
         completed = move()
-    elif action_number < simulation_probab.item_action_number:
+    elif chosen_action == "pick_item":
         completed = pick_item()
-    elif action_number < simulation_probab.battle_action_number:
-        completed = battle()
+    elif chosen_action == "battle":
+        can_move = any(a for a in config.action_list if a.name == 'move' and a.is_enabled)
+        no_rivals = get_two_players_in_random_place(include_treasons=config.events.treasons.is_enabled) == (
+        None, None, None)
 
-    if not completed and MATCH_TYPE != Match_type.rumble:
-         do_something()
+        if no_rivals:
+            if can_move:
+                completed = move()
+            else:
+                completed = pick_item()
+        else:
+            completed = battle()
+
+    if not completed and config.general.match_type != MatchType.rumble:
+        do_something()
+
 
 def end():
     global finished
@@ -98,24 +129,26 @@ def end():
     if len(alive_players) == 1:
         player = alive_players[0]
         tweet = Tweet()
-        tweet.type = Tweet_type.winner
+        tweet.type = TweetType.winner
         tweet.place = player.location
         tweet.player = player
         write_tweet(tweet)
     elif len(alive_players) == 0:
         tweet = Tweet()
-        tweet.type = Tweet_type.nobody_won
+        tweet.type = TweetType.nobody_won
         write_tweet(tweet)
     finished = True
+
 
 def end_districts():
     global finished
     alive_players = get_alive_players()
     tweet = Tweet()
-    tweet.type = Tweet_type.winner_districts
-    tweet.player_list = [x for x in player_list if x.district.name == alive_players[0].district.name and x.state == 1]
+    tweet.type = TweetType.winner_districts
+    tweet.player_list = [x for x in player_list if x.district.name == alive_players[0].district.name and x.is_alive]
     tweet.place = alive_players[0].district
     write_tweet(tweet)
     finished = True
+
 
 initialize()

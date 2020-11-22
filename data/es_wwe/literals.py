@@ -4,15 +4,9 @@
 from data.es.literals import *
 import random
 
-def NEXT_ENTRANCE(tweet):
-    return random.choice([
-        tweet.player.get_name() + u' va a entrar al cuadrilátero.',
-        tweet.player.get_name() + u' va a entrar al ring.',
-        tweet.player.get_name() + u' entra al ring.',
-        tweet.player.get_name() + u' entra al cuadrilátero.',
-        tweet.player.get_name() + get_x_or_y(tweet.player, u' es el siguiente contendiente.', u' es la siguiente contendiente.'),
-        tweet.player.get_name() + get_x_or_y(tweet.player, u' ya está preparado para entrar al ring.', u' ya está preparada para entrar al ring.'),
-    ])
+
+
+
 
 def SOFT_ATTACK(attacker, attacked):
     return random.choice([
@@ -24,6 +18,7 @@ def SOFT_ATTACK(attacker, attacked):
         u' '.join((attacker.get_name(), u'le ha dado un patadón a', attacked.get_name())),
         u' '.join((attacker.get_name(), u'le ha dado un codazo a', attacked.get_name())),
     ])
+
 
 def KILL_ACTION(attacker, attacked):
     if len(attacker.skill_list) > 0:
@@ -37,11 +32,16 @@ def KILL_ACTION(attacker, attacked):
             u' '.join((attacker.get_name(), u'ha echado del cuadrilátero a', attacked.get_name())),
             u' '.join((attacker.get_name(), u'ha mandado fuera del ring a', attacked.get_name())),
             u' '.join((attacker.get_name(), u'ha mandado fuera del cuadrilátero a', attacked.get_name())),
-            u' '.join((attacker.get_name(), u'le ha hecho una sumisión a', attacked.get_name(), u'y', get_x_or_y(attacked, u'éste', u'ésta'), u'no se ha podido levantar')),
-            u' '.join((attacker.get_name(), u'le ha hecho una sumisión a', attacked.get_name(), u'y', get_x_or_y(attacked, u'éste', u'ésta'), u'no se ha podido zafar')),
-            u' '.join((attacker.get_name(), u'le ha hecho una sumisión a', attacked.get_name(), u'y', get_x_or_y(attacked, u'éste', u'ésta'), u'no ha podido liberarse')),
-            u' '.join((attacker.get_name(), u'ha tumbado a', attacked.get_name(), u'y', get_x_or_y(attacked, u'éste', u'ésta'), u'no se ha podido levantar')),
+            u' '.join((attacker.get_name(), u'le ha hecho una sumisión a', attacked.get_name(), u'y',
+                       get_x_or_y(attacked, u'éste', u'ésta'), u'no se ha podido levantar')),
+            u' '.join((attacker.get_name(), u'le ha hecho una sumisión a', attacked.get_name(), u'y',
+                       get_x_or_y(attacked, u'éste', u'ésta'), u'no se ha podido zafar')),
+            u' '.join((attacker.get_name(), u'le ha hecho una sumisión a', attacked.get_name(), u'y',
+                       get_x_or_y(attacked, u'éste', u'ésta'), u'no ha podido liberarse')),
+            u' '.join((attacker.get_name(), u'ha tumbado a', attacked.get_name(), u'y',
+                       get_x_or_y(attacked, u'éste', u'ésta'), u'no se ha podido levantar')),
         ])
+
 
 def HAS_ALREADY_KILLED(kills_count):
     return random.choice([
@@ -50,10 +50,12 @@ def HAS_ALREADY_KILLED(kills_count):
         u' '.join((u'y con éste ya van', kills_count)),
     ])
 
+
 def KILL_METHOD(player):
     return random.choice([
         u'',
     ])
+
 
 def FIND_ACTION():
     return random.choice([
