@@ -50,14 +50,14 @@ def write_tweet(tweet):
     if output_dir is None:
         initialize()
 
-    if tweet.type == TweetType.destroyed_district or tweet.is_event:
+    if tweet.type == TweetType.destroyed_district:
         line_number = line_number - 1
+    elif tweet.is_event:
         with open(os.path.join(output_dir, 'events.txt'), "a+") as file:
             file.write(str(line_number) + '\n')
-    write_line(get_message(tweet))
 
-    if not tweet.is_event:
-        draw_image(tweet)
+    write_line(get_message(tweet))
+    draw_image(tweet)
 
     line_number = line_number + 1
     if tweet.type == TweetType.winner or tweet.type == TweetType.winner_districts:
@@ -80,20 +80,19 @@ def write_last_line():
 
 
 def draw_image(tweet):
-    raw_map_img = Image.open(os.path.join(current_dir, config.file_paths.map))
-    raw_map_img_2 = Image.open(os.path.join(current_dir, config.file_paths.map))
+    raw_map_img = Image.open(os.path.join(current_dir, config.file_paths.map, config.general.run_name + '.png'))
+    raw_map_img_2 = Image.open(os.path.join(current_dir, config.file_paths.map, config.general.run_name + '.png'))
     blank_img = Image.new('RGB', (RANKING_WIDTH, get_ranking_height()), color=config.ranking.colors.background)
 
     main_image = None
     map_image = None
     ranking_image = None
 
-    if tweet.type == TweetType.start:
-        map_image = get_map_image(raw_map_img_2, tweet)
-        ranking_image = get_ranking_image(blank_img, tweet)
-
-        map_image.save(output_dir + '/' + str(line_number) + '_map.png')
-        ranking_image.save(output_dir + '/' + str(line_number) + '_ranking.png')
+    if tweet.is_event:
+        if tweet.type == TweetType.start or tweet.type == TweetType.start_2:
+            return
+        main_image = Image.open(os.path.join(current_dir, config.file_paths.icons, 'event_' + tweet.type + '.png'))
+        main_image.save(output_dir + '/' + str(line_number) + '.png')
     elif tweet.type == TweetType.introduce_players:
         map_image = get_main_image(raw_map_img_2, tweet)
         map_image.save(output_dir + '/' + str(line_number) + '_map.png')
@@ -127,9 +126,9 @@ def draw_image(tweet):
 
 
 def sanitize_lines(path):
-    # Lines no longer than 240 chars
+    # Lines no longer than 280 chars
     longest_line = max(open(path, 'r', encoding='utf-8'), key=len)
-    if len(longest_line) > 240:
+    if len(longest_line) > 280:
         sys.exit('File error: line its too long: (' + str(len(longest_line)) + ' characters)\n' + longest_line)
 
     # Add . at the beginning of the lines if there's an @

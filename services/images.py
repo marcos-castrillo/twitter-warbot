@@ -201,10 +201,10 @@ def draw_wrapped_text(drawing_text):
 
 def paste_image(image, x, y, dimension, image_name, image_dir=None):
     if image_dir is None and os.path.exists(
-            os.path.join(current_dir, config.file_paths.icons + '/' + image_name + '.png')):
-        image_dir = config.file_paths.icons + '/' + image_name
+            os.path.join(current_dir, config.file_paths.icons, config.general.run_name + '/' + image_name + '.png')):
+        image_dir = os.path.join(config.file_paths.icons, config.general.run_name, image_name)
     elif image_dir is None:
-        image_dir = config.file_paths.icons + '/../' + image_name
+        image_dir = os.path.join(config.file_paths.icons, image_name)
     else:
         image_dir = '../' + image_dir
 

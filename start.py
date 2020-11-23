@@ -24,10 +24,14 @@ def initialize():
             write_tweet(tweet)
     start_battle()
 
+
 def start_battle():
     if config.general.match_type != MatchType.rumble:
         tweet = Tweet()
+        tweet.is_event = True
         tweet.type = TweetType.start
+        write_tweet(tweet)
+        tweet.type = TweetType.start_2
         write_tweet(tweet)
 
     while not finished:

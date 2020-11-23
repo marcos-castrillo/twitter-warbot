@@ -12,9 +12,7 @@ if config.general.language == 'es':
 def get_message(tweet):
     message = u''
 
-    if tweet.type == TweetType.start:
-        message = config.literals.default_start
-    elif tweet.type == TweetType.introduce_players:
+    if tweet.type == TweetType.introduce_players:
         message = introduce_players(tweet)
     elif tweet.type == TweetType.winner:
         message = winner(tweet)
@@ -80,7 +78,12 @@ def get_message(tweet):
         message = soft_attack(tweet)
 
     if tweet.is_event:
-        message = tweet.type
+        if tweet.type == TweetType.start:
+            message = config.literals.start
+        elif tweet.type == TweetType.start_2:
+            message = config.literals.start_2
+        elif tweet.type == 'move':
+            message = config.literals.move
 
     return (message + '\n').encode('utf-8')
 

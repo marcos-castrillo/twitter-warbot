@@ -68,6 +68,7 @@ class TweetType(object):
     trap_dodged = 26
     destroyed_district = 27
     monster_appeared = 28
+    start_2 = 29
     monster_moved = 30
     monster_killed = 31
     somebody_died_of_infection = 32
