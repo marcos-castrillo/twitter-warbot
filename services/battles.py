@@ -16,11 +16,10 @@ def battle():
 
     kill_number = random.randint(0, 100)
 
-    if are_friends(player_1, player_2) and (
-            config.general.match_type != MatchType.rumble or (15 < kill_number < 85)):
+    if are_friends(player_1, player_2) and kill_number < config.general.treason_threshold:
         return False
 
-    factor = 50 + 2 * player_1.get_power() - 2 * player_2.get_power()
+    factor = 50 + 3 * player_1.get_power() - 3 * player_2.get_power()
     if factor > 100:
         factor = 100
     if factor < 0:
@@ -63,7 +62,6 @@ def kill(player_1, player_2, place, factor, action_number, inverse):
     else:
         best_killer_item = killer.get_best_item()
         best_killed_item = killed.get_best_item()
-    friendship = are_friends(killer, killed)
 
     tweet = Tweet()
     tweet.type = TweetType.somebody_killed
@@ -78,6 +76,8 @@ def kill(player_1, player_2, place, factor, action_number, inverse):
     if best_killed_item is not None and len(killer.item_list) == 2 and (
             best_killer_item.power < best_killed_item.power):
         # Steal item and throw away
+        killer.previous_power = killer.get_power()
+        killed.previous_power = killed.get_power()
         killer.item_list = [best_killer_item, best_killed_item]
         killed.item_list.pop(killed.item_list.index(best_killed_item))
 
@@ -88,6 +88,8 @@ def kill(player_1, player_2, place, factor, action_number, inverse):
         tweet.new_item = best_killed_item
     elif best_killed_item is not None and len(killer.item_list) < 2:
         # Steal item
+        killer.previous_power = killer.get_power()
+        killed.previous_power = killed.get_power()
         if best_killer_item is not None:
             killer.item_list = [best_killer_item, best_killed_item]
         else:
@@ -102,6 +104,9 @@ def kill(player_1, player_2, place, factor, action_number, inverse):
 
     write_tweet(tweet)
     kill_player(killed)
+
+    killer.previous_power = None
+    killed.previous_power = None
 
     if config.general.match_type == MatchType.districts:
         destroy_tweet = destroy_district_if_needed(killed.district)

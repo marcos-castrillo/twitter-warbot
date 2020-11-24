@@ -22,6 +22,7 @@ class DrawingPlayer(DrawingBase):
     frame_color = None
     show_icons = True
     big_frame = False
+    previous_power = None
 
 
 class DrawingMultiplePlayer(DrawingBase):

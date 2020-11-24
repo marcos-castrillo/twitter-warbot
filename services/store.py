@@ -18,7 +18,7 @@ powerup_list = []
 introduction_tweet_list = []
 injury_list = []
 enabled_action_list = []
-event_list = config.events
+enabled_event_list = []
 hour_count = None
 
 
@@ -70,7 +70,7 @@ def initialize_injury_list():
         injury_list.append(item)
 
 
-def is_action_enabled(action):
+def is_action_or_event_enabled(action):
     if action.is_enabled:
         return True
 
@@ -84,26 +84,14 @@ def is_action_enabled(action):
     return False
 
 
-def update_event_list():
-    global event_list
-
-    for attr, value in event_list.__dict__.items():
-        if not value.is_enabled:
-            should_be_enabled = (not value.is_percentage and hour_count >= value.enable_from) or (
-                        value.is_percentage and len(get_dead_players()) / len(player_list) >= value.enable_from)
-
-            if should_be_enabled:
-                value.is_enabled = True
-
-
 def update_action_event_list():
-    global enabled_action_list
+    global enabled_action_list, enabled_event_list
 
-    enabled_actions = [a for a in config.action_list if is_action_enabled(a)]
+    enabled_actions = [a for a in config.action_list if is_action_or_event_enabled(a)]
     sorted(enabled_actions, key=lambda x: x.probability, reverse=False)
     enabled_action_list = enabled_actions
 
-    update_event_list()
+    enabled_event_list = [e for e in config.event_list if is_action_or_event_enabled(e)]
 
 
 def initialize_place_and_player_list():
@@ -314,7 +302,7 @@ def get_two_players_in_random_place(include_treasons=True):
         for p1 in range(len(place.players)):
             for p2 in range(p1 + 1, len(place.players)):
                 friends = are_friends(place.players[p1], place.players[p2])
-                if not friends or (friends and include_treasons and config.events.treasons.is_enabled):
+                if not friends or (friends and include_treasons and is_event_enabled('treason')):
                     candidates_list.append([place.players[p1], place.players[p2]])
 
     if len(candidates_list) == 0:
@@ -326,6 +314,10 @@ def get_two_players_in_random_place(include_treasons=True):
     place = player_1.location
 
     return player_1, player_2, place
+
+
+def is_event_enabled(event_name):
+    return any(x for x in enabled_event_list if x.name == event_name)
 
 
 def are_friends(player, candidate):

@@ -3,7 +3,7 @@
 
 import random
 
-from services.store import player_list, get_alive_players_count, update_action_event_list, event_list
+from services.store import player_list, get_alive_players_count, update_action_event_list
 import services.store
 
 from services.simulation import *
@@ -15,6 +15,7 @@ from services.api import initialize_avatars
 
 finished = False
 previous_enabled_action_list = []
+previous_enabled_event_list = []
 
 
 def initialize():
@@ -64,17 +65,25 @@ def first_day():
 
 
 def do_something():
-    global previous_enabled_action_list
+    global previous_enabled_action_list, previous_enabled_event_list
     completed = False
     update_action_event_list()
 
-    if services.store.hour_count > 2 and len(services.store.enabled_action_list) > len(previous_enabled_action_list):
-        new_action = next(x for x in services.store.enabled_action_list if x not in previous_enabled_action_list)
-        tweet = Tweet()
-        tweet.is_event = True
-        tweet.type = new_action.name
-        write_tweet(tweet)
-        previous_enabled_action_list = services.store.enabled_action_list
+    if services.store.hour_count > 2:
+        if len(services.store.enabled_action_list) > len(previous_enabled_action_list):
+            new_action = next(x for x in services.store.enabled_action_list if x not in previous_enabled_action_list)
+            tweet = Tweet()
+            tweet.is_event = True
+            tweet.type = new_action.name
+            write_tweet(tweet)
+            previous_enabled_action_list = services.store.enabled_action_list
+        elif len(services.store.enabled_event_list) > len(previous_enabled_event_list):
+            new_event = next(x for x in services.store.enabled_event_list if x.is_enabled and x not in previous_enabled_event_list)
+            tweet = Tweet()
+            tweet.is_event = True
+            tweet.type = new_event.name
+            write_tweet(tweet)
+            previous_enabled_event_list = services.store.enabled_event_list
 
     total_enabled_action_list_probab = sum(a.probability for a in services.store.enabled_action_list)
     action_number = random.randint(1, total_enabled_action_list_probab)
@@ -112,7 +121,7 @@ def do_something():
         completed = pick_item()
     elif chosen_action == "battle":
         can_move = any(a for a in config.action_list if a.name == 'move' and a.is_enabled)
-        no_rivals = get_two_players_in_random_place(include_treasons=config.events.treasons.is_enabled) == (
+        no_rivals = get_two_players_in_random_place(include_treasons=is_event_enabled('treason')) == (
         None, None, None)
 
         if no_rivals:

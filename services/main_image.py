@@ -78,6 +78,7 @@ def get_main_image(main_image, main_tweet):
         drawing_player.font_size = config.map.font_size_icons
         drawing_player.frame_color = config.battle.colors.player_1
         drawing_player.big_frame = True
+        drawing_player.previous_power = tweet.player.previous_power
         draw_player(drawing_player)
 
         # player_2
@@ -88,6 +89,7 @@ def get_main_image(main_image, main_tweet):
         drawing_player_2.font_size = config.map.font_size_icons
         drawing_player_2.frame_color = config.battle.colors.player_2
         drawing_player_2.big_frame = True
+        drawing_player_2.previous_power = tweet.player_2.previous_power
         draw_player(drawing_player_2)
 
     elif tweet.type in [TweetType.destroyed, TweetType.destroyed_district, TweetType.winner_districts,

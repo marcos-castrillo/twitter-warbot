@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from models.enums import *
 from services.config import config
-from services.store import are_friends
+from services.store import are_friends, get_alive_players, place_list
 import emoji
 
 if config.general.language == 'es':
@@ -79,11 +79,48 @@ def get_message(tweet):
 
     if tweet.is_event:
         if tweet.type == TweetType.start:
-            message = config.literals.start
+            random_player = random.choice(get_alive_players()).get_name()
+            message = config.literals.start_1 + random_player + config.literals.start_11
         elif tweet.type == TweetType.start_2:
             message = config.literals.start_2
         elif tweet.type == 'move':
-            message = config.literals.move
+            random_player = random.choice(get_alive_players()).get_name()
+            message = random_player + config.literals.move
+        elif tweet.type == 'steal':
+            random_player = random.choice(get_alive_players()).get_name()
+            message = random_player + config.literals.steal
+        elif tweet.type == 'battle':
+            random_place = random.choice(place_list).name
+            message = config.literals.battle_1 + random_place + config.literals.battle_11
+        elif tweet.type == 'infect':
+            message = config.literals.infect
+        elif tweet.type == 'attract':
+            two_random_players = []
+            while len(two_random_players) < 2:
+                two_random_players = []
+                places = [x for x in place_list if len(x.tributes) > 1]
+                for i, place in enumerate(places):
+                    if len(two_random_players) == 2:
+                        break
+                    for j, player in enumerate(place.tributes):
+                        if len(two_random_players) == 2:
+                            break
+                        elif player.is_alive:
+                            two_random_players.append(player)
+            message = config.literals.attract_1 + two_random_players[0].get_name() + config.literals.attract_11 \
+                      + two_random_players[1].get_name() + config.literals.attract_12
+        elif tweet.type == 'monster':
+            random_player = random.choice(get_alive_players()).get_name()
+            message = config.literals.monster_1 + random_player + config.literals.monster_11
+        elif tweet.type == 'trap':
+            random_player = random.choice(get_alive_players()).get_name()
+            message = config.literals.trap_1 + random_player + config.literals.trap_11
+        elif tweet.type == 'suicide':
+            message = config.literals.suicide
+        elif tweet.type == 'revive':
+            message = config.literals.suicide
+        elif tweet.type == 'treason':
+            message = config.literals.treason
 
     return (message + '\n').encode('utf-8')
 

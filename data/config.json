@@ -8,7 +8,7 @@
             "probability": 0
         },
         {
-            "enable_from": 25,
+            "enable_from": 30,
             "is_enabled": false,
             "is_percentage": false,
             "name": "battle",
@@ -29,9 +29,9 @@
             "probability": 25
         },
         {
-            "enable_from": 25,
+            "enable_from": 20,
             "is_enabled": false,
-            "is_percentage": true,
+            "is_percentage": false,
             "name": "steal",
             "probability": 5
         },
@@ -43,7 +43,7 @@
             "probability": 5
         },
         {
-            "enable_from": 30,
+            "enable_from": 60,
             "is_enabled": false,
             "is_percentage": true,
             "name": "trap",
@@ -2014,13 +2014,14 @@
             "unos tirantes"
         ]
     },
-    "events": {
-        "treasons": {
-            "enable_from": 75,
-            "is_enabled": false,
-            "is_percentage": true
+    "event_list": [
+        {
+            "enable_from": 5,
+            "is_enabled": true,
+            "is_percentage": false,
+            "name": "treason"
         }
-    },
+    ],
     "file_paths": {
         "icons": "../assets/icons",
         "map": "../assets/maps"
@@ -2033,6 +2034,7 @@
         "max_tributes_per_district": 0,
         "mention_users": true,
         "redistribute_tributes": false,
+        "treason_threshold": 80,
         "use_flags": false
     },
     "items": {
@@ -2054,9 +2056,24 @@
     },
     "literals": {
         "default_sleep": "",
-        "start": "Tras posponer la alarma por 4ª vez, Jony(@jony_JRM) se despierta en su habitación.//nDesbloquea el móvil con los ojos entrecerrados y, como cada mañana, abre Twitter.//n\"Pedro Sánchez está en tendencias, ¿qué habrá hecho?\" - se pregunta.",
+        "start_1": "Tras posponer la alarma por 4ª vez, ",
+        "start_11": " se despierta en su habitación.//nDesbloquea el móvil con los ojos entrecerrados y, como cada mañana, abre Twitter.//n\"Pedro Sánchez está en tendencias, ¿qué habrá hecho?\" - se pregunta.",
         "start_2": "\"El confinamiento total ha terminado y la gente puede volver a salir de sus casas sin restricciones.\"//n¡Por fin! Desayuna a toda prisa, se pone un chándal viejo y sale de casa para tomar un café con sus colegas.",
-        "move": "Las restricciones de desplazamiento han sido levantadas, ¡ahora los participantes pueden viajar a su antojo!"
+        "move": " estaba haciéndose unas lentejas cuando le llegó una notificación.//n\"El gobierno ha decretado que el desplazamiento entre localidades está permitido de nuevo.\"",
+        "steal": " estaba dando un paseo con su perro cuando una idea se le vino a la mente.//n\"Oye, ¿y si en vez de buscarme objetos por mi cuenta se los robo a ese del otro pueblo?\"//n¡¿Cómo no se le había ocurrido antes?!",
+        "battle_1": "Tras una pelea enorme en ",
+        "battle_11": ", los ánimos de la gente se han crispado. Las peleas entre gente de distintos pueblos se han vuelto más y más constantes.",
+        "infect": "A alguien que vive en Madrid le parecía buena idea venir unos días al pueblo y ha producido un pequeño rebrote de coronavirus.//nEsperemos que éste haya sido el último...",
+        "attract_1": "2 de la tarde. ",
+        "attract_11": " estaba durmiendo plácidamente, cuando le sonó el móvil.//n\"¿Quién llama a estas horas?... Es ",
+        "attract_12": "\"//n\"¿Te has enterado? ¡Las fiestas de pueblo vuelven a estar permitidas, vete llamando al taxi!\"",
+        "monster_1": "\"No para de haber peleas, ¡no aguanto más! Es hora de poner sobre aviso a la policía local...\" - piensa ",
+        "monster_11": " mientras marca su número en el teléfono.\nPronto empezará a patrullar los pueblos.",
+        "trap_1": "A ",
+        "trap_11": " siempre se le han dado muy bien las manualidades y se le ha ocurrido empezar a fabricarse una trampa para la gente de otros pueblos que esté desprevenida.//nLo que no sabía es que los del pueblo de al lado se han enterado y le van a copiar la idea.",
+        "suicide": "Los ánimos de la gente están por los suelos por tanta pelea y han empezado a perder la concentración y cometer errores.\nEsperemos que a ninguno de ellos les cueste la vida...",
+        "revive": "\"Me están dando un poco de pena...\" - piensa el creador del bot. Va siendo hora de resucitar a un par de ellos para darle más juego a esto, ¿no?",
+        "treason": "TREASON"
     },
     "map": {
         "avatar_size": 48,

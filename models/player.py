@@ -23,6 +23,7 @@ class Player(object):
     infection_immunity = False
     infected = False
     power = 0
+    previous_power = None
 
     # Constructor
     def __init__(self):
@@ -34,6 +35,8 @@ class Player(object):
         return
 
     def get_power(self):
+        if self.previous_power is not None:
+            return self.previous_power
         power = self.power
         for item in self.item_list:
             power = power + item.power
