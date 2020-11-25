@@ -71,6 +71,7 @@ def do_something():
 
     if services.store.hour_count > 2:
         if len(services.store.enabled_action_list) > len(previous_enabled_action_list):
+            # actions
             new_action = next(x for x in services.store.enabled_action_list if x not in previous_enabled_action_list)
             tweet = Tweet()
             tweet.is_event = True
@@ -78,10 +79,10 @@ def do_something():
             write_tweet(tweet)
             previous_enabled_action_list = services.store.enabled_action_list
         elif len(services.store.enabled_event_list) > len(previous_enabled_event_list):
-            new_event = next(x for x in services.store.enabled_event_list if x.is_enabled and x not in previous_enabled_event_list)
-            tweet = Tweet()
-            tweet.is_event = True
-            tweet.type = new_event.name
+            # events
+            new_event = next(x for x in services.store.enabled_event_list if x not in previous_enabled_event_list)
+            tweet = handle_event(new_event)
+
             write_tweet(tweet)
             previous_enabled_event_list = services.store.enabled_event_list
 
@@ -121,8 +122,8 @@ def do_something():
         completed = pick_item()
     elif chosen_action == "battle":
         can_move = any(a for a in config.action_list if a.name == 'move' and a.is_enabled)
-        no_rivals = get_two_players_in_random_place(include_treasons=is_event_enabled('treason')) == (
-        None, None, None)
+        no_rivals = get_two_players_in_random_place(
+            include_treasons=is_action_or_event_enabled('treason', config.event_list)) == (None, None, None)
 
         if no_rivals:
             if can_move:

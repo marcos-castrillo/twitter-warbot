@@ -4,7 +4,7 @@
 import os
 from services.api import tweet_line_from_file
 
-dir_name = 'simulations'
+dir_name = '../simulations'
 
 text_file_extension = '.txt'
 line_filename_suffix = '_line' + text_file_extension

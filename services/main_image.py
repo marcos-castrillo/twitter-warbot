@@ -21,7 +21,7 @@ def get_main_image(main_image, main_tweet):
     offset_vertical = int(config.map.zoomed_avatar_size / 2) + \
                       int(config.map.zoomed_avatar_size / 3) + int(config.map.zoomed_icon_size * 3 / 2)
 
-    place_x, place_y = adjust_coordinates(tweet.place.coord_x, tweet.place.coord_y, offset_horizontal, offset_vertical)
+    place_x, place_y = adjust_coordinates(tweet, offset_horizontal, offset_vertical)
 
     for i, p in enumerate(place_list):
         if p.destroyed:
@@ -34,20 +34,11 @@ def get_main_image(main_image, main_tweet):
                 paste_image(image, p.coord_x, p.coord_y - int(config.map.icon_size / 4),
                             config.map.small_icon_size, 'monster')
 
-            if tweet.type != TweetType.introduce_players and config.general.match_type != MatchType.rumble:
+            if config.general.match_type != MatchType.rumble:
                 drawing_items = DrawingItems(image, p.coord_x, p.coord_y)
                 drawing_items.item_count = len(p.items)
                 drawing_items.transparent = True
                 draw_items(drawing_items)
-
-    if config.general.match_type == MatchType.districts and tweet.type in \
-            [TweetType.introduce_players, TweetType.destroyed_district, TweetType.winner_districts,
-             TweetType.attraction]:
-        if config.general.use_flags:
-            draw_flag()
-        drawing_items = DrawingItems(image, tweet.place.coord_x, tweet.place.coord_y)
-        drawing_items.item_count = len(tweet.place.items)
-        draw_items(drawing_items)
 
     if tweet.type in [TweetType.winner, TweetType.somebody_got_special, TweetType.somebody_found_item,
                       TweetType.somebody_replaced_item, TweetType.somebody_revived, TweetType.somebody_moved,
@@ -121,11 +112,27 @@ def get_main_image(main_image, main_tweet):
             drawing_players.font_size = config.map.font_size_icons
             draw_multiple_players(drawing_players)
 
+    if config.general.match_type == MatchType.districts and tweet.type in \
+            [TweetType.introduce_players, TweetType.destroyed_district, TweetType.winner_districts,
+             TweetType.attraction]:
+        if config.general.use_flags:
+            draw_flag()
+        item_y = tweet.place.coord_y if len(p.players) == 0 else tweet.place.coord_y - int(config.map.avatar_size / 3)
+        drawing_items = DrawingItems(image, tweet.place.coord_x, item_y)
+        drawing_items.item_count = len(tweet.place.items)
+        draw_items(drawing_items)
+
     resize_image()
     return image
 
 
-def adjust_coordinates(coord_x, coord_y, offset_horizontal, offset_vertical):
+def adjust_coordinates(tweet_object, offset_horizontal, offset_vertical):
+    coord_x = tweet_object.place.coord_x
+    coord_y = tweet_object.place.coord_y
+
+    if tweet.type == TweetType.introduce_players:
+        return coord_x, coord_y
+
     if coord_x - offset_horizontal < 0:
         coord_x = offset_horizontal + config.map.width_between_players_battle
     elif coord_x + offset_horizontal > image.width:

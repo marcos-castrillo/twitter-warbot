@@ -2016,10 +2016,34 @@
     },
     "event_list": [
         {
-            "enable_from": 5,
+            "enable_from": 45,
+            "is_enabled": true,
+            "is_percentage": true,
+            "name": "treason"
+        },
+        {
+            "enable_from": 85,
+            "is_enabled": true,
+            "is_percentage": true,
+            "name": "airdrop"
+        },
+        {
+            "enable_from": 15,
             "is_enabled": true,
             "is_percentage": false,
-            "name": "treason"
+            "name": "abduction_1"
+        },
+        {
+            "enable_from": 25,
+            "is_enabled": true,
+            "is_percentage": false,
+            "name": "abduction_1_return"
+        },
+        {
+            "enable_from": 65,
+            "is_enabled": true,
+            "is_percentage": true,
+            "name": "abduction_2"
         }
     ],
     "file_paths": {
@@ -2057,7 +2081,7 @@
     "literals": {
         "default_sleep": "",
         "start_1": "Tras posponer la alarma por 4ª vez, ",
-        "start_11": " se despierta en su habitación.//nDesbloquea el móvil con los ojos entrecerrados y, como cada mañana, abre Twitter.//n\"Pedro Sánchez está en tendencias, ¿qué habrá hecho?\" - se pregunta.",
+        "start_11": " se despierta en su habitación.//nDesbloquea el móvil con los ojos entrecerrados y, como cada mañana, abre Twitter. \"Pedro Sánchez está en tendencias, ¿qué habrá hecho?\" - se pregunta.",
         "start_2": "\"El confinamiento total ha terminado y la gente puede volver a salir de sus casas sin restricciones.\"//n¡Por fin! Desayuna a toda prisa, se pone un chándal viejo y sale de casa para tomar un café con sus colegas.",
         "move": " estaba haciéndose unas lentejas cuando le llegó una notificación.//n\"El gobierno ha decretado que el desplazamiento entre localidades está permitido de nuevo.\"",
         "steal": " estaba dando un paseo con su perro cuando una idea se le vino a la mente.//n\"Oye, ¿y si en vez de buscarme objetos por mi cuenta se los robo a ese del otro pueblo?\"//n¡¿Cómo no se le había ocurrido antes?!",
@@ -2073,7 +2097,14 @@
         "trap_11": " siempre se le han dado muy bien las manualidades y se le ha ocurrido empezar a fabricarse una trampa para la gente de otros pueblos que esté desprevenida.//nLo que no sabía es que los del pueblo de al lado se han enterado y le van a copiar la idea.",
         "suicide": "Los ánimos de la gente están por los suelos por tanta pelea y han empezado a perder la concentración y cometer errores.\nEsperemos que a ninguno de ellos les cueste la vida...",
         "revive": "\"Me están dando un poco de pena...\" - piensa el creador del bot. Va siendo hora de resucitar a un par de ellos para darle más juego a esto, ¿no?",
-        "treason": "TREASON"
+        "treason": "Se están produciendo discusiones cada vez más acaloradas incluso entre habitantes del mismo pueblo.\nNo sería de extrañar que ocurriese alguna traición.",
+        "airdrop": "El creador del bot ha visto que los participantes están un poco necesitados. Es por ello que ha repartido nuevos objetos por todo el mapa.",
+        "abduction_1": "¡Un platillo volante ha sido avistado sobrevolando el Páramo!//nLos extraterrestres han decidido abducir a ",
+        "abduction_1_return_1": "¡El platillo volante ha regresado! Los extraterrestres han devuelto a ",
+        "abduction_1_return_11": " sano y salvo, pero en ",
+        "abduction_1_return_12": ".\nEso sí, ha sido modificado genéticamente y ahora tiene +5 en poder.",
+        "abduction_2_1": "A los extraterrestres les está entreteniendo observar las peleas desde los cielos, así que para meter cizalla han intercambiado de lugar a ",
+        "abduction_2_11": " con "
     },
     "map": {
         "avatar_size": 48,

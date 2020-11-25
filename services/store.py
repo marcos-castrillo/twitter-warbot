@@ -12,6 +12,7 @@ from models.enums import *
 from services.config import config
 
 item_list = []
+spare_item_list = []
 place_list = []
 player_list = []
 powerup_list = []
@@ -70,15 +71,15 @@ def initialize_injury_list():
         injury_list.append(item)
 
 
-def is_action_or_event_enabled(action):
-    if action.is_enabled:
+def should_action_or_event_be_enabled(action, list):
+    if is_action_or_event_enabled(action, list):
         return True
 
-    should_be_enabled = action.probability > 0 and ((not action.is_percentage and hour_count >= action.enable_from) or (
+    should_be_enabled = (not hasattr(action, 'probability') or action.probability > 0) and ((not action.is_percentage and hour_count >= action.enable_from) or (
                 action.is_percentage and len(100 * get_dead_players()) / len(player_list) >= action.enable_from))
 
     if should_be_enabled:
-        next(x for x in config.action_list if x.name == action.name).is_enabled = True
+        next(x for x in list if x.name == action.name).is_enabled = True
         action.enabled = True
         return True
     return False
@@ -87,48 +88,48 @@ def is_action_or_event_enabled(action):
 def update_action_event_list():
     global enabled_action_list, enabled_event_list
 
-    enabled_actions = [a for a in config.action_list if is_action_or_event_enabled(a)]
+    enabled_actions = [a for a in config.action_list if should_action_or_event_be_enabled(a, config.action_list)]
     sorted(enabled_actions, key=lambda x: x.probability, reverse=False)
     enabled_action_list = enabled_actions
 
-    enabled_event_list = [e for e in config.event_list if is_action_or_event_enabled(e)]
+    enabled_event_list = [e for e in config.event_list if should_action_or_event_be_enabled(e, config.event_list)]
+
+
+def get_items_in_place(item_list_1, item_list_2, item_list_3):
+    items = []
+    item_count = random.randint(config.items.min_items_in_place, config.items.max_items_in_place)
+
+    while item_count > 0 and len(item_list_1) + len(item_list_2) + len(item_list_3) > 0:
+        action_number = random.randint(1, 100)
+        item = None
+
+        if action_number < config.items.probabilities.rarity_1:
+            if len(item_list_1) > 0:
+                item = random.choice(item_list_1)
+                item_list_1.pop(item_list_1.index(item))
+        elif action_number < config.items.probabilities.rarity_1 + config.items.probabilities.rarity_2:
+            if len(item_list_2) > 0:
+                item = random.choice(item_list_2)
+                item_list_2.pop(item_list_2.index(item))
+        else:
+            if len(item_list_3) > 0:
+                item = random.choice(item_list_3)
+                item_list_3.pop(item_list_3.index(item))
+
+        if item is not None:
+            items.append(item)
+            item_count = item_count - 1
+
+    return items
 
 
 def initialize_place_and_player_list():
-    global player_list
+    global player_list, spare_item_list
     raw_place_list = config.data.place_list
     raw_player_list = []
     item_list_1 = []
     item_list_2 = []
     item_list_3 = []
-
-    def get_items_in_place(item_list_1, item_list_2, item_list_3):
-        items = []
-        item_count = random.randint(config.items.min_items_in_place, config.items.max_items_in_place)
-        item = None
-
-        while item_count > 0 and len(item_list_1) + len(item_list_2) + len(item_list_3) > 0:
-            action_number = random.randint(1, 100)
-            item = None
-
-            if action_number < config.items.probabilities.rarity_1:
-                if len(item_list_1) > 0:
-                    item = random.choice(item_list_1)
-                    item_list_1.pop(item_list_1.index(item))
-            elif action_number < config.items.probabilities.rarity_1 + config.items.probabilities.rarity_2:
-                if len(item_list_2) > 0:
-                    item = random.choice(item_list_2)
-                    item_list_2.pop(item_list_2.index(item))
-            else:
-                if len(item_list_3) > 0:
-                    item = random.choice(item_list_3)
-                    item_list_3.pop(item_list_3.index(item))
-
-            if item is not None:
-                items.append(item)
-                item_count = item_count - 1
-
-        return items
 
     def initialize_connection_list(places_list, place):
         connections_list = []
@@ -302,7 +303,8 @@ def get_two_players_in_random_place(include_treasons=True):
         for p1 in range(len(place.players)):
             for p2 in range(p1 + 1, len(place.players)):
                 friends = are_friends(place.players[p1], place.players[p2])
-                if not friends or (friends and include_treasons and is_event_enabled('treason')):
+                if not friends or \
+                        (friends and include_treasons and is_action_or_event_enabled('treason', config.event_list)):
                     candidates_list.append([place.players[p1], place.players[p2]])
 
     if len(candidates_list) == 0:
@@ -316,8 +318,72 @@ def get_two_players_in_random_place(include_treasons=True):
     return player_1, player_2, place
 
 
-def is_event_enabled(event_name):
-    return any(x for x in enabled_event_list if x.name == event_name)
+def handle_event(event):
+    tweet = Tweet()
+    tweet.is_event = True
+    tweet.type = event.name
+
+    if event.name == 'airdrop':
+        item_list_1 = []
+        item_list_2 = []
+        item_list_3 = []
+        for i, item in enumerate(spare_item_list):
+            if item.get_rarity() == 1:
+                item_list_1.append(item)
+            elif item.get_rarity() == 2:
+                item_list_2.append(item)
+            elif item.get_rarity() == 3:
+                item_list_3.append(item)
+
+        alive_districts = [x for x in place_list if not x.destroyed and len([y for y in x.tributes if y.is_alive]) > 0]
+        for i, district in enumerate(alive_districts):
+            district.items.append(get_items_in_place(item_list_1, item_list_2, item_list_3))
+    elif event.name == 'abduction_1':
+        abducted = random.choice(get_alive_players())
+        abducted.is_alive = False
+        abducted.location.players.pop(abducted.location.players.index(abducted))
+        tweet.player = abducted
+        tweet.place = abducted.location
+    elif event.name == 'abduction_1_return':
+        abducted = get_dead_players()[0]
+        abducted.is_alive = True
+        abducted.power = abducted.power + 5
+
+        new_place = random.choice(place_list)
+        while new_place.name == abducted.location.name:
+            new_place = random.choice(place_list)
+        abducted.location = new_place
+        new_place.players.append(abducted)
+
+        tweet.player = abducted
+        tweet.place = abducted.location
+    elif event.name == 'abduction_2':
+        alive_players = get_alive_players()
+        random.shuffle(alive_players)
+        abducted_1 = alive_players[0]
+        abducted_2 = alive_players[1]
+        while abducted_1.location.name == abducted_2.location.name:
+            random.shuffle(alive_players)
+            abducted_1 = alive_players[0]
+            abducted_2 = alive_players[1]
+        abducted_1.location.players.pop(abducted_1.location.players.index(abducted_1))
+        abducted_2.location.players.pop(abducted_2.location.players.index(abducted_2))
+        abducted_1.location.players.append(abducted_2)
+        abducted_2.location.players.append(abducted_1)
+        abducted_1.location, abducted_2.location = abducted_2.location, abducted_1.location
+
+        tweet.player = abducted_1
+        tweet.player_2 = abducted_2
+
+        tweet.player = abducted_1
+        tweet.player_2 = abducted_2
+        tweet.place = abducted_1.location
+        tweet.place_2 = abducted_2.location
+    return tweet
+
+
+def is_action_or_event_enabled(name, list):
+    return any(x for x in list if x.name == name)
 
 
 def are_friends(player, candidate):

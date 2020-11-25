@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import json
+import os
 import unittest
 from types import SimpleNamespace
 
@@ -10,12 +11,14 @@ class TestConfig(unittest.TestCase):
     config = None
     place_list = []
     player_list = []
+    event_list = []
 
     def setUp(self):
         with open('../data/config.json', 'r', encoding="utf-8") as configFile:
             data = configFile.read()
         self.config = json.loads(data, object_hook=lambda d: SimpleNamespace(**d))
         self.place_list = self.config.data.place_list
+        self.event_list = self.config.event_list
         for i, place in enumerate(self.place_list):
             self.player_list = self.player_list + place.player_list
         pass
@@ -76,3 +79,8 @@ class TestConfig(unittest.TestCase):
     # Returns True if the participants have the required attrs (name and gender).
     def test_required_attrs_participants(self):
         self.assertEqual(len([p for p in self.player_list if p.name is None or p.is_female is None]), 0)
+
+    # Returns True if the events have the required images.
+    def test_required_images_events(self):
+        for i, event in enumerate(self.event_list):
+            self.assertTrue(os.path.exists('../assets/icons/events/' + event.name + '.png'))

@@ -103,7 +103,7 @@ def infect():
         player = random.choice(healthy_players)
         if not player.infection_immunity:
             player.infected = True
-        affected = [x for x in player.location.players if x.name != player.name]
+        affected = [x for x in player.location.players if x.get_name() != player.get_name()]
         for i, p in enumerate(affected):
             if not p.infection_immunity:
                 p.infected = True

@@ -23,19 +23,19 @@ def get_message(tweet):
     elif tweet.type == TweetType.somebody_got_special:
         message = somebody_got_special(tweet)
     elif tweet.type == TweetType.somebody_found_item:
-        message = emoji.emojize(':package:') + LINEBREAK() + somebody_found_item(tweet)
+        message = LINEBREAK() + somebody_found_item(tweet)
     elif tweet.type == TweetType.somebody_replaced_item:
-        message = emoji.emojize(':package:') + LINEBREAK() + somebody_replaced_item(tweet)
+        message = LINEBREAK() + somebody_replaced_item(tweet)
     elif tweet.type == TweetType.somebody_tied_and_became_friend:
-        message = emoji.emojize(':handshake:') + LINEBREAK() + TIED_AND_BEFRIEND(tweet)
+        message = emoji.emojize(':handshake:') + ' ' + TIED_AND_BEFRIEND(tweet)
     elif tweet.type == TweetType.somebody_tied_and_was_friend:
-        message = emoji.emojize(':handshake:') + LINEBREAK() + FRIENDS_TIED(tweet)
+        message = emoji.emojize(':handshake:') + ' ' + FRIENDS_TIED(tweet)
     elif tweet.type == TweetType.somebody_escaped:
-        message = emoji.emojize(':running:') + LINEBREAK() + somebody_escaped(tweet)
+        message = emoji.emojize(':running:') + ' ' + somebody_escaped(tweet)
     elif tweet.type == TweetType.somebody_killed:
         message = somebody_killed(tweet)
     elif tweet.type == TweetType.somebody_revived:
-        message = emoji.emojize(':angel:') + LINEBREAK() + somebody_revived(tweet)
+        message = emoji.emojize(':angel:') + ' ' + somebody_revived(tweet)
     elif tweet.type == TweetType.somebody_suicided:
         message = somebody_suicided(tweet)
     elif tweet.type == TweetType.somebody_moved:
@@ -53,11 +53,11 @@ def get_message(tweet):
     elif tweet.type == TweetType.trap_dodged:
         message = TRAP_DODGED(tweet)
     elif tweet.type == TweetType.somebody_stole:
-        message = emoji.emojize(':moneybag:') + LINEBREAK() + STOLE(tweet)
+        message = emoji.emojize(':moneybag:') + ' ' + STOLE(tweet)
     elif tweet.type == TweetType.somebody_stole_and_replaced:
-        message = emoji.emojize(':moneybag:') + LINEBREAK() + STOLE_AND_REPLACED(tweet)
+        message = emoji.emojize(':moneybag:') + ' ' + STOLE_AND_REPLACED(tweet)
     elif tweet.type == TweetType.somebody_stole_and_threw:
-        message = emoji.emojize(':moneybag:') + LINEBREAK() + STOLE_AND_THREW(tweet)
+        message = emoji.emojize(':moneybag:') + ' ' + STOLE_AND_THREW(tweet)
     elif tweet.type == TweetType.monster_appeared:
         message = MONSTER_APPEARED(tweet)
     elif tweet.type == TweetType.monster_moved:
@@ -121,6 +121,16 @@ def get_message(tweet):
             message = config.literals.suicide
         elif tweet.type == 'treason':
             message = config.literals.treason
+        elif tweet.type == 'airdrop':
+            message = config.literals.airdrop
+        elif tweet.type == 'abduction_1':
+            message = config.literals.abduction_1 + tweet.player.get_name()
+        elif tweet.type == 'abduction_1_return':
+            message = config.literals.abduction_1_return_1 + tweet.player.get_name() + \
+                      config.literals.abduction_1_return_11 + tweet.place.name + config.literals.abduction_1_return_12
+        elif tweet.type == 'abduction_2':
+            message = config.literals.abduction_2_1 + tweet.player.get_name() + \
+                config.literals.abduction_2_11 + tweet.player_2.get_name()
 
     return (message + '\n').encode('utf-8')
 
@@ -357,12 +367,12 @@ def somebody_moved(tweet):
     item = u''
     if tweet.double:
         item = LINEBREAK() + emoji.emojize(
-            ':flexedbiceps:') + LINEBREAK() + STRONGER_POWER(tweet)
+            ':flexedbiceps:') + ' ' + STRONGER_POWER(tweet)
     elif tweet.item is not None:
         if tweet.item.type == ItemType.powerup:
             item = LINEBREAK() + FOUND_ON_THE_WAY(tweet) + u' ' + has_now_short(tweet.player, tweet.item)
         elif tweet.item.type == ItemType.injury:
-            item = LINEBREAK() + emoji.emojize(':hospital:') + LINEBREAK() + INJURE_ON_THE_WAY(
+            item = LINEBREAK() + emoji.emojize(':hospital:') + ' ' + INJURE_ON_THE_WAY(
                 tweet) + u' ' + has_now_short(tweet.player, tweet.item)
 
     infection = u''
@@ -529,7 +539,7 @@ def attraction(tweet):
     if tweet.there_was_infection:
         infection = LINEBREAK() + INFECTED_EVERYBODY()
     return u' '.join(
-        [emoji.emojize(':partyingface:') + LINEBREAK(), location, players + infection])
+        [emoji.emojize(':partyingface:') + ' ', location, players + infection])
 
 
 def has_now(player, event, previous_event=None, short=False):

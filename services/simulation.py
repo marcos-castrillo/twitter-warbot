@@ -31,9 +31,7 @@ def initialize():
         temp_output_dir = os.path.join(output_dir + '-' + str(i))
 
     output_dir = temp_output_dir
-
     os.makedirs(output_dir)
-
     path = os.path.join(output_dir, filename + '.txt')
 
     i = 1
@@ -91,11 +89,18 @@ def draw_image(tweet):
     if tweet.is_event:
         if tweet.type == TweetType.start or tweet.type == TweetType.start_2:
             return
-        main_image = Image.open(os.path.join(current_dir, config.file_paths.icons, 'event_' + tweet.type + '.png'))
+        main_image = Image.open(os.path.join(current_dir, config.file_paths.icons, 'events/' + tweet.type + '.png'))
         main_image.save(output_dir + '/' + str(line_number) + '.png')
+        if 'abduction' in tweet.type:
+            map_image = get_map_image(raw_map_img_2, tweet)
+            map_image.save(output_dir + '/' + str(line_number) + '_map.png')
+
+            ranking_image = get_ranking_image(blank_img, tweet)
+            ranking_image.save(output_dir + '/' + str(line_number) + '_ranking.png')
+
     elif tweet.type == TweetType.introduce_players:
-        map_image = get_main_image(raw_map_img_2, tweet)
-        map_image.save(output_dir + '/' + str(line_number) + '_map.png')
+        main_image = get_main_image(raw_map_img_2, tweet)
+        main_image.save(output_dir + '/' + str(line_number) + '_map.png')
     elif tweet.type == TweetType.destroyed_district:
         map_image = get_map_image(raw_map_img_2, tweet)
         map_image.save(output_dir + '/' + str(line_number) + '_bis.png')

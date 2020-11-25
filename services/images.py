@@ -144,22 +144,22 @@ def draw_items(drawing_items):
     item_count = drawing_items.item_count
     transparent = drawing_items.transparent
 
-    delta_y = int(config.map.small_icon_size / 2)
+    delta = int(config.map.small_icon_size / 2)
     item_img = 'item_transparent' if transparent else 'item'
 
     if item_count == 1:
-        paste_image(image, coord_x, coord_y - int(config.map.icon_size / 2), config.map.small_icon_size, item_img)
+        paste_image(image, coord_x, coord_y - delta, config.map.small_icon_size, item_img)
     elif item_count == 2:
-        paste_image(image, coord_x - 12, coord_y - delta_y, config.map.small_icon_size, item_img)
-        paste_image(image, coord_x + 12, coord_y - delta_y, config.map.small_icon_size, item_img)
+        paste_image(image, coord_x - delta, coord_y - delta, config.map.small_icon_size, item_img)
+        paste_image(image, coord_x + delta, coord_y - delta, config.map.small_icon_size, item_img)
     else:
         while item_count > 0:
             if item_count <= 3:
-                y = coord_y - delta_y
+                y = coord_y - delta
                 paste_image(image, coord_x - config.map.small_icon_size * 2 + item_count * config.map.small_icon_size,
                             y, config.map.small_icon_size, item_img)
             else:
-                y = coord_y - delta_y - 10
+                y = coord_y - delta - 10
                 paste_image(image,
                             coord_x - config.map.small_icon_size * 2 + (item_count - 3) * config.map.small_icon_size,
                             y, config.map.small_icon_size, item_img)
