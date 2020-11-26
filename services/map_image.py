@@ -17,36 +17,18 @@ def get_map_image(image_map, tweet_map):
     tweet = tweet_map
     draw = ImageDraw.Draw(image)
 
-    draw_map_places()
+    draw_map_places(image)
     draw_map_players()
     if config.map.show_circle:
         if tweet.place is not None:
             draw_ellipse(tweet.place, tweet.place_2)
     if config.map.watermark_coordinates is not None:
-        paste_image(image, config.map.watermark_coordinates[0], config.map.watermark_coordinates[1], 150, 'watermark')
+        drawing_image = DrawingFile(image, config.map.watermark_coordinates[0], config.map.watermark_coordinates[1])
+        drawing_image.dimension = 150
+        drawing_image.image_name = 'watermark'
+        paste_image(drawing_image)
 
     return image
-
-
-def draw_map_places():
-    for i, p in enumerate(place_list):
-        color = config.map.colors.text
-        icon_name = 'place'
-        if p.destroyed:
-            color = config.map.colors.text_destroyed
-            icon_name = 'destroyed'
-
-        drawing_text = DrawingText(image, p.coord_x + int(config.map.avatar_size / 4) + 4,
-                                   p.coord_y - int(config.map.line_height / 2))
-        drawing_text.color = color
-        drawing_text.font_size = config.map.font_size
-        drawing_text.max_width = config.map.avatar_size * 2
-        drawing_text.line_height = config.map.line_height
-        drawing_text.text = p.name
-        drawing_text.center_horizontally = True
-        draw_wrapped_text(drawing_text)
-
-        paste_image(image, p.coord_x, p.coord_y, config.map.icon_size, icon_name)
 
 
 def draw_map_players():
@@ -59,17 +41,16 @@ def draw_map_players():
         draw_multiple_players(drawing_players)
 
         if config.general.match_type != MatchType.rumble:
-            item_y = p.coord_y if len(p.players) == 0 else p.coord_y - int(config.map.avatar_size / 3)
-            drawing_items = DrawingItems(image, p.coord_x, item_y)
-            drawing_items.item_count = len(p.items)
-            draw_items(drawing_items)
-
             if p.trap_by is not None:
-                paste_image(image, p.coord_x, p.coord_y + int(config.map.icon_size / 2), config.map.small_icon_size,
-                            'trap')
+                drawing_image = DrawingFile(image, p.coord_x, p.coord_y + int(config.map.icon_size / 2))
+                drawing_image.dimension = config.map.icon_size
+                drawing_image.image_name = 'trap'
+                paste_image(drawing_image)
             if p.monster:
-                paste_image(image, p.coord_x, p.coord_y - int(config.map.icon_size / 4), config.map.small_icon_size,
-                            'monster')
+                drawing_image = DrawingFile(image, p.coord_x, p.coord_y - int(config.map.icon_size / 4))
+                drawing_image.dimension = config.map.icon_size
+                drawing_image.image_name = 'monster'
+                paste_image(drawing_image)
 
 
 def draw_ellipse(place, place_2=None):

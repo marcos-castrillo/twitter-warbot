@@ -20,7 +20,7 @@ previous_enabled_event_list = []
 
 def initialize():
     initialize_avatars()
-    if config.general.match_type == MatchType.districts and False:
+    if config.general.match_type == MatchType.districts:
         for i, tweet in enumerate(introduction_tweet_list):
             write_tweet(tweet)
     start_battle()
@@ -78,11 +78,16 @@ def do_something():
             tweet.type = new_action.name
             write_tweet(tweet)
             previous_enabled_action_list = services.store.enabled_action_list
-        elif len(services.store.enabled_event_list) > len(previous_enabled_event_list):
-            # events
-            new_event = next(x for x in services.store.enabled_event_list if x not in previous_enabled_event_list)
-            tweet = handle_event(new_event)
+        elif len(services.store.enabled_event_list) != len(previous_enabled_event_list):
+            if len(services.store.enabled_event_list) > len(previous_enabled_event_list):
+                # new event
+                event = next(x for x in services.store.enabled_event_list if x not in previous_enabled_event_list)
+            else:
+                # finished event
+                event = next(x for x in previous_enabled_event_list if x not in services.store.enabled_event_list)
+                event.name = event.name + '_end'
 
+            tweet = handle_event(event)
             write_tweet(tweet)
             previous_enabled_event_list = services.store.enabled_event_list
 
@@ -121,11 +126,11 @@ def do_something():
     elif chosen_action == "pick_item":
         completed = pick_item()
     elif chosen_action == "battle":
-        can_move = any(a for a in config.action_list if a.name == 'move' and a.is_enabled)
+        can_move = is_a_or_e_enabled('move')
         no_rivals = get_two_players_in_random_place(
-            include_treasons=is_action_or_event_enabled('treason', config.event_list)) == (None, None, None)
-
-        if no_rivals:
+            include_treasons=is_a_or_e_enabled('treason', is_action=False)) == (None, None, None)
+        peace = is_a_or_e_enabled('peace', is_action=False)
+        if no_rivals or peace:
             if can_move:
                 completed = move()
             else:

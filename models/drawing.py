@@ -34,7 +34,8 @@ class DrawingMultiplePlayer(DrawingBase):
 
 class DrawingItems(DrawingBase):
     item_count = 0
-    transparent = False
+    gray_style = False
+    offset_y = None
 
 
 class DrawingText(DrawingBase):
@@ -52,3 +53,5 @@ class DrawingFile(DrawingBase):
     image_name = None
     image_dir = None
     dimension = None
+    gray_style = False
+

@@ -1,0 +1,66 @@
+START
+Tras posponer la alarma por 4ª vez, Jony(@jony_JRM) se despierta en su habitación.
+Desbloquea el móvil con los ojos entrecerrados y, como cada mañana, abre Twitter.
+"Pedro Sánchez está en tendencias, ¿qué habrá hecho?" - se pregunta.
+
+START2
+"El confinamiento total ha terminado y la gente puede volver a salir de sus casas sin restricciones."
+¡Por fin! Desayuna a toda prisa, se pone un chándal viejo y sale de casa para tomar un café con sus colegas.
+
+MOVE - 10.
+Jony(@jony_JRM) estaba haciéndose unas lentejas cuando le llegó una notificación de Twitter.
+"El gobierno ha decretado que el desplazamiento entre localidades está permitido de nuevo."
+
+ABDUCTION_1 - 15
+¡Un platillo volante ha sido avistado sobrevolando el Páramo!
+Los extraterrestres han decidido abducir a Jony(@jony_JRM).
+
+STEAL - 20
+Jony(@jony_JRM) estaba dando un paseo con su perro cuando una idea se le vino a la mente.
+"Oye, ¿y si en vez de buscarme objetos por mi cuenta se los robo a ese del otro pueblo?"
+¡¿Cómo no se le había ocurrido antes?!
+
+ABDUCTION_1_RETURN - 25
+¡El platillo volante ha regresado! Los extraterrestres han devuelto a Jony(@jony_JRM) sano y salvo, pero en Bercianos.
+Eso sí, ha sido modificado genéticamente y ahora tiene +5 en poder.
+
+BATTLE - 30
+Tras una refriega enorme en La Bañeza, los ánimos de la gente se han crispado. Las peleas entre gente de distintos pueblos se han vuelto más y más constantes.
+
+INFECT - 30%
+A alguien que vive en Madrid le parecía buena idea venir unos días al pueblo y ha producido un pequeño rebrote de coronavirus.
+Esperemos que éste haya sido el último...
+
+ATTRACT - 40%
+2 de la tarde. Jony(@jony_JRM) estaba durmiendo plácidamente, cuando le sonó el móvil.
+"¿Quién llama a estas horas?... Es Jony(@jony_JRM)"
+"¿Te has enterado? ¡Las fiestas de pueblo vuelven a estar permitidas, vete llamando al taxi!"
+
+TREASON - 45%
+Se están produciendo discusiones cada vez más acaloradas incluso entre habitantes del mismo pueblo.
+No sería de extrañar que ocurriese alguna traición.
+
+MONSTER - 50%
+"No para de haber peleas, ¡no aguanto más! Es hora de poner sobre aviso a la policía local..." - piensa Jony(@jony_JRM) mientras marca su número en el teléfono.
+Pronto empezará a patrullar los pueblos.
+
+PEACE - 55%
+Debido a la preocupante situación, la policía ha decidido incrementar la vigilancia en las calles.
+Por ahora no se producirán más peleas.
+
+TRAP - 60%
+A Jony(@jony_JRM) siempre se le han dado muy bien las manualidades y se le ha ocurrido empezar a fabricarse una trampa para la gente de otros pueblos que esté desprevenida.
+Lo que no sabía es que los del pueblo de al lado se han enterado y le van a copiar la idea.
+
+ABDUCTION_2 - 65%
+A los extraterrestres les está entreteniendo observar las peleas desde los cielos, así que para meter cizalla han intercambiado de lugar a Jony(@jony_JRM) con Jony(@jony_JRM)
+
+SUICIDE - 70%
+Los ánimos de la gente están por los suelos por tanta pelea y han empezado a perder la concentración y cometer errores.
+Esperemos que a ninguno de ellos les cueste la vida...
+
+REVIVE - 80%
+"Me están dando un poco de pena..." - piensa el creador del bot. Va siendo hora de resucitar a un par de ellos para darle más juego a esto, ¿no?
+
+AIRDROPS - 85%
+El creador del bot ha visto que los participantes están un poco necesitados. Es por ello que ha repartido nuevos objetos por todo el mapa.

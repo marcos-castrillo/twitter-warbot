@@ -125,13 +125,16 @@ def get_message(tweet):
             message = config.literals.airdrop
         elif tweet.type == 'abduction_1':
             message = config.literals.abduction_1 + tweet.player.get_name()
-        elif tweet.type == 'abduction_1_return':
-            message = config.literals.abduction_1_return_1 + tweet.player.get_name() + \
-                      config.literals.abduction_1_return_11 + tweet.place.name + config.literals.abduction_1_return_12
+        elif tweet.type == 'abduction_1_end':
+            message = config.literals.abduction_1_end_1 + tweet.player.get_name() + \
+                      config.literals.abduction_1_end_11 + tweet.place.name + config.literals.abduction_1_end_12
         elif tweet.type == 'abduction_2':
             message = config.literals.abduction_2_1 + tweet.player.get_name() + \
                 config.literals.abduction_2_11 + tweet.player_2.get_name()
-
+        elif tweet.type == 'peace':
+            message = config.literals.peace
+        elif tweet.type == 'peace_end':
+            message = config.literals.peace_end
     return (message + '\n').encode('utf-8')
 
 

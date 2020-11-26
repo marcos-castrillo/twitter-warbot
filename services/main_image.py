@@ -4,7 +4,7 @@
 from services.images import *
 from services.store import place_list
 from models.enums import TweetType
-from models.drawing import DrawingMultiplePlayer, DrawingItems
+from models.drawing import DrawingMultiplePlayer, DrawingItems, DrawingText
 
 draw = None
 image = None
@@ -23,22 +23,7 @@ def get_main_image(main_image, main_tweet):
 
     place_x, place_y = adjust_coordinates(tweet, offset_horizontal, offset_vertical)
 
-    for i, p in enumerate(place_list):
-        if p.destroyed:
-            paste_image(image, p.coord_x, p.coord_y, config.map.small_icon_size, 'destroyed')
-        else:
-            if p.trap_by is not None:
-                paste_image(image, p.coord_x, p.coord_y + int(config.map.icon_size / 2),
-                            config.map.small_icon_size, 'trap')
-            if p.monster:
-                paste_image(image, p.coord_x, p.coord_y - int(config.map.icon_size / 4),
-                            config.map.small_icon_size, 'monster')
-
-            if config.general.match_type != MatchType.rumble:
-                drawing_items = DrawingItems(image, p.coord_x, p.coord_y)
-                drawing_items.item_count = len(p.items)
-                drawing_items.transparent = True
-                draw_items(drawing_items)
+    draw_map_places(image, tweet.place)
 
     if tweet.type in [TweetType.winner, TweetType.somebody_got_special, TweetType.somebody_found_item,
                       TweetType.somebody_replaced_item, TweetType.somebody_revived, TweetType.somebody_moved,
@@ -101,9 +86,16 @@ def get_main_image(main_image, main_tweet):
                 draw_multiple_players(drawing_players)
 
                 if tweet.inverse:
-                    paste_image(image, place_x, place_y + 70, 128, 'merge')
+                    drawing_image = DrawingFile(image, place_x, place_y + 70)
+                    drawing_image.dimension = 128
+                    drawing_image.image_name = 'merge'
+                    paste_image(drawing_image)
                 else:
-                    paste_image(image, place_x, place_y + 70, 128, 'split')
+                    drawing_image = DrawingFile(image, place_x, place_y + 70)
+                    drawing_image.dimension = 128
+                    drawing_image.image_name = 'split'
+                    paste_image(drawing_image)
+
         elif tweet.place_2 is not None:
             drawing_players = DrawingMultiplePlayer(image, tweet.place_2.coord_x,
                                                     tweet.place_2.coord_y)
@@ -112,15 +104,10 @@ def get_main_image(main_image, main_tweet):
             drawing_players.font_size = config.map.font_size_icons
             draw_multiple_players(drawing_players)
 
-    if config.general.match_type == MatchType.districts and tweet.type in \
-            [TweetType.introduce_players, TweetType.destroyed_district, TweetType.winner_districts,
-             TweetType.attraction]:
-        if config.general.use_flags:
-            draw_flag()
-        item_y = tweet.place.coord_y if len(p.players) == 0 else tweet.place.coord_y - int(config.map.avatar_size / 3)
-        drawing_items = DrawingItems(image, tweet.place.coord_x, item_y)
-        drawing_items.item_count = len(tweet.place.items)
-        draw_items(drawing_items)
+    if config.general.match_type == MatchType.districts and config.general.use_flags and tweet.type in \
+            [TweetType.introduce_players, TweetType.destroyed_district,
+             TweetType.winner_districts, TweetType.attraction]:
+        draw_flag()
 
     resize_image()
     return image
@@ -185,7 +172,11 @@ def draw_battle(coord_x, coord_y):
 
     # action_number
     draw.rectangle((action_number_x - 1, y_0, action_number_x + 1, y_1), fill=config.battle.colors.arrow)
-    paste_image(image, action_number_x, y_0 + 60, 72, 'arrow')
+    drawing_image = DrawingFile(image, action_number_x, y_0 + 60)
+    drawing_image.dimension = 72
+    drawing_image.image_name = 'arrow'
+    paste_image(drawing_image)
+
     draw.text((action_number_x + 10, y_0 + 60), str(tweet.action_number) + "%", fill=config.battle.colors.arrow,
               font=ImageFont.truetype(font_path, size=20))
 

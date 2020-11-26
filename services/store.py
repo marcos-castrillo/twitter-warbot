@@ -71,28 +71,36 @@ def initialize_injury_list():
         injury_list.append(item)
 
 
-def should_action_or_event_be_enabled(action, list):
-    if is_action_or_event_enabled(action, list):
-        return True
+def should_action_or_event_be_enabled(a_or_e, is_action=True):
+    if is_a_or_e_enabled(a_or_e.name, is_action):
+        if hasattr(a_or_e, 'duration'):
+            if a_or_e.duration > 0:
+                a_or_e.duration = a_or_e.duration - 1
+                return True
+            else:
+                return False
+        else:
+            return True
 
-    should_be_enabled = (not hasattr(action, 'probability') or action.probability > 0) and ((not action.is_percentage and hour_count >= action.enable_from) or (
-                action.is_percentage and len(100 * get_dead_players()) / len(player_list) >= action.enable_from))
+    current_percentage = len(100 * get_dead_players()) / len(player_list)
+    percentage_enabled = a_or_e.is_percentage and current_percentage == a_or_e.enable_from
 
-    if should_be_enabled:
-        next(x for x in list if x.name == action.name).is_enabled = True
-        action.enabled = True
-        return True
-    return False
+    time_enabled = not a_or_e.is_percentage and hour_count == a_or_e.enable_from
+
+    should_be_enabled = (not hasattr(a_or_e, 'probability') or a_or_e.probability > 0) and\
+                        (percentage_enabled or time_enabled)
+
+    return should_be_enabled
 
 
 def update_action_event_list():
     global enabled_action_list, enabled_event_list
 
-    enabled_actions = [a for a in config.action_list if should_action_or_event_be_enabled(a, config.action_list)]
+    enabled_actions = [a for a in config.action_list if should_action_or_event_be_enabled(a)]
     sorted(enabled_actions, key=lambda x: x.probability, reverse=False)
     enabled_action_list = enabled_actions
 
-    enabled_event_list = [e for e in config.event_list if should_action_or_event_be_enabled(e, config.event_list)]
+    enabled_event_list = [e for e in config.event_list if should_action_or_event_be_enabled(e, is_action=False)]
 
 
 def get_items_in_place(item_list_1, item_list_2, item_list_3):
@@ -304,7 +312,7 @@ def get_two_players_in_random_place(include_treasons=True):
             for p2 in range(p1 + 1, len(place.players)):
                 friends = are_friends(place.players[p1], place.players[p2])
                 if not friends or \
-                        (friends and include_treasons and is_action_or_event_enabled('treason', config.event_list)):
+                        (friends and include_treasons and is_a_or_e_enabled('treason', is_action=False)):
                     candidates_list.append([place.players[p1], place.players[p2]])
 
     if len(candidates_list) == 0:
@@ -344,7 +352,7 @@ def handle_event(event):
         abducted.location.players.pop(abducted.location.players.index(abducted))
         tweet.player = abducted
         tweet.place = abducted.location
-    elif event.name == 'abduction_1_return':
+    elif event.name == 'abduction_1_end':
         abducted = get_dead_players()[0]
         abducted.is_alive = True
         abducted.power = abducted.power + 5
@@ -379,11 +387,13 @@ def handle_event(event):
         tweet.player_2 = abducted_2
         tweet.place = abducted_1.location
         tweet.place_2 = abducted_2.location
+
     return tweet
 
 
-def is_action_or_event_enabled(name, list):
-    return any(x for x in list if x.name == name)
+def is_a_or_e_enabled(name, is_action=True):
+    a_or_e_list = enabled_action_list if is_action else enabled_event_list
+    return any(x for x in a_or_e_list if x.name == name)
 
 
 def are_friends(player, candidate):
