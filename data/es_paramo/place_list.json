@@ -1,0 +1,1527 @@
+[
+  {
+    "coordinates": [
+      254,
+      1034
+    ],
+    "name": "Tabuyuelo de Jamuz",
+    "player_list": [
+      {
+        "is_female": false,
+        "name": "Pelayo García",
+        "username": "SergioRenton"
+      }
+    ],
+    "road_connection_list": [
+      "La Bañeza"
+    ]
+  },
+  {
+    "coordinates": [
+      1039,
+      750
+    ],
+    "name": "Villibañe",
+    "player_list": [],
+    "road_connection_list": [
+      "Villacalbiel",
+      "Villagallegos"
+    ]
+  },
+  {
+    "coordinates": [
+      1159,
+      1045
+    ],
+    "name": "Villademor de la Vega",
+    "player_list": [],
+    "road_connection_list": [
+      "Toral de los Guzmanes",
+      "Valencia de Don Juan"
+    ]
+  },
+  {
+    "coordinates": [
+      1049,
+      621
+    ],
+    "name": "Valdevimbre",
+    "player_list": [
+      {
+        "is_female": true,
+        "name": "Nuria",
+        "username": "nuriamontesco"
+      },
+      {
+        "is_female": true,
+        "name": "Sara",
+        "username": "Sara_alonso_99"
+      }
+    ],
+    "road_connection_list": [
+      "Cembranos",
+      "Villagallegos"
+    ]
+  },
+  {
+    "coordinates": [
+      770,
+      1054
+    ],
+    "name": "Zotes del Páramo",
+    "player_list": [],
+    "road_connection_list": [
+      "Roperuelos del Páramo",
+      "Villaestrigo del Páramo",
+      "Zambroncinos"
+    ]
+  },
+  {
+    "coordinates": [
+      583,
+      1063
+    ],
+    "name": "Cebrones del Río",
+    "player_list": [],
+    "road_connection_list": [
+      "La Bañeza",
+      "Regueras de Abajo",
+      "Roperuelos del Páramo",
+      "Zambroncinos"
+    ]
+  },
+  {
+    "coordinates": [
+      1076,
+      796
+    ],
+    "name": "Villacalbiel",
+    "player_list": [],
+    "road_connection_list": [
+      "Cabreros del Río",
+      "Villamañán",
+      "Villibañe"
+    ]
+  },
+  {
+    "coordinates": [
+      1113,
+      467
+    ],
+    "name": "Cembranos",
+    "player_list": [
+      {
+        "is_female": false,
+        "name": "Pablo",
+        "username": "pablinn7_"
+      },
+      {
+        "is_female": true,
+        "name": "Andrea",
+        "username": "andreadrewww"
+      },
+      {
+        "is_female": false,
+        "name": "JC",
+        "username": "yisii_"
+      },
+      {
+        "is_female": true,
+        "name": "Sara",
+        "username": "saraaalonso__"
+      },
+      {
+        "is_female": true,
+        "name": "Beita",
+        "username": "beeitaa21"
+      },
+      {
+        "is_female": false,
+        "name": "Candi",
+        "username": "Candi_0033"
+      },
+      {
+        "is_female": false,
+        "name": "David",
+        "username": "daviddeleon33"
+      },
+      {
+        "is_female": false,
+        "name": "Iker",
+        "username": "iikeer3"
+      },
+      {
+        "is_female": true,
+        "name": "Cami",
+        "username": "Camii0315"
+      },
+      {
+        "is_female": false,
+        "name": "Héctor",
+        "username": "HBatracio"
+      },
+      {
+        "is_female": false,
+        "name": "Hugo",
+        "username": "hugoblannco_"
+      },
+      {
+        "is_female": false,
+        "name": "Héctor",
+        "username": "HectorCC5"
+      }
+    ],
+    "road_connection_list": [
+      "Ardoncino",
+      "León",
+      "Valdevimbre"
+    ]
+  },
+  {
+    "coordinates": [
+      1115,
+      908
+    ],
+    "name": "Villamañán",
+    "player_list": [
+      {
+        "is_female": true,
+        "name": "Sara",
+        "username": "saara_rguezz"
+      },
+      {
+        "is_female": true,
+        "name": "Sheila",
+        "username": "Sheila97H"
+      },
+      {
+        "is_female": true,
+        "name": "Lorena",
+        "username": "Lorenapa1999"
+      },
+      {
+        "is_female": true,
+        "name": "Paula",
+        "username": "paularmonti"
+      },
+      {
+        "is_female": false,
+        "name": "David",
+        "username": "davidstarstar1"
+      },
+      {
+        "is_female": false,
+        "name": "Freijas",
+        "username": "pablin220301"
+      },
+      {
+        "is_female": false,
+        "name": "Michu",
+        "username": "michumier"
+      },
+      {
+        "is_female": false,
+        "name": "Álex",
+        "username": "AlexAlonson"
+      },
+      {
+        "is_female": true,
+        "name": "Lucía",
+        "username": "Luciaagz7"
+      },
+      {
+        "is_female": false,
+        "name": "Álex",
+        "username": "alexsnpr"
+      },
+      {
+        "is_female": true,
+        "name": "Diana",
+        "username": "Dianagm_98"
+      },
+      {
+        "is_female": false,
+        "name": "Daniel",
+        "username": "danipop_01"
+      }
+    ],
+    "road_connection_list": [
+      "Laguna de Negrillos",
+      "Santa María del Páramo",
+      "Valencia de Don Juan",
+      "Villacalbiel",
+      "Villar del Yermo"
+    ]
+  },
+  {
+    "coordinates": [
+      1117,
+      182
+    ],
+    "name": "León",
+    "player_list": [],
+    "road_connection_list": [
+      "Ardoncino",
+      "Cembranos",
+      "Trobajo del Camino"
+    ]
+  },
+  {
+    "coordinates": [
+      843,
+      1119
+    ],
+    "name": "Villaestrigo del Páramo",
+    "player_list": [
+      {
+        "is_female": false,
+        "name": "Pablo",
+        "username": "pablo_gmar"
+      },
+      {
+        "is_female": true,
+        "name": "Celia",
+        "username": "ceeliaperonaa"
+      }
+    ],
+    "road_connection_list": [
+      "Laguna de Negrillos",
+      "Roperuelos del Páramo",
+      "Zotes del Páramo"
+    ]
+  },
+  {
+    "coordinates": [
+      957,
+      1131
+    ],
+    "name": "Laguna de Negrillos",
+    "player_list": [
+      {
+        "is_female": false,
+        "name": "Óscar",
+        "username": "oski99_lgn"
+      },
+      {
+        "is_female": true,
+        "name": "Amaia",
+        "username": "AmaiaaLgn"
+      },
+      {
+        "is_female": true,
+        "name": "Raquel",
+        "username": "RaqueeLgn"
+      },
+      {
+        "is_female": true,
+        "name": "Andrea",
+        "username": "andree_228"
+      },
+      {
+        "is_female": true,
+        "name": "Sheila",
+        "username": "Sheiilanerea00"
+      },
+      {
+        "is_female": true,
+        "name": "Amaya",
+        "username": "AmayaaMtnz"
+      },
+      {
+        "is_female": true,
+        "name": "Ainhoa",
+        "username": "ainhoaLgn"
+      },
+      {
+        "is_female": true,
+        "name": "Sandra",
+        "username": "SandraLgn2"
+      },
+      {
+        "is_female": false,
+        "name": "Miguel",
+        "username": "miguelgp_lgn"
+      }
+    ],
+    "road_connection_list": [
+      "Toral de los Guzmanes",
+      "Villaestrigo del Páramo",
+      "Villamañán",
+      "Villamorico"
+    ]
+  },
+  {
+    "coordinates": [
+      1135,
+      1151
+    ],
+    "name": "Toral de los Guzmanes",
+    "player_list": [
+      {
+        "is_female": false,
+        "name": "Rik",
+        "username": "Rik3619"
+      }
+    ],
+    "road_connection_list": [
+      "Laguna de Negrillos",
+      "Villademor de la Vega"
+    ]
+  },
+  {
+    "coordinates": [
+      686,
+      1135
+    ],
+    "name": "Roperuelos del Páramo",
+    "player_list": [
+      {
+        "is_female": true,
+        "name": "Sonic",
+        "username": "imanidi0tt"
+      },
+      {
+        "is_female": true,
+        "name": "Jensecita",
+        "username": "eugenialaputuka"
+      },
+      {
+        "is_female": false,
+        "name": "Cris",
+        "username": "Cris199VA"
+      }
+    ],
+    "road_connection_list": [
+      "Cebrones del Río",
+      "Villaestrigo del Páramo",
+      "Zotes del Páramo"
+    ]
+  },
+  {
+    "coordinates": [
+      1203,
+      691
+    ],
+    "name": "Cabreros del Río",
+    "player_list": [],
+    "road_connection_list": [
+      "Valencia de Don Juan",
+      "Villacalbiel"
+    ]
+  },
+  {
+    "coordinates": [
+      1259,
+      985
+    ],
+    "name": "Valencia de Don Juan",
+    "player_list": [
+      {
+        "is_female": false,
+        "name": "Samuel",
+        "username": "Samuelgarrido88"
+      }
+    ],
+    "road_connection_list": [
+      "Cabreros del Río",
+      "Villademor de la Vega",
+      "Villamañán"
+    ]
+  },
+  {
+    "coordinates": [
+      951,
+      1261
+    ],
+    "name": "Villamorico",
+    "player_list": [
+      {
+        "is_female": false,
+        "name": "Víctor",
+        "username": "Victoriano_15"
+      }
+    ],
+    "road_connection_list": [
+      "Laguna de Negrillos"
+    ]
+  },
+  {
+    "coordinates": [
+      129,
+      540
+    ],
+    "name": "Astorga",
+    "player_list": [],
+    "road_connection_list": [
+      "Armellada",
+      "Carral de la Vega",
+      "Celadilla del Páramo",
+      "Hospital de Órbigo",
+      "Riego de la Vega",
+      "San Feliz de Órbigo",
+      "San Román de la Vega",
+      "Valderrey",
+      "Villamejil"
+    ]
+  },
+  {
+    "coordinates": [
+      179,
+      465
+    ],
+    "name": "San Román de la Vega",
+    "player_list": [],
+    "road_connection_list": [
+      "Armellada",
+      "Astorga",
+      "Celadilla del Páramo",
+      "Hospital de Órbigo",
+      "San Feliz de Órbigo",
+      "Villamejil"
+    ]
+  },
+  {
+    "coordinates": [
+      616,
+      185
+    ],
+    "name": "Carrizo de la Ribera",
+    "player_list": [],
+    "road_connection_list": [
+      "La Milla del Río",
+      "Trobajo del Camino",
+      "Villadangos del Páramo"
+    ]
+  },
+  {
+    "coordinates": [
+      188,
+      249
+    ],
+    "name": "Villamejil",
+    "player_list": [],
+    "road_connection_list": [
+      "Armellada",
+      "Astorga",
+      "Celadilla del Páramo",
+      "San Feliz de Órbigo",
+      "San Román de la Vega"
+    ]
+  },
+  {
+    "coordinates": [
+      192,
+      708
+    ],
+    "name": "Valderrey",
+    "player_list": [],
+    "road_connection_list": [
+      "Astorga",
+      "Carral de la Vega",
+      "Riego de la Vega"
+    ]
+  },
+  {
+    "coordinates": [
+      994,
+      214
+    ],
+    "name": "Trobajo del Camino",
+    "player_list": [],
+    "road_connection_list": [
+      "Carrizo de la Ribera",
+      "León",
+      "Villadangos del Páramo"
+    ]
+  },
+  {
+    "coordinates": [
+      554,
+      237
+    ],
+    "name": "La Milla del Río",
+    "player_list": [],
+    "road_connection_list": [
+      "Armellada",
+      "Carrizo de la Ribera"
+    ]
+  },
+  {
+    "coordinates": [
+      293,
+      754
+    ],
+    "name": "Riego de la Vega",
+    "player_list": [],
+    "road_connection_list": [
+      "Astorga",
+      "Carral de la Vega",
+      "La Bañeza",
+      "Valderrey",
+      "Veguellina de Órbigo"
+    ]
+  },
+  {
+    "coordinates": [
+      513,
+      307
+    ],
+    "name": "Armellada",
+    "player_list": [
+      {
+        "is_female": false,
+        "name": "David",
+        "username": "Dav1darme"
+      }
+    ],
+    "road_connection_list": [
+      "Astorga",
+      "Celadilla del Páramo",
+      "La Milla del Río",
+      "San Feliz de Órbigo",
+      "San Román de la Vega",
+      "Villamejil"
+    ]
+  },
+  {
+    "coordinates": [
+      339,
+      617
+    ],
+    "name": "Carral de la Vega",
+    "player_list": [],
+    "road_connection_list": [
+      "Astorga",
+      "Riego de la Vega",
+      "Valderrey",
+      "Veguellina de Órbigo"
+    ]
+  },
+  {
+    "coordinates": [
+      729,
+      369
+    ],
+    "name": "Villadangos del Páramo",
+    "player_list": [],
+    "road_connection_list": [
+      "Carrizo de la Ribera",
+      "Celadilla del Páramo",
+      "Fojedo",
+      "San Martín del Camino",
+      "Trobajo del Camino"
+    ]
+  },
+  {
+    "coordinates": [
+      588,
+      378
+    ],
+    "name": "Celadilla del Páramo",
+    "player_list": [],
+    "road_connection_list": [
+      "Armellada",
+      "Astorga",
+      "San Feliz de Órbigo",
+      "San Román de la Vega",
+      "Villadangos del Páramo",
+      "Villamejil"
+    ]
+  },
+  {
+    "coordinates": [
+      458,
+      435
+    ],
+    "name": "San Feliz de Órbigo",
+    "player_list": [
+      {
+        "is_female": true,
+        "name": "Silvia",
+        "username": "silviamati07"
+      },
+      {
+        "is_female": false,
+        "name": "Víctor",
+        "username": "VictCoca"
+      },
+      {
+        "is_female": true,
+        "name": "Monicus",
+        "username": "monica260613"
+      },
+      {
+        "is_female": false,
+        "name": "Abel",
+        "username": "reyweasley"
+      },
+      {
+        "is_female": true,
+        "name": "María",
+        "username": "reyweasley"
+      },
+      {
+        "is_female": false,
+        "name": "Rubén",
+        "username": "iRubensio"
+      }
+    ],
+    "road_connection_list": [
+      "Armellada",
+      "Astorga",
+      "Celadilla del Páramo",
+      "Hospital de Órbigo",
+      "San Román de la Vega",
+      "Villamejil"
+    ]
+  },
+  {
+    "coordinates": [
+      794,
+      440
+    ],
+    "name": "Fojedo",
+    "player_list": [
+      {
+        "is_female": true,
+        "name": "Lucía",
+        "username": "LuciaArancio"
+      },
+      {
+        "is_female": true,
+        "name": "Mer",
+        "username": "Mariialvvarez"
+      },
+      {
+        "is_female": true,
+        "name": "Nay",
+        "username": "Nayaraaguado"
+      },
+      {
+        "is_female": true,
+        "name": "Ángela",
+        "username": "14Angeelaaa"
+      }
+    ],
+    "road_connection_list": [
+      "Villadangos del Páramo",
+      "Villar de Mazarife"
+    ]
+  },
+  {
+    "coordinates": [
+      635,
+      442
+    ],
+    "name": "San Martín del Camino",
+    "player_list": [
+      {
+        "is_female": true,
+        "name": "Nerey",
+        "username": "ivrognee"
+      }
+    ],
+    "road_connection_list": [
+      "Bustillo del Páramo",
+      "Hospital de Órbigo",
+      "Villadangos del Páramo"
+    ]
+  },
+  {
+    "coordinates": [
+      997,
+      454
+    ],
+    "name": "Ardoncino",
+    "player_list": [],
+    "road_connection_list": [
+      "Cembranos",
+      "León",
+      "Palacios de Fontecha",
+      "Villar de Mazarife"
+    ]
+  },
+  {
+    "coordinates": [
+      461,
+      962
+    ],
+    "name": "La Bañeza",
+    "player_list": [
+      {
+        "is_female": false,
+        "name": "Garcu",
+        "username": "AdriGarcu23"
+      },
+      {
+        "is_female": false,
+        "name": "ATX",
+        "username": "AlejandroT_13"
+      },
+      {
+        "is_female": false,
+        "name": "Sergio",
+        "username": "sergio_12sg"
+      },
+      {
+        "is_female": false,
+        "name": "Samuel",
+        "username": "samuelcabero31"
+      },
+      {
+        "is_female": true,
+        "name": "Paula",
+        "username": "paulapd10"
+      },
+      {
+        "is_female": false,
+        "name": "Pin",
+        "username": "Daviciiin9"
+      },
+            {
+        "is_female": true,
+        "name": "San",
+        "username": "_sandradelmazo"
+      },
+            {
+        "is_female": true,
+        "name": "Claudia",
+        "username": "claudiaccz_"
+      }
+    ],
+    "road_connection_list": [
+      "Cebrones del Río",
+      "Regueras de Abajo",
+      "Riego de la Vega",
+      "Santa María del Páramo",
+      "Tabuyuelo de Jamuz",
+      "Villoria de Órbigo"
+    ]
+  },
+  {
+    "coordinates": [
+      479,
+      713
+    ],
+    "name": "Villoria de Órbigo",
+    "player_list": [],
+    "road_connection_list": [
+      "La Bañeza",
+      "Veguellina de Órbigo"
+    ]
+  },
+  {
+    "coordinates": [
+      480,
+      599
+    ],
+    "name": "Veguellina de Órbigo",
+    "player_list": [
+      {
+        "is_female": false,
+        "name": "Pablo",
+        "username": "Pablo_Converse"
+      },
+      {
+        "is_female": true,
+        "name": "Susy",
+        "username": "SusySevillano"
+      },
+      {
+        "is_female": false,
+        "name": "Pérez",
+        "username": "PerezVegue"
+      }
+    ],
+    "road_connection_list": [
+      "Carral de la Vega",
+      "Hospital de Órbigo",
+      "Riego de la Vega",
+      "Villoria de Órbigo"
+    ]
+  },
+  {
+    "coordinates": [
+      506,
+      517
+    ],
+    "name": "Hospital de Órbigo",
+    "player_list": [],
+    "road_connection_list": [
+      "Astorga",
+      "Grisuela del Páramo",
+      "San Feliz de Órbigo",
+      "San Martín del Camino",
+      "San Román de la Vega",
+      "Urdiales del Páramo",
+      "Veguellina de Órbigo"
+    ]
+  },
+  {
+    "coordinates": [
+      835,
+      510
+    ],
+    "name": "Villar de Mazarife",
+    "player_list": [],
+    "road_connection_list": [
+      "Ardoncino",
+      "Fojedo",
+      "La Mata del Páramo",
+      "Palacios de Fontecha"
+    ]
+  },
+  {
+    "coordinates": [
+      549,
+      977
+    ],
+    "name": "Regueras de Abajo",
+    "player_list": [],
+    "road_connection_list": [
+      "Cebrones del Río",
+      "La Bañeza",
+      "Santa María del Páramo",
+      "Zambroncinos"
+    ]
+  },
+  {
+    "coordinates": [
+      680,
+      558
+    ],
+    "name": "Bustillo del Páramo",
+    "player_list": [
+      {
+        "is_female": true,
+        "name": "Ana",
+        "username": "Anagonzaalezz_"
+      },
+      {
+        "is_female": false,
+        "name": "Alejandro",
+        "username": "akex_gonzalez"
+      }
+    ],
+    "road_connection_list": [
+      "Grisuela del Páramo",
+      "San Martín del Camino"
+    ]
+  },
+  {
+    "coordinates": [
+      790,
+      599
+    ],
+    "name": "La Mata del Páramo",
+    "player_list": [],
+    "road_connection_list": [
+      "Grisuela del Páramo",
+      "Santa María del Páramo",
+      "Villar de Mazarife"
+    ]
+  },
+  {
+    "coordinates": [
+      930,
+      611
+    ],
+    "name": "Palacios de Fontecha",
+    "player_list": [],
+    "road_connection_list": [
+      "Ardoncino",
+      "Villagallegos",
+      "Villar de Mazarife"
+    ]
+  },
+  {
+    "coordinates": [
+      683,
+      661
+    ],
+    "name": "Grisuela del Páramo",
+    "player_list": [
+      {
+        "is_female": true,
+        "name": "MeBart",
+        "username": "MelissaShelbyy"
+      },
+      {
+        "is_female": true,
+        "name": "Elena",
+        "username": "elenagrisuu"
+      },
+      {
+        "is_female": true,
+        "name": "Mirian",
+        "username": "Mirian_grisu"
+      },
+      {
+        "is_female": true,
+        "name": "Juani",
+        "username": "sjuanl"
+      },
+      {
+        "is_female": true,
+        "name": "Inés",
+        "username": "InesSutil"
+      },
+      {
+        "is_female": true,
+        "name": "Andrea",
+        "username": "andreagrisuela"
+      },
+      {
+        "is_female": false,
+        "name": "David",
+        "username": "davidbf94"
+      }
+    ],
+    "road_connection_list": [
+      "Bustillo del Páramo",
+      "Hospital de Órbigo",
+      "La Mata del Páramo",
+      "Urdiales del Páramo"
+    ]
+  },
+  {
+    "coordinates": [
+      674,
+      772
+    ],
+    "name": "Urdiales del Páramo",
+    "player_list": [
+      {
+        "is_female": true,
+        "name": "Oana",
+        "username": "Juummy_"
+      },
+      {
+        "is_female": false,
+        "name": "Mario",
+        "username": "XoperMario"
+      },
+      {
+        "is_female": false,
+        "name": "Nicolás",
+        "username": "nicolasalba99"
+      },
+      {
+        "is_female": false,
+        "name": "Sergio",
+        "username": "sergiobailez"
+      },
+      {
+        "is_female": true,
+        "name": "Ángela",
+        "username": "toctocAngela"
+      },
+      {
+        "is_female": false,
+        "name": "Christian",
+        "username": "Christianvegall"
+      },
+      {
+        "is_female": false,
+        "name": "No te lo digo",
+        "username": "Miguii_10"
+      }
+    ],
+    "road_connection_list": [
+      "Grisuela del Páramo",
+      "Hospital de Órbigo",
+      "Santa María del Páramo"
+    ]
+  },
+  {
+    "coordinates": [
+      978,
+      689
+    ],
+    "name": "Villagallegos",
+    "player_list": [],
+    "road_connection_list": [
+      "Bercianos del Páramo",
+      "Palacios de Fontecha",
+      "Valdevimbre",
+      "Villibañe"
+    ]
+  },
+  {
+    "coordinates": [
+      721,
+      835
+    ],
+    "name": "Santa María del Páramo",
+    "player_list": [
+      {
+        "is_female": false,
+        "name": "Mata",
+        "username": "dani1229mata"
+      },
+      {
+        "is_female": true,
+        "name": "Ángela",
+        "username": "Angelaapa"
+      },
+      {
+        "is_female": false,
+        "name": "García",
+        "username": "J_Garcia_25"
+      },
+      {
+        "is_female": false,
+        "name": "Pérez",
+        "username": "javierperezJP"
+      },
+      {
+        "is_female": true,
+        "name": "Noe",
+        "username": "k3rfufflexx"
+      },
+      {
+        "is_female": false,
+        "name": "Diego",
+        "username": "DiegoMockingjay"
+      },
+      {
+        "is_female": true,
+        "name": "Carmen",
+        "username": "_carmenseijas"
+      },
+            {
+        "is_female": false,
+        "name": "Welin",
+        "username": "WelintonSergist"
+      },
+      {
+        "is_female": true,
+        "name": "Poru",
+        "username": "Porulinda"
+      }
+    ],
+    "road_connection_list": [
+      "Bercianos del Páramo",
+      "La Bañeza",
+      "La Mata del Páramo",
+      "Regueras de Abajo",
+      "Urdiales del Páramo",
+      "Villamañán",
+      "Villar del Yermo",
+      "Zambroncinos"
+    ]
+  },
+  {
+    "coordinates": [
+      843,
+      743
+    ],
+    "name": "Bercianos del Páramo",
+    "player_list": [
+      {
+        "is_female": false,
+        "name": "Sokram",
+        "username": "Sokram"
+      },
+      {
+        "is_female": false,
+        "name": "Jony",
+        "username": "jony_JRM"
+      },
+      {
+        "is_female": true,
+        "name": "Laura",
+        "username": "lauucch"
+      },
+      {
+        "is_female": true,
+        "name": "Noelia",
+        "username": "noeejuuan"
+      },
+      {
+        "is_female": false,
+        "name": "Eric",
+        "username": "Eric_Almeda"
+      },
+      {
+        "is_female": false,
+        "name": "Ivo",
+        "username": "ivopd_01"
+      },
+      {
+        "is_female": true,
+        "name": "Cloti",
+        "username": "Claudia08teran"
+      },
+      {
+        "is_female": false,
+        "name": "Boycon",
+        "username": "JaviDeLonge182"
+      },
+      {
+        "is_female": true,
+        "name": "Rosa",
+        "username": "larosaliaaa"
+      },
+      {
+        "is_female": true,
+        "name": "Maite",
+        "username": "MaiteCasado"
+      },
+      {
+        "is_female": true,
+        "name": "Clara",
+        "username": "clarabntzz"
+      }
+    ],
+    "road_connection_list": [
+      "Santa María del Páramo",
+      "Villagallegos",
+      "Villar del Yermo"
+    ]
+  },
+  {
+    "coordinates": [
+      801,
+      979
+    ],
+    "name": "Zambroncinos",
+    "player_list": [],
+    "road_connection_list": [
+      "Cebrones del Río",
+      "Regueras de Abajo",
+      "Santa María del Páramo",
+      "Zotes del Páramo"
+    ]
+  },
+  {
+    "coordinates": [
+      901,
+      832
+    ],
+    "name": "Villar del Yermo",
+    "player_list": [
+      {
+        "is_female": true,
+        "name": "Clara",
+        "username": "ClaaaraDj"
+      },
+      {
+        "is_female": true,
+        "name": "Natalia",
+        "username": "Natsuarez20"
+      },
+      {
+        "is_female": false,
+        "name": "Jose",
+        "username": "Josss_10"
+      },
+            {
+        "is_female": false,
+        "name": "Luis",
+        "username": "Luisseijas_98"
+      }
+
+    ],
+    "road_connection_list": [
+      "Bercianos del Páramo",
+      "Santa María del Páramo",
+      "Villamañán"
+    ]
+  },
+  {
+    "coordinates": [],
+    "name": "Huerga de Frailes",
+    "player_list": [
+      {
+        "is_female": false,
+        "name": "Víctor",
+        "username": "Victor_hdf_AJ"
+      },
+      {
+        "is_female": false,
+        "name": "Miguel",
+        "username": "miguelin_cf"
+      },
+      {
+        "is_female": true,
+        "name": "Paula",
+        "username": "PaulaCasado2"
+      }
+    ],
+    "road_connection_list": []
+  },
+  {
+    "coordinates": [],
+    "name": "Matalobos del Páramo",
+    "player_list": [
+      {
+        "is_female": true,
+        "name": "Alba",
+        "username": "albacanton_"
+      },
+      {
+        "is_female": true,
+        "name": "Ali",
+        "username": "alimatalobos"
+      },
+      {
+        "is_female": true,
+        "name": "Marta",
+        "username": "Marta_Leon23"
+      }
+    ],
+    "road_connection_list": []
+  },
+  {
+    "coordinates": [],
+    "name": "Fáfilas",
+    "player_list": [
+      {
+        "is_female": true,
+        "name": "Lorena",
+        "username": "lore_macu16"
+      }
+    ],
+    "road_connection_list": []
+  },
+  {
+    "coordinates": [],
+    "name": "Castrillo de las Piedras",
+    "player_list": [
+      {
+        "is_female": false,
+        "name": "Castry",
+        "username": "castry_55"
+      }
+    ],
+    "road_connection_list": []
+  },
+  {
+    "coordinates": [],
+    "name": "Castrocalbón",
+    "player_list": [
+      {
+        "is_female": false,
+        "name": "Germán",
+        "username": "german_aldonza"
+      },
+      {
+        "is_female": false,
+        "name": "Paco Loro",
+        "username": "skapunk_comrade"
+      },
+      {
+        "is_female": false,
+        "name": "Escultor de setos",
+        "username": "julioruizz_"
+      },
+            {
+        "is_female": false,
+        "name": "Brincatapias",
+        "username": "Vctor1Manuel"
+      }
+    ],
+    "road_connection_list": []
+  },
+  {
+    "coordinates": [],
+    "name": "Acebes del Páramo",
+    "player_list": [
+      {
+        "is_female": false,
+        "name": "Novo",
+        "username": "novobrooklyn"
+      }
+    ],
+    "road_connection_list": []
+  },
+  {
+    "coordinates": [],
+    "name": "Sanfelismo",
+    "player_list": [
+      {
+        "is_female": false,
+        "name": "JC",
+        "username": "llamera_jc"
+      }
+    ],
+    "road_connection_list": []
+  },
+  {
+    "coordinates": [],
+    "name": "Alcoba de la Ribera",
+    "player_list": [
+      {
+        "is_female": false,
+        "name": "Isu",
+        "username": "isucelta"
+      }
+    ],
+    "road_connection_list": []
+  },
+    {
+    "coordinates": [],
+    "name": "Valcabado del Páramo",
+    "player_list": [
+      {
+        "is_female": false,
+        "name": "Javi",
+        "username": "Javicarrascoooo"
+      },
+            {
+        "is_female": true,
+        "name": "Clara",
+        "username": "clara7103"
+      },
+      {
+        "is_female": false,
+        "name": "Manu",
+        "username": "manu_ggez"
+      }
+    ],
+    "road_connection_list": []
+  },
+      {
+    "coordinates": [],
+    "name": "Benazolve",
+    "player_list": [
+      {
+        "is_female": true,
+        "name": "Sara",
+        "username": "saraardss"
+      }
+    ],
+    "road_connection_list": []
+  },
+  {
+    "coordinates": [],
+    "name": "Fresno de la Vega",
+    "player_list": [
+      {
+        "is_female": true,
+        "name": "Iván",
+        "username": "ivaniglesias92"
+      }
+    ],
+    "road_connection_list": []
+  },
+          {
+    "coordinates": [],
+    "name": "Villamediana de la Vega",
+    "player_list": [
+      {
+        "is_female": true,
+        "name": "Lucía",
+        "username": "Luciafp03"
+      }
+    ],
+    "road_connection_list": []
+  },
+  {
+    "coordinates": [],
+    "name": "Mansilla del Páramo",
+    "player_list": [
+      {
+        "is_female": false,
+        "name": "Blay",
+        "username": "blaymartinezz"
+      },
+      {
+        "is_female": false,
+        "name": "Leyre",
+        "username": "leyremartinez__"
+      },
+            {
+        "is_female": false,
+        "name": "Thaais",
+        "username": "ThaaisWatson"
+      },
+                  {
+        "is_female": false,
+        "name": "Adrián",
+        "username": "adrisanta03"
+      },
+      {
+        "is_female": false,
+        "name": "bigjumps",
+        "username": "ja411vi"
+      },
+      {
+        "is_female": true,
+        "name": "Andrea",
+        "username": "andreamgh20"
+      }
+
+    ],
+    "road_connection_list": []
+  },
+  {
+    "coordinates": [],
+    "name": "Alcuetas",
+    "player_list": [
+      {
+        "is_female": false,
+        "name": "Andrés",
+        "username": "andresbarri12"
+      }
+    ],
+    "road_connection_list": []
+  },
+  {
+    "coordinates": [],
+    "name": "Alcuetas",
+    "player_list": [
+      {
+        "is_female": false,
+        "name": "Piti",
+        "username": "petevalencia12"
+      }
+    ],
+    "road_connection_list": []
+  },
+  {
+    "coordinates": [],
+    "name": "Antimio de Abajo",
+    "player_list": [
+      {
+        "is_female": false,
+        "name": "Guille",
+        "username": "er_guiillee17"
+      },
+      {
+        "is_female": true,
+        "name": "Mer",
+        "username": "maariavv_"
+      },
+      {
+        "is_female": true,
+        "name": ,
+        "username": "miree_loopez16"
+      },
+      {
+        "is_female": true,
+        "name": "Nuri",
+        "username": "nuriii_17"
+      },
+      {
+        "is_female": true,
+        "name": "Ana",
+        "username": "anamdz17"
+      }
+    ],
+    "road_connection_list": []
+  },
+  {
+    "coordinates": [],
+    "name": "Villarejo de Órbigo",
+    "player_list": [
+      {
+        "is_female": false,
+        "name": "Sergio",
+        "username": "Sergio_GallFdz"
+      }
+    ],
+    "road_connection_list": []
+  }
+]
