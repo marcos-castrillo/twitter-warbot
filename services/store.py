@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import random
-import sys
 
 from models.item import Item
 from models.place import Place
@@ -24,12 +23,14 @@ hour_count = None
 
 
 def initialize_item_list():
-    for i, weapon_name in enumerate(config.data.weapon_list):
-        item = Item()
-        item.type = ItemType.weapon
-        item.name = weapon_name
-        item.power = random.randint(config.items.min_power_weapon, config.items.max_power_weapon)
-        item_list.append(item)
+    for i, group in enumerate(config.data.weapon_list):
+        for j, weapon in enumerate(group.suffix_list):
+            item = Item()
+            item.type = ItemType.weapon
+            item.name = weapon
+            item.prefix_list = group.prefix_list
+            item.power = random.randint(config.items.min_power_weapon, config.items.max_power_weapon)
+            item_list.append(item)
 
     for i, special in enumerate(config.data.special_list):
         for j, special_name in enumerate(special.monster_immunity_list):
@@ -50,45 +51,49 @@ def initialize_item_list():
             item.name = special_name
             item.special = SpecialType.infection_immunity
             item_list.append(item)
+        for j, special_name in enumerate(special.movement_boost_list):
+            item = Item()
+            item.type = ItemType.special
+            item.name = special_name
+            item.special = SpecialType.movement_boost
+            item_list.append(item)
 
 
 def initialize_powerup_list():
-    for i, powerup_name in enumerate(config.data.powerup_list):
-        item = Item()
-        item.type = ItemType.powerup
-        item.name = powerup_name
-        item.power = random.randint(config.items.min_power_powerup, config.items.max_power_powerup)
-        powerup_list.append(item)
+    for i, group in enumerate(config.data.powerup_list):
+        for j, powerup in enumerate(group.suffix_list):
+            item = Item()
+            item.type = ItemType.powerup
+            item.name = powerup
+            item.prefix_list = group.prefix_list
+            item.power = random.randint(config.items.min_power_powerup, config.items.max_power_powerup)
+            powerup_list.append(item)
 
 
 def initialize_injury_list():
-    global injury_list
-    for i, injury_name in enumerate(config.data.injury_list):
-        item = Item()
-        item.type = ItemType.injury
-        item.name = injury_name
-        item.power = - random.randint(config.items.min_power_injury, config.items.max_power_injury)
-        injury_list.append(item)
+    for i, group in enumerate(config.data.injury_list):
+        for j, injury in enumerate(group.suffix_list):
+            item = Item()
+            item.type = ItemType.injury
+            item.name = injury
+            item.prefix_list = group.prefix_list
+            item.power = - random.randint(config.items.min_power_injury, config.items.max_power_injury)
+            injury_list.append(item)
 
 
 def should_action_or_event_be_enabled(a_or_e, is_action=True):
-    if is_a_or_e_enabled(a_or_e.name, is_action):
-        if hasattr(a_or_e, 'duration'):
-            if a_or_e.duration > 0:
-                a_or_e.duration = a_or_e.duration - 1
-                return True
-            else:
-                return False
-        else:
-            return True
-
     current_percentage = len(100 * get_dead_players()) / len(player_list)
-    percentage_enabled = a_or_e.is_percentage and current_percentage == a_or_e.enable_from
+    percentage_enabled = a_or_e.is_percentage and current_percentage >= a_or_e.enable_from
 
-    time_enabled = not a_or_e.is_percentage and hour_count == a_or_e.enable_from
+    time_enabled = not a_or_e.is_percentage and hour_count >= a_or_e.enable_from
 
     should_be_enabled = (not hasattr(a_or_e, 'probability') or a_or_e.probability > 0) and\
                         (percentage_enabled or time_enabled)
+
+    if should_be_enabled and hasattr(a_or_e, 'duration'):
+        if a_or_e.duration == 0:
+            return False
+        a_or_e.duration = a_or_e.duration - 1
 
     return should_be_enabled
 
@@ -345,7 +350,7 @@ def handle_event(event):
 
         alive_districts = [x for x in place_list if not x.destroyed and len([y for y in x.tributes if y.is_alive]) > 0]
         for i, district in enumerate(alive_districts):
-            district.items.append(get_items_in_place(item_list_1, item_list_2, item_list_3))
+            district.items = district.items + get_items_in_place(item_list_1, item_list_2, item_list_3)
     elif event.name == 'abduction_1':
         abducted = random.choice(get_alive_players())
         abducted.is_alive = False
@@ -355,7 +360,7 @@ def handle_event(event):
     elif event.name == 'abduction_1_end':
         abducted = get_dead_players()[0]
         abducted.is_alive = True
-        abducted.power = abducted.power + 5
+        abducted.power = abducted.power + 7.4
 
         new_place = random.choice(place_list)
         while new_place.name == abducted.location.name:

@@ -22,7 +22,7 @@ Jony(@jony_JRM) estaba dando un paseo con su perro cuando una idea se le vino a 
 
 ABDUCTION_1_RETURN - 25
 ¡El platillo volante ha regresado! Los extraterrestres han devuelto a Jony(@jony_JRM) sano y salvo, pero en Bercianos.
-Eso sí, ha sido modificado genéticamente y ahora tiene +5 en poder.
+Eso sí, ha sido modificado genéticamente y ahora tiene +7.4 en poder.
 
 BATTLE - 30
 Tras una refriega enorme en La Bañeza, los ánimos de la gente se han crispado. Las peleas entre gente de distintos pueblos se han vuelto más y más constantes.

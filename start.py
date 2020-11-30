@@ -30,9 +30,9 @@ def start_battle():
     if config.general.match_type != MatchType.rumble:
         tweet = Tweet()
         tweet.is_event = True
-        tweet.type = TweetType.start
+        tweet.type = 'start'
         write_tweet(tweet)
-        tweet.type = TweetType.start_2
+        tweet.type = 'start_2'
         write_tweet(tweet)
 
     while not finished:

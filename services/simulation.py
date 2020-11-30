@@ -87,8 +87,9 @@ def draw_image(tweet):
     ranking_image = None
 
     if tweet.is_event:
-        if tweet.type == TweetType.start or tweet.type == TweetType.start_2:
+        if tweet.type == 'start':
             return
+
         main_image = Image.open(os.path.join(current_dir, config.file_paths.icons, 'events/' + tweet.type + '.png'))
         main_image.save(output_dir + '/' + str(line_number) + '.png')
         if 'abduction' in tweet.type:
@@ -100,7 +101,7 @@ def draw_image(tweet):
 
     elif tweet.type == TweetType.introduce_players:
         main_image = get_main_image(raw_map_img_2, tweet)
-        main_image.save(output_dir + '/' + str(line_number) + '_map.png')
+        main_image.save(output_dir + '/' + str(line_number) + '.png')
     elif tweet.type == TweetType.destroyed_district:
         map_image = get_map_image(raw_map_img_2, tweet)
         map_image.save(output_dir + '/' + str(line_number) + '_bis.png')
@@ -125,7 +126,8 @@ def draw_image(tweet):
 
         if tweet.type in [TweetType.monster_killed, TweetType.trapped, TweetType.somebody_died_of_infection,
                           TweetType.somebody_killed, TweetType.somebody_revived, TweetType.somebody_suicided,
-                          TweetType.somebody_was_infected, TweetType.winner, TweetType.winner_districts]:
+                          TweetType.somebody_was_infected, TweetType.winner, TweetType.winner_districts,
+                          TweetType.somebody_got_special]:
             ranking_image = get_ranking_image(blank_img, tweet)
             ranking_image.save(output_dir + '/' + str(line_number) + '_ranking.png')
 

@@ -31,6 +31,7 @@ class SpecialType(object):
     infection_immunity = 1
     monster_immunity = 2
     injure_immunity = 3
+    movement_boost = 4
 
     def __init__(self):
         pass

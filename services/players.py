@@ -17,6 +17,8 @@ def befriend(player_1, player_2):
 
 def suicide():
     alive_players = get_alive_players()
+    if len(alive_players) < 5:
+        return False
     player = random.choice(alive_players)
     kill_player(player)
     tweet = Tweet()

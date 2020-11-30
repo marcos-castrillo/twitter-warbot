@@ -4,7 +4,7 @@
 import twitter
 import os
 import random
-import urllib.request
+import urllib
 
 from data.secrets import *
 from data.literals import SLEEP

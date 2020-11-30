@@ -21,6 +21,7 @@ class Player(object):
     monster_immunity = False
     injure_immunity = False
     infection_immunity = False
+    movement_boost = False
     infected = False
     power = 0
     previous_power = None

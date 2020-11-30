@@ -6,4 +6,5 @@ TTB is a bot that simulates a fictional tournament where players can 'fight' to 
 2. Fill /data/config.json with your own players' data.
 3. Run start.py
 
-## Bugs
+## Todos
+Add party names

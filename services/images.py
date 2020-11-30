@@ -41,12 +41,13 @@ def draw_player(drawing_player):
                    outline=frame_color, width=frame_width)
 
     if not player.is_alive:
-        draw.text((coord_x - int(avatar_size / 3) - 4, coord_y - int(avatar_size / 3) * 2 - 4), 'X',
+        draw.text((coord_x - int(3 * avatar_size / 8), coord_y - int(9 * avatar_size / 12)), 'X',
                   fill=config.map.colors.circle, font=ImageFont.truetype(font_path, size=avatar_size))
 
     if show_icons:
         skull_icon_size = int(icon_size * 3 / 4)
         skull_font_size = font_size if (len(str(player.kills)) == 1) else font_size - 3
+        skull_text_delta_x = int(avatar_size / 3) if (len(str(player.get_power())) == 1) else int(3 * avatar_size / 12)
         power_icon_size = icon_size
         power_font_size = font_size if (len(str(player.get_power())) == 1) else font_size - 3
 
@@ -64,7 +65,7 @@ def draw_player(drawing_player):
             drawing_image.image_name = 'skull'
             paste_image(drawing_image)
 
-            draw.text((coord_x - int(avatar_size / 3), coord_y - avatar_size - int(avatar_size/15)), str(player.kills),
+            draw.text((coord_x - skull_text_delta_x, coord_y - avatar_size - int(avatar_size/15)), str(player.kills),
                       fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=skull_font_size))
 
         if player.get_power() != 0:
@@ -102,26 +103,37 @@ def draw_player(drawing_player):
             drawing_image.image_name = 'item_' + str(player.item_list[1].get_rarity())
             paste_image(drawing_image)
 
+        delta_x = int(avatar_size / 2) - int(avatar_size / 10)
+        delta_y = int(avatar_size / 4)
+
         if player.infected:
-            drawing_image = DrawingFile(image, coord_x + int(avatar_size / 2), coord_y)
+            drawing_image = DrawingFile(image, coord_x + delta_x, coord_y + delta_y)
             drawing_image.dimension = icon_size
             drawing_image.image_name = 'infection'
             paste_image(drawing_image)
 
         if player.monster_immunity:
-            drawing_image = DrawingFile(image, coord_x - int(avatar_size / 2), coord_y - int(avatar_size / 4))
+            drawing_image = DrawingFile(image, coord_x - delta_x, coord_y - delta_y)
             drawing_image.dimension = icon_size
             drawing_image.image_name = 'monster_immunity'
             paste_image(drawing_image)
+
         if player.injure_immunity:
-            drawing_image = DrawingFile(image, coord_x - int(avatar_size / 2), coord_y + int(avatar_size / 4))
+            drawing_image = DrawingFile(image, coord_x - delta_x, coord_y + delta_y)
             drawing_image.dimension = icon_size
             drawing_image.image_name = 'injure_immunity'
             paste_image(drawing_image)
+
         if player.infection_immunity:
-            drawing_image = DrawingFile(image, coord_x + int(avatar_size / 2), coord_y)
+            drawing_image = DrawingFile(image, coord_x + delta_x, coord_y + delta_y)
             drawing_image.dimension = icon_size
             drawing_image.image_name = 'infection_immunity'
+            paste_image(drawing_image)
+
+        if player.movement_boost:
+            drawing_image = DrawingFile(image, coord_x + delta_x, coord_y - delta_y)
+            drawing_image.dimension = icon_size
+            drawing_image.image_name = 'movement_boost'
             paste_image(drawing_image)
 
         if player.is_alive and ((config.general.match_type == MatchType.districts and get_alive_districts_count() <= 1) or\

@@ -8,6 +8,7 @@ from models.enums import ItemType
 class Item(object):
     type = None
     name = ""
+    prefix_list = []
     power = 0
     special = None
     thrown_away_by = None

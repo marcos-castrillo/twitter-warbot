@@ -118,7 +118,7 @@ def move():
                 if not sc.destroyed and sc.name != player.location.name:
                     loc_candidates.append(sc)
 
-    if len(loc_candidates) == 0:
+    if len(loc_candidates) == 0 or player.movement_boost:
         for j, c in enumerate(player.location.connection_list):
             for k, sc in enumerate(c.connection_list):
                 for l, ssc in enumerate(sc.connection_list):
