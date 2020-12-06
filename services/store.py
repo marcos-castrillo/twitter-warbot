@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import random
-
+from types import SimpleNamespace
 from models.item import Item
 from models.place import Place
 from models.tweet import Tweet
@@ -87,7 +87,7 @@ def should_action_or_event_be_enabled(a_or_e, is_action=True):
 
     time_enabled = not a_or_e.is_percentage and hour_count >= a_or_e.enable_from
 
-    should_be_enabled = (not hasattr(a_or_e, 'probability') or a_or_e.probability > 0) and\
+    should_be_enabled = (not hasattr(a_or_e, 'probability') or a_or_e.probability > 0) and \
                         (percentage_enabled or time_enabled)
 
     if should_be_enabled and hasattr(a_or_e, 'duration'):
@@ -179,11 +179,11 @@ def initialize_place_and_player_list():
             initial_items = []
             if hasattr(raw_player, 'weapon_list'):
                 for weapon_name in raw_player.weapon_list:
-                    reserved_item = [x for x in raw_player.weapon_list if x.name == weapon_name]
+                    reserved_item = [x for x in item_list if x.name == weapon_name]
 
                     initial_items.append(reserved_item[0])
-                    powerup_list.pop(powerup_list.index(reserved_item[0]))
-            player.powerup_list = initial_items
+                    item_list.pop(item_list.index(reserved_item[0]))
+            player.item_list = initial_items
 
             player_list.append(player)
             if config.general.match_type == MatchType.districts:
@@ -207,7 +207,19 @@ def initialize_place_and_player_list():
         elif item.get_rarity() == 3:
             item_list_3.append(item)
 
+    max_coord_x = 0
+    max_coord_y = 0
+    min_coord_x = 999
+    min_coord_y = 999
     for i, raw_place in enumerate(raw_place_list):
+        if raw_place.coordinates[0] > max_coord_x:
+            max_coord_x = raw_place.coordinates[0]
+        if raw_place.coordinates[1] > max_coord_y:
+            max_coord_y = raw_place.coordinates[1]
+        if raw_place.coordinates[0] < min_coord_x:
+            min_coord_x = raw_place.coordinates[0]
+        if raw_place.coordinates[1] < min_coord_y:
+            min_coord_y = raw_place.coordinates[1]
         district_display_name = None
         water_connection_list = []
         items = get_items_in_place(item_list_1, item_list_2, item_list_3)
@@ -219,11 +231,10 @@ def initialize_place_and_player_list():
                           district_display_name, water_connection_list)
         place_list.append(new_place)
         fill_player_list(raw_place, new_place)
-    spare_item_list = item_list_1 + item_list_2 + item_list_3
 
+    spare_item_list = item_list_1 + item_list_2 + item_list_3
     for i, pl in enumerate(place_list):
         initialize_connection_list(place_list, pl)
-
 
 def initialize_tributes():
     global player_list
@@ -572,6 +583,14 @@ def who_infected_who(player, list_of_players):
     there_was_infection = any_infected and any_healthy
     infected_or_was_infected_by = there_was_infection and was_infected
     return there_was_infection, infected_or_was_infected_by
+
+
+def any_players_around(place):
+    return any([p for p in place_list if
+                p.name != place.name and
+                any([x for x in p.players if x.is_alive]) and
+                abs(p.coord_x - place.coord_x) < config.map.avatar_size * 3 and
+                 abs(p.coord_y - place.coord_y) < config.map.avatar_size * 3])
 
 
 def get_players_in_place(place):

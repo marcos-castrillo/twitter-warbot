@@ -8,3 +8,4 @@ TTB is a bot that simulates a fictional tournament where players can 'fight' to 
 
 ## Todos
 Add party names
+Create map - not include empty villages!

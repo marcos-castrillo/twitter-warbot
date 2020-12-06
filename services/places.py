@@ -138,7 +138,7 @@ def move():
         if len(candidates) == 0:
             return False
         else:
-            new_location = random.choice()
+            new_location = random.choice(candidates)
     else:
         new_location = random.choice(loc_candidates)
 

@@ -63,9 +63,9 @@ def get_message(tweet):
     elif tweet.type == TweetType.monster_moved:
         message = insert_emoji('cop') + MONSTER_MOVED(tweet)
     elif tweet.type == TweetType.somebody_died_of_infection:
-        message = insert_emoji('cop') + INFECTED_DIED(tweet)
+        message = insert_emoji('U+1F9EB	') + INFECTED_DIED(tweet)
     elif tweet.type == TweetType.somebody_was_infected:
-        message = insert_emoji('cop') + infected(tweet)
+        message = insert_emoji('U+1F9EB') + infected(tweet)
     elif tweet.type == TweetType.attraction:
         message = insert_emoji('tada') + attraction(tweet)
     elif tweet.type == TweetType.monster_killed:

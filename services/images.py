@@ -5,7 +5,8 @@ import os
 from PIL import Image, ImageDraw, ImageFont
 
 from services.config import config
-from services.store import get_alive_districts_count, get_alive_players_count, split_multiline_text, place_list
+from services.store import get_alive_districts_count, get_alive_players_count,\
+    split_multiline_text, place_list, any_players_around
 from models.enums import MatchType
 from models.drawing import DrawingPlayer, DrawingFile, DrawingItems, DrawingText
 
@@ -157,32 +158,34 @@ def draw_multiple_players(drawing_players):
     avatar_size = config.map.avatar_size
     players_length = len(players)
 
-    if 0 < config.map.limit_small_avatars < len(players):
+    if players_length == 0:
+        return
+
+    if any_players_around(players[0].location):
         delta_y = int(delta_y / 2)
         delta_x = int(delta_x / 2)
         avatar_size = int(avatar_size / 2)
-    if 0 < config.map.max_players_in_line < len(players) and not single_line:
+    if 0 < config.map.max_players_in_line < players_length and not single_line:
         players_length = config.map.max_players_in_line
     if players_length % 2 == 0:
         x_0 = coord_x - int(players_length / 2) * int(delta_x / 2)
     else:
         x_0 = coord_x - int((players_length - 1) / 2) * delta_x
 
-    if len(players) > 0:
-        x = x_0
-        y = coord_y
-        for i, player in enumerate(players):
-            drawing_player = DrawingPlayer(image, x, y)
-            drawing_player.player = players[i]
-            drawing_player.avatar_size = avatar_size
-            drawing_player.icon_size = config.map.icon_size
-            drawing_player.show_icons = False
-            drawing_player.font_size = font_size
-            draw_player(drawing_player)
-            x = x + delta_x
-            if not single_line and (i - config.map.max_players_in_line + 1) % config.map.max_players_in_line == 0:
-                x = x_0
-                y = y + delta_y
+    x = x_0
+    y = coord_y
+    for i, player in enumerate(players):
+        drawing_player = DrawingPlayer(image, x, y)
+        drawing_player.player = players[i]
+        drawing_player.avatar_size = avatar_size
+        drawing_player.icon_size = config.map.icon_size
+        drawing_player.show_icons = False
+        drawing_player.font_size = font_size
+        draw_player(drawing_player)
+        x = x + delta_x
+        if not single_line and (i - config.map.max_players_in_line + 1) % config.map.max_players_in_line == 0:
+            x = x_0
+            y = y + delta_y
 
 
 def draw_items(drawing_items):
