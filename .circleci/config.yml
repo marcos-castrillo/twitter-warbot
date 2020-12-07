@@ -8,7 +8,9 @@ jobs:
     executor: python/default
     steps:
       - checkout
+      - python/load-cache
       - python/install-deps
+      - python/save-cache
       - run:
           command: ./tests/config_tests.py test
           name: Test
