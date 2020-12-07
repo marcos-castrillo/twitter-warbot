@@ -1,4 +1,4 @@
-# TTB - Twitter Tournament Bot
+# TTB - Twitter Tournament Bot [![CircleCI](https://circleci.com/gh/marcos-castrillo/Twitter-tournament-bot.svg?style=svg)](https://circleci.com/gh/marcos-castrillo/Twitter-tournament-bot)
 
 TTB is a bot that simulates a fictional tournament where players can 'fight' to see who will be the winner.
 
