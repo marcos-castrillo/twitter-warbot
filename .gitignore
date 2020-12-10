@@ -1,6 +1,6 @@
 # Python files
 *.pyc
-.idea
+/.idea
 
 simulations/
 assets/avatars

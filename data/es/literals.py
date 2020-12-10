@@ -63,69 +63,6 @@ def AND():
 
 
 def ATRACTION(place):
-    if place == u'Ardoncino':
-        return u'Como son las grandes fiestas de Ardoncino (San Miguel),'
-    elif place == u'Armellada':
-        return u'Son las fiestas de Nuestra Señora de la Asunción en Armellada y'
-    elif place == u'Astorga':
-        return u'Son las fiestas de Santa Marta en Astorga y'
-    elif place == u'Bustillo':
-        return u'Son las fiestas de Bustillo (San Pedro) y'
-    elif place == u'Bercianos del Páramo':
-        return u'Como son las grandes fiestas de Bercianos (San Vicente),'
-    elif place == u'Cabreros del Río':
-        return u'Son las fiestas de Cabreros (San Miguel) y'
-    elif place == u'Carrizo de la Ribera':
-        return u'Son las Fiestas de la Virgen del Villar en Carrizo de la Ribera y'
-    elif place == u'La Bañeza':
-        return u'Se han celebrado las fiestas de La Bañeza y'
-    elif place == u'Laguna de Negrillos':
-        return u'Se ha celebrado la Alubia y'
-    elif place == u'Celadilla del Páramo':
-        return u'Como son las grandes fiestas de Celadilla (San Blas),'
-    elif place == u'Laguna de Negrillos':
-        return u'Se ha celebrado la Alubia y'
-    elif place == u'Grisuela del Páramo':
-        return u'Se han celebrado las fiestas de Grisuela y'
-    elif place == u'La Milla del Río':
-        return u'Se han celebrado las fiestas de San Juan en La Milla y'
-    elif place == u'León':
-        return u'Como es la Fiesta de Genarín,'
-    elif place == u'Palacios de Fontecha':
-        return u'Como son las Fiestas de San Adrián,'
-    elif place == u'Riego de la Vega':
-        return u'Se ha celebrado el Corpus Cristi en Riego de la Vega y'
-    elif place == u'Roperuelos del Páramo':
-        return u'Como son las fiestas de Roperuelos (San Miguel),'
-    elif place == u'Santa María del Páramo':
-        return u'Se ha celebrado la Feria Multisectorial y'
-    elif place == u'Tabuyuelo de Jamuz':
-        return u'Como son las fiestas de San Fabián en Tabuyuelo de Jamuz,'
-    elif place == u'Toral de los Guzmanes':
-        return u'Como es El Cristo en Toral de los Guzmanes,'
-    elif place == u'Urdiales del Páramo':
-        return u'Como es San Cipriano,'
-    elif place == u'Valdevimbre':
-        return u'Como es la Fiesta del Vino,'
-    elif place == u'Valencia de Don Juan':
-        return u'Se han celebrado las fiestas de Coyanza y'
-    elif place == u'Veguellina de Órbigo':
-        return u'Se han celebrado las fiestas del Carmen y'
-    elif place == u'Villadangos del Páramo':
-        return u'Se han celebrado las Fiestas de Pascua de Resurrección en Villadangos y'
-    elif place == u'Villademor de la Vega':
-        return u'Se han celebrado las Fiestas del Señor y'
-    elif place == u'Villagallegos':
-        return u'Como son las Fiestas de San Roque,'
-    elif place == u'Villamorico':
-        return u'Se han celebrado las fiestas en honor a la Virgen del Carmen en Villamorico y'
-    elif place == u'Villar del Yermo':
-        return u'Se han celebrado las fiestas de Santiago en Villar del Yermo y'
-    elif place == u'Zambroncinos':
-        return u'Como es el ZambronRock,'
-    elif place == u'Zotes del Páramo':
-        return u'Se ha celebrado el XXIII Zotes Rock y'
-
     return random.choice([
         u'Se han celebrado las grandes fiestas de ' + place + u' y',
         u'Se han celebrado las fiestas de ' + place + u' y',
