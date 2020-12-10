@@ -40,13 +40,15 @@ class TestConfig(unittest.TestCase):
     # Returns True if all the connections are in place_list and area mutually connected.
     def test_connection_list(self):
         for i, place in enumerate(self.place_list):
-            self.assertGreater(len(place.road_connection_list), 0, place.name + u' has no road connections.')
+            self.assertTrue(hasattr(place, 'road_connection_list') or hasattr(place, 'water_connection_list'))
 
-            for j, connection in enumerate(place.road_connection_list):
-                connection_place = next((i for i in config.place_list if i.name == connection), None)
-                self.assertIsNotNone(connection_place, connection + u' not in place_list.')
-                self.assertTrue(any(c for c in connection_place.road_connection_list if c == place.name),
-                                place.name + u' not mutually connected in ' + connection_place.name)
+            if hasattr(place, 'road_connection_list'):
+                self.assertGreater(len(place.road_connection_list), 0, place.name + u' has no road connections.')
+                for j, connection in enumerate(place.road_connection_list):
+                    connection_place = next((i for i in config.place_list if i.name == connection), None)
+                    self.assertIsNotNone(connection_place, connection + u' not in place_list.')
+                    self.assertTrue(any(c for c in connection_place.road_connection_list if c == place.name),
+                                    place.name + u' not mutually connected in ' + connection_place.name)
 
             if hasattr(place, 'water_connection_list'):
                 self.assertGreater(len(place.water_connection_list), 0, place.name + u' has no water connections.')
