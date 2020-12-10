@@ -5,7 +5,7 @@ from models.enums import MatchType
 from services.simulation import write_tweet
 from services.store import get_dead_players, get_alive_players, kill_player, place_list, destroy_district_if_needed, \
     move_player
-from services.config import config
+from data.config import config
 
 
 def befriend(player_1, player_2):

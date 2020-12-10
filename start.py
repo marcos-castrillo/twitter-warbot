@@ -27,13 +27,12 @@ def initialize():
 
 
 def start_battle():
-    if config.general.match_type != MatchType.rumble:
-        tweet = Tweet()
-        tweet.is_event = True
-        tweet.type = 'start'
-        write_tweet(tweet)
-        tweet.type = 'start_2'
-        write_tweet(tweet)
+    tweet = Tweet()
+    tweet.is_event = True
+    tweet.type = 'start'
+    write_tweet(tweet)
+    tweet.type = 'start_2'
+    write_tweet(tweet)
 
     while not finished:
         simulate_day()
@@ -43,14 +42,6 @@ def simulate_day():
     if services.store.hour_count == 1:
         first_day()
     services.store.hour_count = services.store.hour_count + 1
-    if config.general.match_type == MatchType.rumble:
-        if len(get_players_in_place(place_list[0])) < 2 or config.general.entrance_countdown == 0:
-            config.general.entrance_countdown = 3
-            next_entrance()
-            return
-        else:
-            config.general.entrance_countdown = config.general.entrance_countdown - 1
-
     do_something()
 
     if config.general.match_type == MatchType.districts and get_alive_districts_count() <= 1:
@@ -138,7 +129,7 @@ def do_something():
         else:
             completed = battle()
 
-    if not completed and config.general.match_type != MatchType.rumble:
+    if not completed:
         do_something()
 
 
@@ -165,6 +156,7 @@ def end_districts():
     tweet = Tweet()
     tweet.type = TweetType.winner_districts
     tweet.player_list = [x for x in player_list if x.district.name == alive_players[0].district.name and x.is_alive]
+    tweet.player_list_2 = [x for x in player_list if x.district.name == alive_players[0].district.name]
     tweet.place = alive_players[0].district
     write_tweet(tweet)
     finished = True

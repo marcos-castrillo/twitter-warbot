@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from services.config import config
+from data.config import config
 
 
 class Player(object):
@@ -17,7 +17,6 @@ class Player(object):
     friend_list = []
     injury_list = []
     powerup_list = []
-    skill_list = []
     monster_immunity = False
     injure_immunity = False
     infection_immunity = False
@@ -32,7 +31,6 @@ class Player(object):
         self.injury_list = []
         self.friend_list = []
         self.powerup_list = []
-        self.skill_list = []
         return
 
     def get_power(self):

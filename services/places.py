@@ -1,14 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import random
 import sys
-from models.tweet import Tweet
-from models.enums import TweetType
-from models.enums import MatchType
 from services.simulation import write_tweet
 
-from services.config import config
 from services.store import *
 
 
@@ -17,7 +12,7 @@ def attract():
 
     for i, p in enumerate(place_list):
         if not p.destroyed and not p.attracted and (
-                config.attraction.max_attracted_players == 0 or len(p.players) < config.attraction.max_attracted_players):
+                config.general.max_attracted_players == 0 or len(p.players) < config.general.max_attracted_players):
             loc_candidates.append(p)
 
     if len(loc_candidates) == 0:
@@ -44,8 +39,8 @@ def attract():
                         append_players_from(subsubconnection)
 
     if len(attracted_players) > sum(player.is_alive for player in place.players):
-        if config.attraction.max_attracted_players > 0 and len(attracted_players) > config.attraction.max_attracted_players:
-            attracted_players = attracted_players[:config.attraction.max_attracted_players]
+        if config.general.max_attracted_players > 0 and len(attracted_players) > config.general.max_attracted_players:
+            attracted_players = attracted_players[:config.general.max_attracted_players]
         alive_players = get_alive_players()
 
         any_infected = False

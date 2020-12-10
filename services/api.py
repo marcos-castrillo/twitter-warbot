@@ -8,7 +8,7 @@ import urllib
 
 from data.secrets import *
 from data.literals import SLEEP
-from services.config import config
+from data.config import config
 from services.store import player_list
 from PIL import Image
 

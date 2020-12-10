@@ -1,9 +1,8 @@
-from data.literals import *
 from services.store import *
 from models.tweet import Tweet
 from models.enums import TweetType
 from models.enums import MatchType
-from services.config import config
+from data.config import config
 from services.simulation import write_tweet
 
 
@@ -32,15 +31,9 @@ def battle():
             return
         success = tie(player_1, player_2, factor, kill_number)
     elif factor - config.battle.probabilities.neutral < kill_number < factor:
-        if config.general.match_type == MatchType.rumble:
-            success = soft_attack(player_1, player_2, factor, kill_number, False)
-        else:
-            success = run_away(player_1, player_2, factor, kill_number, False)
+        success = run_away(player_1, player_2, factor, kill_number, False)
     elif factor < kill_number < factor + config.battle.probabilities.neutral:
-        if config.general.match_type == MatchType.rumble:
-            success = soft_attack(player_1, player_2, factor, kill_number, True)
-        else:
-            success = run_away(player_1, player_2, factor, kill_number, True)
+        success = run_away(player_1, player_2, factor, kill_number, True)
     elif kill_number < factor - config.battle.probabilities.neutral:
         success = kill(player_1, player_2, place, factor, kill_number, False)
     elif kill_number > factor + config.battle.probabilities.neutral:
@@ -56,12 +49,8 @@ def kill(player_1, player_2, place, factor, action_number, inverse):
         killed = player_1
 
     killer.kills = killer.kills + 1
-    if config.general.match_type == MatchType.rumble:
-        best_killer_item = None
-        best_killed_item = None
-    else:
-        best_killer_item = killer.get_best_item()
-        best_killed_item = killed.get_best_item()
+    best_killer_item = killer.get_best_item()
+    best_killed_item = killed.get_best_item()
 
     tweet = Tweet()
     tweet.type = TweetType.somebody_killed
@@ -168,32 +157,6 @@ def run_away(player_1, player_2, factor, action_number, inverse):
     if there_was_infection:
         tweet.there_was_infection = True
     tweet.infected_or_was_infected_by = infected_or_was_infected_by
-
-    if are_friends(player_1, player_2):
-        unfriend(player_1, player_2)
-        tweet.unfriend = True
-
-    write_tweet(tweet)
-    return True
-
-
-def soft_attack(player_1, player_2, factor, action_number, inverse):
-    tweet = Tweet()
-    tweet.item = Item()
-
-    tweet.player = player_1
-    tweet.player_2 = player_2
-
-    power_loss = random.randint(-3, 0)
-
-    tweet.player.power = tweet.player.get_power() + power_loss
-
-    tweet.item.power = power_loss
-    tweet.place = player_1.location
-    tweet.type = TweetType.soft_attack
-    tweet.factor = factor
-    tweet.action_number = action_number
-    tweet.inverse = inverse
 
     if are_friends(player_1, player_2):
         unfriend(player_1, player_2)

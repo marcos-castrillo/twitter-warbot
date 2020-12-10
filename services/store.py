@@ -1,14 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import random
-from types import SimpleNamespace
 from models.item import Item
 from models.place import Place
 from models.tweet import Tweet
 from models.player import Player
 from models.enums import *
 
-from services.config import config
+from data.config import config
 
 item_list = []
 spare_item_list = []
@@ -23,7 +22,7 @@ hour_count = None
 
 
 def initialize_item_list():
-    for i, group in enumerate(config.data.weapon_list):
+    for i, group in enumerate(config.weapon_list):
         for j, weapon in enumerate(group.suffix_list):
             item = Item()
             item.type = ItemType.weapon
@@ -32,7 +31,7 @@ def initialize_item_list():
             item.power = random.randint(config.items.min_power_weapon, config.items.max_power_weapon)
             item_list.append(item)
 
-    for i, special in enumerate(config.data.special_list):
+    for i, special in enumerate(config.special_list):
         for j, special_name in enumerate(special.monster_immunity_list):
             item = Item()
             item.type = ItemType.special
@@ -60,7 +59,7 @@ def initialize_item_list():
 
 
 def initialize_powerup_list():
-    for i, group in enumerate(config.data.powerup_list):
+    for i, group in enumerate(config.powerup_list):
         for j, powerup in enumerate(group.suffix_list):
             item = Item()
             item.type = ItemType.powerup
@@ -71,7 +70,7 @@ def initialize_powerup_list():
 
 
 def initialize_injury_list():
-    for i, group in enumerate(config.data.injury_list):
+    for i, group in enumerate(config.injury_list):
         for j, injury in enumerate(group.suffix_list):
             item = Item()
             item.type = ItemType.injury
@@ -82,6 +81,9 @@ def initialize_injury_list():
 
 
 def should_action_or_event_be_enabled(a_or_e, is_action=True):
+    if a_or_e.name == 'destroy' and config.general.match_type == MatchType.districts:
+        return False
+
     current_percentage = len(100 * get_dead_players()) / len(player_list)
     percentage_enabled = a_or_e.is_percentage and current_percentage >= a_or_e.enable_from
 
@@ -138,7 +140,7 @@ def get_items_in_place(item_list_1, item_list_2, item_list_3):
 
 def initialize_place_and_player_list():
     global player_list, spare_item_list
-    raw_place_list = config.data.place_list
+    raw_place_list = config.place_list
     raw_player_list = []
     item_list_1 = []
     item_list_2 = []
@@ -191,8 +193,6 @@ def initialize_place_and_player_list():
                     location = next(x for x in place_list if x.name == place.name)
                     player.district = location  # only to store p[3]
                     location.tributes.append(player)  # idem
-            elif config.general.match_type == MatchType.rumble and raw_player.skill_list is not None:
-                player.skill_list = raw_player.skill_list
             elif config.general.match_type == MatchType.standard:
                 location = random.choice(place_list)
                 player.location = location
@@ -236,6 +236,7 @@ def initialize_place_and_player_list():
     for i, pl in enumerate(place_list):
         initialize_connection_list(place_list, pl)
 
+
 def initialize_tributes():
     global player_list
 
@@ -243,9 +244,9 @@ def initialize_tributes():
         # Initialize and distribute the tributes per district
         free_tributes = [x for x in player_list if x.district is None]
         tributes_per_district = round(len(player_list) / len(place_list))
-        place_list_sorted = sorted(place_list, key=lambda x: len(x.tributes), reverse=True)
-        enough_tributes_list = [x for x in place_list_sorted if len(x.tributes) >= tributes_per_district]
-        not_enough_tributes_list = [x for x in place_list_sorted if len(x.tributes) < tributes_per_district]
+        random.shuffle(place_list)
+        enough_tributes_list = [x for x in place_list if len(x.tributes) >= tributes_per_district]
+        not_enough_tributes_list = [x for x in place_list if len(x.tributes) < tributes_per_district]
 
         # Districts with enough tributes
         for j, enough_tributes_district in enumerate(enough_tributes_list):
@@ -296,8 +297,8 @@ def initialize_tributes():
             tweet.inverse = True
             introduction_tweet_list.append(tweet)
     else:
-        place_list_sorted = sorted(place_list, key=lambda x: len(x.tributes))
-        district_list = [x for x in place_list_sorted if len(x.tributes) > 0]
+        random.shuffle(place_list)
+        district_list = [x for x in place_list if len(x.tributes) > 0]
         for i, district in enumerate(district_list):
             tweet = Tweet()
             tweet.type = TweetType.introduce_players
@@ -572,12 +573,12 @@ def who_infected_who(player, list_of_players):
     for i, p in enumerate(list_of_players):
         if p.infected:
             any_infected = True
-        else:
+        elif not p.infection_immunity:
             any_healthy = True
     if player.infected:
         was_infected = True
         any_infected = True
-    else:
+    elif not player.infection_immunity:
         any_healthy = True
 
     there_was_infection = any_infected and any_healthy

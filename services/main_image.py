@@ -37,13 +37,22 @@ def get_main_image(main_image, main_tweet):
         drawing_player.icon_size = config.map.zoomed_icon_size
         drawing_player.font_size = config.map.font_size_icons
         draw_player(drawing_player)
+        if tweet.type == TweetType.winner:
+            drawing_image = DrawingFile(image, place_x, place_y - 2 * int(config.map.zoomed_avatar_size / 4))
+            drawing_image.dimension = config.map.zoomed_icon_size * 2
+            drawing_image.image_name = 'crown'
+            paste_image(drawing_image)
+
+            drawing_image = DrawingFile(image, place_x, place_y - int(2*config.map.zoomed_avatar_size / 3))
+            drawing_image.dimension = config.map.zoomed_avatar_size * 3
+            drawing_image.image_name = 'winner'
+            paste_image(drawing_image)
     elif tweet.type in [TweetType.somebody_tied_and_became_friend, TweetType.somebody_tied_and_was_friend,
                         TweetType.somebody_escaped, TweetType.somebody_killed, TweetType.somebody_stole,
-                        TweetType.somebody_stole_and_threw, TweetType.somebody_stole_and_replaced,
-                        TweetType.soft_attack]:
+                        TweetType.somebody_stole_and_threw, TweetType.somebody_stole_and_replaced]:
         # Pair actions
         if tweet.type in [TweetType.somebody_tied_and_became_friend, TweetType.somebody_tied_and_was_friend,
-                          TweetType.somebody_escaped, TweetType.somebody_killed, TweetType.soft_attack]:
+                          TweetType.somebody_escaped, TweetType.somebody_killed]:
             draw_battle(place_x, place_y)
 
         # player_1
@@ -88,14 +97,25 @@ def get_main_image(main_image, main_tweet):
                 if tweet.inverse:
                     drawing_image = DrawingFile(image, place_x, place_y + 70)
                     drawing_image.dimension = 128
-                    drawing_image.image_name = 'merge'
+                    drawing_image.image_name = 'merge'''
                     paste_image(drawing_image)
                 else:
                     drawing_image = DrawingFile(image, place_x, place_y + 70)
                     drawing_image.dimension = 128
                     drawing_image.image_name = 'split'
                     paste_image(drawing_image)
+        elif tweet.type == TweetType.winner_districts:
+            player_list_2 = tweet.place.tributes
+            drawing_players = DrawingMultiplePlayer(image, place_x, place_y)
+            drawing_players.player_list = player_list_2
+            drawing_players.delta_x = config.map.avatar_size + 2
+            drawing_players.font_size = config.map.font_size_icons
+            draw_multiple_players(drawing_players)
 
+            drawing_image = DrawingFile(image, place_x, place_y - int(2*config.map.zoomed_avatar_size / 3))
+            drawing_image.dimension = config.map.zoomed_icon_size * 3
+            drawing_image.image_name = 'winner'
+            paste_image(drawing_image)
         elif tweet.place_2 is not None:
             drawing_players = DrawingMultiplePlayer(image, tweet.place_2.coord_x,
                                                     tweet.place_2.coord_y)
@@ -103,11 +123,6 @@ def get_main_image(main_image, main_tweet):
             drawing_players.delta_x = config.map.avatar_size + 2
             drawing_players.font_size = config.map.font_size_icons
             draw_multiple_players(drawing_players)
-
-    if config.general.match_type == MatchType.districts and config.general.use_flags and tweet.type in \
-            [TweetType.introduce_players, TweetType.destroyed_district,
-             TweetType.winner_districts, TweetType.attraction]:
-        draw_flag()
 
     resize_image()
     return image
@@ -179,15 +194,6 @@ def draw_battle(coord_x, coord_y):
 
     draw.text((action_number_x + 10, y_0 + 60), str(tweet.action_number) + "%", fill=config.battle.colors.arrow,
               font=ImageFont.truetype(font_path, size=20))
-
-
-def draw_flag():
-    dimension_1 = 424
-    dimension_2 = 286
-    image_to_paste = Image.open(
-        os.path.join(current_dir, '../assets/flags/' + tweet.place.district_display_name + '.jpg'))
-    image_to_paste.thumbnail([dimension_1 / 2, dimension_2 / 2])
-    image.paste(image_to_paste, (tweet.place.coord_x - 100, tweet.place.coord_y - 130), image_to_paste.convert('RGBA'))
 
 
 def resize_image():

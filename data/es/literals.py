@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import random
-from services.config import config
+from data.config import config
 
 
 def get_amount(number):
@@ -46,7 +46,7 @@ def ALSO_STOLE():
         u'Además, le ha quitado',
         u'Además, le ha saqueado',
         u'Le ha quitado',
-        u'Ha saqueado su cadáver y ha encontrado'
+        u'Ha saqueado su cadáver y ha encontrado',
         u'Ha looteado su cadáver y se ha llevado'
     ])
 
@@ -232,9 +232,9 @@ def ESCAPED(player_1, player_2):
 
 def FROM(owner):
     return random.choice([
-        u'(que antes era de ' + owner + u')',
-        u'(que era de ' + owner + u')',
-        u'(que pertenecía a ' + owner + u')'
+        u'(que antes era de @' + owner + u')',
+        u'(que era de @' + owner + u')',
+        u'(que pertenecía a @' + owner + u')'
     ])
 
 
@@ -770,18 +770,6 @@ def SLEEP():
     ])
 
 
-def SOFT_ATTACK(attacker, attacked):
-    return random.choice([
-        u' '.join((attacker.get_name(), u'le ha dado una patada voladora a', attacked.get_name() + u'.')),
-        u' '.join((attacker.get_name(), u'se ha tirado desde la tercera cuerda encima de', attacked.get_name())),
-        u' '.join((attacker.get_name(), u'le ha hecho un suplex a', attacked.get_name())),
-        u' '.join((attacker.get_name(), u'le ha hecho una llave a', attacked.get_name())),
-        u' '.join((attacker.get_name(), u'le ha hecho una lanza a', attacked.get_name())),
-        u' '.join((attacker.get_name(), u'le ha dado un patadón a', attacked.get_name())),
-        u' '.join((attacker.get_name(), u'le ha dado un codazo a', attacked.get_name())),
-    ])
-
-
 def SPECIAL_ACTION():
     return random.choice([u'ha encontrado', u'ha cogido'])
 
@@ -951,7 +939,7 @@ def WINNER_DISTRICTS_COMPOSED(winners_str, district, kills_count):
         winner_2 = '.'
     else:
         winner_2 = u' '.join((u', siendo', max_kills.get_name(), u'quien más ha conseguido con', str(max_kills.kills)+ u'.'))
-    winner_3 = u' '.join((LINEBREAK() + u'¡' + district.district_display_name, u'es el ganador!'))
+    winner_3 = u' '.join((LINEBREAK() + u'¡' + district.district_display_name, u'es el ganador de la batalla!'))
     return winner_1 + winner_2 + winner_3
 
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from services.config import config
+from data.config import config
 from models.enums import ItemType
 
 

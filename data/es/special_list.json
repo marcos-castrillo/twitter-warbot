@@ -1,0 +1,25 @@
+[
+      {
+        "infection_immunity_list": [
+          "la vacuna del coronavirus",
+          "unas mascarillas FFP2"
+        ],
+        "injure_immunity_list": [
+          "un botiquín",
+          "una caja de ibuprofenos"
+        ],
+        "monster_immunity_list": [
+          "la corona de España",
+          "un uniforme de policía",
+          "una placa de policía"
+        ],
+        "movement_boost_list": [
+          "un Massey Ferguson",
+          "un Kubota",
+          "un John Deere",
+          "un Fendt",
+          "un New Holland",
+          "una cosechadora Claas"
+        ]
+      }
+    ]

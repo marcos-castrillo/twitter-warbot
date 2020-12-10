@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from services.config import config
+from data.config import config
 
 
 class DrawingBase(object):
@@ -30,6 +30,7 @@ class DrawingMultiplePlayer(DrawingBase):
     delta_x = None
     single_line = False
     font_size = None
+    adjust_size = False
 
 
 class DrawingItems(DrawingBase):

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from models.enums import *
-from services.config import config
+from data.config import config
 from services.store import are_friends, get_alive_players, place_list, get_dead_players
 import emoji
 
@@ -63,9 +63,9 @@ def get_message(tweet):
     elif tweet.type == TweetType.monster_moved:
         message = insert_emoji('cop') + MONSTER_MOVED(tweet)
     elif tweet.type == TweetType.somebody_died_of_infection:
-        message = insert_emoji('U+1F9EB	') + INFECTED_DIED(tweet)
+        message = insert_emoji('dizzy_face') + INFECTED_DIED(tweet)
     elif tweet.type == TweetType.somebody_was_infected:
-        message = insert_emoji('U+1F9EB') + infected(tweet)
+        message = insert_emoji('persevere') + infected(tweet)
     elif tweet.type == TweetType.attraction:
         message = insert_emoji('tada') + attraction(tweet)
     elif tweet.type == TweetType.monster_killed:
@@ -74,8 +74,6 @@ def get_message(tweet):
         message = insert_emoji('hospital') + CURED(tweet)
     elif tweet.type == TweetType.next_entrance:
         message = NEXT_ENTRANCE(tweet)
-    elif tweet.type == TweetType.soft_attack:
-        message = soft_attack(tweet)
 
     if tweet.is_event:
         if tweet.type == 'start':
@@ -251,45 +249,20 @@ def somebody_got_special(tweet):
     if tweet.item.special == SpecialType.movement_boost:
         immunity = MOVEMENT_BOOST(tweet.player, shared)
 
-
     return I_COMPOSED(tweet.player, SPECIAL_ACTION(), tweet.item.name, immunity)
 
 
-def soft_attack(tweet):
-    attacker = tweet.player
-    attacked = tweet.player_2
-    if tweet.inverse:
-        attacker = tweet.player_2
-        attacked = tweet.player
-
-    soft = SOFT_ATTACK(attacker, attacked)
-    change = LINEBREAK() + has_now(attacked, tweet.item)
-
-    suffix = ''
-    if tweet.unfriend:
-        suffix = LINEBREAK() + UNFRIEND()
-    return soft + change + suffix
-
-
 def somebody_found_item(tweet):
-    if tweet.item.thrown_away_by is not None and config.general.match_type != MatchType.rumble:
-        thrown_away_by = FROM(tweet.item.thrown_away_by.name)
-        return I_COMPOSED(tweet.player, random.choice(tweet.item.prefix_list), tweet.item.name, has_now(tweet.player, tweet.item),
-                          thrown_away_by)
-    else:
-        return I_COMPOSED(tweet.player, random.choice(tweet.item.prefix_list), tweet.item.name, has_now(tweet.player, tweet.item))
+    thrown_away_by = FROM(tweet.item.thrown_away_by.username) if tweet.item.thrown_away_by is not None else ''
+    return I_COMPOSED(tweet.player, random.choice(tweet.item.prefix_list), tweet.item.name,
+                      has_now(tweet.player, tweet.item), thrown_away_by)
 
 
 def somebody_replaced_item(tweet):
-    if tweet.item.thrown_away_by is not None and config.general.match_type != MatchType.rumble:
-        thrown_away_by = FROM(tweet.item.thrown_away_by.name)
-        return I_COMPOSED(tweet.player, random.choice(tweet.item.prefix_list), tweet.item.name,
-                          REPLACED + ' ' + tweet.old_item.name + has_now(tweet.player, tweet.item,
-                                                                                tweet.old_item), thrown_away_by)
-    else:
-        return I_COMPOSED(tweet.player, random.choice(tweet.item.prefix_list), tweet.item.name,
-                          REPLACED + ' ' + tweet.old_item.name + has_now(tweet.player, tweet.item,
-                                                                                tweet.old_item))
+    thrown_away_by = FROM(tweet.item.thrown_away_by.username) if tweet.item.thrown_away_by is not None else ''
+    return I_COMPOSED(tweet.player, random.choice(tweet.item.prefix_list), tweet.item.name,
+                      REPLACED + ' ' + tweet.old_item.name + has_now(tweet.player, tweet.item,
+                                                                     tweet.old_item), thrown_away_by)
 
 
 def somebody_escaped(tweet):
@@ -333,7 +306,7 @@ def somebody_killed(tweet):
     kill_method = KILL_METHOD(attacker)
     if len(kill_method) > 1:
         kill_method = u' ' + kill_method
-    if killing_item is not None and config.general.match_type != MatchType.rumble:
+    if killing_item is not None:
         kill_method = u' ' + u' '.join((WITH, killing_item.name))
 
     kills_count = ''
@@ -378,11 +351,11 @@ def somebody_moved(tweet):
         item = LINEBREAK() + insert_emoji('muscle') + STRONGER_POWER(tweet)
     elif tweet.item is not None:
         if tweet.item.type == ItemType.powerup:
-            item = LINEBREAK() + u' '.join((random.choice(tweet.item.prefix_list), tweet.item.name,
+            item = LINEBREAK() + u' '.join((random.choice(tweet.item.prefix_list), tweet.item.name + '.',
                                             has_now_short(tweet.player, tweet.item)))
         elif tweet.item.type == ItemType.injury:
             item = LINEBREAK() + u' '.join((insert_emoji('ambulance'), random.choice(tweet.item.prefix_list),
-                                            tweet.item.name, has_now_short(tweet.player, tweet.item)))
+                                            tweet.item.name + '.', has_now_short(tweet.player, tweet.item)))
 
     infection = u''
     if tweet.there_was_infection:
@@ -393,7 +366,7 @@ def somebody_moved(tweet):
             infection = LINEBREAK() + SOMEBODY_INFECTED(tweet, other_players)
 
     return u' '.join(
-        (tweet.player.get_name(), action, tweet.place_2.name, TO, tweet.place.name + item + infection))
+        (tweet.player.get_name(), action, tweet.place_2.name, TO, tweet.place.name + '.' + item + infection))
 
 
 def destroyed(tweet):

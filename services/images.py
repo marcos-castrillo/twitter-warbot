@@ -4,7 +4,7 @@
 import os
 from PIL import Image, ImageDraw, ImageFont
 
-from services.config import config
+from data.config import config
 from services.store import get_alive_districts_count, get_alive_players_count,\
     split_multiline_text, place_list, any_players_around
 from models.enums import MatchType
@@ -48,7 +48,7 @@ def draw_player(drawing_player):
     if show_icons:
         skull_icon_size = int(icon_size * 3 / 4)
         skull_font_size = font_size if (len(str(player.kills)) == 1) else font_size - 3
-        skull_text_delta_x = int(avatar_size / 3) if (len(str(player.get_power())) == 1) else int(3 * avatar_size / 12)
+        skull_text_delta_x = int(avatar_size / 3) - 3 if (len(str(player.get_power())) == 1) else int(3 * avatar_size / 12) - 3
         power_icon_size = icon_size
         power_font_size = font_size if (len(str(player.get_power())) == 1) else font_size - 3
 
@@ -161,7 +161,7 @@ def draw_multiple_players(drawing_players):
     if players_length == 0:
         return
 
-    if any_players_around(players[0].location):
+    if drawing_players.adjust_size and any_players_around(players[0].location):
         delta_y = int(delta_y / 2)
         delta_x = int(delta_x / 2)
         avatar_size = int(avatar_size / 2)
@@ -262,13 +262,12 @@ def draw_map_places(image, main_place=None):
         drawing_image.gray_style = gray_style
         paste_image(drawing_image)
 
-        if config.general.match_type != MatchType.rumble:
-            item_y = p.coord_y if len(p.players) == 0 else p.coord_y - int(config.map.avatar_size / 3)
-            drawing_items = DrawingItems(image, p.coord_x, item_y)
-            drawing_items.item_count = len(p.items)
-            drawing_items.offset_y = int(config.map.icon_size / 2)
-            drawing_items.gray_style = gray_style
-            draw_items(drawing_items)
+        item_y = p.coord_y if len(p.players) == 0 else p.coord_y - int(config.map.avatar_size / 3)
+        drawing_items = DrawingItems(image, p.coord_x, item_y)
+        drawing_items.item_count = len(p.items)
+        drawing_items.offset_y = int(config.map.icon_size / 2)
+        drawing_items.gray_style = gray_style
+        draw_items(drawing_items)
 
         if p.trap_by is not None:
             drawing_image = DrawingFile(image, p.coord_x, p.coord_y + int(config.map.icon_size / 2))

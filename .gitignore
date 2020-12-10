@@ -1,7 +1,8 @@
 # Python files
 *.pyc
+.idea
 
 simulations/
 assets/avatars
-assets/sleep
+assets/sleep/*
 */secrets.py

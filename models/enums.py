@@ -18,7 +18,6 @@ class ItemType(object):
 class MatchType(object):
     standard = 1
     districts = 2
-    rumble = 3
 
     def __init__(self):
         pass
@@ -51,7 +50,6 @@ class TweetType(object):
     somebody_stole_and_replaced = 8
     somebody_stole_and_threw = 9
     somebody_got_special = 10
-    soft_attack = 11
     somebody_found_item = 12
     somebody_replaced_item = 13
     introduce_players = 14

@@ -1,6 +1,5 @@
-import random
 from services.store import *
-from services.config import config
+from data.config import config
 from services.simulation import write_tweet
 from models.tweet import Tweet
 from models.enums import *
@@ -124,7 +123,7 @@ def infect():
     elif len(infected_players) > 0:
         player = random.choice(infected_players)
         action_number = random.randint(1, 100)
-        if action_number > config.general.infection_survive_threshold:
+        if action_number > config.general.infection_die_threshold:
             player.infected = False
             player.infection_immunity = True
             tweet = Tweet()

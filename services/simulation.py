@@ -99,24 +99,12 @@ def draw_image(tweet):
             ranking_image = get_ranking_image(blank_img, tweet)
             ranking_image.save(output_dir + '/' + str(line_number) + '_ranking.png')
 
-    elif tweet.type == TweetType.introduce_players:
+    elif tweet.type in [TweetType.introduce_players, TweetType.winner, TweetType.winner_districts]:
         main_image = get_main_image(raw_map_img_2, tweet)
         main_image.save(output_dir + '/' + str(line_number) + '.png')
     elif tweet.type == TweetType.destroyed_district:
         map_image = get_map_image(raw_map_img_2, tweet)
         map_image.save(output_dir + '/' + str(line_number) + '_bis.png')
-    elif config.general.match_type == MatchType.rumble:
-        if tweet.type == TweetType.next_entrance:
-            main_image = Image.open(tweet.player.avatar_dir + '.png')
-            map_image = get_map_image(raw_map_img_2, tweet)
-        else:
-            main_image = get_main_image(raw_map_img, tweet)
-            if len(get_players_in_place(place_list[0])) > 2:
-                map_image = get_map_image(raw_map_img_2, tweet)
-
-        main_image.save(output_dir + '/' + str(line_number) + '.png')
-        if map_image is not None:
-            map_image.save(output_dir + '/' + str(line_number) + '_map.png')
     else:
         main_image = get_main_image(raw_map_img, tweet)
         map_image = get_map_image(raw_map_img_2, tweet)
@@ -126,7 +114,7 @@ def draw_image(tweet):
 
         if tweet.type in [TweetType.monster_killed, TweetType.trapped, TweetType.somebody_died_of_infection,
                           TweetType.somebody_killed, TweetType.somebody_revived, TweetType.somebody_suicided,
-                          TweetType.somebody_was_infected, TweetType.winner, TweetType.winner_districts,
+                          TweetType.somebody_was_infected,
                           TweetType.somebody_got_special]:
             ranking_image = get_ranking_image(blank_img, tweet)
             ranking_image.save(output_dir + '/' + str(line_number) + '_ranking.png')
