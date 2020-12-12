@@ -1,4 +1,3 @@
 emoji
 pillow
-shutil
 twitter
