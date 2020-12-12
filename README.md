@@ -1,7 +1,8 @@
 # Twitter Warbot [![CircleCI](https://circleci.com/gh/marcos-castrillo/twitter-warbot.svg?style=shield)](https://circleci.com/gh/marcos-castrillo/twitter-warbot)
 ## Simulate your own custom war!
-![preview](https://user-images.githubusercontent.com/28508893/101995454-2f539800-3cca-11eb-89d1-407f18907293.png)
+![preview](https://user-images.githubusercontent.com/28508893/101995454-2f539800-3cca-11eb-89d1-407f18907293.png)  
 
+Intro TODO
 
 # Dependencies
 - pip
@@ -23,3 +24,6 @@ Fill it with your own keys and secrets.
 You're ready to start simulating wars!
 
 ````./start.py````
+
+## Customization
+TODO
