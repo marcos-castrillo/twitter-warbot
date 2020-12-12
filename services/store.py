@@ -221,13 +221,17 @@ def initialize_place_and_player_list():
         if raw_place.coordinates[1] < min_coord_y:
             min_coord_y = raw_place.coordinates[1]
         district_display_name = None
+        road_connection_list = []
         water_connection_list = []
         items = get_items_in_place(item_list_1, item_list_2, item_list_3)
         if hasattr(raw_place, 'district_display_name'):
             district_display_name = raw_place.district_display_name
+        if hasattr(raw_place, 'road_connection_list'):
+            water_connection_list = raw_place.road_connection_list
         if hasattr(raw_place, 'water_connection_list'):
             water_connection_list = raw_place.water_connection_list
-        new_place = Place(raw_place.name, raw_place.road_connection_list, raw_place.coordinates, items,
+
+        new_place = Place(raw_place.name, road_connection_list, raw_place.coordinates, items,
                           district_display_name, water_connection_list)
         place_list.append(new_place)
         fill_player_list(raw_place, new_place)

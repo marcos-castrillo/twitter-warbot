@@ -1,7 +1,9 @@
 # Python files
 *.pyc
 /.idea
+venv
 
+# Custom files
 simulations/
 assets/avatars
 assets/sleep/*
