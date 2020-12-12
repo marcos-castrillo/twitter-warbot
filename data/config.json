@@ -7,7 +7,7 @@
       "probability": 0
     },
     {
-      "enable_from": 30,
+      "enable_from": 0,
       "is_percentage": false,
       "name": "battle",
       "probability": 43
@@ -19,49 +19,49 @@
       "probability": 10
     },
     {
-      "enable_from": 10,
+      "enable_from": 0,
       "is_percentage": false,
       "name": "move",
       "probability": 25
     },
     {
-      "enable_from": 20,
+      "enable_from": 0,
       "is_percentage": false,
       "name": "steal",
       "probability": 5
     },
     {
-      "enable_from": 30,
+      "enable_from": 0,
       "is_percentage": true,
       "name": "infect",
       "probability": 5
     },
     {
-      "enable_from": 60,
+      "enable_from": 0,
       "is_percentage": true,
       "name": "trap",
       "probability": 3
     },
     {
-      "enable_from": 40,
+      "enable_from": 0,
       "is_percentage": true,
       "name": "attract",
       "probability": 3
     },
     {
-      "enable_from": 70,
+      "enable_from": 0,
       "is_percentage": true,
       "name": "suicide",
       "probability": 1
     },
     {
-      "enable_from": 50,
+      "enable_from": 0,
       "is_percentage": true,
       "name": "monster",
       "probability": 3
     },
     {
-      "enable_from": 80,
+      "enable_from": 0,
       "is_percentage": true,
       "name": "revive",
       "probability": 2
@@ -83,29 +83,29 @@
   },
   "event_list": [
     {
-      "enable_from": 45,
+      "enable_from": 9999,
       "is_percentage": true,
       "name": "treason"
     },
     {
-      "enable_from": 85,
+      "enable_from": 9999,
       "is_percentage": true,
       "name": "airdrop"
     },
     {
       "duration": 10,
-      "enable_from": 5,
+      "enable_from": 9999,
       "is_percentage": false,
       "name": "abduction_1"
     },
     {
-      "enable_from": 65,
+      "enable_from": 9999,
       "is_percentage": true,
       "name": "abduction_2"
     },
     {
       "duration": 10,
-      "enable_from": 55,
+      "enable_from": 9999,
       "is_percentage": true,
       "name": "peace"
     }

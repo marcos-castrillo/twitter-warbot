@@ -89,8 +89,8 @@ def do_something():
     i = 0
     accumulated_probab = 0
     while chosen_action is None:
-        if action_number > (total_enabled_action_list_probab - accumulated_probab - services.store.enabled_action_list[
-            i].probability):
+        if action_number > (total_enabled_action_list_probab - accumulated_probab
+                            - services.store.enabled_action_list[i].probability):
             chosen_action = services.store.enabled_action_list[i].name
         else:
             accumulated_probab = accumulated_probab + services.store.enabled_action_list[i].probability

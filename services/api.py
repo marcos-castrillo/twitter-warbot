@@ -11,11 +11,12 @@ from data.literals import SLEEP
 from data.config import config
 from services.store import player_list
 from PIL import Image
+from shutil import copyfile
 
 
 def get_api():
-    return twitter.Api(consumer_key=consumer_key,
-                       consumer_secret=consumer_secret,
+    return twitter.Api(consumer_key=api_key,
+                       consumer_secret=api_secret,
                        access_token_key=access_token,
                        access_token_secret=access_token_secret)
 
@@ -74,7 +75,10 @@ def initialize_avatars():
             print('Downloading ' + player.get_name() + '\'s avatar...')
             profile_image_url = api.GetUser(screen_name=player.username).profile_image_url
             profile_image_url = profile_image_url.replace('_normal', '')
-            urllib.request.urlretrieve(profile_image_url, filename + '.png')
+            try:
+                urllib.request.urlretrieve(profile_image_url, filename + '.png')
+            except urllib.error.HTTPError as te:
+                copyfile(path + '/default.png', filename + '.png')
 
             old_im = Image.open(filename + '.png')
             (old_size_x, old_size_y) = old_im.size

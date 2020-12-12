@@ -28,7 +28,6 @@ def get_map_image(image_map, tweet_map):
         drawing_image.image_name = 'watermark'
         paste_image(drawing_image)
 
-    leon = next(p for p in place_list if p.name == 'León')
     return image
 
 
