@@ -1,8 +1,10 @@
 # Twitter Warbot [![CircleCI](https://circleci.com/gh/marcos-castrillo/twitter-warbot.svg?style=shield)](https://circleci.com/gh/marcos-castrillo/twitter-warbot)
+| :warning: WARNING          |
+|:---------------------------|
+| The output of this bot is 100% in Spanish, at least for now      |
+
 ## Simulate your own custom war!
 ![preview](https://user-images.githubusercontent.com/28508893/101995454-2f539800-3cca-11eb-89d1-407f18907293.png)  
-
-Intro TODO
 
 # Dependencies
 - pip
@@ -22,6 +24,8 @@ After creating it, copy and rename /data/secrets.bak.py to /data/secrets.py:
 
 Fill it with your own keys and secrets.  
 You're ready to start simulating wars!
+
+However, most probably you'll want to replace the default places and players with your own.
 
 ````./start.py````
 
