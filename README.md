@@ -25,9 +25,9 @@ After creating it, copy and rename /data/secrets.bak.py to /data/secrets.py:
 Fill it with your own keys and secrets.  
 You're ready to start simulating wars!
 
-However, most probably you'll want to replace the default places and players with your own.
-
 ````./start.py````
+
+However, most probably you'll want to replace the default places and players with your own. Take a look at the next section:
 
 ## Customization
 TODO
