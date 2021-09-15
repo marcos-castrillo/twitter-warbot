@@ -61,6 +61,7 @@ def tweet(message, image_path_list):
 
 def initialize_avatars():
     path = 'assets/avatars'
+    icons_path = 'assets/icons'
     if not os.path.exists(path):
         os.makedirs(path)
     for i, player in enumerate(player_list):
@@ -78,7 +79,7 @@ def initialize_avatars():
             try:
                 urllib.request.urlretrieve(profile_image_url, filename + '.png')
             except urllib.error.HTTPError as te:
-                copyfile(path + '/default.png', filename + '.png')
+                copyfile(icons_path + '/default.png', filename + '.png')
 
             old_im = Image.open(filename + '.png')
             (old_size_x, old_size_y) = old_im.size
