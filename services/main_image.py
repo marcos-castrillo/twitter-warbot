@@ -2,20 +2,18 @@
 # -*- coding: utf-8 -*-
 
 from services.images import *
-from services.store import place_list
 from models.enums import TweetType
-from models.drawing import DrawingMultiplePlayer, DrawingItems, DrawingText
+from models.drawing import DrawingMultiplePlayer
 
 draw = None
 image = None
 tweet = None
 
 
-def get_main_image(main_image, main_tweet):
+def get_main_image(main_image, main_tweet, map_preview=False):
     global draw, image, tweet
     image = main_image
     tweet = main_tweet
-    draw = ImageDraw.Draw(image)
 
     offset_horizontal = config.map.zoomed_avatar_size + config.map.frame_width * 2 + config.map.width_between_players_battle
     offset_vertical = int(config.map.zoomed_avatar_size / 2) + \
@@ -23,13 +21,22 @@ def get_main_image(main_image, main_tweet):
 
     place_x, place_y = adjust_coordinates(tweet, offset_horizontal, offset_vertical)
 
-    draw_map_places(image, tweet.place)
+    draw_map_places(image, tweet.place, map_preview=map_preview)
+
+    if tweet.type not in [TweetType.monster_appeared, TweetType.monster_moved,TweetType.zombie_appeared,
+                          TweetType.zombie_moved, TweetType.doctor_appeared, TweetType.doctor_moved]:
+        # No player actions
+        blurred_area = Image.new('RGBA', image.size, color=(255, 255, 255, 100))
+        image = Image.alpha_composite(image, blurred_area)
+
+    draw = ImageDraw.Draw(image)
 
     if tweet.type in [TweetType.winner, TweetType.somebody_got_special, TweetType.somebody_found_item,
                       TweetType.somebody_replaced_item, TweetType.somebody_revived, TweetType.somebody_moved,
                       TweetType.trap, TweetType.trap_dodged, TweetType.somebody_was_infected,
-                      TweetType.somebody_suicided, TweetType.monster_killed, TweetType.trapped,
-                      TweetType.somebody_died_of_infection, TweetType.somebody_got_cured]:
+                      TweetType.somebody_suicided, TweetType.monster_took, TweetType.zombie_killed, TweetType.zombie_was_defeated,
+                      TweetType.trapped, TweetType.somebody_died_of_infection, TweetType.somebody_got_cured, TweetType.doctor_cured]:
+
         # Individual actions
         drawing_player = DrawingPlayer(image, place_x, place_y)
         drawing_player.player = tweet.player
@@ -38,21 +45,16 @@ def get_main_image(main_image, main_tweet):
         drawing_player.font_size = config.map.font_size_icons
         draw_player(drawing_player)
         if tweet.type == TweetType.winner:
-            drawing_image = DrawingFile(image, place_x, place_y - 2 * int(config.map.zoomed_avatar_size / 4))
-            drawing_image.dimension = config.map.zoomed_icon_size * 2
-            drawing_image.image_name = 'crown'
-            paste_image(drawing_image)
-
             drawing_image = DrawingFile(image, place_x, place_y - int(2*config.map.zoomed_avatar_size / 3))
             drawing_image.dimension = config.map.zoomed_avatar_size * 3
             drawing_image.image_name = 'winner'
             paste_image(drawing_image)
     elif tweet.type in [TweetType.somebody_tied_and_became_friend, TweetType.somebody_tied_and_was_friend,
-                        TweetType.somebody_escaped, TweetType.somebody_killed, TweetType.somebody_stole,
+                        TweetType.somebody_escaped, TweetType.somebody_hurt, TweetType.somebody_killed, TweetType.somebody_stole,
                         TweetType.somebody_stole_and_threw, TweetType.somebody_stole_and_replaced]:
         # Pair actions
         if tweet.type in [TweetType.somebody_tied_and_became_friend, TweetType.somebody_tied_and_was_friend,
-                          TweetType.somebody_escaped, TweetType.somebody_killed]:
+                          TweetType.somebody_escaped, TweetType.somebody_hurt, TweetType.somebody_killed]:
             draw_battle(place_x, place_y)
 
         # player_1
@@ -76,6 +78,12 @@ def get_main_image(main_image, main_tweet):
         drawing_player_2.big_frame = True
         drawing_player_2.previous_power = tweet.player_2.previous_power
         draw_player(drawing_player_2)
+
+        if tweet.type in [TweetType.somebody_tied_and_became_friend, TweetType.somebody_tied_and_was_friend]:
+            drawing_image = DrawingFile(image, place_x, place_y)
+            drawing_image.dimension = 128
+            drawing_image.image_name = 'heart'
+            paste_image(drawing_image)
 
     elif tweet.type in [TweetType.destroyed, TweetType.destroyed_district, TweetType.winner_districts,
                         TweetType.attraction, TweetType.introduce_players]:
@@ -141,9 +149,9 @@ def adjust_coordinates(tweet_object, offset_horizontal, offset_vertical):
         coord_x = image.width - offset_horizontal - config.map.width_between_players_battle
 
     if coord_y - offset_vertical < 0:
-        coord_y = offset_vertical + config.map.width_between_players_battle
-    # elif coord_y + offset_vertical > image.height:
-        # coord_y = image.height - offset_vertical - config.map.width_between_players_battle
+        coord_y = offset_vertical
+    #elif coord_y + offset_vertical > image.height:
+        # coord_y = image.height - offset_vertical
 
     return coord_x, coord_y
 
@@ -155,10 +163,10 @@ def draw_battle(coord_x, coord_y):
     min_x = coord_x - config.map.zoomed_avatar_size
     max_x = coord_x + config.map.zoomed_avatar_size
 
-    action_number_x = min_x + tweet.action_number * 4
-    tie = min_x + 4 * tweet.factor
-    min_tie = min_x + 4 * (tweet.factor - config.battle.probabilities.neutral)
-    max_tie = min_tie + 8 * config.battle.probabilities.neutral
+    action_number_x = min_x + tweet.action_number * int(config.map.zoomed_avatar_size/50)
+    tie = min_x + int(config.map.zoomed_avatar_size / 50) * tweet.factor
+    min_tie = min_x + int(config.map.zoomed_avatar_size / 50) * (tweet.factor - config.battle.probabilities.neutral)
+    max_tie = min_tie + 2 * int(config.map.zoomed_avatar_size / 50) * config.battle.probabilities.neutral
 
     if min_tie < min_x:
         min_tie = min_x
@@ -174,7 +182,7 @@ def draw_battle(coord_x, coord_y):
     y_0 = coord_y + int(3 * config.map.zoomed_avatar_size / 4)
     y_1 = y_0 + 30
 
-    draw.rectangle((min_x - 2, y_0 - 2, max_x + 2, y_1 + 2), outline='rgb(255,255,255)', width=4)
+    draw.rectangle((min_x - 2, y_0 - 2, max_x + 2, y_1 + 2), outline='rgb(0,0,0)', width=4)
     draw.rectangle((min_x, y_0, min_tie, y_1), fill=config.battle.colors.player_1)
     draw.rectangle((max_tie, y_0, max_x, y_1), fill=config.battle.colors.player_2)
     draw.rectangle((min_tie, y_0, tie, y_1), fill=config.battle.colors.tie_player_1)
@@ -182,8 +190,12 @@ def draw_battle(coord_x, coord_y):
     draw.rectangle((tie - 2 * int((config.battle.probabilities.tie - 1) / 2), y_0,
                     tie + 2 * int((config.battle.probabilities.tie - 1) / 2), y_1), fill=config.battle.colors.tie)
 
-    draw.text((min_x - 15, y_0 - 27), "0%", fill='rgb(255,255,255)', font=ImageFont.truetype(font_path, size=20))
-    draw.text((max_x - 23, y_0 - 27), "100%", fill='rgb(255,255,255)', font=ImageFont.truetype(font_path, size=20))
+    draw.text((min_x - 15, y_0 - 30), "0%", fill='rgb(255,255,255)', font=ImageFont.truetype(font_path, size=20),
+              stroke_width=2,
+              stroke_fill='rgb(0,0,0)')
+    draw.text((max_x - 23, y_0 - 30), "100%", fill='rgb(255,255,255)', font=ImageFont.truetype(font_path, size=20),
+              stroke_width=2,
+              stroke_fill='rgb(0,0,0)')
 
     # action_number
     draw.rectangle((action_number_x - 1, y_0, action_number_x + 1, y_1), fill=config.battle.colors.arrow)
@@ -192,8 +204,8 @@ def draw_battle(coord_x, coord_y):
     drawing_image.image_name = 'arrow'
     paste_image(drawing_image)
 
-    draw.text((action_number_x + 10, y_0 + 60), str(tweet.action_number) + "%", fill=config.battle.colors.arrow,
-              font=ImageFont.truetype(font_path, size=20))
+    draw.text((action_number_x + 23, y_0 + 35), str(tweet.action_number) + "%", fill='rgb(255,255,255)',
+              font=ImageFont.truetype(font_path, size=20), stroke_width=2, stroke_fill='rgb(0,0,0)')
 
 
 def resize_image():

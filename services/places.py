@@ -12,7 +12,7 @@ def attract():
 
     for i, p in enumerate(place_list):
         if not p.destroyed and not p.attracted and (
-                config.general.max_attracted_players == 0 or len(p.players) < config.general.max_attracted_players):
+                config.general.max_attracted_players == 0 or len([x for x in p.players if x.is_alive]) < config.general.max_attracted_players):
             loc_candidates.append(p)
 
     if len(loc_candidates) == 0:
@@ -23,7 +23,7 @@ def attract():
     attracted_players = []
 
     def append_players_from(location):
-        for j, player in enumerate(location.players):
+        for j, player in enumerate([x for x in location.players if x.is_alive]):
             if player.is_alive and player not in attracted_players:
                 attracted_players.append(player)
 
@@ -49,7 +49,7 @@ def attract():
             if player in attracted_players:
                 if player.infected:
                     any_infected = True
-                else:
+                elif not player.infection_immunity:
                     any_healthy = True
                 move_player(player, place)
 
@@ -66,35 +66,20 @@ def attract():
 
 
 def trap():
-    list = []
-    for i, p in enumerate(place_list):
-        if p.trap_by is None and len(p.players) > 0:
-            any_alive = False
-            for j, q in enumerate(p.players):
-                if q.is_alive:
-                    any_alive = True
-            if any_alive:
-                list.append(p)
+    candidates_list = [x for x in get_alive_players() if x.location.trap_by is None]
 
-    if len(list) > 0:
-        candidates_list = []
-        while len(candidates_list) == 0:
-            place = random.choice(list)
-            for i, p in enumerate(place.players):
-                if p.is_alive:
-                    candidates_list.append(p)
-
-        player = random.choice(candidates_list)
-
-        place.trap_by = player
-        tweet = Tweet()
-        tweet.type = TweetType.trap
-        tweet.place = place
-        tweet.player = player
-        write_tweet(tweet)
-        return True
-    else:
+    if len(candidates_list) == 0:
         return False
+
+    player = random.choice(candidates_list)
+    place = player.location
+    place.trap_by = player
+    tweet = Tweet()
+    tweet.type = TweetType.trap
+    tweet.place = place
+    tweet.player = player
+    write_tweet(tweet)
+    return True
 
 
 def move():
@@ -141,11 +126,11 @@ def move():
 
     tweet = Tweet()
 
-    there_was_infection, infected_or_was_infected_by = who_infected_who(player, new_location.players)
+    there_was_infection, infected_or_was_infected_by = who_infected_who(player, [x for x in new_location.players if x.is_alive])
 
     if new_location.trap_by is not None and new_location.trap_by.get_name() != player.get_name() and not are_friends(
             new_location.trap_by, player):
-        if action_number < 50:
+        if action_number + int(5 * player.get_power()) < 50:
             trapped_by = new_location.trap_by
             new_location.trap_by.kills = new_location.trap_by.kills + 1
             move_player(player, new_location, False)
@@ -208,16 +193,19 @@ def monster():
 
         if action_number < 50 and len(people_list) > 0:
             player = random.choice(people_list)
-            kill_player(player)
+            if len(player.item_list) == 0:
+                return False
+
+            item = random.choice(player.item_list)
+            index = player.item_list.index(item)
+            player.item_list.pop(index)
+
             tweet = Tweet()
-            tweet.type = TweetType.monster_killed
+            tweet.type = TweetType.monster_took
             tweet.place = player.location
             tweet.player = player
+            tweet.item = item
             write_tweet(tweet)
-            if config.general.match_type == MatchType.districts:
-                destroy_tweet = destroy_district_if_needed(player.district)
-                if destroy_tweet is not None:
-                    write_tweet(destroy_tweet)
         else:
             place.monster = False
             loc_candidates = [x for x in place.connection_list if not x.destroyed]
@@ -244,6 +232,134 @@ def monster():
     return True
 
 
+def zombie():
+    zombie_player = [x for x in get_dead_players() if x.is_zombie]
+
+    if len(zombie_player) > 0:
+        zombie_player = zombie_player[0]
+        place = zombie_player.location
+        action_number = random.randint(1, 100)
+        people_list = [x for x in place.players if x.is_alive]
+
+        if len(people_list) == 0 or action_number < 20:
+            place.zombie = False
+            loc_candidates = [x for x in place.connection_list if not x.destroyed]
+
+            if len(loc_candidates) == 0:
+                return False
+
+            new_place = random.choice(loc_candidates)
+            new_place.zombie = True
+            place.players.pop(place.players.index(zombie_player))
+            zombie_player.location = new_place
+            new_place.players.append(zombie_player)
+
+            tweet = Tweet()
+            tweet.type = TweetType.zombie_moved
+            tweet.place = new_place
+            tweet.place_2 = place
+            tweet.player = zombie_player
+            write_tweet(tweet)
+        else:
+            player = random.choice(people_list)
+
+            if action_number < 80 and not player.zombie_immunity:
+                kill_player(player)
+
+                tweet = Tweet()
+                tweet.type = TweetType.zombie_killed
+                tweet.place = player.location
+                tweet.player = player
+                tweet.player_2 = zombie_player
+                write_tweet(tweet)
+
+                if config.general.match_type == MatchType.districts:
+                    destroy_tweet = destroy_district_if_needed(player.district)
+                    if destroy_tweet is not None:
+                        write_tweet(destroy_tweet)
+            else:
+                place.zombie = False
+                zombie_player.is_zombie = False
+
+                tweet = Tweet()
+                tweet.type = TweetType.zombie_was_defeated
+                tweet.place = player.location
+                tweet.player = player
+                tweet.player_2 = zombie_player
+                write_tweet(tweet)
+    else:
+        zombie_candidates = [x for x in get_dead_players() if not x.is_alive and not x.zombie_immunity and not x.location.destroyed]
+        if len(zombie_candidates) == 0:
+            return False
+        new_zombie = random.choice(zombie_candidates)
+        new_zombie.is_zombie = True
+
+        loc_candidates = [x for x in new_zombie.location.connection_list if not x.destroyed]
+        if new_zombie.location.name == new_zombie.district.name and len(loc_candidates) > 0:
+            new_zombie.location.players.pop(new_zombie.location.players.index(new_zombie))
+            place = random.choice(loc_candidates)
+            place.players.append(new_zombie)
+            new_zombie.location = place
+            moved = True
+        else:
+            place = new_zombie.location
+            moved = False
+
+        place.zombie = True
+        tweet = Tweet()
+        tweet.type = TweetType.zombie_appeared
+        tweet.place = new_zombie.location
+        tweet.player = new_zombie
+        tweet.double = moved
+        write_tweet(tweet)
+    return True
+
+
+def doctor():
+    place = [x for x in place_list if x.doctor]
+
+    if len(place) > 0:
+        place = place[0]
+        people_list = [x for x in place.players if x.is_alive and len(x.injury_list) > 0]
+
+        if len(people_list) > 0:
+            player = random.choice(people_list)
+            player.injury_list = []
+
+            tweet = Tweet()
+            tweet.type = TweetType.doctor_cured
+            tweet.place = player.location
+            tweet.player = player
+            write_tweet(tweet)
+        else:
+            place.doctor = False
+            loc_candidates = [x for x in place.connection_list if not x.destroyed]
+            loc_candidates_to_cure = [x for x in loc_candidates if any(y for y in x.players if y.is_alive and len(y.injury_list) > 0)]
+            if len(loc_candidates_to_cure) > 0:
+                loc_candidates = loc_candidates_to_cure
+
+            if len(loc_candidates) > 0:
+                new_place = random.choice(loc_candidates)
+                new_place.doctor = True
+                tweet = Tweet()
+                tweet.type = TweetType.doctor_moved
+                tweet.place = new_place
+                tweet.place_2 = place
+                write_tweet(tweet)
+            else:
+                return False
+    else:
+        loc_candidates = [x for x in place_list if not x.destroyed]
+
+        new_place = random.choice(loc_candidates)
+        new_place.doctor = True
+        tweet = Tweet()
+        tweet.type = TweetType.doctor_appeared
+        tweet.place = new_place
+        write_tweet(tweet)
+    return True
+
+
 def destroy():
     if config.general.match_type == MatchType.districts:
         return False
@@ -254,6 +370,7 @@ def destroy():
 
     place.destroyed = True
     place.monster = False
+    place.zombie = False
     place.trap_by = None
     place.items = []
     dead_list = []
@@ -285,7 +402,9 @@ def destroy():
     new_location = random.choice(route_list)
 
     for i, p in enumerate(place.players):
-        if p.is_alive:
+        if p.is_zombie:
+            p.is_zombie = False
+        elif p.is_alive:
             if random.randint(0, 100) >= 75:
                 escaped_list.append(p)
             else:
@@ -298,7 +417,7 @@ def destroy():
     for i, p in enumerate(escaped_list):
         if p.infected:
             any_infected = True
-        else:
+        elif not p.infection_immunity:
             any_healthy = True
         move_player(p, new_location)
 

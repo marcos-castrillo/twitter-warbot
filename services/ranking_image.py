@@ -19,7 +19,7 @@ RANKING_FIRST_ROW_Y = RANKING_IMG_SIZE + config.ranking.padding + config.ranking
 RANKING_SPACE_BETWEEN_DISTRICTS = config.ranking.padding / 2
 RANKING_SPACE_BETWEEN_ROWS = int(RANKING_IMG_SIZE * 7 / 4) + config.ranking.padding + int(
     RANKING_SPACE_BETWEEN_DISTRICTS / 4) + config.ranking.district_name_height
-RANKING_WIDTH = config.ranking.images_per_row * RANKING_IMG_SIZE +\
+RANKING_WIDTH = config.ranking.images_per_row * RANKING_IMG_SIZE + \
                 (config.ranking.images_per_row - 1) * RANKING_SPACE_BETWEEN_COLS + config.ranking.padding * 2
 RANKING_DELTA_X = RANKING_IMG_SIZE + RANKING_SPACE_BETWEEN_COLS
 
@@ -87,25 +87,25 @@ def draw_player_ranking(player, row_index, col_index, is_dead=False):
         alive_rows = math.ceil(len(get_alive_players()) / config.ranking.images_per_row)
         dead_rows = row_index + 1 - alive_rows
         coord_y = coord_y - dead_rows * int(2 * RANKING_SPACE_BETWEEN_ROWS / 5)
-        text_color = config.ranking.colors.text_dead
 
-    y = coord_y + int(3*RANKING_IMG_SIZE/4) - 1
+    y = coord_y + int(2 * RANKING_IMG_SIZE / 4) - 2
     lines = split_multiline_text(player.name, RANKING_IMG_SIZE, font)
 
     for j, line in enumerate(lines):
-        drawing_text = DrawingText(image, coord_x, y)
+        drawing_text = DrawingText(image, coord_x - 6, y)
         drawing_text.color = text_color
         drawing_text.font_size = config.ranking.font_size
-        drawing_text.max_width = RANKING_IMG_SIZE
+        drawing_text.max_width = RANKING_IMG_SIZE + 10
         drawing_text.max_height = config.ranking.line_height
         drawing_text.line_height = config.ranking.line_height
         drawing_text.text = line
         drawing_text.center_horizontally = True
         drawing_text.center_vertically = False
         draw_wrapped_text(drawing_text)
+        y = y + config.ranking.line_height
 
     drawing_player = DrawingPlayer(image, coord_x + int(config.ranking.avatar_size / 2),
-                                   coord_y + int(config.ranking.avatar_size / 4))
+                                   coord_y)
     drawing_player.player = player
     drawing_player.avatar_size = config.ranking.avatar_size
     drawing_player.icon_size = config.ranking.small_icon_size
@@ -140,7 +140,7 @@ def draw_ranking_rectangle(fill_color, fill_color_dark, players_count, row_index
 def draw_place_name(name, row_index, col_index, current_index):
     coord_x = RANKING_FIRST_COLUMN_X + (RANKING_DELTA_X * col_index) - int(RANKING_SPACE_BETWEEN_DISTRICTS / 2)
     coord_y = RANKING_FIRST_ROW_Y + (
-                RANKING_SPACE_BETWEEN_ROWS * row_index) - RANKING_IMG_SIZE - config.ranking.district_name_height
+            RANKING_SPACE_BETWEEN_ROWS * row_index) - RANKING_IMG_SIZE - config.ranking.district_name_height
 
     drawing_text = DrawingText(image, coord_x, coord_y)
     drawing_text.color = config.ranking.colors.text
@@ -198,21 +198,39 @@ def circle_players(players_to_circle):
             row_index = row_index + 1
             dead_area = True
 
-        if (tweet.player is not None and player.get_name() == tweet.player.get_name()) or\
-                (tweet.player_2 is not None and player.get_name() == tweet.player_2.get_name()) or\
+        if (tweet.player is not None and player.get_name() == tweet.player.get_name()) or \
+                (tweet.player_2 is not None and player.get_name() == tweet.player_2.get_name()) or \
                 (tweet.type == TweetType.attraction and any(
-                x for x in tweet.player_list if x.get_name() == player.get_name())):
+                    x for x in tweet.player_list if x.get_name() == player.get_name())):
             coord_x = RANKING_FIRST_COLUMN_X + (RANKING_DELTA_X * col_index)
             coord_y = RANKING_FIRST_ROW_Y + (RANKING_SPACE_BETWEEN_ROWS * row_index)
             if dead_area:
                 alive_rows = math.ceil(len(get_alive_players()) / config.ranking.images_per_row)
                 dead_rows = row_index + 1 - alive_rows
                 coord_y = coord_y - dead_rows * int(2 * RANKING_SPACE_BETWEEN_ROWS / 5)
+
+                draw.ellipse((coord_x - int(RANKING_IMG_SIZE / 2), coord_y - RANKING_IMG_SIZE,
+                              coord_x + 3 * int(RANKING_IMG_SIZE / 2), coord_y + RANKING_IMG_SIZE),
+                             outline=config.map.colors.circle, width=6)
+                draw.ellipse((coord_x - int(RANKING_IMG_SIZE / 2), coord_y - RANKING_IMG_SIZE, coord_x + 3 * int(
+                    RANKING_IMG_SIZE / 2), coord_y + RANKING_IMG_SIZE),
+                             outline='rgb(0,0,0)', width=2)
+                draw.ellipse((coord_x - int(RANKING_IMG_SIZE / 2) + 5, coord_y - RANKING_IMG_SIZE + 5, coord_x + 3 * int(
+                    RANKING_IMG_SIZE / 2) - 5, coord_y + RANKING_IMG_SIZE - 5),
+                             outline='rgb(0,0,0)', width=2)
             else:
                 coord_y = coord_y - config.ranking.district_name_height
 
-            draw.ellipse((coord_x - RANKING_IMG_SIZE, coord_y - RANKING_IMG_SIZE, coord_x + RANKING_IMG_SIZE * 2,
-                          coord_y + RANKING_IMG_SIZE * 2), outline=config.map.colors.circle, width=5)
+                draw.ellipse((coord_x - RANKING_IMG_SIZE, coord_y - RANKING_IMG_SIZE - int(RANKING_IMG_SIZE/4), coord_x + RANKING_IMG_SIZE * 2,
+                              coord_y + RANKING_IMG_SIZE * 2 - int(RANKING_IMG_SIZE / 4)),
+                             outline=config.map.colors.circle, width=6)
+                draw.ellipse((coord_x - RANKING_IMG_SIZE, coord_y - RANKING_IMG_SIZE - int(RANKING_IMG_SIZE / 4), coord_x + RANKING_IMG_SIZE * 2,
+                              coord_y + RANKING_IMG_SIZE * 2 - int(RANKING_IMG_SIZE / 4)),
+                             outline='rgb(0,0,0)', width=2)
+                draw.ellipse((coord_x - RANKING_IMG_SIZE + 5, coord_y - RANKING_IMG_SIZE - int(RANKING_IMG_SIZE / 4) + 5,
+                              coord_x + RANKING_IMG_SIZE * 2 - 5, coord_y + RANKING_IMG_SIZE * 2 - int(
+                    RANKING_IMG_SIZE / 4) - 5),
+                             outline='rgb(0,0,0)', width=2)
 
         col_index = col_index + 1
 

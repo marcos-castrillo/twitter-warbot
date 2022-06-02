@@ -1,7 +1,11 @@
 [
       {
+        "friendship_boost_list": [
+          "un outfit muy mono",
+          "un tremendo piquete"
+        ],
         "infection_immunity_list": [
-          "la vacuna del coronavirus",
+          "la Pfizer",
           "unas mascarillas FFP2"
         ],
         "injure_immunity_list": [
@@ -10,12 +14,17 @@
         ],
         "monster_immunity_list": [
           "la corona de España",
-          "un uniforme de policía",
           "una placa de policía"
         ],
         "movement_boost_list": [
-          "un Fórmula 1",
-          "la moto de Valentino Rossi"
+          "un Massey Ferguson",
+          "un John Deere",
+          "un Fendt"
+        ],
+        "zombie_immunity_list": [
+          "un maniquí muy realista",
+          "un cerebro de peluche",
+          "un señuelo de mono con platillos"
         ]
       }
     ]

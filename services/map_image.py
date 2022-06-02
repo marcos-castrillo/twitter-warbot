@@ -22,11 +22,17 @@ def get_map_image(image_map, tweet_map):
     if config.map.show_circle:
         if tweet.place is not None:
             draw_ellipse(tweet.place, tweet.place_2)
-    if config.map.watermark_coordinates is not None:
-        drawing_image = DrawingFile(image, config.map.watermark_coordinates[0], config.map.watermark_coordinates[1])
-        drawing_image.dimension = 150
-        drawing_image.image_name = 'watermark'
-        paste_image(drawing_image)
+
+    return image
+
+
+def get_map_image_preview(image_map):
+    global draw, image, tweet
+    image = image_map
+    draw = ImageDraw.Draw(image)
+
+    draw_map_places(image, map_preview=True)
+    draw_map_players()
 
     return image
 
@@ -34,7 +40,7 @@ def get_map_image(image_map, tweet_map):
 def draw_map_players():
     for i, p in enumerate(place_list):
         drawing_players = DrawingMultiplePlayer(image, p.coord_x, p.coord_y)
-        drawing_players.player_list = p.players
+        drawing_players.player_list = [x for x in p.players if x.is_alive]
         drawing_players.delta_x = config.map.width_between_players
         drawing_players.single_line = config.map.players_in_single_line
         drawing_players.font_size = config.map.font_size_icons
@@ -50,6 +56,16 @@ def draw_map_players():
             drawing_image = DrawingFile(image, p.coord_x, p.coord_y - int(config.map.icon_size / 4))
             drawing_image.dimension = config.map.icon_size
             drawing_image.image_name = 'monster'
+            paste_image(drawing_image)
+        if p.doctor:
+            drawing_image = DrawingFile(image, p.coord_x, p.coord_y - int(config.map.icon_size / 2))
+            drawing_image.dimension = config.map.icon_size
+            drawing_image.image_name = 'doctor'
+            paste_image(drawing_image)
+        if p.zombie:
+            drawing_image = DrawingFile(image, p.coord_x, p.coord_y + int(config.map.icon_size / 4))
+            drawing_image.dimension = config.map.icon_size
+            drawing_image.image_name = 'zombie'
             paste_image(drawing_image)
 
 

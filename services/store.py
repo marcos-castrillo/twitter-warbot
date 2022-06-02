@@ -9,6 +9,7 @@ from models.enums import *
 
 from data.config import config
 
+abducted_username = None
 item_list = []
 spare_item_list = []
 place_list = []
@@ -32,6 +33,12 @@ def initialize_item_list():
             item_list.append(item)
 
     for i, special in enumerate(config.special_list):
+        for j, special_name in enumerate(special.friendship_boost_list):
+            item = Item()
+            item.type = ItemType.special
+            item.name = special_name
+            item.special = SpecialType.friendship_boost
+            item_list.append(item)
         for j, special_name in enumerate(special.monster_immunity_list):
             item = Item()
             item.type = ItemType.special
@@ -56,7 +63,12 @@ def initialize_item_list():
             item.name = special_name
             item.special = SpecialType.movement_boost
             item_list.append(item)
-
+        for j, special_name in enumerate(special.zombie_immunity_list):
+            item = Item()
+            item.type = ItemType.special
+            item.name = special_name
+            item.special = SpecialType.zombie_immunity
+            item_list.append(item)
 
 def initialize_powerup_list():
     for i, group in enumerate(config.powerup_list):
@@ -110,15 +122,23 @@ def update_action_event_list():
     enabled_event_list = [e for e in config.event_list if should_action_or_event_be_enabled(e, is_action=False)]
 
 
-def get_items_in_place(item_list_1, item_list_2, item_list_3):
+def get_items_in_place(item_list_1, item_list_2, item_list_3, airdrop=False):
     items = []
     item_count = random.randint(config.items.min_items_in_place, config.items.max_items_in_place)
+    if airdrop:
+        item_count = item_count - 1
+    special_added = False
 
     while item_count > 0 and len(item_list_1) + len(item_list_2) + len(item_list_3) > 0:
         action_number = random.randint(1, 100)
         item = None
+        specials_left = [x for x in item_list_3 if x.special is not None]
 
-        if action_number < config.items.probabilities.rarity_1:
+        if not special_added and len(specials_left) > 0:
+            item = random.choice(specials_left)
+            item_list_3.pop(item_list_3.index(item))
+            special_added = True
+        elif action_number < config.items.probabilities.rarity_1:
             if len(item_list_1) > 0:
                 item = random.choice(item_list_1)
                 item_list_1.pop(item_list_1.index(item))
@@ -163,6 +183,7 @@ def initialize_place_and_player_list():
             connection = get_place_by_name(places_list, c)
             if connection is not None:
                 water_connection_list.append(connection)
+
         place.connection_list = connections_list
         place.road_connection_list = road_connection_list
         place.water_connection_list = water_connection_list
@@ -211,6 +232,8 @@ def initialize_place_and_player_list():
     max_coord_y = 0
     min_coord_x = 999
     min_coord_y = 999
+
+    random.shuffle(raw_place_list)
     for i, raw_place in enumerate(raw_place_list):
         if raw_place.coordinates[0] > max_coord_x:
             max_coord_x = raw_place.coordinates[0]
@@ -223,11 +246,15 @@ def initialize_place_and_player_list():
         district_display_name = None
         road_connection_list = []
         water_connection_list = []
-        items = get_items_in_place(item_list_1, item_list_2, item_list_3)
+
+        items = []
+        if len(raw_place.player_list) > 0 or not config.general.destroy_initial_empty_places:
+            items = get_items_in_place(item_list_1, item_list_2, item_list_3)
+
         if hasattr(raw_place, 'district_display_name'):
             district_display_name = raw_place.district_display_name
         if hasattr(raw_place, 'road_connection_list'):
-            water_connection_list = raw_place.road_connection_list
+            road_connection_list = raw_place.road_connection_list
         if hasattr(raw_place, 'water_connection_list'):
             water_connection_list = raw_place.water_connection_list
 
@@ -235,6 +262,8 @@ def initialize_place_and_player_list():
                           district_display_name, water_connection_list)
         place_list.append(new_place)
         fill_player_list(raw_place, new_place)
+        if config.general.destroy_initial_empty_places and len(raw_place.player_list) == 0:
+            new_place.destroyed = True
 
     spare_item_list = item_list_1 + item_list_2 + item_list_3
     for i, pl in enumerate(place_list):
@@ -325,16 +354,17 @@ def get_player_by_name(name):
 
 
 def get_two_players_in_random_place(include_treasons=True):
-    place_with_people_list = [x for x in place_list if len(x.players) > 1]
+    place_with_people_list = [x for x in place_list if any(p for p in x.players if p.is_alive)]
     candidates_list = []
 
     for i, place in enumerate(place_with_people_list):
-        for p1 in range(len(place.players)):
-            for p2 in range(p1 + 1, len(place.players)):
-                friends = are_friends(place.players[p1], place.players[p2])
+        alive_players = [p for p in place.players if p.is_alive]
+        for p1 in range(len(alive_players)):
+            for p2 in range(p1 + 1, len(alive_players)):
+                friends = are_friends(alive_players[p1], alive_players[p2])
                 if not friends or \
                         (friends and include_treasons and is_a_or_e_enabled('treason', is_action=False)):
-                    candidates_list.append([place.players[p1], place.players[p2]])
+                    candidates_list.append([alive_players[p1], alive_players[p2]])
 
     if len(candidates_list) == 0:
         return None, None, None
@@ -348,6 +378,7 @@ def get_two_players_in_random_place(include_treasons=True):
 
 
 def handle_event(event):
+    global abducted_username
     tweet = Tweet()
     tweet.is_event = True
     tweet.type = event.name
@@ -366,15 +397,16 @@ def handle_event(event):
 
         alive_districts = [x for x in place_list if not x.destroyed and len([y for y in x.tributes if y.is_alive]) > 0]
         for i, district in enumerate(alive_districts):
-            district.items = district.items + get_items_in_place(item_list_1, item_list_2, item_list_3)
+            district.items = district.items + get_items_in_place(item_list_1, item_list_2, item_list_3, airdrop=True)
     elif event.name == 'abduction_1':
         abducted = random.choice(get_alive_players())
         abducted.is_alive = False
         abducted.location.players.pop(abducted.location.players.index(abducted))
+        abducted_username = abducted.username
         tweet.player = abducted
         tweet.place = abducted.location
     elif event.name == 'abduction_1_end':
-        abducted = get_dead_players()[0]
+        abducted = next(x for x in get_dead_players() if x.username == abducted_username)
         abducted.is_alive = True
         abducted.power = abducted.power + 7.4
 
@@ -408,7 +440,12 @@ def handle_event(event):
         tweet.player_2 = abducted_2
         tweet.place = abducted_1.location
         tweet.place_2 = abducted_2.location
-
+    elif event.name == 'zombie':
+        zombie = random.choice(get_dead_players())
+        zombie.is_zombie = True
+        zombie.location.zombie = True
+        tweet.player = zombie
+        tweet.place = zombie.location
     return tweet
 
 
@@ -454,7 +491,7 @@ def move_player(player, new_location, infect=True):
             for j, p in enumerate(players_in_place):
                 if not p.infection_immunity:
                     p.infected = True
-        elif any(x for x in players_in_place if x.infected) and not player.infection_immunity:
+        elif any(x for x in players_in_place if x.infected and x.is_alive) and not player.infection_immunity:
             player.infected = True
 
 
@@ -464,6 +501,7 @@ def destroy_district_if_needed(district):
 
     district.destroyed = True
     district.monster = False
+    district.zombie = False
     district.trap_by = None
     district.items = []
 
@@ -503,18 +541,21 @@ def destroy_district_if_needed(district):
         new_location = random.choice(route_list)
 
     for i, p in enumerate(district.players):
-        if p.is_alive:
+        if p.is_zombie:
+            p.is_zombie = False
+        elif p.is_alive:
             escaped_list.append(p)
 
     any_infected = False
     any_healthy = False
 
-    for i, p in enumerate(escaped_list + new_location.players):
+    for i, p in enumerate(escaped_list + [x for x in new_location.players if x.is_alive]):
         if p.infected:
             any_infected = True
-        else:
+        elif not p.infection_immunity:
             any_healthy = True
-        move_player(p, new_location)
+        if p.is_alive:
+            move_player(p, new_location)
 
     tweet = Tweet()
     tweet.type = TweetType.destroyed_district
@@ -558,35 +599,42 @@ def kill_player(player):
         item.thrown_away_by = player
 
     place.items = place.items + player.item_list
-    place.players.pop(place.players.index(player))
+    # place.players.pop(place.players.index(player))
     player.is_alive = False
     player.power = 0
     player.item_list = []
     player.injury_list = []
     player.powerup_list = []
     player.infected = False
-    player.monster_immunity = False
+    player.friendship_boost = False
     player.injure_immunity = False
     player.infection_immunity = False
+    player.monster_immunity = False
+    player.movement_boost = False
+    player.zombie_immunity = False
 
 
 def who_infected_who(player, list_of_players):
     any_infected = False
     any_healthy = False
     was_infected = False
-    for i, p in enumerate(list_of_players):
-        if p.infected:
-            any_infected = True
-        elif not p.infection_immunity:
-            any_healthy = True
-    if player.infected:
-        was_infected = True
-        any_infected = True
-    elif not player.infection_immunity:
-        any_healthy = True
+    there_was_infection = False
+    infected_or_was_infected_by = False
 
-    there_was_infection = any_infected and any_healthy
-    infected_or_was_infected_by = there_was_infection and was_infected
+    if len(list_of_players) > 0:
+        for i, p in enumerate(list_of_players):
+            if p.infected:
+                any_infected = True
+            elif not p.infection_immunity:
+                any_healthy = True
+        if player.infected:
+            was_infected = True
+            any_infected = True
+        elif not player.infection_immunity:
+            any_healthy = True
+
+        there_was_infection = any_infected and any_healthy
+        infected_or_was_infected_by = there_was_infection and was_infected
     return there_was_infection, infected_or_was_infected_by
 
 

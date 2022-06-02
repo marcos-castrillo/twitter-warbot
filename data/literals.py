@@ -18,8 +18,6 @@ def get_message(tweet):
         message = insert_emoji('crown') + winner(tweet)
     elif tweet.type == TweetType.winner_districts:
         message = insert_emoji('crown') + winner_districts(tweet)
-    elif tweet.type == TweetType.nobody_won:
-        message = NOBODY_WON(tweet)
     elif tweet.type == TweetType.somebody_got_special:
         message = insert_emoji('package') + somebody_got_special(tweet)
     elif tweet.type == TweetType.somebody_found_item:
@@ -27,11 +25,13 @@ def get_message(tweet):
     elif tweet.type == TweetType.somebody_replaced_item:
         message = insert_emoji('package') + somebody_replaced_item(tweet)
     elif tweet.type == TweetType.somebody_tied_and_became_friend:
-        message = insert_emoji('handshake') + TIED_AND_BEFRIEND(tweet)
+        message = insert_emoji('heart') + TIED_AND_BEFRIEND(tweet)
     elif tweet.type == TweetType.somebody_tied_and_was_friend:
-        message = insert_emoji('handshake') + FRIENDS_TIED(tweet.player_1, tweet.player_2)
+        message = insert_emoji('heart') + FRIENDS_TIED(tweet.player_1, tweet.player_2)
     elif tweet.type == TweetType.somebody_escaped:
         message = insert_emoji('running') + somebody_escaped(tweet)
+    elif tweet.type == TweetType.somebody_hurt:
+        message = insert_emoji('oncoming_fist') + somebody_hurt(tweet)
     elif tweet.type == TweetType.somebody_killed:
         message = insert_emoji('skull') + somebody_killed(tweet)
     elif tweet.type == TweetType.somebody_revived:
@@ -44,8 +44,6 @@ def get_message(tweet):
         message = insert_emoji('boom') + destroyed(tweet)
     elif tweet.type == TweetType.destroyed_district:
         message = insert_emoji('boom') + destroyed_district(tweet)
-    elif tweet.type == TweetType.somebody_couldnt_move:
-        message = COULDNT_MOVE(tweet)
     elif tweet.type == TweetType.trap:
         message = insert_emoji('construction_worker') + TRAP(tweet)
     elif tweet.type == TweetType.trapped:
@@ -68,12 +66,24 @@ def get_message(tweet):
         message = insert_emoji('persevere') + infected(tweet)
     elif tweet.type == TweetType.attraction:
         message = insert_emoji('tada') + attraction(tweet)
-    elif tweet.type == TweetType.monster_killed:
-        message = insert_emoji('cop') + MONSTER_KILLED(tweet)
+    elif tweet.type == TweetType.monster_took:
+        message = insert_emoji('cop') + MONSTER_TOOK(tweet)
+    elif tweet.type == TweetType.doctor_appeared:
+        message = insert_emoji('man_health_worker') + DOCTOR_APPEARED(tweet)
+    elif tweet.type == TweetType.doctor_moved:
+        message = insert_emoji('man_health_worker') + DOCTOR_MOVED(tweet)
+    elif tweet.type == TweetType.doctor_cured:
+        message = insert_emoji('man_health_worker') + DOCTOR_CURED(tweet)
+    elif tweet.type == TweetType.zombie_appeared:
+        message = insert_emoji('zombie') + ZOMBIE_APPEARED(tweet)
+    elif tweet.type == TweetType.zombie_moved:
+        message = insert_emoji('zombie') + ZOMBIE_MOVED(tweet)
+    elif tweet.type == TweetType.zombie_killed:
+        message = insert_emoji('zombie') + ZOMBIE_KILLED(tweet)
+    elif tweet.type == TweetType.zombie_was_defeated:
+        message = insert_emoji('zombie') + ZOMBIE_WAS_DEFEATED(tweet)
     elif tweet.type == TweetType.somebody_got_cured:
         message = insert_emoji('hospital') + CURED(tweet)
-    elif tweet.type == TweetType.next_entrance:
-        message = NEXT_ENTRANCE(tweet)
 
     if tweet.is_event:
         if tweet.type == 'start':
@@ -112,7 +122,7 @@ def get_message(tweet):
             message = config.literals.monster_1 + random_player + config.literals.monster_11
         elif tweet.type == 'trap':
             random_player = random.choice(get_alive_players()).get_name()
-            message = config.literals.trap_1 + random_player + config.literals.trap_11
+            message = random_player + config.literals.trap_1
         elif tweet.type == 'suicide':
             message = config.literals.suicide
         elif tweet.type == 'revive':
@@ -133,7 +143,10 @@ def get_message(tweet):
             message = config.literals.peace
         elif tweet.type == 'peace_end':
             message = config.literals.peace_end
-        message = insert_emoji('exclamation') + message
+        elif tweet.type == 'doctor':
+            message = config.literals.doctor
+        elif tweet.type == 'zombie':
+            message = config.literals.zombie
     return (message + '\n').encode('utf-8')
 
 
@@ -240,6 +253,8 @@ def somebody_got_special(tweet):
         shared = True
 
     immunity = ''
+    if tweet.item.special == SpecialType.friendship_boost:
+        immunity = FRIENDSHIP_BOOST(tweet.player)
     if tweet.item.special == SpecialType.injure_immunity:
         immunity = INJURE_IMMUNITY(tweet.player, shared)
     if tweet.item.special == SpecialType.monster_immunity:
@@ -248,6 +263,8 @@ def somebody_got_special(tweet):
         immunity = INFECTION_IMMUNITY(tweet.player, shared)
     if tweet.item.special == SpecialType.movement_boost:
         immunity = MOVEMENT_BOOST(tweet.player, shared)
+    if tweet.item.special == SpecialType.zombie_immunity:
+        immunity = ZOMBIE_IMMUNITY(tweet.player, shared)
 
     return I_COMPOSED(tweet.player, SPECIAL_ACTION(), tweet.item.name, immunity)
 
@@ -261,7 +278,7 @@ def somebody_found_item(tweet):
 def somebody_replaced_item(tweet):
     thrown_away_by = FROM(tweet.item.thrown_away_by.username) if tweet.item.thrown_away_by is not None else ''
     return I_COMPOSED(tweet.player, random.choice(tweet.item.prefix_list), tweet.item.name,
-                      REPLACED + ' ' + tweet.old_item.name + has_now(tweet.player, tweet.item,
+                      REPLACED + ' ' + tweet.old_item.name + '. ' + has_now(tweet.player, tweet.item,
                                                                      tweet.old_item), thrown_away_by)
 
 
@@ -279,12 +296,30 @@ def somebody_escaped(tweet):
     if tweet.unfriend:
         suffix = LINEBREAK() + UNFRIEND()
     if tweet.there_was_infection:
-        other_players = [x for x in tweet.place_2.players if x.get_name() != player_escaped.get_name()]
+        other_players = [x for x in tweet.place_2.players if x.get_name() != player_escaped.get_name() and x.is_alive]
         if tweet.infected_or_was_infected_by:
             suffix = suffix + LINEBREAK() + INFECTED_OTHERS(tweet, other_players)
         else:
             suffix = suffix + LINEBREAK() + SOMEBODY_INFECTED(tweet, other_players)
     return escaped + suffix
+
+
+def somebody_hurt(tweet):
+    if tweet.inverse:
+        player_hurt = tweet.player
+        player_attacker = tweet.player_2
+    else:
+        player_hurt = tweet.player_2
+        player_attacker = tweet.player
+
+    hurt = HURT(player_attacker, player_hurt, tweet.item.power)
+
+    suffix = ''
+
+    if tweet.unfriend:
+        suffix = LINEBREAK() + UNFRIEND()
+
+    return hurt + suffix
 
 
 def somebody_killed(tweet):
@@ -330,7 +365,8 @@ def somebody_revived(tweet):
     if tweet.double:
         suffix = LINEBREAK() + DISTRICT_REBUILD(tweet)
     if tweet.there_was_infection:
-        suffix = LINEBREAK() + SOMEBODY_INFECTED(tweet, tweet.player.location.players)
+        suffix = LINEBREAK() + SOMEBODY_INFECTED(tweet, [x for x in tweet.player.location.players if
+                                                         x.get_name() != tweet.player.get_name() and x.is_alive])
 
     return revived + suffix
 
@@ -340,8 +376,7 @@ def somebody_suicided(tweet):
 
 
 def somebody_moved(tweet):
-    if any(x for x in tweet.place_2.water_connection_list if x.name == tweet.place.name) or len(
-            tweet.place.road_connection_list) == 0 or len(tweet.place_2.road_connection_list) == 0:
+    if any(x for x in tweet.place_2.water_connection_list if x.name == tweet.place.name):
         action = MOVE_ACTION_WATER()
     else:
         action = MOVE_ACTION_ROAD()
@@ -359,7 +394,7 @@ def somebody_moved(tweet):
 
     infection = u''
     if tweet.there_was_infection:
-        other_players = [x for x in tweet.place.players if x.get_name() != tweet.player.get_name()]
+        other_players = [x for x in tweet.place.players if x.get_name() != tweet.player.get_name() and x.is_alive]
         if tweet.infected_or_was_infected_by:
             infection = LINEBREAK() + INFECTED_OTHERS(tweet, other_players)
         else:

@@ -7,6 +7,8 @@ class Place(object):
     name = None
     trap_by = None
     monster = None
+    zombie = None
+    doctor = None
     items = []
     connection_list = []
     road_connection_list = []

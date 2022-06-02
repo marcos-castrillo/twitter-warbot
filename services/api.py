@@ -13,7 +13,6 @@ from services.store import player_list
 from PIL import Image
 from shutil import copyfile
 
-
 def get_api():
     return twitter.Api(consumer_key=api_key,
                        consumer_secret=api_secret,
@@ -21,7 +20,7 @@ def get_api():
                        access_token_secret=access_token_secret)
 
 
-def tweet_line_from_file(file_path, line_number, image_path_list = []):
+def tweet_line_from_file(file_path, line_number, image_path_list=[]):
     with open(file_path, 'r', encoding='utf-8') as file:
         for i, line in enumerate(file):
             if int(i) == int(line_number):
@@ -62,6 +61,7 @@ def tweet(message, image_path_list):
 def initialize_avatars():
     path = 'assets/avatars'
     icons_path = 'assets/icons'
+
     if not os.path.exists(path):
         os.makedirs(path)
     for i, player in enumerate(player_list):

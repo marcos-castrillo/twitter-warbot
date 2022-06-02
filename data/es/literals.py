@@ -46,8 +46,8 @@ def ALSO_STOLE():
         u'Además, le ha quitado',
         u'Además, le ha saqueado',
         u'Le ha quitado',
-        u'Ha saqueado su cadáver y ha encontrado',
-        u'Ha looteado su cadáver y se ha llevado'
+        u'Le ha saqueado y ha encontrado',
+        u'Le ha looteado y se ha llevado'
     ])
 
 
@@ -63,6 +63,73 @@ def AND():
 
 
 def ATRACTION(place):
+    if place == u'Ardoncino':
+        return u'Como son las grandes fiestas de Ardoncino (San Miguel),'
+    elif place == u'Armellada':
+        return u'Son las fiestas de Armellada (Nuestra Señora de la Asunción) y'
+    elif place == u'Astorga':
+        return u'Son las fiestas de Astorga (Santa Marta) y'
+    elif place == u'Bustillo':
+        return u'Son las fiestas de Bustillo (San Pedro) y'
+    elif place == u'Bercianos del Páramo':
+        return u'Como son las grandes fiestas de Bercianos (San Vicente),'
+    elif place == u'Cabreros del Río':
+        return u'Son las fiestas de Cabreros (San Miguel) y'
+    elif place == u'Carrizo de la Ribera':
+        return u'Son las Fiestas de Carrizo de la Ribera (Virgen del Villar) y'
+    elif place == u'Cembranos':
+        return u'Son las Fiestas de Cembranos (Nuestra Señora de La Asunción) y'
+    elif place == u'La Bañeza':
+        return u'Se han celebrado las fiestas de La Bañeza y'
+    elif place == u'Laguna de Negrillos':
+        return u'Se ha celebrado la Alubia y'
+    elif place == u'Celadilla del Páramo':
+        return u'Como son las grandes fiestas de Celadilla (San Blas),'
+    elif place == u'Laguna de Negrillos':
+        return u'Se ha celebrado la Alubia y'
+    elif place == u'Grisuela del Páramo':
+        return u'Se han celebrado las fiestas de Grisuela y'
+    elif place == u'La Milla del Río':
+        return u'Se han celebrado las fiestas de San Juan en La Milla y'
+    elif place == u'León':
+        return u'Como es la Fiesta de Genarín,'
+    elif place == u'Palacios de Fontecha':
+        return u'Como son las Fiestas de San Adrián,'
+    elif place == u'Riego de la Vega':
+        return u'Se ha celebrado el Corpus Cristi en Riego de la Vega y'
+    elif place == u'Roperuelos del Páramo':
+        return u'Como son las fiestas de Roperuelos (San Miguel),'
+    elif place == u'Santa María del Páramo':
+        return u'Se ha celebrado la Feria Multisectorial y'
+    elif place == u'Tabuyuelo de Jamuz':
+        return u'Como son las fiestas de San Fabián en Tabuyuelo de Jamuz,'
+    elif place == u'Toral de los Guzmanes':
+        return u'Como es El Cristo en Toral de los Guzmanes,'
+    elif place == u'Urdiales del Páramo':
+        return u'Como es San Cipriano,'
+    elif place == u'Valdevimbre':
+        return u'Como es la Fiesta del Vino,'
+    elif place == u'Valencia de Don Juan':
+        return u'Se han celebrado las fiestas de Coyanza y'
+    elif place == u'Veguellina de Órbigo':
+        return u'Se han celebrado las fiestas del Carmen y'
+    elif place == u'Villadangos del Páramo':
+        return u'Se han celebrado las Fiestas de Pascua de Resurrección en Villadangos y'
+    elif place == u'Villademor de la Vega':
+        return u'Se han celebrado las Fiestas del Señor y'
+    elif place == u'Villagallegos':
+        return u'Como son las Fiestas de San Roque,'
+    elif place == u'Villamañán':
+        return u'Se han celebrado las fiestas de la Zarza en Villamañán y'
+    elif place == u'Villamorico':
+        return u'Se han celebrado las fiestas en honor a la Virgen del Carmen en Villamorico y'
+    elif place == u'Villar del Yermo':
+        return u'Se han celebrado las fiestas de Villar del Yermo y'
+    elif place == u'Zambroncinos':
+        return u'Como es el ZambronRock,'
+    elif place == u'Zotes del Páramo':
+        return u'Se ha celebrado el XXIII Zotes Rock y'
+
     return random.choice([
         u'Se han celebrado las grandes fiestas de ' + place + u' y',
         u'Se han celebrado las fiestas de ' + place + u' y',
@@ -76,13 +143,6 @@ def OTHERS(amount):
         return 'otro más'
     else:
         return 'otros ' + str(amount)
-
-
-def COULDNT_MOVE(player):
-    return random.choice([
-        u' '.join((player.get_name(), u'se ha terminado toda la comida de', player.location.name,
-                   u'y no ha podido acceder a otros lugares, por lo que ha muerto de hambre.'))
-    ])
 
 
 def CURED(tweet):
@@ -147,7 +207,7 @@ def DISTRICT_REBUILD(tweet):
     return random.choice([
         u'¡' + tweet.player.district.district_display_name + u' ha sido reconstruida!',
         u'¡' + tweet.player.district.district_display_name + u' vuelve a estar en pie!',
-        u'¡' + tweet.player.district.district_display_name + u' vuelve a la vida!'
+        u'¡' + tweet.player.district.district_display_name + u' vuelve a la lucha!'
     ])
 
 
@@ -167,6 +227,19 @@ def ESCAPED(player_1, player_2):
     ])
 
 
+def HURT(player_1, player_2, hurt_amount):
+    return random.choice([
+        player_1.get_name() + u' le arreó tremendo hostión a ' + player_2.get_name() + u', que ha perdido ' + str(abs(hurt_amount)) + u' de poder.',
+        player_1.get_name() + u' le dio tal colleja a ' + player_2.get_name() + u' que le quitó ' + str(abs(hurt_amount)) + u' de poder.',
+        player_1.get_name() + u' le dio un puñetazo a ' + player_2.get_name() + u' que le quitó ' + str(abs(hurt_amount)) + u' de poder.',
+        player_1.get_name() + u' le dio una hostia a mano abierta a ' + player_2.get_name() + u'. ' + player_2.name + u' ha perdido ' + str(abs(hurt_amount)) + u' de poder.',
+        player_1.get_name() + u' le ha dado un cabezazo a ' + player_2.get_name() + u'. ' + player_2.name + u' ' + str(hurt_amount) + u' de poder.',
+        player_1.get_name() + u' le ha dado un codazo a ' + player_2.get_name() + u'. ' + player_2.name + u' ha perdido ' + str(abs(hurt_amount)) + u' de poder.',
+        player_1.get_name() + u' le ha dado una patada en la rodilla a ' + player_2.get_name() + u' que le ha quitado ' + str(abs(hurt_amount)) + u' de poder.',
+        player_1.get_name() + u' le ha dado un puñetazo en el estómago a ' + player_2.get_name() + u'. ' + player_2.name + u' ha perdido ' + str(abs(hurt_amount)) + u' de poder.',
+    ])
+
+
 def FROM(owner):
     return random.choice([
         u'(que antes era de @' + owner + u')',
@@ -177,17 +250,11 @@ def FROM(owner):
 
 def FRIENDS_TIED(player_1, player_2):
     return (random.choice([
-        player_1.get_name() + ' y ' + player_2.get_name() + u' son tan ' + get_x_or_y_plural([player_1, player_2],
-                                                                                             'buenos amigos',
-                                                                                             'buenas amigas') + ' que no han querido pelearse.',
-        player_1.get_name() + u' iba a reventar a ' + player_2.get_name() + u', pero se dio cuenta de que en el fondo le cae bien.',
-        u'La amistad ha impedido que ' + player_1.get_name() + u' se cargase a ' + player_2.get_name() + u'.',
-        player_1.get_name() + u' contó un chiste tan malo que ' + player_2.get_name() + u' estuvo a punto de ' + get_x_or_y(
-            player_1, 'matarlo',
-            'matarla') + u', pero cambió de opinión en el último momento porque son ' + get_x_or_y_plural(
-            [player_1, player_2], 'amigos.', 'amigas.'),
-        player_1.get_name() + ' se ha negado a pelearse con ' + player_2.get_name() + u' a pesar de que le tenga ganas, ya que son ' + get_x_or_y_plural(
-            [player_1, player_2], 'amigos', 'amigas') + '.'
+        player_1.get_name() + u' y ' + player_2.get_name() + u' se molan y son incapaces de hacerse daño.',
+        player_1.get_name() + u' y ' + player_2.get_name() + u' siguen a lo suyo.',
+        player_1.get_name() + u' sigue ' + get_x_or_y(player_1, 'liado', 'liada') + ' con ' + player_2.get_name() + u' y no pueden luchar.',
+        player_1.get_name() + u' y ' + player_2.get_name() + u' son tan ' + get_x_or_y_plural([player_1, player_2], 'monos', 'monas') + ' que en vez de pelear se han abrazado.',
+        player_1.get_name() + u' y ' + player_2.get_name() + u' siguen ' + get_x_or_y_plural([player_1, player_2], 'enamorados.', 'enamoradas.'),
     ]))
 
 
@@ -279,11 +346,11 @@ def INFECTION_IMMUNITY(player, shared=False):
     if shared:
         return random.choice([
             u'¡A partir de ahora ' + get_x_or_y(player, u'él',
-                                                u'ella') + u' y el resto de su equipo son inmunes al COVID-19!',
+                                                u'ella') + u' y el resto de su pueblo son inmunes al COVID-19!',
             u'¡A partir de ahora ' + get_x_or_y(player, u'él',
-                                                u'ella') + u' y el resto de su equipo tienen inmunidad contra el COVID-19!',
-            u'¡A partir de ahora el COVID-19 no afecta a su equipo!',
-            u'¡A partir de ahora su equipo no puede ser infectado con el COVID-19!'
+                                                u'ella') + u' y el resto de su pueblo tienen inmunidad contra el COVID-19!',
+            u'¡A partir de ahora el COVID-19 no afecta a su pueblo!',
+            u'¡A partir de ahora su pueblo no puede ser infectado con el COVID-19!'
         ])
     else:
         return random.choice([
@@ -298,9 +365,9 @@ def INJURE_IMMUNITY(player, shared=False):
     if shared:
         return random.choice([
             u'¡A partir de ahora ' + get_x_or_y(player, u'él',
-                                                u'ella') + ' y el resto de su equipo no sufrirán heridas ni lesiones!',
-            u'¡A partir de ahora su equipo es inmune a heridas y lesiones!',
-            u'¡A partir de ahora su equipo tiene inmunidad contra lesiones y heridas!',
+                                                u'ella') + ' y el resto de su pueblo no sufrirán heridas ni lesiones!',
+            u'¡A partir de ahora su pueblo es inmune a heridas y lesiones!',
+            u'¡A partir de ahora su pueblo tiene inmunidad contra lesiones y heridas!',
         ])
     else:
         return random.choice([
@@ -310,18 +377,41 @@ def INJURE_IMMUNITY(player, shared=False):
         ])
 
 
+def FRIENDSHIP_BOOST(player):
+    return random.choice([
+        u'¡A partir de ahora será ' + get_x_or_y(player, u'un', u'una') + ' rompecorazones!',
+        u'¡A partir de ahora va a atraer todas las miradas!',
+        u'¡Ahora va a conquistar a todos y todas!'
+    ])
+
+
 def MOVEMENT_BOOST(player, shared=False):
     if shared:
         return random.choice([
             u'¡A partir de ahora ' + get_x_or_y(player, u'él',
-                                                u'ella') + ' y el resto de su equipo podrá viajar más lejos!',
-            u'¡A partir de ahora su equipo podrá viajar más lejos!',
-            u'¡A partir de ahora su equipo podrá viajar a pueblos más lejanos!'
+                                                u'ella') + ' y el resto de su pueblo podrá viajar más lejos!',
+            u'¡A partir de ahora su pueblo podrá viajar más lejos!',
+            u'¡A partir de ahora su pueblo podrá viajar a pueblos más lejanos!'
         ])
     else:
         return random.choice([
             u'¡A partir de ahora podrá viajar más lejos!',
             u'¡A partir de ahora podrá viajar a pueblos más lejanos!'
+        ])
+
+
+def ZOMBIE_IMMUNITY(player, shared=False):
+    if shared:
+        return random.choice([
+            u'¡Los zombies ya no perseguirán a ' + get_x_or_y(player, u'él', u'ella') + ' ni a su pueblo!',
+            u'¡A partir de ahora su pueblo es inmune a zombies!',
+            u'¡A partir de ahora su pueblo tiene inmunidad contra zombies!',
+        ])
+    else:
+        return random.choice([
+            u'¡A partir de ahora los zombies no le perseguirán!',
+            u'¡A partir de ahora es inmune a zombies!',
+            u'¡A partir de ahora tiene inmunidad contra zombies!',
         ])
 
 
@@ -430,10 +520,6 @@ def LINEBREAK():
     return u'//n'
 
 
-def NOBODY_WON(tweet):
-    return u'Por algún motivo, todos los jugadores están muertos. Nadie ha ganado... ¡otra vez será!'
-
-
 REPLACED = u'Se lo queda y se deshace de'
 
 
@@ -443,7 +529,7 @@ def REVIVED(tweet):
         u'sólo se estaba haciendo ' + get_x_or_y(player, u'el muerto. ¡Qué zooorrrooooo!',
                                                  u'la muerta. ¡Qué zooorrraaaaa! (sin trazas de patriarcado).'),
         u'ha vuelto a la vida bajo extrañas circunstancias.',
-        u'ha vuelto en forma de chapa y ahora es un zombie.',
+        u'ha vuelto en forma de chapa.',
         u'ha resucitado en mitad de su funeral y ha vuelto a la batalla.',
         u'tiene enchufe y el creador del bot le ha resucitado.',
         u'ha vuelto del otro barrio.'
@@ -462,17 +548,6 @@ def WAS_INFECTED(tweet):
 def PLACE_INFECTED(tweet):
     return u'El virus se ha propagado rápidamente por ' + tweet.place.name
 
-def NEXT_ENTRANCE(tweet):
-    return random.choice([
-        tweet.player.get_name() + u' va a entrar al cuadrilátero.',
-        tweet.player.get_name() + u' va a entrar al ring.',
-        tweet.player.get_name() + u' entra al ring.',
-        tweet.player.get_name() + u' entra al cuadrilátero.',
-        tweet.player.get_name() + get_x_or_y(tweet.player, u' es el siguiente contendiente.',
-                                             u' es la siguiente contendiente.'),
-        tweet.player.get_name() + get_x_or_y(tweet.player, u' ya está preparado para entrar al ring.',
-                                             u' ya está preparada para entrar al ring.'),
-    ])
 
 def INFECTED_DIED(tweet):
     player = tweet.player
@@ -499,11 +574,11 @@ def MONSTER_APPEARED(tweet):
 def MONSTER_IMMUNITY(player, shared=False):
     if shared:
         return random.choice([
-            u'¡A partir de ahora la guardia no le hará nada a su equipo.',
-            u'¡A partir de ahora su equipo es inmune ante la justicia!',
-            u'¡A partir de ahora su equipo es inmune ante la ley!',
+            u'¡A partir de ahora la guardia no le hará nada a su pueblo.',
+            u'¡A partir de ahora su pueblo es inmune ante la justicia!',
+            u'¡A partir de ahora su pueblo es inmune ante la ley!',
             u'¡A partir de ahora ' + get_x_or_y(player, u'él',
-                                                u'ella') + u' y el resto de su equipo son inmunes ante la guardia!',
+                                                u'ella') + u' y el resto de su pueblo son inmunes ante la guardia!',
         ])
     else:
         return random.choice([
@@ -514,22 +589,66 @@ def MONSTER_IMMUNITY(player, shared=False):
         ])
 
 
-def MONSTER_KILLED(tweet):
+def DOCTOR_APPEARED(tweet):
+    place = tweet.place
+    return u'¡Un médico ha aparecido en ' + place.name + u'!'
+
+
+def DOCTOR_MOVED(tweet):
+    place = tweet.place
+    place_2 = tweet.place_2
+    return u'El médico se ha movido de ' + place_2.name + u' a ' + place.name + u'.'
+
+
+def DOCTOR_CURED(tweet):
     player = tweet.player
     place = tweet.place
+    return u'¡El médico de ' + place.name + u' ha curado completamente a ' + player.get_name() + u'! ' + HAS_NOW(str(player.get_power()))
+
+
+def ZOMBIE_APPEARED(tweet):
+    player = tweet.player
+    place = tweet.place
+    moved = tweet.double
+
+    if moved:
+        return player.get_name() + u' ha vuelto a la vida en forma de zombi y se ha ido a liarla a ' + place.name + u'.'
+    else:
+        return player.get_name() + u' ha vuelto a la vida en forma de zombi y está sembrando el caos en ' + place.name + u'.'
+
+
+def ZOMBIE_MOVED(tweet):
+    player_zombie = tweet.player
+    place = tweet.place
+    place_2 = tweet.place_2
+    return u'El zombi (' + player_zombie.get_name() + u') se ha movido de ' + place.name + u' a ' + place_2.name + u'.'
+
+
+def ZOMBIE_KILLED(tweet):
+    player = tweet.player
+    player_zombie = tweet.player_2
     return random.choice([
-        player.get_name() + u' ha sido ' + get_x_or_y(player, 'arrestado',
-                                                      'arrestada') + u' por la guardia de ' + place.name + u'. Aquí acaba su aventura.',
-        player.get_name() + ' tiene una pinta sospechosa y la guardia se ' + get_x_or_y(player, 'lo',
-                                                                                        'la') + ' ha llevado de ' + place.name + u' sólo por si acaso.',
-        u'¡La guardia le ha pillado una bolsita a ' + player.get_name() + ' en ' + place.name + u' y se ' + get_x_or_y(
-            player, 'lo', 'la') + u' han llevado a comisaría, hay que esconderla mejor!',
-        u'La guardia ha desahuciado a palos a ' + player.get_name() + u' de ' + place.name + u'. ¡Game over!',
-        'A ' + player.get_name() + u' se le ocurrió que era gracioso gritar GORA *** al lado de la guardia. Se ' + get_x_or_y(
-            player, 'lo han llevado detenido',
-            'la han llevado detenida') + ' de ' + place.name + u' por apología al terrorismo.',
-        player.get_name() + u' creía que era ' + get_x_or_y(player, u'el más gracioso',
-                                                            u'la más graciosa') + u' haciendo humor negro en Twitter, hasta que se encontró a la guardia en ' + place.name + u'.'
+        u'El zombi (' + player_zombie.get_name() + u') se ha cargado a ' + player.get_name() + u'.',
+        u'El zombi (' + player_zombie.get_name() + u') no conoce y ha matado a ' + player.get_name() + u'.',
+        player.get_name() + u' no ha podido sobrevivir contra el zombi (' + player_zombie.get_name() + u').',
+        player.get_name() + u' tendría que haberse visto más pelis de zombies para sobrevivir contra ' + player_zombie.get_name() + u'.'
+    ])
+
+
+def ZOMBIE_WAS_DEFEATED(tweet):
+    player = tweet.player
+    player_zombie = tweet.player_2
+    return u'El zombi (' + player_zombie.get_name() + u') ha sido vencido por ' + player.get_name() + u', que se ha visto muchas pelis de zombies.'
+
+
+def MONSTER_TOOK(tweet):
+    player = tweet.player
+    item = tweet.item
+    return random.choice([
+        player.get_name() + u' ha sido ' + get_x_or_y(player, 'registrado', 'registrada') + u' y le han requisado ' + item.name + u'.',
+        player.get_name() + ' tiene una pinta sospechosa y la guardia le ha quitado ' + item.name + u' sólo por si acaso.',
+        u'La guardia ha parado a ' + player.get_name() + u' y le ha quitado ' + item.name + u'.',
+        u'La guardia le ha requisado ' + item.name + u' a ' + player.get_name() + u'.',
     ])
 
 
@@ -725,11 +844,11 @@ def STOLE_AND_THREW(tweet):
 
 def STRONGER_POWER(tweet):
     return random.choice([
-        u'Ha aprovechado el viaje para hacer unas flexiones y ha conseguido +2 en ataque.',
-        u'A mitad de camino se ha parado para hacer unas sentadillas, ¡+2 en ataque!',
-        u'Hacía mucho tiempo que no se levantaba del sofá, así que ha ganado 2 en ataque.',
-        u'Ha ganado 2 en ataque por irse a la aventura.',
-        u'De repente se siente más fuerte... ¡+2 en ataque!',
+        u'Ha aprovechado el viaje para hacer unas flexiones y ha conseguido +2 en poder.',
+        u'A mitad de camino se ha parado para hacer unas sentadillas, ¡+2 en poder!',
+        u'Hacía mucho tiempo que no se levantaba del sofá, así que ha ganado 2 en poder.',
+        u'Ha ganado 2 en poder por irse a la aventura.',
+        u'De repente se siente más fuerte... ¡+2 en poder!',
     ])
 
 
@@ -755,21 +874,16 @@ def TIED_AND_BEFRIEND(tweet):
     player_2 = tweet.player_2
 
     return random.choice([
-        player_1.get_name() + ' y ' + player_2.get_name() + u' se han peleado, pero se han cansado antes de que nadie cayera en combate, así que se han hecho ' + get_x_or_y_plural(
-            [player_1, player_2], 'amigos.', 'amigas.'),
-        player_1.get_name() + ' y ' + player_2.get_name() + u' han hecho una tregua y ahora son ' + get_x_or_y_plural(
-            [player_1, player_2], 'amigos.', 'amigas.'),
-        player_1.get_name() + ' ha formado una alianza con ' + player_2.get_name() + u' y ahora son ' + get_x_or_y_plural(
-            [player_1, player_2], 'amigos.', 'amigas.'),
-        'Aunque no se caigan muy bien, ' + player_1.get_name() + ' y ' + player_2.get_name() + u' han hecho un pacto y ahora son ' + get_x_or_y_plural(
-            [player_1, player_2], 'amigos.', 'amigas.'),
-        'Una bonita amistad ha surgido entre ' + player_1.get_name() + ' y ' + player_2.get_name() + u'. A partir de ahora se ayudarán mutuamente.',
-        player_1.get_name() + ' y ' + player_2.get_name() + u' iban tan ' + get_x_or_y_plural([player_1, player_2],
-                                                                                              'ciegos',
-                                                                                              'ciegas') + ' anoche que se habían olvidado de que eran ' + get_x_or_y_plural(
-            [player_1, player_2], 'amigos.', 'amigas.'),
-        'Usando sus encantos, ' + player_1.get_name() + ' ha conquistado a ' + player_2.get_name() + u' y ahora son ' + get_x_or_y_plural(
-            [player_1, player_2], 'amigos.', 'amigas.')
+        player_1.get_name() + u' y ' + player_2.get_name() + u' ahora están liados.',
+        player_1.get_name() + u' se ha liado con ' + player_2.get_name() + u'.',
+        player_1.get_name() + u' y ' + player_2.get_name() + u' ahora son algo más que ' + get_x_or_y_plural([player_1, player_2], 'amigos.', 'amigas.'),
+        player_1.get_name() + u' llevaba tiempo detrás de ' + player_2.get_name() + u' y por fin lo ha conseguido.',
+        player_1.get_name() + u' por fin se ha declarado a su crush, ' + player_2.get_name() + u', y le ha salido bien.',
+        player_1.get_name() + u' no ha podido resistirse a los encantos de ' + player_2.get_name() + u'.',
+        player_1.get_name() + u' ha conquistado a ' + player_2.get_name() + u'.',
+        player_1.get_name() + u' y ' + player_2.get_name() + u' creían que nadie les había visto irse juntos.',
+        player_1.get_name() + u' y ' + player_2.get_name() + u' hacen una pareja muy bonita.',
+        u'De tanto pelearse, ' + player_1.get_name() + u' y ' + player_2.get_name() + u' se han enamorado.',
     ])
 
 
@@ -860,9 +974,10 @@ def TRIBUTES_WERE_DIVIDED(place_name):
 
 def UNFRIEND():
     return random.choice([
-        'Ya no son ' + get_x_or_y_plural([player_1, player_2], 'amigos.', 'amigas.'),
-        'Han dejado de ser ' + get_x_or_y_plural([player_1, player_2], 'amigos.', 'amigas.'),
-        'Su amistad se ha roto.'
+        'Ya no están ' + get_x_or_y_plural([player_1, player_2], 'liados.', 'liadas.'),
+        'Ya no están a líos.',
+        'Ya no están juntos.',
+        'Se ve que lo suyo no funcionó.',
     ])
 
 

@@ -7,15 +7,15 @@ from services.simulation import write_tweet
 
 
 def battle():
-    alive_players = get_alive_players()
     player_1, player_2, place = get_two_players_in_random_place()
 
     if (player_1, player_2) == (None, None):
         return False
 
     kill_number = random.randint(0, 100)
+    current_percentage = int(len(100 * get_dead_players()) / len(player_list))
 
-    if are_friends(player_1, player_2) and kill_number < config.general.treason_threshold:
+    if are_friends(player_1, player_2) and (current_percentage < 95 or kill_number < config.general.treason_threshold):
         return False
 
     factor = 50 + 3 * player_1.get_power() - 3 * player_2.get_power()
@@ -25,19 +25,24 @@ def battle():
         factor = 0
 
     success = False
-    if factor - int((config.battle.probabilities.tie - 1) / 2) <= kill_number <= factor + int(
-            (config.battle.probabilities.tie - 1) / 2):
+    if factor - int((config.battle.probabilities.tie - 1) / 2) <= kill_number <= factor + int((config.battle.probabilities.tie - 1) / 2):
         if get_alive_players_count() == 2:
             return
         success = tie(player_1, player_2, factor, kill_number)
     elif factor - config.battle.probabilities.neutral < kill_number < factor:
-        success = run_away(player_1, player_2, factor, kill_number, False)
+        if player_1.friendship_boost or player_2.friendship_boost:
+            success = tie(player_1, player_2, factor, kill_number, inverse=False)
+        else:
+            success = run_away_or_hurt(player_1, player_2, factor, kill_number, inverse=False)
     elif factor < kill_number < factor + config.battle.probabilities.neutral:
-        success = run_away(player_1, player_2, factor, kill_number, True)
+        if player_1.friendship_boost or player_2.friendship_boost:
+            success = tie(player_1, player_2, factor, kill_number, inverse=True)
+        else:
+            success = run_away_or_hurt(player_1, player_2, factor, kill_number, inverse=True)
     elif kill_number < factor - config.battle.probabilities.neutral:
-        success = kill(player_1, player_2, place, factor, kill_number, False)
+        success = kill(player_1, player_2, place, factor, kill_number, inverse=False)
     elif kill_number > factor + config.battle.probabilities.neutral:
-        success = kill(player_1, player_2, place, factor, kill_number, True)
+        success = kill(player_1, player_2, place, factor, kill_number, inverse=True)
     return success
 
 
@@ -88,7 +93,6 @@ def kill(player_1, player_2, place, factor, action_number, inverse):
         tweet.new_item = best_killed_item
 
     place = killed.location
-    place.players.pop(place.players.index(killed))
     killed.is_alive = False
 
     write_tweet(tweet)
@@ -104,65 +108,97 @@ def kill(player_1, player_2, place, factor, action_number, inverse):
     return True
 
 
-def tie(player_1, player_2, factor, action_number):
-    if not are_friends(player_1, player_2):
-        befriend(player_1, player_2)
+def tie(player_1, player_2, factor, action_number, inverse=False):
+    attacker = player_1
+    attacked = player_2
+    if inverse:
+        attacker = player_2
+        attacked = player_1
+
+    if not are_friends(attacker, attacked):
+        befriend(attacker, attacked)
         tweet = Tweet()
         tweet.type = TweetType.somebody_tied_and_became_friend
-        tweet.place = player_1.location
-        tweet.player = player_1
-        tweet.player_2 = player_2
+        tweet.place = attacker.location
+        tweet.player = attacker
+        tweet.player_2 = attacked
         tweet.factor = factor
         tweet.action_number = action_number
         write_tweet(tweet)
     else:
         tweet = Tweet()
         tweet.type = TweetType.somebody_tied_and_was_friend
-        tweet.place = player_1.location
-        tweet.player = player_1
-        tweet.player_2 = player_2
+        tweet.place = attacker.location
+        tweet.player = attacker
+        tweet.player_2 = attacked
         tweet.factor = factor
         tweet.action_number = action_number
         write_tweet(tweet)
     return True
 
 
-def run_away(player_1, player_2, factor, action_number, inverse):
+def run_away_or_hurt(player_1, player_2, factor, action_number, inverse):
     tweet = Tweet()
 
-    candidates = [x for x in player_1.location.connection_list if not x.destroyed]
+    if (action_number % 2) == 0:
+        # Hurt
+        hurt_amount = random.randint(config.battle.hurt_min, config.battle.hurt_max)
+        injury = Item()
+        injury.type = ItemType.injury
+        injury.power = - hurt_amount
+        if inverse:
+            player_1.previous_power = player_1.get_power()
+            player_1.injury_list.append(injury)
+        else:
+            player_2.previous_power = player_2.get_power()
+            player_2.injury_list.append(injury)
 
-    if len(candidates) == 0:
-        return False
-
-    new_location = random.choice(candidates)
-
-    if inverse:
-        there_was_infection, infected_or_was_infected_by = who_infected_who(player_1, new_location.players)
-        move_player(player_1, new_location)
-        tweet.place = player_2.location
-        tweet.place_2 = player_1.location
-    else:
-        there_was_infection, infected_or_was_infected_by = who_infected_who(player_1, new_location.players)
-        move_player(player_2, new_location)
+        tweet.item = injury
+        tweet.type = TweetType.somebody_hurt
         tweet.place = player_1.location
-        tweet.place_2 = player_2.location
+        tweet.player = player_1
+        tweet.player_2 = player_2
+        tweet.factor = factor
+        tweet.action_number = action_number
+        tweet.inverse = inverse
+    else:
+        # Run away
+        candidates = [x for x in player_1.location.connection_list if not x.destroyed]
+        if len(candidates) == 0:
+            return False
 
-    tweet.type = TweetType.somebody_escaped
-    tweet.player = player_1
-    tweet.player_2 = player_2
-    tweet.factor = factor
-    tweet.action_number = action_number
-    tweet.inverse = inverse
-    if there_was_infection:
-        tweet.there_was_infection = True
-    tweet.infected_or_was_infected_by = infected_or_was_infected_by
+        new_location = random.choice(candidates)
+
+        if inverse:
+            there_was_infection, infected_or_was_infected_by = who_infected_who(player_1, [x for x in new_location.players if x.is_alive])
+            move_player(player_1, new_location)
+            tweet.place = player_2.location
+            tweet.place_2 = player_1.location
+        else:
+            there_was_infection, infected_or_was_infected_by = who_infected_who(player_1, [x for x in new_location.players if x.is_alive])
+            move_player(player_2, new_location)
+            tweet.place = player_1.location
+            tweet.place_2 = player_2.location
+
+        tweet.type = TweetType.somebody_escaped
+        tweet.player = player_1
+        tweet.player_2 = player_2
+        tweet.factor = factor
+        tweet.action_number = action_number
+        tweet.inverse = inverse
+        if there_was_infection:
+            tweet.there_was_infection = True
+        tweet.infected_or_was_infected_by = infected_or_was_infected_by
 
     if are_friends(player_1, player_2):
         unfriend(player_1, player_2)
         tweet.unfriend = True
 
     write_tweet(tweet)
+
+    player_1.previous_power = None
+    player_2.previous_power = None
+
     return True
 
 
@@ -236,21 +272,3 @@ def unfriend(player_1, player_2):
     if player_1 in player_2.friend_list:
         player_2.friend_list.remove(player_1)
 
-
-def kill_player(player):
-    place = player.location
-
-    for i, item in enumerate(player.item_list):
-        item.thrown_away_by = player
-
-    place.items = place.items + player.item_list
-    # place.players.pop(place.players.index(player))
-    # player.is_alive = False
-    player.power = 0
-    player.item_list = []
-    player.injury_list = []
-    player.powerup_list = []
-    player.infected = False
-    player.monster_immunity = False
-    player.injure_immunity = False
-    player.infection_immunity = False

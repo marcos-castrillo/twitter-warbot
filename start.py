@@ -20,9 +20,6 @@ previous_enabled_event_list = []
 
 def initialize():
     initialize_avatars()
-    if config.general.match_type == MatchType.districts:
-        for i, tweet in enumerate(introduction_tweet_list):
-            write_tweet(tweet)
     start_battle()
 
 
@@ -110,6 +107,10 @@ def do_something():
         completed = attract()
     elif chosen_action == "monster":
         completed = monster()
+    elif chosen_action == "zombie":
+        completed = zombie()
+    elif chosen_action == "doctor":
+        completed = doctor()
     elif chosen_action == "steal":
         completed = steal()
     elif chosen_action == "move":
@@ -136,17 +137,16 @@ def do_something():
 def end():
     global finished
     alive_players = get_alive_players()
-    if len(alive_players) == 1:
+    if len(alive_players) == 0:
+        sys.exit('Error: everything is destroyed')
+    elif len(alive_players) == 1:
         player = alive_players[0]
         tweet = Tweet()
         tweet.type = TweetType.winner
         tweet.place = player.location
         tweet.player = player
         write_tweet(tweet)
-    elif len(alive_players) == 0:
-        tweet = Tweet()
-        tweet.type = TweetType.nobody_won
-        write_tweet(tweet)
+
     finished = True
 
 

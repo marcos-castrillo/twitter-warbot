@@ -6,24 +6,27 @@ from data.config import config
 
 class Player(object):
     avatar_dir = None
-    name = ""
-    username = ""
-    kills = 0
-    is_alive = True
-    location = None
-    gender = None
     district = None
-    item_list = []
     friend_list = []
-    injury_list = []
-    powerup_list = []
-    monster_immunity = False
-    injure_immunity = False
-    infection_immunity = False
-    movement_boost = False
+    friendship_boost = False
+    gender = None
     infected = False
+    infection_immunity = False
+    injure_immunity = False
+    injury_list = []
+    is_alive = True
+    is_zombie = False
+    item_list = []
+    kills = 0
+    location = None
+    monster_immunity = False
+    movement_boost = False
+    name = ""
     power = 0
+    powerup_list = []
     previous_power = None
+    username = ""
+    zombie_immunity = False
 
     # Constructor
     def __init__(self):

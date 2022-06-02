@@ -25,7 +25,7 @@ def draw_player(drawing_player):
     show_icons = drawing_player.show_icons
     frame_color = drawing_player.frame_color
     if not frame_color:
-        frame_color = '#FFFFFF'
+        frame_color = 'rgb(0,0,0)'
     frame_width = config.map.frame_width_big if drawing_player.big_frame else config.map.frame_width
 
     draw = ImageDraw.Draw(image)
@@ -42,48 +42,74 @@ def draw_player(drawing_player):
                    outline=frame_color, width=frame_width)
 
     if not player.is_alive:
-        draw.text((coord_x - int(3 * avatar_size / 8), coord_y - int(9 * avatar_size / 12)), 'X',
-                  fill=config.map.colors.circle, font=ImageFont.truetype(font_path, size=avatar_size))
+        if player.is_zombie:
+            drawing_image = DrawingFile(image, coord_x + int(avatar_size / 2), coord_y + int(avatar_size / 2))
+            drawing_image.dimension = icon_size * 2
+            drawing_image.image_name = 'zombie'
+            paste_image(drawing_image)
+        else:
+            draw.text((coord_x - int(3 * avatar_size / 8), coord_y - int(9 * avatar_size / 12)), 'X',
+                      fill=config.map.colors.circle, font=ImageFont.truetype(font_path, size=avatar_size), stroke_width=2,
+                      stroke_fill='rgb(0,0,0)')
+
+    # Icons
+    delta_x = int(avatar_size / 2) - int(avatar_size / 10)
+    delta_y = int(avatar_size / 4)
+
+    if player.infected:
+        drawing_image = DrawingFile(image, coord_x + delta_x, coord_y + delta_y)
+        drawing_image.dimension = icon_size
+        drawing_image.image_name = 'infection'
+        paste_image(drawing_image)
+
+    if player.is_alive and ((config.general.match_type == MatchType.districts and get_alive_districts_count() <= 1) or \
+                            (config.general.match_type == MatchType.standard and get_alive_players_count() <= 1)):
+        drawing_image = DrawingFile(image, coord_x, coord_y - 2 * int(avatar_size / 4))
+        drawing_image.dimension = icon_size * 2
+        drawing_image.image_name = 'crown'
+        paste_image(drawing_image)
 
     if show_icons:
-        skull_icon_size = int(icon_size * 3 / 4)
-        skull_font_size = font_size if (len(str(player.kills)) == 1) else font_size - 3
-        skull_text_delta_x = int(avatar_size / 3) - 3 if (len(str(player.get_power())) == 1) else int(3 * avatar_size / 12) - 3
-        power_icon_size = icon_size
-        power_font_size = font_size if (len(str(player.get_power())) == 1) else font_size - 3
+        text_stroke_fill = drawing_player.frame_color
+        if frame_color == 'rgb(0,0,0)':
+            text_stroke_fill = 'rgb(0,0,0)'
+
+        icons_further = len(player.item_list) > 0
+        icons_y = coord_y - int(60 * avatar_size / 60) if icons_further else coord_y - int(47 * avatar_size / 60)
+        icons_text_y = coord_y - int(70 * avatar_size / 60) if icons_further else coord_y - int(55 * avatar_size / 60)
 
         if player.kills > 0:
-            draw.ellipse((coord_x - int(avatar_size / 3) - int(power_icon_size * 3 / 4),
-                          coord_y - int(avatar_size) - int(power_icon_size * 3 / 4),
-                          coord_x - int(avatar_size / 3) + int(power_icon_size * 3 / 4),
-                          coord_y - int(avatar_size) + int(power_icon_size * 3 / 4)),
-                         fill='#FFFFFF', outline=frame_color, width=2)
+            #draw.ellipse((coord_x - int(avatar_size / 3) - int(icon_size * 3 / 4),
+                          #coord_y - int(avatar_size) - int(icon_size * 3 / 4),
+                          #coord_x - int(avatar_size / 3) + int(icon_size * 3 / 4),
+                          #coord_y - int(avatar_size) + int(icon_size * 3 / 4)),
+                         #fill='#FFFFFF', outline=frame_color, width=2)
 
             draw = ImageDraw.Draw(image)
-            drawing_image = \
-                DrawingFile(image, coord_x - int(avatar_size / 3) - int(avatar_size/15), coord_y - avatar_size - int(avatar_size/15))
-            drawing_image.dimension = skull_icon_size
+            drawing_image = DrawingFile(image, coord_x - 6 * int(avatar_size/15), icons_y)
+            drawing_image.dimension = icon_size
             drawing_image.image_name = 'skull'
             paste_image(drawing_image)
 
-            draw.text((coord_x - skull_text_delta_x, coord_y - avatar_size - int(avatar_size/15)), str(player.kills),
-                      fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=skull_font_size))
+            draw.text((coord_x - 3 * int(avatar_size / 12), icons_text_y), str(player.kills),
+                      fill='rgb(255,255,255)', font=ImageFont.truetype(font_path, size=font_size), stroke_width=2,
+                      stroke_fill=text_stroke_fill)
 
         if player.get_power() != 0:
-            draw.ellipse((coord_x + int(avatar_size / 3) - int(power_icon_size * 3 / 4),
-                          coord_y - int(avatar_size) - int(power_icon_size * 3 / 4),
-                          coord_x + int(avatar_size / 3) + int(power_icon_size * 3 / 4),
-                          coord_y - int(avatar_size) + int(power_icon_size * 3 / 4)),
-                         fill='#FFFFFF', outline=frame_color, width=2)
+            #draw.ellipse((coord_x + int(avatar_size / 3) - int(icon_size * 3 / 4),
+                          #coord_y - int(avatar_size) - int(icon_size * 3 / 4),
+                          #coord_x + int(avatar_size / 3) + int(icon_size * 3 / 4),
+                          #coord_y - int(avatar_size) + int(icon_size * 3 / 4)),
+                         #fill='#FFFFFF', outline=frame_color, width=2)
 
-            drawing_image = \
-                DrawingFile(image, coord_x + int(avatar_size / 3) - int(avatar_size/15), coord_y - int(avatar_size) - int(avatar_size/15))
-            drawing_image.dimension = power_icon_size
+            drawing_image = DrawingFile(image, coord_x + 2*int(avatar_size/15), icons_y)
+            drawing_image.dimension = icon_size
             drawing_image.image_name = 'power'
             paste_image(drawing_image)
 
-            draw.text((coord_x + int(avatar_size / 3), coord_y - avatar_size - int(avatar_size/15)), str(player.get_power()),
-                      fill='rgb(0,0,0)', font=ImageFont.truetype(font_path, size=power_font_size))
+            draw.text((coord_x + 5*int(avatar_size / 24), icons_text_y), str(player.get_power()),
+                      fill='rgb(255,255,255)', font=ImageFont.truetype(font_path, size=font_size), stroke_width=2,
+                      stroke_fill=text_stroke_fill)
 
         if len(player.item_list) == 1:
             drawing_image = \
@@ -104,13 +130,10 @@ def draw_player(drawing_player):
             drawing_image.image_name = 'item_' + str(player.item_list[1].get_rarity())
             paste_image(drawing_image)
 
-        delta_x = int(avatar_size / 2) - int(avatar_size / 10)
-        delta_y = int(avatar_size / 4)
-
-        if player.infected:
-            drawing_image = DrawingFile(image, coord_x + delta_x, coord_y + delta_y)
+        if player.friendship_boost:
+            drawing_image = DrawingFile(image, coord_x - delta_x, coord_y + 2 * delta_y)
             drawing_image.dimension = icon_size
-            drawing_image.image_name = 'infection'
+            drawing_image.image_name = 'friendship_boost'
             paste_image(drawing_image)
 
         if player.monster_immunity:
@@ -120,13 +143,13 @@ def draw_player(drawing_player):
             paste_image(drawing_image)
 
         if player.injure_immunity:
-            drawing_image = DrawingFile(image, coord_x - delta_x, coord_y + delta_y)
+            drawing_image = DrawingFile(image, coord_x - delta_x, coord_y + int(0.5 * delta_y))
             drawing_image.dimension = icon_size
             drawing_image.image_name = 'injure_immunity'
             paste_image(drawing_image)
 
         if player.infection_immunity:
-            drawing_image = DrawingFile(image, coord_x + delta_x, coord_y + delta_y)
+            drawing_image = DrawingFile(image, coord_x + delta_x, coord_y + int(0.5 * delta_y))
             drawing_image.dimension = icon_size
             drawing_image.image_name = 'infection_immunity'
             paste_image(drawing_image)
@@ -137,13 +160,11 @@ def draw_player(drawing_player):
             drawing_image.image_name = 'movement_boost'
             paste_image(drawing_image)
 
-        if player.is_alive and ((config.general.match_type == MatchType.districts and get_alive_districts_count() <= 1) or\
-                (config.general.match_type == MatchType.standard and get_alive_players_count() <= 1)):
-            drawing_image = DrawingFile(image, coord_x, coord_y - 2 * int(avatar_size / 4))
-            drawing_image.dimension = icon_size * 2
-            drawing_image.image_name = 'crown'
+        if player.zombie_immunity:
+            drawing_image = DrawingFile(image, coord_x + delta_x, coord_y + 2 * delta_y)
+            drawing_image.dimension = icon_size
+            drawing_image.image_name = 'zombie_immunity'
             paste_image(drawing_image)
-
 
 def draw_multiple_players(drawing_players):
     image = drawing_players.image
@@ -162,9 +183,9 @@ def draw_multiple_players(drawing_players):
         return
 
     if drawing_players.adjust_size and any_players_around(players[0].location):
-        delta_y = int(delta_y / 2)
-        delta_x = int(delta_x / 2)
-        avatar_size = int(avatar_size / 2)
+        delta_y = int(delta_y-5)
+        delta_x = int(delta_x-5)
+        avatar_size = int(avatar_size-10)
     if 0 < config.map.max_players_in_line < players_length and not single_line:
         players_length = config.map.max_players_in_line
     if players_length % 2 == 0:
@@ -221,16 +242,14 @@ def draw_items(drawing_items):
         while item_count > 0:
             if item_count <= 3:
                 y = coord_y - delta_y
-                drawing_image =\
-                    DrawingFile(image, coord_x - config.map.icon_size * 2 + item_count * config.map.icon_size, y)
+                drawing_image = DrawingFile(image, coord_x - config.map.icon_size * 2 + item_count * config.map.icon_size, y)
                 drawing_image.dimension = config.map.icon_size
                 drawing_image.image_name = 'item'
                 drawing_image.gray_style = gray_style
                 paste_image(drawing_image)
             else:
                 y = coord_y - delta_y - 10
-                drawing_image = \
-                    DrawingFile(image, coord_x - config.map.icon_size * 2 + (item_count - 3) * config.map.icon_size, y)
+                drawing_image = DrawingFile(image, coord_x - config.map.icon_size * 2 + (item_count - 3) * config.map.icon_size, y)
                 drawing_image.dimension = config.map.icon_size
                 drawing_image.image_name = 'item'
                 drawing_image.gray_style = gray_style
@@ -238,7 +257,7 @@ def draw_items(drawing_items):
             item_count = item_count - 1
 
 
-def draw_map_places(image, main_place=None):
+def draw_map_places(image, main_place=None, map_preview=False):
     for i, p in enumerate(place_list):
         gray_style = main_place is not None and p.name != main_place.name
         color = config.map.colors.text if not gray_style else config.map.colors.text_subtle
@@ -246,14 +265,14 @@ def draw_map_places(image, main_place=None):
         if p.destroyed:
             color = config.map.colors.text_destroyed
             icon_name = 'destroyed'
-        drawing_text = DrawingText(image, p.coord_x + int(config.map.avatar_size / 4) + 4,
+        drawing_text = DrawingText(image, p.coord_x + int(config.map.avatar_size / 4),
                                    p.coord_y - int(config.map.line_height / 2))
         drawing_text.color = color
         drawing_text.font_size = config.map.font_size
         drawing_text.max_width = config.map.avatar_size * 2
         drawing_text.line_height = config.map.line_height
         drawing_text.text = p.name
-        drawing_text.center_horizontally = True
+        drawing_text.center_horizontally = False
         draw_wrapped_text(drawing_text)
 
         drawing_image = DrawingFile(image, p.coord_x, p.coord_y)
@@ -262,25 +281,39 @@ def draw_map_places(image, main_place=None):
         drawing_image.gray_style = gray_style
         paste_image(drawing_image)
 
-        item_y = p.coord_y if len(p.players) == 0 else p.coord_y - int(config.map.avatar_size / 3)
-        drawing_items = DrawingItems(image, p.coord_x, item_y)
-        drawing_items.item_count = len(p.items)
-        drawing_items.offset_y = int(config.map.icon_size / 2)
-        drawing_items.gray_style = gray_style
-        draw_items(drawing_items)
+        if not map_preview:
+            items_further = main_place is None and len([x for x in p.players if x.is_alive]) > 0
+            item_y = p.coord_y - int(config.map.avatar_size / 3) if items_further else p.coord_y
+            drawing_items = DrawingItems(image, p.coord_x, item_y)
+            drawing_items.item_count = len(p.items)
+            drawing_items.offset_y = int(config.map.icon_size / 2)
+            drawing_items.gray_style = gray_style
+            draw_items(drawing_items)
 
-        if p.trap_by is not None:
-            drawing_image = DrawingFile(image, p.coord_x, p.coord_y + int(config.map.icon_size / 2))
-            drawing_image.dimension = config.map.icon_size
-            drawing_image.image_name = 'trap'
-            drawing_image.gray_style = gray_style
-            paste_image(drawing_image)
-        if p.monster:
-            drawing_image = DrawingFile(image, p.coord_x, p.coord_y - int(config.map.icon_size / 4))
-            drawing_image.dimension = config.map.icon_size
-            drawing_image.image_name = 'monster'
-            drawing_image.gray_style = gray_style
-            paste_image(drawing_image)
+            if p.trap_by is not None:
+                drawing_image = DrawingFile(image, p.coord_x, p.coord_y + int(config.map.icon_size / 2))
+                drawing_image.dimension = config.map.icon_size
+                drawing_image.image_name = 'trap'
+                drawing_image.gray_style = gray_style
+                paste_image(drawing_image)
+            if p.monster:
+                drawing_image = DrawingFile(image, p.coord_x, p.coord_y - int(config.map.icon_size / 4))
+                drawing_image.dimension = config.map.icon_size
+                drawing_image.image_name = 'monster'
+                drawing_image.gray_style = gray_style
+                paste_image(drawing_image)
+            if p.doctor:
+                drawing_image = DrawingFile(image, p.coord_x, p.coord_y - int(config.map.icon_size / 2))
+                drawing_image.dimension = config.map.icon_size
+                drawing_image.image_name = 'doctor'
+                drawing_image.gray_style = gray_style
+                paste_image(drawing_image)
+            if p.zombie:
+                drawing_image = DrawingFile(image, p.coord_x, p.coord_y + int(config.map.icon_size / 2))
+                drawing_image.dimension = config.map.icon_size
+                drawing_image.image_name = 'zombie'
+                drawing_image.gray_style = gray_style
+                paste_image(drawing_image)
 
 
 def draw_wrapped_text(drawing_text):
@@ -313,7 +346,7 @@ def draw_wrapped_text(drawing_text):
 
         x = coord_x + (max_width - w) / 2 if center_horizontally else coord_x
         y = y + (int(max_height/len(lines)) - h) / 2 if max_height and center_vertically else y
-        draw.text((x, y), line, fill=text_color, font=font)
+        draw.text((x, y), line, fill='rgb(255,255,255)', font=font, stroke_width=1, stroke_fill=text_color)
 
 
 def paste_image(drawing_image):
@@ -336,7 +369,7 @@ def paste_image(drawing_image):
     image_to_paste = Image.open(os.path.join(current_dir, image_dir + '.png'))
     image_to_paste.thumbnail([dimension, dimension])
     side = int(dimension / 2)
-    if gray_style:
-        image_to_paste = image_to_paste.convert('L')
-        image_to_paste.putalpha(128)
+    #if gray_style:
+        #image_to_paste = image_to_paste.convert('L')
+        #image_to_paste.putalpha(64)
     image.paste(image_to_paste, (x - side, y - side, x + side, y + side), image_to_paste.convert('RGBA'))

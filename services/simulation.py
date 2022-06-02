@@ -45,7 +45,7 @@ def initialize():
 
 def write_tweet(tweet):
     global line_number
-    if output_dir is None:
+    if tweet.type != TweetType.introduce_players and output_dir is None:
         initialize()
 
     if tweet.type == TweetType.destroyed_district:
@@ -54,7 +54,8 @@ def write_tweet(tweet):
         with open(os.path.join(output_dir, 'events.txt'), "a+") as file:
             file.write(str(line_number) + '\n')
 
-    write_line(get_message(tweet))
+    if tweet.type != TweetType.introduce_players:
+        write_line(get_message(tweet))
     draw_image(tweet)
 
     line_number = line_number + 1
@@ -99,7 +100,11 @@ def draw_image(tweet):
             ranking_image = get_ranking_image(blank_img, tweet)
             ranking_image.save(output_dir + '/' + str(line_number) + '_ranking.png')
 
-    elif tweet.type in [TweetType.introduce_players, TweetType.winner, TweetType.winner_districts]:
+    elif tweet.type in [TweetType.introduce_players]:
+        output_dir_preview = os.path.join(current_dir, '../simulations', 'preview')
+        main_image = get_main_image(raw_map_img_2, tweet, map_preview=True)
+        main_image.save(output_dir_preview + '/' + str(line_number) + '.png')
+    elif tweet.type in [TweetType.winner, TweetType.winner_districts]:
         main_image = get_main_image(raw_map_img_2, tweet)
         main_image.save(output_dir + '/' + str(line_number) + '.png')
     elif tweet.type == TweetType.destroyed_district:
@@ -112,10 +117,9 @@ def draw_image(tweet):
         main_image.save(output_dir + '/' + str(line_number) + '.png')
         map_image.save(output_dir + '/' + str(line_number) + '_map.png')
 
-        if tweet.type in [TweetType.monster_killed, TweetType.trapped, TweetType.somebody_died_of_infection,
+        if tweet.type in [TweetType.monster_took, TweetType.trapped, TweetType.somebody_died_of_infection,
                           TweetType.somebody_killed, TweetType.somebody_revived, TweetType.somebody_suicided,
-                          TweetType.somebody_was_infected,
-                          TweetType.somebody_got_special]:
+                          TweetType.somebody_was_infected, TweetType.somebody_got_special]:
             ranking_image = get_ranking_image(blank_img, tweet)
             ranking_image.save(output_dir + '/' + str(line_number) + '_ranking.png')
 

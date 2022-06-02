@@ -34,27 +34,27 @@ def suicide():
 
 
 def revive():
-    dead_players = get_dead_players()
-    if len(dead_players) > 0:
+    dead_players = [x for x in get_dead_players() if not x.is_zombie]
+    if len(dead_players) > 0 and len(get_alive_players()) > 5:
         player = random.choice(dead_players)
         player.is_alive = True
         rebuild_district = config.general.match_type == MatchType.districts and player.district.destroyed
 
         if rebuild_district:
-            place = player.district
-            place.destroyed = False
-        else:
-            place = player.location
+            player.district.destroyed = False
+
+        place = player.location
+        if place.destroyed:
+            if config.general.match_type == MatchType.districts:
+                place = player.district
             while place.destroyed:
                 place = random.choice(place_list)
+            move_player(player, place)
 
         tweet = Tweet()
-        player.location = place
-        for i, pl in enumerate(place.players):
-            if pl.infected:
-                player.infected = True
-                tweet.there_was_infection = True
-        place.players.append(player)
+        if player.infected and len([x for x in place.players if x.is_alive]) > 1:
+            tweet.there_was_infection = True
+
         tweet.type = TweetType.somebody_revived
         tweet.place = player.location
         tweet.player = player
@@ -65,22 +65,3 @@ def revive():
         return True
     else:
         suicide()
-
-
-def next_entrance():
-    alive_players = get_alive_players()
-    players_in_place = [x for x in alive_players if x.location is not None]
-    players_out = [x for x in alive_players if x.location is None]
-    if len(players_out) == 0:
-        return False
-    candidate = random.choice(players_out)
-    move_player(candidate, place_list[0])
-
-    tweet = Tweet()
-    tweet.type = TweetType.next_entrance
-    tweet.place = candidate.location
-    tweet.player = candidate
-    tweet.player_list = players_in_place
-    write_tweet(tweet)
-
-    return True

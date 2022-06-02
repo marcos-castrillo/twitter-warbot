@@ -7,7 +7,7 @@
       "probability": 0
     },
     {
-      "enable_from": 0,
+      "enable_from": 20,
       "is_percentage": false,
       "name": "battle",
       "probability": 43
@@ -19,31 +19,31 @@
       "probability": 10
     },
     {
-      "enable_from": 0,
+      "enable_from": 5,
       "is_percentage": false,
       "name": "move",
-      "probability": 25
+      "probability": 22
     },
     {
-      "enable_from": 0,
+      "enable_from": 15,
       "is_percentage": false,
       "name": "steal",
       "probability": 5
     },
     {
-      "enable_from": 0,
+      "enable_from": 10,
       "is_percentage": true,
       "name": "infect",
-      "probability": 5
+      "probability": 3
     },
     {
-      "enable_from": 0,
+      "enable_from": 3,
       "is_percentage": true,
       "name": "trap",
       "probability": 3
     },
     {
-      "enable_from": 0,
+      "enable_from": 7,
       "is_percentage": true,
       "name": "attract",
       "probability": 3
@@ -52,19 +52,31 @@
       "enable_from": 0,
       "is_percentage": true,
       "name": "suicide",
-      "probability": 1
+      "probability": 0
     },
     {
-      "enable_from": 0,
+      "enable_from": 15,
       "is_percentage": true,
       "name": "monster",
       "probability": 3
     },
     {
-      "enable_from": 0,
+      "enable_from": 22,
+      "is_percentage": true,
+      "name": "zombie",
+      "probability": 3
+    },
+    {
+      "enable_from": 16,
+      "is_percentage": true,
+      "name": "doctor",
+      "probability": 4
+    },
+    {
+      "enable_from": 5,
       "is_percentage": true,
       "name": "revive",
-      "probability": 2
+      "probability": 1
     }
   ],
   "battle": {
@@ -76,6 +88,8 @@
       "tie_player_1": "rgb(192,0,64)",
       "tie_player_2": "rgb(64,0,192)"
     },
+    "hurt_min": 2,
+    "hurt_max": 7,
     "probabilities": {
       "neutral": 10,
       "tie": 3
@@ -88,24 +102,24 @@
       "name": "treason"
     },
     {
-      "enable_from": 9999,
+      "enable_from": 25,
       "is_percentage": true,
       "name": "airdrop"
     },
     {
       "duration": 10,
-      "enable_from": 9999,
-      "is_percentage": false,
+      "enable_from": 8,
+      "is_percentage": true,
       "name": "abduction_1"
     },
     {
-      "enable_from": 9999,
+      "enable_from": 18,
       "is_percentage": true,
       "name": "abduction_2"
     },
     {
       "duration": 10,
-      "enable_from": 9999,
+      "enable_from": 30,
       "is_percentage": true,
       "name": "peace"
     }
@@ -116,30 +130,31 @@
   },
   "general": {
     "language": "es",
-    "run_name": "example",
+    "run_name": "es_paramo",
     "match_type": 2,
     "max_attracted_players": 5,
     "max_tributes_per_district": 0,
     "mention_users": true,
     "redistribute_tributes": false,
     "treason_threshold": 90,
-    "infection_die_threshold": 20
+    "infection_die_threshold": 20,
+    "destroy_initial_empty_places": true
   },
   "items": {
-    "min_items_in_place": 0,
+    "min_items_in_place": 1,
     "max_items_in_place": 2,
     "min_power_injury": 1,
-    "max_power_injury": 4,
+    "max_power_injury": 2,
     "min_power_powerup": 1,
-    "max_power_powerup": 5,
+    "max_power_powerup": 4,
     "min_power_weapon": 1,
     "max_power_weapon": 7,
     "max_value_rarity_1": 3,
     "max_value_rarity_2": 5,
     "probabilities": {
-      "rarity_1": 65,
-      "rarity_2": 30,
-      "rarity_3": 5
+      "rarity_1": 50,
+      "rarity_2": 35,
+      "rarity_3": 15
     }
   },
   "map": {
@@ -163,10 +178,7 @@
     "players_in_single_line": false,
     "show_circle": true,
     "short_distance": true,
-    "watermark_coordinates": [
-      1320,
-      1272
-    ],
+    "watermark_coordinates": [1320, 1272],
     "width_between_players": 24,
     "width_between_players_battle": 30,
     "zoomed_avatar_size": 200,

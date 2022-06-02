@@ -59,6 +59,8 @@ def pick_weapon(player, weapon):
 
 
 def pick_special(player, item):
+    if item.special == SpecialType.friendship_boost:
+        player.friendship_boost = True
     if item.special == SpecialType.injure_immunity:
         player.injure_immunity = True
     if item.special == SpecialType.monster_immunity:
@@ -67,6 +69,8 @@ def pick_special(player, item):
         player.infection_immunity = True
     if item.special == SpecialType.movement_boost:
         player.movement_boost = True
+    if item.special == SpecialType.zombie_immunity:
+        player.zombie_immunity = True
 
     if config.general.match_type == MatchType.districts:
         others_in_district = [x for x in get_alive_players() if
@@ -81,6 +85,8 @@ def pick_special(player, item):
                     pl.infection_immunity = player.infection_immunity
                 if item.special == SpecialType.movement_boost:
                     pl.movement_boost = player.movement_boost
+                if item.special == SpecialType.zombie_immunity:
+                    pl.zombie_immunity = player.zombie_immunity
 
     player.location.items.pop(player.location.items.index(item))
     tweet = Tweet()
@@ -109,10 +115,9 @@ def infect():
         player = random.choice(healthy_players)
         if not player.infection_immunity:
             player.infected = True
-        affected = [x for x in player.location.players if x.get_name() != player.get_name()]
+        affected = [x for x in player.location.players if x.is_alive and not x.infection_immunity and x.get_name() != player.get_name()]
         for i, p in enumerate(affected):
-            if not p.infection_immunity:
-                p.infected = True
+            p.infected = True
 
         tweet = Tweet()
         tweet.type = TweetType.somebody_was_infected
@@ -131,7 +136,7 @@ def infect():
             tweet.place = player.location
             tweet.player = player
             write_tweet(tweet)
-        elif len(alive_players) > 5:
+        elif len(alive_players) > 10:
             kill_player(player)
             tweet = Tweet()
             tweet.type = TweetType.somebody_died_of_infection
