@@ -100,7 +100,7 @@ def lambda_handler(event, context):
     tweet_line_from_file(simulation_file, next_line, image_path_list)
     # Rename next_line and next_image files
     rename_file(str(next_line - 1) + line_filename_suffix, str(next_line) + line_filename_suffix)
-    rename_file(str(next_line - 1) + image_filename_suffix, str(next_line) + image_filename_suffix)
+    rename_file(str(next_image - 1) + image_filename_suffix, str(next_image) + image_filename_suffix)
     # Check if there's a follow-up (bis) tweet
     main_image_path = get_file_path(str(next_image) + img_bis_suffix + img_file_extension)
     if main_image_path != None:
