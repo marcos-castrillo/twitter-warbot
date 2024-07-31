@@ -5,6 +5,7 @@ from services.simulation import write_tweet
 from services.store import introduction_tweet_list
 
 initialize_avatars()
+print('Preparing preview...')
 raw_map_img = Image.open(os.path.join(current_dir, config.file_paths.map, config.general.run_name + '.png'))
 map_image = get_map_image_preview(raw_map_img)
 if not os.path.exists('./simulations'):

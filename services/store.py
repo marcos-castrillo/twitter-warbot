@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import random
+import sys
 from models.item import Item
 from models.place import Place
 from models.tweet import Tweet
@@ -51,12 +52,12 @@ def initialize_item_list():
             item.name = special_name
             item.special = SpecialType.injure_immunity
             item_list.append(item)
-        for j, special_name in enumerate(special.infection_immunity_list):
-            item = Item()
-            item.type = ItemType.special
-            item.name = special_name
-            item.special = SpecialType.infection_immunity
-            item_list.append(item)
+        # for j, special_name in enumerate(special.infection_immunity_list):
+        #     item = Item()
+        #     item.type = ItemType.special
+        #     item.name = special_name
+        #     item.special = SpecialType.infection_immunity
+        #     item_list.append(item)
         for j, special_name in enumerate(special.movement_boost_list):
             item = Item()
             item.type = ItemType.special
@@ -199,14 +200,22 @@ def initialize_place_and_player_list():
             player.district = place
 
             # initial items
-            initial_items = []
+            initial_weapons = []
             if hasattr(raw_player, 'weapon_list'):
                 for weapon_name in raw_player.weapon_list:
-                    reserved_item = [x for x in item_list if x.name == weapon_name]
+                    reserved_weapon = next(x for x in item_list if x.name == weapon_name)
 
-                    initial_items.append(reserved_item[0])
-                    item_list.pop(item_list.index(reserved_item[0]))
-            player.item_list = initial_items
+                    initial_weapons.append(reserved_weapon)
+                    item_list.pop(item_list.index(reserved_weapon))
+            player.item_list = initial_weapons
+
+            initial_powerups = []
+            if hasattr(raw_player, 'powerup_list'):
+                for powerup_name in raw_player.powerup_list:
+                    reserved_powerup = next(x for x in powerup_list if x.name == powerup_name)
+                    initial_powerups.append(reserved_powerup)
+                    powerup_list.pop(powerup_list.index(reserved_powerup))
+            player.powerup_list = initial_powerups
 
             player_list.append(player)
             if config.general.match_type == MatchType.districts:
@@ -261,6 +270,13 @@ def initialize_place_and_player_list():
         new_place = Place(raw_place.name, road_connection_list, raw_place.coordinates, items,
                           district_display_name, water_connection_list)
         place_list.append(new_place)
+        # Print player list
+        # if (len(raw_place.player_list) > 0):
+        #     print(raw_place.name)
+        #     a = []
+        #     for i, raw_player in enumerate(raw_place.player_list):
+        #         a.append(raw_player.name)
+        #     print(a)
         fill_player_list(raw_place, new_place)
         if config.general.destroy_initial_empty_places and len(raw_place.player_list) == 0:
             new_place.destroyed = True
@@ -504,6 +520,7 @@ def destroy_district_if_needed(district):
     district.zombie = False
     district.trap_by = None
     district.items = []
+    district.doctor = None
 
     tributes_list = district.tributes
     escaped_list = []
@@ -656,11 +673,11 @@ def initialize():
     global hour_count
     hour_count = 0
     initialize_item_list()
-    initialize_place_and_player_list()
     initialize_powerup_list()
+    initialize_injury_list()
+    initialize_place_and_player_list()
     if config.general.match_type == MatchType.districts:
         initialize_tributes()
-    initialize_injury_list()
     update_action_event_list()
 
 

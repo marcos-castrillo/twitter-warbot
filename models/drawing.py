@@ -16,6 +16,7 @@ class DrawingBase(object):
 
 class DrawingPlayer(DrawingBase):
     player = None
+    player_2 = None
     avatar_size = None
     icon_size = None
     font_size = None

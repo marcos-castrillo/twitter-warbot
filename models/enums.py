@@ -60,6 +60,7 @@ class TweetType(object):
     somebody_suicided = 20
     somebody_moved = 21
     destroyed = 22
+    somebody_moved_together_with = 23
     trap = 24
     trapped = 25
     trap_dodged = 26
