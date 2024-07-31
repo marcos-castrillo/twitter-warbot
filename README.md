@@ -8,7 +8,7 @@
 
 # Dependencies
 - pip
-- python-twitter
+- tweepy
 - pillow
 - emoji
 

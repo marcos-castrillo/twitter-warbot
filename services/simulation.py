@@ -88,8 +88,8 @@ def draw_image(tweet):
     ranking_image = None
 
     if tweet.is_event:
-        if tweet.type == 'start':
-            return
+        # if tweet.type == 'start':
+            # return
 
         main_image = Image.open(os.path.join(current_dir, config.file_paths.icons, 'events/' + tweet.type + '.png'))
         main_image.save(output_dir + '/' + str(line_number) + '.png')

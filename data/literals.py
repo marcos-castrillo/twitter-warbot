@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from models.enums import *
 from data.config import config
+from models.item import Item
 from services.store import are_friends, get_alive_players, place_list, get_dead_players
 import emoji
 
@@ -40,6 +41,8 @@ def get_message(tweet):
         message = insert_emoji('sweat_smile') + somebody_suicided(tweet)
     elif tweet.type == TweetType.somebody_moved:
         message = insert_emoji('shoe') + somebody_moved(tweet)
+    elif tweet.type == TweetType.somebody_moved_together_with:
+        message = insert_emoji('shoe') + insert_emoji('shoe') + somebody_moved_together_with(tweet)
     elif tweet.type == TweetType.destroyed:
         message = insert_emoji('boom') + destroyed(tweet)
     elif tweet.type == TweetType.destroyed_district:
@@ -73,7 +76,7 @@ def get_message(tweet):
     elif tweet.type == TweetType.doctor_moved:
         message = insert_emoji('man_health_worker') + DOCTOR_MOVED(tweet)
     elif tweet.type == TweetType.doctor_cured:
-        message = insert_emoji('man_health_worker') + DOCTOR_CURED(tweet)
+        message = insert_emoji('man_health_worker') + doctor_cured(tweet)
     elif tweet.type == TweetType.zombie_appeared:
         message = insert_emoji('zombie') + ZOMBIE_APPEARED(tweet)
     elif tweet.type == TweetType.zombie_moved:
@@ -87,8 +90,11 @@ def get_message(tweet):
 
     if tweet.is_event:
         if tweet.type == 'start':
-            random_player = random.choice(get_alive_players()).get_name()
-            message = config.literals.start_1 + random_player + config.literals.start_11
+            message = u' '.join([
+                tweet.player.get_name(), config.literals.start_1,
+                tweet.player_2.get_name() + '.' + config.literals.start_11,
+                tweet.item.name + '.', has_now(tweet.player, tweet.item)
+            ])
         elif tweet.type == 'start_2':
             message = config.literals.start_2
         elif tweet.type == 'move':
@@ -115,8 +121,7 @@ def get_message(tweet):
                             break
                         elif player.is_alive:
                             two_random_players.append(player)
-            message = config.literals.attract_1 + two_random_players[0].get_name() + config.literals.attract_11 \
-                      + two_random_players[1].get_name() + config.literals.attract_12
+            message = two_random_players[0].get_name() + config.literals.attract_1 + two_random_players[1].get_name() + config.literals.attract_11
         elif tweet.type == 'monster':
             random_player = random.choice(get_alive_players()).get_name()
             message = config.literals.monster_1 + random_player + config.literals.monster_11
@@ -403,6 +408,22 @@ def somebody_moved(tweet):
     return u' '.join(
         (tweet.player.get_name(), action, tweet.place_2.name, TO, tweet.place.name + '.' + item + infection))
 
+def somebody_moved_together_with(tweet):
+    if any(x for x in tweet.place_2.water_connection_list if x.name == tweet.place.name):
+        action = MOVE_ACTION_WATER_PL()
+    else:
+        action = MOVE_ACTION_ROAD_PL()
+
+    infection = u''
+    if tweet.there_was_infection:
+        other_players = [x for x in tweet.place.players if x.get_name() != tweet.player.get_name() and x.is_alive]
+        if tweet.infected_or_was_infected_by:
+            infection = LINEBREAK() + INFECTED_OTHERS_PL(tweet, other_players)
+        else:
+            infection = LINEBREAK() + SOMEBODY_INFECTED(tweet, other_players)
+
+    return u' '.join(
+        (tweet.player.get_name(), 'y', tweet.player_2.get_name(), action, tweet.place_2.name, TO, tweet.place.name + '.' + infection))
 
 def destroyed(tweet):
     place = tweet.place
@@ -557,6 +578,12 @@ def attraction(tweet):
         infection = LINEBREAK() + INFECTED_EVERYBODY()
     return u' '.join([location, players + infection])
 
+def doctor_cured(tweet):
+    player = tweet.player
+    amount_cured = Item()
+    amount_cured.power = tweet.factor
+    
+    return u' '.join((DOCTOR_CURED(tweet), has_now(player, amount_cured)))
 
 def has_now(player, event, previous_event=None, short=False):
     previous_power = 0
@@ -577,4 +604,4 @@ def has_now_short(player, event):
 
 
 def insert_emoji(emoji_name):
-    return emoji.emojize(':' + emoji_name + ':', use_aliases=True) + ' '
+    return emoji.emojize(':' + emoji_name + ':', language='alias') + ' '

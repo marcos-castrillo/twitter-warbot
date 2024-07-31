@@ -63,7 +63,7 @@ class TestConfig(unittest.TestCase):
         for i, place in enumerate(self.place_list):
             self.assertEqual(len(place.coordinates), 2, place.name + u' has no coordinates.')
 
-    # Returns True if all the assigned weapons are in weapon_list.
+    # Returns True if all the assigned weapons are in weapon list.
     def test_assigned_weapon_list(self):
         all_suffixes = []
         for k, weapon_group in enumerate(config.weapon_list):
@@ -73,6 +73,17 @@ class TestConfig(unittest.TestCase):
             if hasattr(player, 'weapon_list'):
                 for j, item in enumerate(player.weapon_list):
                     self.assertTrue(any(i for i in all_suffixes if i == item), item + u' not in weapon_list.')
+
+    # Returns True if all the assigned powerups are in powerups list.
+    def test_assigned_powerup_list(self):
+        all_suffixes = []
+        for k, powerup_group in enumerate(config.powerup_list):
+            all_suffixes = all_suffixes + powerup_group.suffix_list
+
+        for i, player in enumerate(self.player_list):
+            if hasattr(player, 'powerup_list'):
+                for j, item in enumerate(player.powerup_list):
+                    self.assertTrue(any(i for i in all_suffixes if i == item), item + u' not in powerup_list.')
 
     # Returns True the number of participants is higher than 1.
     def test_min_number_participants(self):

@@ -32,7 +32,7 @@ def get_main_image(main_image, main_tweet, map_preview=False):
     draw = ImageDraw.Draw(image)
 
     if tweet.type in [TweetType.winner, TweetType.somebody_got_special, TweetType.somebody_found_item,
-                      TweetType.somebody_replaced_item, TweetType.somebody_revived, TweetType.somebody_moved,
+                      TweetType.somebody_replaced_item, TweetType.somebody_revived, TweetType.somebody_moved, TweetType.somebody_moved_together_with,
                       TweetType.trap, TweetType.trap_dodged, TweetType.somebody_was_infected,
                       TweetType.somebody_suicided, TweetType.monster_took, TweetType.zombie_killed, TweetType.zombie_was_defeated,
                       TweetType.trapped, TweetType.somebody_died_of_infection, TweetType.somebody_got_cured, TweetType.doctor_cured]:
@@ -43,6 +43,8 @@ def get_main_image(main_image, main_tweet, map_preview=False):
         drawing_player.avatar_size = config.map.zoomed_avatar_size
         drawing_player.icon_size = config.map.zoomed_icon_size
         drawing_player.font_size = config.map.font_size_icons
+        if tweet.type == TweetType.somebody_moved_together_with:
+            drawing_player.player_2 = tweet.player_2
         draw_player(drawing_player)
         if tweet.type == TweetType.winner:
             drawing_image = DrawingFile(image, place_x, place_y - int(2*config.map.zoomed_avatar_size / 3))

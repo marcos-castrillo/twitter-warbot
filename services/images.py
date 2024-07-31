@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import sys
 from PIL import Image, ImageDraw, ImageFont
 
 from data.config import config
@@ -19,6 +20,7 @@ def draw_player(drawing_player):
     coord_x = drawing_player.coord_x
     coord_y = drawing_player.coord_y
     player = drawing_player.player
+    player_2 = drawing_player.player_2
     avatar_size = drawing_player.avatar_size
     icon_size = drawing_player.icon_size
     font_size = drawing_player.font_size
@@ -29,6 +31,22 @@ def draw_player(drawing_player):
     frame_width = config.map.frame_width_big if drawing_player.big_frame else config.map.frame_width
 
     draw = ImageDraw.Draw(image)
+
+    if drawing_player.player_2 is not None:
+        coord_x_2 = coord_x - int(2 * avatar_size / 3)
+        coord_y_2 = coord_y - int(2 * avatar_size / 3)
+        drawing_image = DrawingFile(image, coord_x_2, coord_y_2)
+        drawing_image.dimension = avatar_size
+        drawing_image.image_name = ''
+        drawing_image.image_dir = player_2.avatar_dir
+        paste_image(drawing_image)
+        draw.rectangle((coord_x_2 - int(avatar_size / 2) - 1,
+                        coord_y_2 - int(avatar_size / 2) - 1,
+                        coord_x_2 + int(avatar_size / 2),
+                        coord_y_2 + int(avatar_size / 2)),
+                    outline=frame_color, width=frame_width)
+
+    
     drawing_image = DrawingFile(image, coord_x, coord_y)
     drawing_image.dimension = avatar_size
     drawing_image.image_name = ''
@@ -40,6 +58,7 @@ def draw_player(drawing_player):
                     coord_x + int(avatar_size / 2),
                     coord_y + int(avatar_size / 2)),
                    outline=frame_color, width=frame_width)
+
 
     if not player.is_alive:
         if player.is_zombie:
@@ -366,7 +385,13 @@ def paste_image(drawing_image):
     else:
         image_dir = '../' + image_dir
 
-    image_to_paste = Image.open(os.path.join(current_dir, image_dir + '.png'))
+    if os.path.exists(os.path.join(current_dir, image_dir + '.png')):
+        image_to_paste = Image.open(os.path.join(current_dir, image_dir + '.png'))
+    elif os.path.exists(os.path.join(current_dir, image_dir + '.jpg')):
+        image_to_paste = Image.open(os.path.join(current_dir, image_dir + '.jpg'))
+    else:
+        sys.error("Error: image not found: " + image_dir)
+    
     image_to_paste.thumbnail([dimension, dimension])
     side = int(dimension / 2)
     #if gray_style:

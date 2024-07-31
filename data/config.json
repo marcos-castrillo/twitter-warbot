@@ -3,8 +3,14 @@
     {
       "enable_from": 0,
       "is_percentage": false,
-      "name": "destroy",
-      "probability": 0
+      "name": "pick_item",
+      "probability": 14
+    },
+    {
+      "enable_from": 5,
+      "is_percentage": false,
+      "name": "move",
+      "probability": 23
     },
     {
       "enable_from": 20,
@@ -13,28 +19,10 @@
       "probability": 43
     },
     {
-      "enable_from": 0,
-      "is_percentage": false,
-      "name": "pick_item",
-      "probability": 10
-    },
-    {
-      "enable_from": 5,
-      "is_percentage": false,
-      "name": "move",
-      "probability": 22
-    },
-    {
-      "enable_from": 15,
+      "enable_from": 30,
       "is_percentage": false,
       "name": "steal",
       "probability": 5
-    },
-    {
-      "enable_from": 10,
-      "is_percentage": true,
-      "name": "infect",
-      "probability": 3
     },
     {
       "enable_from": 3,
@@ -43,40 +31,52 @@
       "probability": 3
     },
     {
+      "enable_from": 5,
+      "is_percentage": true,
+      "name": "revive",
+      "probability": 1
+    },
+    {
       "enable_from": 7,
       "is_percentage": true,
       "name": "attract",
       "probability": 3
     },
     {
-      "enable_from": 0,
-      "is_percentage": true,
-      "name": "suicide",
-      "probability": 0
-    },
-    {
-      "enable_from": 15,
+      "enable_from": 10,
       "is_percentage": true,
       "name": "monster",
       "probability": 3
     },
     {
-      "enable_from": 22,
-      "is_percentage": true,
-      "name": "zombie",
-      "probability": 3
-    },
-    {
-      "enable_from": 16,
+      "enable_from": 15,
       "is_percentage": true,
       "name": "doctor",
       "probability": 4
     },
     {
-      "enable_from": 5,
+      "enable_from": 20,
       "is_percentage": true,
-      "name": "revive",
+      "name": "zombie",
       "probability": 1
+    },
+    {
+      "enable_from": 0,
+      "is_percentage": false,
+      "name": "destroy",
+      "probability": 0
+    },
+    {
+      "enable_from": 0,
+      "is_percentage": true,
+      "name": "infect",
+      "probability": 0
+    },
+    {
+      "enable_from": 0,
+      "is_percentage": true,
+      "name": "suicide",
+      "probability": 0
     }
   ],
   "battle": {
@@ -97,16 +97,6 @@
   },
   "event_list": [
     {
-      "enable_from": 9999,
-      "is_percentage": true,
-      "name": "treason"
-    },
-    {
-      "enable_from": 25,
-      "is_percentage": true,
-      "name": "airdrop"
-    },
-    {
       "duration": 10,
       "enable_from": 8,
       "is_percentage": true,
@@ -118,10 +108,20 @@
       "name": "abduction_2"
     },
     {
+      "enable_from": 25,
+      "is_percentage": true,
+      "name": "airdrop"
+    },
+    {
       "duration": 10,
       "enable_from": 30,
       "is_percentage": true,
       "name": "peace"
+    },
+    {
+      "enable_from": 9999,
+      "is_percentage": true,
+      "name": "treason"
     }
   ],
   "file_paths": {
@@ -130,7 +130,7 @@
   },
   "general": {
     "language": "es",
-    "run_name": "es_paramo",
+    "run_name": "example",
     "match_type": 2,
     "max_attracted_players": 5,
     "max_tributes_per_district": 0,

@@ -1,6 +1,6 @@
 import boto3
 import os
-import twitter
+import tweepy
 from secrets import *
 
 dir_name = 'simulations'
@@ -17,28 +17,37 @@ ranking_filename_suffix = '_ranking'
 session = boto3.Session(aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
 s3 = session.resource('s3')
 s3_client = session.client('s3')
-bucket_name = 'paramobot'
+bucket_name = 'example'
 my_bucket = s3.Bucket(bucket_name)
 
 
 def get_api():
-    return twitter.Api(consumer_key=api_key,
+    auth = tweepy.OAuth1UserHandler(consumer_key=api_key,
                        consumer_secret=api_secret,
-                       access_token_key=access_token,
+                       access_token=access_token,
+                       access_token_secret=access_token_secret)
+    return tweepy.API(auth)
+
+def get_client():
+    return tweepy.Client(consumer_key=api_key,
+                       consumer_secret=api_secret,
+                       access_token=access_token,
                        access_token_secret=access_token_secret)
 
 
 def tweet(message, image_path_list):
-    image_list = []
+    media_ids  = []
+    api = get_api()
+    client = get_client()
 
     if image_path_list is not None:
         for i, path in enumerate(image_path_list):
             if path is not None and os.path.exists(path):
-                image_list.append(path)
+                print(path)
+                media = api.chunked_upload(path)
+                media_ids.append(media.media_id_string)
 
-    api = get_api()
-    tweet_obj = api.PostUpdate(status=message, media=image_list)
-    return tweet_obj.id_str
+    return client.create_tweet(text=message, media_ids=media_ids)
 
 
 def tweet_line_from_file(file_path, line_number, image_path_list=[]):
@@ -79,7 +88,7 @@ def rename_file(old_filename, new_filename):
 
 def lambda_handler(event, context):
     # Get number of total lines and next line to tweet
-    total_lines = 0
+    total_lines = -1
     next_line = None
     next_image = None
     simulation_file = get_file(simulation_filename)

@@ -128,8 +128,20 @@ def move():
 
     there_was_infection, infected_or_was_infected_by = who_infected_who(player, [x for x in new_location.players if x.is_alive])
 
+    move_together_with = None
+    if action_number > 75 and len(player.location.players) > 0 and len(player.friend_list) > 0:
+        next_to_him = player.location.players
+        friends = player.friend_list
+        random.shuffle(next_to_him)
+        random.shuffle(friends)
+        for i, p in enumerate(next_to_him):
+            friend_next_to_him = next((x for x in friends if x.username != player.username and x.username == p.username and x.is_alive), None)
+            if friend_next_to_him is not None:
+                move_together_with = friend_next_to_him
+                break
+
     if new_location.trap_by is not None and new_location.trap_by.get_name() != player.get_name() and not are_friends(
-            new_location.trap_by, player):
+            new_location.trap_by, player) and not move_together_with:
         if action_number + int(5 * player.get_power()) < 50:
             trapped_by = new_location.trap_by
             new_location.trap_by.kills = new_location.trap_by.kills + 1
@@ -158,24 +170,29 @@ def move():
             write_tweet(tweet)
     else:
         tweet = Tweet()
-        if action_number > 90 and len(powerup_list) > 0:
-            powerup = random.choice(powerup_list)
-            player.powerup_list.append(powerup)
-            tweet.item = powerup
-        elif action_number > 80:
-            player.power = player.power + 2
-            tweet.double = True
-        elif action_number > 60 and not player.injure_immunity:
-            injury = random.choice(injury_list)
-            player.injury_list.append(injury)
-            tweet.item = injury
+        if move_together_with is not None:
+            tweet.type = TweetType.somebody_moved_together_with
+            tweet.player_2 = move_together_with
+            move_player(move_together_with, new_location)
+        else:
+            tweet.type = TweetType.somebody_moved
+            if action_number > 90 and len(powerup_list) > 0:
+                powerup = random.choice(powerup_list)
+                player.powerup_list.append(powerup)
+                tweet.item = powerup
+            elif action_number > 70:
+                player.power = player.power + 2
+                tweet.double = True
+            elif action_number > 60 and not player.injure_immunity:
+                injury = random.choice(injury_list)
+                player.injury_list.append(injury)
+                tweet.item = injury
 
         old_location = player.location
         tweet.there_was_infection = there_was_infection
         tweet.infected_or_was_infected_by = infected_or_was_infected_by
         move_player(player, new_location)
 
-        tweet.type = TweetType.somebody_moved
         tweet.place = player.location
         tweet.place_2 = old_location
         tweet.player = player
@@ -263,7 +280,7 @@ def zombie():
         else:
             player = random.choice(people_list)
 
-            if action_number < 80 and not player.zombie_immunity:
+            if action_number < 50 and not player.zombie_immunity:
                 kill_player(player)
 
                 tweet = Tweet()
@@ -317,19 +334,31 @@ def zombie():
 
 def doctor():
     place = [x for x in place_list if x.doctor]
-
+    action_number = random.randint(0, 100)
+    
     if len(place) > 0:
         place = place[0]
-        people_list = [x for x in place.players if x.is_alive and len(x.injury_list) > 0]
+        people_list = [x for x in place.players if x.is_alive]
 
-        if len(people_list) > 0:
+        if action_number > 70 and len(people_list) > 0:
             player = random.choice(people_list)
+
+            item = Item()
+            item.type = ItemType.powerup
+            item.power = random.randint(config.items.min_power_powerup, config.items.max_power_powerup - 1)
+            player.powerup_list.append(item)
+            
+            injures = 0
+            for i, inj in enumerate(player.injury_list):
+                injures += inj.power * -1
+
             player.injury_list = []
 
             tweet = Tweet()
             tweet.type = TweetType.doctor_cured
             tweet.place = player.location
             tweet.player = player
+            tweet.factor = item.power + injures
             write_tweet(tweet)
         else:
             place.doctor = False
@@ -372,6 +401,7 @@ def destroy():
     place.monster = False
     place.zombie = False
     place.trap_by = None
+    place.doctor = None
     place.items = []
     dead_list = []
     escaped_list = []

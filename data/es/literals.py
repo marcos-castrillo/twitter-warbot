@@ -231,8 +231,12 @@ def HURT(player_1, player_2, hurt_amount):
     return random.choice([
         player_1.get_name() + u' le arreó tremendo hostión a ' + player_2.get_name() + u', que ha perdido ' + str(abs(hurt_amount)) + u' de poder.',
         player_1.get_name() + u' le dio tal colleja a ' + player_2.get_name() + u' que le quitó ' + str(abs(hurt_amount)) + u' de poder.',
+        player_1.get_name() + u' le dio un patadón a ' + player_2.get_name() + u' que le quitó ' + str(abs(hurt_amount)) + u' de poder.',
         player_1.get_name() + u' le dio un puñetazo a ' + player_2.get_name() + u' que le quitó ' + str(abs(hurt_amount)) + u' de poder.',
         player_1.get_name() + u' le dio una hostia a mano abierta a ' + player_2.get_name() + u'. ' + player_2.name + u' ha perdido ' + str(abs(hurt_amount)) + u' de poder.',
+        player_1.get_name() + u' le hizo una llave de kárate a ' + player_2.get_name() + u'. ' + player_2.name + u' ha perdido ' + str(abs(hurt_amount)) + u' de poder.',
+        player_1.get_name() + u' le hizo un mataleón a ' + player_2.get_name() + u'. ' + player_2.name + u' ha perdido ' + str(abs(hurt_amount)) + u' de poder.',
+        player_1.get_name() + u' le hizo un 619 a ' + player_2.get_name() + u'. ' + player_2.name + u' ha perdido ' + str(abs(hurt_amount)) + u' de poder.',
         player_1.get_name() + u' le ha dado un cabezazo a ' + player_2.get_name() + u'. ' + player_2.name + u' ' + str(hurt_amount) + u' de poder.',
         player_1.get_name() + u' le ha dado un codazo a ' + player_2.get_name() + u'. ' + player_2.name + u' ha perdido ' + str(abs(hurt_amount)) + u' de poder.',
         player_1.get_name() + u' le ha dado una patada en la rodilla a ' + player_2.get_name() + u' que le ha quitado ' + str(abs(hurt_amount)) + u' de poder.',
@@ -291,6 +295,8 @@ def I_COMPOSED(player, action, event, has_now, thrown_away_by=''):
 def FIRST_DEAD(player):
     return u' '.join([u'Ya me jodería ser', get_x_or_y(player, u'el primero', u'la primera'), 'en morir..'])
 
+def INITIAL_WEAPON():
+    return u'una barra de hace 5 días'
 
 def INFECTED_EVERYBODY():
     return random.choice([
@@ -317,6 +323,8 @@ def INFECTED_OTHERS(tweet, other_players):
             u'Quienes estaban allí han sido infectados con el COVID-19.',
         ])
 
+def INFECTED_OTHERS_PL(tweet, other_players):
+    return INFECTED_OTHERS(tweet, other_players).replace('Ha', 'Han').replace(' ha ', ' han ')
 
 def SOMEBODY_INFECTED(tweet, other_players):
     if len(other_players) == 1:
@@ -346,11 +354,11 @@ def INFECTION_IMMUNITY(player, shared=False):
     if shared:
         return random.choice([
             u'¡A partir de ahora ' + get_x_or_y(player, u'él',
-                                                u'ella') + u' y el resto de su pueblo son inmunes al COVID-19!',
+                                                u'ella') + u' y el resto de su equipo son inmunes al COVID-19!',
             u'¡A partir de ahora ' + get_x_or_y(player, u'él',
-                                                u'ella') + u' y el resto de su pueblo tienen inmunidad contra el COVID-19!',
-            u'¡A partir de ahora el COVID-19 no afecta a su pueblo!',
-            u'¡A partir de ahora su pueblo no puede ser infectado con el COVID-19!'
+                                                u'ella') + u' y el resto de su equipo tienen inmunidad contra el COVID-19!',
+            u'¡A partir de ahora el COVID-19 no afecta a su equipo!',
+            u'¡A partir de ahora su equipo no puede ser infectado con el COVID-19!'
         ])
     else:
         return random.choice([
@@ -365,9 +373,9 @@ def INJURE_IMMUNITY(player, shared=False):
     if shared:
         return random.choice([
             u'¡A partir de ahora ' + get_x_or_y(player, u'él',
-                                                u'ella') + ' y el resto de su pueblo no sufrirán heridas ni lesiones!',
-            u'¡A partir de ahora su pueblo es inmune a heridas y lesiones!',
-            u'¡A partir de ahora su pueblo tiene inmunidad contra lesiones y heridas!',
+                                                u'ella') + ' y el resto de su equipo no sufrirán heridas ni lesiones!',
+            u'¡A partir de ahora su equipo es inmune a heridas y lesiones!',
+            u'¡A partir de ahora su equipo tiene inmunidad contra lesiones y heridas!',
         ])
     else:
         return random.choice([
@@ -389,9 +397,9 @@ def MOVEMENT_BOOST(player, shared=False):
     if shared:
         return random.choice([
             u'¡A partir de ahora ' + get_x_or_y(player, u'él',
-                                                u'ella') + ' y el resto de su pueblo podrá viajar más lejos!',
-            u'¡A partir de ahora su pueblo podrá viajar más lejos!',
-            u'¡A partir de ahora su pueblo podrá viajar a pueblos más lejanos!'
+                                                u'ella') + ' y el resto de su equipo podrá viajar más lejos!',
+            u'¡A partir de ahora su equipo podrá viajar más lejos!',
+            u'¡A partir de ahora su equipo podrá viajar a pueblos más lejanos!'
         ])
     else:
         return random.choice([
@@ -403,9 +411,9 @@ def MOVEMENT_BOOST(player, shared=False):
 def ZOMBIE_IMMUNITY(player, shared=False):
     if shared:
         return random.choice([
-            u'¡Los zombies ya no perseguirán a ' + get_x_or_y(player, u'él', u'ella') + ' ni a su pueblo!',
-            u'¡A partir de ahora su pueblo es inmune a zombies!',
-            u'¡A partir de ahora su pueblo tiene inmunidad contra zombies!',
+            u'¡Los zombies ya no perseguirán a ' + get_x_or_y(player, u'él', u'ella') + ' ni a su equipo!',
+            u'¡A partir de ahora su equipo es inmune a zombies!',
+            u'¡A partir de ahora su equipo tiene inmunidad contra zombies!',
         ])
     else:
         return random.choice([
@@ -574,11 +582,11 @@ def MONSTER_APPEARED(tweet):
 def MONSTER_IMMUNITY(player, shared=False):
     if shared:
         return random.choice([
-            u'¡A partir de ahora la guardia no le hará nada a su pueblo.',
-            u'¡A partir de ahora su pueblo es inmune ante la justicia!',
-            u'¡A partir de ahora su pueblo es inmune ante la ley!',
+            u'¡A partir de ahora la guardia no le hará nada a su equipo.',
+            u'¡A partir de ahora su equipo es inmune ante la justicia!',
+            u'¡A partir de ahora su equipo es inmune ante la ley!',
             u'¡A partir de ahora ' + get_x_or_y(player, u'él',
-                                                u'ella') + u' y el resto de su pueblo son inmunes ante la guardia!',
+                                                u'ella') + u' y el resto de su equipo son inmunes ante la guardia!',
         ])
     else:
         return random.choice([
@@ -601,9 +609,15 @@ def DOCTOR_MOVED(tweet):
 
 
 def DOCTOR_CURED(tweet):
-    player = tweet.player
     place = tweet.place
-    return u'¡El médico de ' + place.name + u' ha curado completamente a ' + player.get_name() + u'! ' + HAS_NOW(str(player.get_power()))
+    player = tweet.player
+    return random.choice([
+        u'¡El médico de ' + place.name + u' ha curado completamente a ' + player.get_name() + u'!',
+        u'¡El médico de ' + place.name + u' le ha dado una pastillita misteriosa a ' + player.get_name() + u'!',
+        u'¡El médico de ' + place.name + u' le ha pinchado algo a ' + player.get_name() + u'!',
+        u'¡El médico de ' + place.name + u' ha dopado a ' + player.get_name() + u'!',
+        u'¡' + player.get_name() + u' ha ido al médico de ' + place.name + u' y se ha curado de todos los males!',
+    ]) 
 
 
 def ZOMBIE_APPEARED(tweet):
@@ -621,7 +635,7 @@ def ZOMBIE_MOVED(tweet):
     player_zombie = tweet.player
     place = tweet.place
     place_2 = tweet.place_2
-    return u'El zombi (' + player_zombie.get_name() + u') se ha movido de ' + place.name + u' a ' + place_2.name + u'.'
+    return u'El zombi (' + player_zombie.get_name() + u') se ha movido de ' + place_2.name + u' a ' + place.name + u'.'
 
 
 def ZOMBIE_KILLED(tweet):
@@ -689,6 +703,8 @@ def MOVE_ACTION_ROAD():
     else:
         return MOVE_ACTION_ROAD_LONG()
 
+def MOVE_ACTION_ROAD_PL():
+    return MOVE_ACTION_ROAD().replace("ha ", "han ").replace("está ", "están ").replace(" le ", " les ").replace("aburría", "aburrían").replace("fuerte", "fuertes")
 
 def MOVE_ACTION_ROAD_LONG():
     return random.choice([
@@ -706,7 +722,7 @@ def MOVE_ACTION_ROAD_LONG():
         u'ha llamado a ' + random.choice([u'un taxi', u'un Uber', u'un Cabify']) + u' para que le lleve de',
         u'ha hecho ' + random.choice([u'autostop', u'dedo']) + u' para que le lleven de',
         u'ha ido en ' + random.choice(
-            [u'moto', u'su scooter', u'AVE', u'mochillo', u'limusina con su chófer', u'patinete eléctrico',
+            [u'moto', u'motoniveladora', u'su scooter', u'AVE', u'mochillo', u'limusina con su chófer', u'patinete eléctrico',
              u'tren regional', u'Alsa', u'Blablacar', u'un coche robado a lo GTA']) + u' de'
     ])
 
@@ -776,6 +792,8 @@ def MOVE_ACTION_WATER():
         u'se ha colado de polizón en un barco de'
     ])
 
+def MOVE_ACTION_WATER_PL():
+    return MOVE_ACTION_WATER().replace(" ha ", " han ")
 
 def MOVED_SING():
     return random.choice([
@@ -881,7 +899,6 @@ def TIED_AND_BEFRIEND(tweet):
         player_1.get_name() + u' por fin se ha declarado a su crush, ' + player_2.get_name() + u', y le ha salido bien.',
         player_1.get_name() + u' no ha podido resistirse a los encantos de ' + player_2.get_name() + u'.',
         player_1.get_name() + u' ha conquistado a ' + player_2.get_name() + u'.',
-        player_1.get_name() + u' y ' + player_2.get_name() + u' creían que nadie les había visto irse juntos.',
         player_1.get_name() + u' y ' + player_2.get_name() + u' hacen una pareja muy bonita.',
         u'De tanto pelearse, ' + player_1.get_name() + u' y ' + player_2.get_name() + u' se han enamorado.',
     ])

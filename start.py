@@ -13,6 +13,9 @@ from services.players import *
 from services.places import *
 from services.api import initialize_avatars
 
+if config.general.language == 'es':
+    from data.es.literals import *
+
 finished = False
 previous_enabled_action_list = []
 previous_enabled_event_list = []
@@ -25,15 +28,32 @@ def initialize():
 
 def start_battle():
     tweet = Tweet()
+
+    initial_weapon = Item()
+    initial_weapon.type = ItemType.weapon
+    initial_weapon.prefix_list = config.weapon_list[0].prefix_list
+    initial_weapon.name = INITIAL_WEAPON()
+    initial_weapon.power = random.randint(config.items.min_power_weapon, config.items.max_power_weapon)
+
+    random_place = random.choice(services.store.place_list)
+    random_player = random.choice(random_place.players)
+    another_player = random.choice(random.choice(random_place.connection_list).players)
+    random_player.item_list.append(initial_weapon)
+
+    tweet = Tweet()
     tweet.is_event = True
     tweet.type = 'start'
+    tweet.player = random_player
+    tweet.player_2 = another_player
+    tweet.place = random_player.location
+    tweet.item = initial_weapon
+    
     write_tweet(tweet)
-    tweet.type = 'start_2'
-    write_tweet(tweet)
+    # tweet.type = 'start_2'
+    # write_tweet(tweet)
 
     while not finished:
         simulate_day()
-
 
 def simulate_day():
     if services.store.hour_count == 1:
