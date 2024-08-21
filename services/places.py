@@ -84,8 +84,15 @@ def trap():
 
 def move():
     alive_players = get_alive_players()
-    player = random.choice(alive_players)
-
+    biggest_place = get_district_with_most_alive()
+    action_number = random.randint(1, 100)
+    player = None
+    if biggest_place and action_number > 80:
+        players_in_biggest_place = [x for x in biggest_place.tributes if x.is_alive and x.location.name == biggest_place.name]
+        if len(players_in_biggest_place) > 0:
+            player = random.choice(players_in_biggest_place)
+    if player is None:
+        player = random.choice(alive_players)
     loc_candidates = []
 
     for i, l in enumerate(player.location.connection_list):

@@ -215,7 +215,7 @@ def resize_image():
     w, h = image.size
     x = tweet.place.coord_x
     y = tweet.place.coord_y
-    zoom = 2.5
+    zoom = 2
     zoom2 = zoom * 2
 
     x_1 = x - w / zoom2

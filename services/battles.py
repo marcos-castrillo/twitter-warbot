@@ -13,8 +13,8 @@ def battle():
         return False
 
     kill_number = random.randint(0, 100)
-    current_percentage = int(len(100 * get_dead_players()) / len(player_list))
-    if are_friends(player_1, player_2) and (current_percentage < 95 or kill_number < config.general.treason_threshold):
+    current_percentage = int(100 * len(get_dead_players()) / len(player_list))
+    if are_friends(player_1, player_2) and current_percentage < 95 and kill_number < config.general.treason_threshold:
         return False
 
     factor = 50 + 2.5 * player_1.get_power() - 2.5 * player_2.get_power()

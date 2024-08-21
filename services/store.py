@@ -162,7 +162,6 @@ def get_items_in_place(item_list_1, item_list_2, item_list_3, airdrop=False):
 def initialize_place_and_player_list():
     global player_list, spare_item_list
     raw_place_list = config.place_list
-    raw_player_list = []
     item_list_1 = []
     item_list_2 = []
     item_list_3 = []
@@ -490,10 +489,18 @@ def get_alive_players_count():
 def get_alive_districts_count():
     return len([x for x in place_list if not x.destroyed and len([y for y in x.tributes if y.is_alive]) > 0])
 
+def get_district_with_most_alive():
+    count = 10
+    biggest_place = None
+    for i, place in enumerate(place_list):
+        alive = len([x for x in place.tributes if x.is_alive])
+        if(alive > count):
+            count = alive
+            biggest_place = place
+    return biggest_place
 
 def get_place_by_name(place_list, name):
     return next((i for i in place_list if i.name == name), None)
-
 
 def move_player(player, new_location, infect=True):
     if player.location is not None:
