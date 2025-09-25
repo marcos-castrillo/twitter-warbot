@@ -128,6 +128,8 @@ def sanitize_lines(path):
     # Lines no longer than 280 chars
     longest_line = max(open(path, 'r', encoding='utf-8'), key=len)
     if len(longest_line) > 280:
+        with open(path, "w") as file:
+            file.write('error')
         sys.exit('File error: line its too long: (' + str(len(longest_line)) + ' characters)\n' + longest_line)
 
     # Add . at the beginning of the lines if there's an @
@@ -149,4 +151,6 @@ def sanitize_lines(path):
     with open(path, encoding='utf-8') as f:
         for i, l in enumerate(f):
             if l[0] == '@':
+                with open(path, "w") as file:
+                    file.write('error')
                 sys.exit('File error: theres an @ as the first character of the line: ' + str(i))

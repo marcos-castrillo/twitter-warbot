@@ -4,7 +4,7 @@
       "enable_from": 0,
       "is_percentage": false,
       "name": "pick_item",
-      "probability": 14
+      "probability": 15
     },
     {
       "enable_from": 5,
@@ -16,7 +16,7 @@
       "enable_from": 20,
       "is_percentage": false,
       "name": "battle",
-      "probability": 43
+      "probability": 45
     },
     {
       "enable_from": 30,
@@ -40,7 +40,7 @@
       "enable_from": 7,
       "is_percentage": true,
       "name": "attract",
-      "probability": 3
+      "probability": 4
     },
     {
       "enable_from": 10,
@@ -52,7 +52,7 @@
       "enable_from": 15,
       "is_percentage": true,
       "name": "doctor",
-      "probability": 4
+      "probability": 0
     },
     {
       "enable_from": 20,
@@ -136,7 +136,6 @@
     "max_tributes_per_district": 0,
     "mention_users": true,
     "redistribute_tributes": false,
-    "treason_threshold": 90,
     "infection_die_threshold": 20,
     "destroy_initial_empty_places": true
   },
@@ -178,7 +177,10 @@
     "players_in_single_line": false,
     "show_circle": true,
     "short_distance": true,
-    "watermark_coordinates": [1320, 1272],
+    "watermark_coordinates": [
+      1320,
+      1272
+    ],
     "width_between_players": 24,
     "width_between_players_battle": 30,
     "zoomed_avatar_size": 200,

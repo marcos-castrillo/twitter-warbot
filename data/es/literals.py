@@ -229,19 +229,19 @@ def ESCAPED(player_1, player_2):
 
 def HURT(player_1, player_2, hurt_amount):
     return random.choice([
-        player_1.get_name() + u' le arreó tremendo hostión a ' + player_2.get_name() + u', que ha perdido ' + str(abs(hurt_amount)) + u' de poder.',
-        player_1.get_name() + u' le dio tal colleja a ' + player_2.get_name() + u' que le quitó ' + str(abs(hurt_amount)) + u' de poder.',
-        player_1.get_name() + u' le dio un patadón a ' + player_2.get_name() + u' que le quitó ' + str(abs(hurt_amount)) + u' de poder.',
-        player_1.get_name() + u' le dio un puñetazo a ' + player_2.get_name() + u' que le quitó ' + str(abs(hurt_amount)) + u' de poder.',
-        player_1.get_name() + u' le dio una hostia a mano abierta a ' + player_2.get_name() + u'. ' + player_2.name + u' ha perdido ' + str(abs(hurt_amount)) + u' de poder.',
-        player_1.get_name() + u' le hizo una llave de kárate a ' + player_2.get_name() + u'. ' + player_2.name + u' ha perdido ' + str(abs(hurt_amount)) + u' de poder.',
-        player_1.get_name() + u' le hizo un mataleón a ' + player_2.get_name() + u'. ' + player_2.name + u' ha perdido ' + str(abs(hurt_amount)) + u' de poder.',
-        player_1.get_name() + u' le hizo un 619 a ' + player_2.get_name() + u'. ' + player_2.name + u' ha perdido ' + str(abs(hurt_amount)) + u' de poder.',
-        player_1.get_name() + u' le ha dado un cabezazo a ' + player_2.get_name() + u'. ' + player_2.name + u' ' + str(hurt_amount) + u' de poder.',
-        player_1.get_name() + u' le ha dado un codazo a ' + player_2.get_name() + u'. ' + player_2.name + u' ha perdido ' + str(abs(hurt_amount)) + u' de poder.',
-        player_1.get_name() + u' le ha dado una patada en la rodilla a ' + player_2.get_name() + u' que le ha quitado ' + str(abs(hurt_amount)) + u' de poder.',
-        player_1.get_name() + u' le ha dado un puñetazo en el estómago a ' + player_2.get_name() + u'. ' + player_2.name + u' ha perdido ' + str(abs(hurt_amount)) + u' de poder.',
-    ])
+        player_1.get_name() + u' le arreó tremendo hostión a ' + player_2.get_name() + u', que ha perdido ' + str(abs(hurt_amount)),
+        player_1.get_name() + u' le dio tal colleja a ' + player_2.get_name() + u' que le quitó ' + str(abs(hurt_amount)),
+        player_1.get_name() + u' le dio un patadón a ' + player_2.get_name() + u' que le quitó ' + str(abs(hurt_amount)),
+        player_1.get_name() + u' le dio un puñetazo a ' + player_2.get_name() + u' que le quitó ' + str(abs(hurt_amount)),
+        player_1.get_name() + u' le dio una hostia a mano abierta a ' + player_2.get_name() + u'. ' + player_2.name + u' ha perdido ' + str(abs(hurt_amount)),
+        player_1.get_name() + u' le hizo una llave de kárate a ' + player_2.get_name() + u'. ' + player_2.name + u' ha perdido ' + str(abs(hurt_amount)),
+        player_1.get_name() + u' le hizo un mataleón a ' + player_2.get_name() + u'. ' + player_2.name + u' ha perdido ' + str(abs(hurt_amount)),
+        player_1.get_name() + u' le hizo un 619 a ' + player_2.get_name() + u'. ' + player_2.name + u' ha perdido ' + str(abs(hurt_amount)),
+        player_1.get_name() + u' le ha dado un cabezazo a ' + player_2.get_name() + u'. ' + player_2.name + u' ' + str(hurt_amount),
+        player_1.get_name() + u' le ha dado un codazo a ' + player_2.get_name() + u'. ' + player_2.name + u' ha perdido ' + str(abs(hurt_amount)),
+        player_1.get_name() + u' le ha dado una patada en la rodilla a ' + player_2.get_name() + u' que le ha quitado ' + str(abs(hurt_amount)),
+        player_1.get_name() + u' le ha dado un puñetazo en el estómago a ' + player_2.get_name() + u'. ' + player_2.name + u' ha perdido ' + str(abs(hurt_amount))
+    ]) + u' de poder' + get_amount(player_2.get_power() + hurt_amount) + '.'
 
 
 def FROM(owner):
@@ -534,14 +534,14 @@ REPLACED = u'Se lo queda y se deshace de'
 def REVIVED(tweet):
     player = tweet.player
     return u' '.join((player.get_name(), random.choice([
-        u'sólo se estaba haciendo ' + get_x_or_y(player, u'el muerto. ¡Qué zooorrrooooo!',
-                                                 u'la muerta. ¡Qué zooorrraaaaa! (sin trazas de patriarcado).'),
-        u'ha vuelto a la vida bajo extrañas circunstancias.',
-        u'ha vuelto en forma de chapa.',
-        u'ha resucitado en mitad de su funeral y ha vuelto a la batalla.',
-        u'tiene enchufe y el creador del bot le ha resucitado.',
-        u'ha vuelto del otro barrio.'
-    ])))
+        u'sólo se estaba haciendo ' + get_x_or_y(player, u'el muerto en',
+                                                 u'la muerta en'),
+        u'ha vuelto a la vida bajo extrañas circunstancias en',
+        u'ha vuelto en forma de chapa en',
+        u'ha resucitado en mitad de su funeral y ha vuelto a la batalla en',
+        u'tiene enchufe y el creador del bot le ha resucitado en',
+        u'ha vuelto del otro barrio en'
+    ]), player.location.name + '.'))
 
 
 def WAS_INFECTED(tweet):

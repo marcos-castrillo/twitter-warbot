@@ -1,30 +1,22 @@
 [
-      {
-        "friendship_boost_list": [
-          "un outfit muy mono",
-          "un tremendo piquete"
-        ],
-        "infection_immunity_list": [
-          "la Pfizer",
-          "unas mascarillas FFP2"
-        ],
-        "injure_immunity_list": [
-          "un botiquín",
-          "una caja de ibuprofenos"
-        ],
-        "monster_immunity_list": [
-          "la corona de España",
-          "una placa de policía"
-        ],
-        "movement_boost_list": [
-          "un Massey Ferguson",
-          "un John Deere",
-          "un Fendt"
-        ],
-        "zombie_immunity_list": [
-          "un maniquí muy realista",
-          "un cerebro de peluche",
-          "un señuelo de mono con platillos"
-        ]
-      }
+  {
+    "friendship_boost_list": [
+      "un outfit muy mono"
+    ],
+    "infection_immunity_list": [
+      "unas mascarillas FFP2"
+    ],
+    "injure_immunity_list": [
+      "un botiquín"
+    ],
+    "monster_immunity_list": [
+      "una placa de policía"
+    ],
+    "movement_boost_list": [
+      "un Lambo"
+    ],
+    "zombie_immunity_list": [
+      "un maniquí muy realista"
     ]
+  }
+]
